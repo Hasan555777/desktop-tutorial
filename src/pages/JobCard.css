@@ -1,0 +1,1257 @@
+/* ==========================================================================
+   📦 JOB CARD - ULTIMATE EDITION (Updated with Budget/Deadline Rules)
+   WorkHub Brand Theme (Teal/Cyan)
+   ========================================================================== */
+
+/* ==========================================================================
+   🎨 CSS VARIABLES - সিঙ্গেল সোর্স অফ ট্রুথ
+   ========================================================================== */
+
+:root {
+    /* === কার্ড === */
+    --card-bg-hover: var(--bg-hover);
+    --card-border: var(--border-color);
+    --card-border-hover: var(--accent-primary);
+    --card-shadow: 0 4px 20px var(--shadow-color);
+    --card-shadow-hover: 0 12px 40px var(--shadow-color);
+    --card-radius: 20px;
+    --card-radius-sm: 16px;
+    --card-radius-xs: 12px;
+
+    /* === টেক্সট === */
+    --accent-hover: var(--accent-light);
+    --accent-gradient: linear-gradient(135deg, var(--accent-light), var(--accent-secondary));
+
+    /* === ফাংশনাল === */
+    --danger: var(--status-danger);
+    --danger-bg: var(--status-danger-bg);
+    --warning: var(--status-warning);
+    --warning-bg: var(--status-warning-bg);
+    --info: var(--status-info);
+    --info-bg: var(--status-info-bg);
+    --success: var(--status-success);
+    --success-bg: var(--status-success-bg);
+
+    /* === সিস্টেম === */
+    --bg-elevated: var(--bg-tertiary);
+    --border-subtle: var(--border-light);
+    --avatar-bg: var(--accent-primary);
+    --avatar-text: var(--text-inverse);
+
+    /* === স্পেসিং === */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 20px;
+    --space-2xl: 24px;
+
+    /* === ট্রানজিশন === */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* === ফন্ট === */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-handwriting: 'Caveat', cursive;
+}
+
+/* ==========================================================================
+   ☀️ লাইট মোড
+   ========================================================================== */
+
+[data-theme="light"] {
+    --card-bg-hover: var(--text-primary);
+    --card-border: var(--border-color);
+    --card-border-hover: var(--border-color);
+    --card-shadow: 0 4px 20px var(--shadow-color);
+    --card-shadow-hover: 0 12px 40px var(--shadow-color);
+    --accent-hover: var(--accent-dark);
+    --accent-gradient: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    --danger: var(--status-danger);
+    --danger-bg: var(--status-danger-bg);
+    --warning: var(--status-warning);
+    --warning-bg: var(--status-warning-bg);
+    --info: var(--status-info);
+    --info-bg: var(--status-info-bg);
+    --success: var(--status-success);
+    --success-bg: var(--status-success-bg);
+    --bg-elevated: var(--bg-tertiary);
+    --border-subtle: var(--shadow-color);
+    --avatar-bg: var(--accent-primary);
+    --avatar-text: var(--accent-primary);
+}
+
+/* ==========================================================================
+   🎯 বেস রিসেট
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Bensen Handwriting', sans-serif;
+}
+
+/* ==========================================================================
+   📦 জব কার্ড - প্রধান এলিমেন্ট
+   ========================================================================== */
+
+.job-post-card {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 520px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    will-change: transform, box-shadow;
+    padding: 10px;
+}
+
+/* টপ গ্রেডিয়েন্ট বার */
+.job-post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+/* কার্ড হোভার */
+.job-post-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--card-border-hover);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.job-post-card:hover::before {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   👤 টপ মেটা সেকশন
+   ========================================================================== */
+
+.post-top-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: var(--space-md);
+}
+
+.client-profile-block {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    min-width: 0;
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* অ্যাভাটার */
+.client-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--card-radius-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: var(--avatar-text);
+    font-size: 18px;
+    background: var(--avatar-bg);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    transition: transform var(--transition-fast);
+}
+
+.client-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--text-inverse);
+}
+
+.job-post-card:hover .client-avatar {
+    transform: scale(1.05);
+}
+
+/* ক্লায়েন্ট ইনফো */
+.client-info {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+}
+
+.client-name {
+    font-weight: 700;
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+    color: var(--text-primary);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--transition-fast);
+    font-family: monospace, 'Bensen Handwriting';
+}
+
+.client-name:hover {
+    color: var(--accent-primary);
+}
+
+/* রেটিং সেকশন */
+.client-rating-section {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: wrap;
+}
+
+.client-rating-section .rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+}
+
+.client-rating-section .rating-stars .fa-star,
+.client-rating-section .rating-stars .fa-star-half-stroke {
+    color: var(--warning);
+}
+
+.client-rating-section .rating-stars .fa-regular.fa-star {
+    color: var(--text-muted);
+}
+
+.client-rating-section .rating-average {
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-left: 2px;
+}
+
+.client-rating-section .rating-reviews-count {
+    font-size: 10px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.client-rating-section .no-reviews {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.rating-loading {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* ভেরিফাইড ব্যাজ */
+.verified-badges {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.5rem;
+    font-weight: 500;
+    color: var(--success);
+    background: var(--success-bg);
+    padding: 1px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--success);
+}
+
+.verified-badges i {
+    font-size: 8px;
+    margin-top: 10px;
+}
+
+/* টাইম ব্যাজ & অ্যাকশন */
+.jc-top-right-actions {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: var(--space-xs);
+}
+
+.post-time-badge {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-elevated);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid var(--card-border);
+    transition: all var(--transition-fast);
+}
+
+/* অ্যাকশন আইকন গ্রুপ */
+.jc-action-icon-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.jc-action-icon-btn {
+    background: var(--bg-elevated);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.jc-action-icon-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+.jc-action-icon-btn:active {
+    transform: scale(0.92);
+}
+
+.jc-action-icon-btn.saved {
+    background: var(--warning-bg);
+    border-color: var(--warning);
+    color: var(--warning);
+}
+
+.jc-action-icon-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ==========================================================================
+   📝 মেইন কন্টেন্ট
+   ========================================================================== */
+
+.post-main-content {
+    text-align: left;
+}
+
+.post-main-content .job-title {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    font-weight: 300;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-sm) 0;
+    line-height: 1.4;
+    letter-spacing: -0.3px;
+    word-break: break-word;
+    transition: color var(--transition-fast);
+    font-family: cursive, 'Bensen Handwriting';
+}
+
+/* ==========================================================================
+   📝 ডায়নামিক টেক্সট & সি মোর
+   ========================================================================== */
+
+.jc-dynamic-text {
+    word-break: break-word;
+    color: var(--text-secondary);
+    font-size: clamp(0.9rem, 1.1vw, 0.95rem);
+    line-height: 1.7;
+    margin: 0;
+    min-height: 125px;
+    border-top: 2px solid var(--border-subtle);
+    border-left: 2px solid var(--border-subtle);
+    font-family: cursive, 'Bensen Handwriting';
+}
+
+.jc-dynamic-text .highlight {
+    background: var(--accent-light);
+    color: var(--accent-primary);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.jc-see-more-btn {
+    background: none;
+    border: none;
+    color: var(--accent-primary);
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0 4px;
+    font-size: clamp(0.8rem, 1vw, 0.9rem);
+    display: inline-block;
+    transition: all var(--transition-fast);
+}
+
+.jc-see-more-btn:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   🖼️ ইমেজ গ্যালারি
+   ========================================================================== */
+
+.jc-image-gallery-grid {
+    display: grid;
+    gap: 6px;
+    border-radius: var(--card-radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated);
+}
+
+.gallery-cols-1 {
+    grid-template-columns: 1fr;
+    max-height: 400px;
+}
+
+.gallery-cols-2 {
+    grid-template-columns: 1fr 1fr;
+    max-height: 300px;
+}
+
+.gallery-cols-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+    max-height: 280px;
+}
+
+.jc-gallery-img-wrapper {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    cursor: pointer;
+    overflow: hidden;
+    background: var(--bg-elevated);
+}
+
+.jc-feed-live-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.jc-gallery-img-wrapper:hover .jc-feed-live-img {
+    transform: scale(1.05);
+}
+
+/* ইমেজ হোভার ওভারলে */
+.img-hover-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    color: var(--accent-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.jc-gallery-img-wrapper:hover .img-hover-overlay {
+    opacity: 1;
+}
+
+/* মোর ওভারলে */
+.more-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-inverse);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* ==========================================================================
+   💰 ইনফো স্ট্রিপ (বাজেট & ডেডলাইন) - ✅ Updated
+   ========================================================================== */
+
+.post-info-strip {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.strip-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    background: var(--bg-elevated);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--card-radius-xs);
+    border: 1px solid var(--card-border);
+    font-size: clamp(0.8rem, 1vw, 0.9rem);
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+    flex-wrap: wrap;
+}
+
+.job-post-card:hover .strip-item {
+    border-color: var(--card-border-hover);
+}
+
+.strip-item i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.strip-item strong {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-left: auto;
+    font-family: monospace, 'Bensen Handwriting';
+
+}
+
+.si-budget i {
+    color: var(--warning);
+}
+
+.si-budget strong {
+    color: var(--warning);
+}
+
+.si-deadline i {
+    color: var(--info);
+}
+
+.si-deadline strong {
+    color: var(--info);
+    font-family: monospace, 'Bensen Handwriting';
+}
+
+/* ✅ নেগোশিয়েবল ব্যাজ */
+.negotiable-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent-primary, #14b8a6);
+    background: var(--accent-glow, rgba(20, 184, 166, 0.1));
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 6px;
+    white-space: nowrap;
+}
+
+/* ✅ রেঞ্জ ব্যাজ */
+.range-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-secondary, #94a3b8);
+    background: var(--bg-tertiary, #1a2030);
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 6px;
+    white-space: nowrap;
+    font-family: monospace, 'Bensen Handwriting';
+}
+
+/* ✅ ফ্লেক্সিবল ব্যাজ (ডেডলাইন রেঞ্জের জন্য) */
+.flexible-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-secondary, #94a3b8);
+    background: var(--bg-tertiary, #1a2030);
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 6px;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   🎯 ফুটার অ্যাকশন
+   ========================================================================== */
+
+.post-footer-actions {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--space-lg);
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+    padding-top: var(--space-md);
+}
+
+.btn-apply-job {
+    background: var(--accent-gradient);
+    border: none;
+    color: var(--text-inverse);
+    padding: 12px 28px;
+    border-radius: 40px;
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    transition: all var(--transition-base);
+    white-space: nowrap;
+    font-family: inherit;
+    box-shadow: 0 2px 12px var(--accent-glow);
+    justify-content: center;
+}
+
+.btn-apply-job:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--accent-glow);
+    filter: brightness(1.05);
+}
+
+.btn-apply-job:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.btn-apply-job:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 3px;
+}
+
+/* ==========================================================================
+   🔍 লাইটবক্স / জুম
+   ========================================================================== */
+
+.zoom-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+    animation: fadeIn var(--transition-base);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.lightbox-content-box {
+    max-width: 85%;
+    max-height: 85vh;
+    box-shadow: 0 25px 50px -12px var(--shadow-color);
+    border-radius: var(--card-radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    animation: slideUp var(--transition-bounce);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.lightbox-zoomed-img {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    display: block;
+    cursor: zoom-out;
+}
+
+.lightbox-close-btn {
+    position: fixed;
+    top: var(--space-xl);
+    right: var(--space-xl);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    box-shadow: var(--card-shadow);
+    z-index: 100000;
+}
+
+.lightbox-close-btn:hover {
+    background: var(--danger-bg);
+    color: var(--danger);
+    border-color: var(--danger);
+    transform: rotate(90deg);
+}
+
+/* ==========================================================================
+   📱 রেসপনসিভ
+   ========================================================================== */
+
+/* ট্যাবলেট (640px - 1024px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+    .job-post-card {
+        gap: var(--space-xl);
+        border-radius: var(--card-radius-sm);
+        max-width: 720px;
+        padding: 10px;
+    }
+
+    .client-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 16px;
+        margin-top: 3px;
+    }
+
+    .post-main-content .job-title {
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        font-family: monospace, 'Bensen Handwriting';
+    }
+
+    .jc-gallery-img-wrapper {
+        aspect-ratio: 16 / 9;
+    }
+
+    .strip-item {
+        padding: var(--space-md) var(--space-lg);
+    }
+
+    .btn-apply-job {
+        padding: 12px 28px;
+        font-size: 0.9rem;
+    }
+
+    .gallery-cols-1 {
+        max-height: 480px;
+    }
+    .gallery-cols-2 {
+        max-height: 360px;
+    }
+    .gallery-cols-3 {
+        max-height: 320px;
+    }
+}
+
+/* মোবাইল (< 640px) */
+@media (max-width: 640px) {
+    .job-post-card {
+        gap: var(--space-md);
+        border-radius: var(--card-radius-sm);
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .post-top-meta {
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+        padding-bottom: var(--space-sm);
+    }
+
+    .client-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 15px;
+        border-radius: 50%;
+        margin-top: 3px;
+    }
+
+    .client-name {
+        font-size: 0.95rem;
+        font-family: monospace, 'Bensen Handwriting';
+    }
+
+    .client-rating-section .rating-stars {
+        font-size: 10px;
+    }
+
+    .jc-top-right-actions {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        gap: var(--space-xs);
+    }
+
+    .post-time-badge {
+        font-size: 10px;
+        padding: 3px 12px;
+    }
+
+    .jc-action-icon-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+        border-radius: 8px;
+    }
+
+    .post-main-content .job-title {
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        margin-bottom: var(--space-xs);
+    }
+
+    .jc-dynamic-text {
+        font-size: clamp(0.85rem, 3vw, 0.95rem);
+        line-height: 1.6;
+        font-family: cursive, 'Bensen Handwriting';
+    }
+
+    .jc-image-gallery-grid {
+        gap: 4px;
+        border-radius: var(--card-radius-xs);
+    }
+
+    .gallery-cols-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gallery-cols-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gallery-cols-3 .jc-gallery-img-wrapper:last-child {
+        display: none;
+    }
+
+    .jc-gallery-img-wrapper {
+        aspect-ratio: 16 / 9;
+        height: auto;
+        min-height: 120px;
+    }
+
+    .gallery-cols-1 {
+        max-height: 320px;
+    }
+    .gallery-cols-2 {
+        max-height: 240px;
+    }
+    .gallery-cols-3 {
+        max-height: 200px;
+    }
+
+    .img-hover-overlay {
+        font-size: 10px;
+    }
+
+    .post-info-strip {
+        gap: var(--space-xs);
+    }
+
+    .strip-item {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.8rem;
+        border-radius: 8px;
+        gap: var(--space-sm);
+    }
+
+    .strip-item i {
+        font-size: 14px;
+        width: 16px;
+    }
+
+    .strip-item strong {
+        font-size: 0.85rem;
+        font-family: monospace, 'Bensen Handwriting';
+    }
+
+    .post-footer-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-sm);
+        padding-top: var(--space-md);
+    }
+
+    .btn-apply-job {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+        font-size: 0.85rem;
+        border-radius: 40px;
+    }
+
+    .lightbox-content-box {
+        max-width: 95%;
+        border-radius: var(--card-radius-xs);
+    }
+
+    .lightbox-close-btn {
+        top: var(--space-md);
+        right: var(--space-md);
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    /* ✅ মোবাইলে ব্যাজ ছোট */
+    .negotiable-badge,
+    .range-badge,
+    .flexible-badge {
+        font-size: 8px;
+        padding: 1px 6px;
+        margin-left: 4px;
+    }
+}
+
+/* স্মল মোবাইল (< 400px) */
+@media (max-width: 400px) {
+    .job-post-card {
+        gap: var(--space-sm);
+        border-radius: var(--card-radius-xs);
+        padding: 10px;
+    }
+
+    .client-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+        border-radius: 50%;
+        margin-top: 3px;
+    }
+
+    .client-name {
+        font-size: 0.85rem;
+        font-family: monospace, 'Bensen Handwriting';
+    }
+
+    .client-rating-section {
+        gap: var(--space-xs);
+    }
+
+    .client-rating-section .rating-stars {
+        font-size: 9px;
+    }
+
+    .post-main-content .job-title {
+        font-size: 0.95rem;
+        font-family: monospace, 'Bensen Handwriting';
+    }
+
+    .jc-dynamic-text {
+        font-size: 0.9rem;
+        font-family: monospace, 'Bensen Handwriting';
+        word-spacing: -4px;
+    }
+
+    .strip-item {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.7rem;
+        border-radius: 6px;
+    }
+
+    .strip-item i {
+        font-size: 12px;
+        width: 14px;
+    }
+
+    .strip-item strong {
+        font-size: 0.75rem;
+        font-family: monospace, 'Bensen Handwriting';
+    }
+
+    .btn-apply-job {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+
+    .jc-action-icon-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .post-time-badge {
+        font-size: 9px;
+        padding: 2px 10px;
+    }
+
+    .lightbox-close-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        top: var(--space-sm);
+        right: var(--space-sm);
+    }
+
+    .gallery-cols-1 {
+        max-height: 240px;
+    }
+    .gallery-cols-2 {
+        max-height: 180px;
+    }
+    .gallery-cols-3 {
+        max-height: 150px;
+    }
+
+    .jc-gallery-img-wrapper {
+        min-height: 80px;
+    }
+
+    .negotiable-badge,
+    .range-badge,
+    .flexible-badge {
+        font-size: 7px;
+        padding: 1px 4px;
+    }
+}
+
+/* ==========================================================================
+   ♿ অ্যাক্সেসিবিলিটি
+   ========================================================================== */
+
+:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .jc-gallery-img-wrapper:hover .jc-feed-live-img {
+        transform: none !important;
+    }
+
+    .lightbox-content-box {
+        animation: none !important;
+    }
+
+    .zoom-lightbox-overlay {
+        animation: none !important;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .job-post-card {
+        border-width: 2px;
+    }
+
+    .btn-apply-job {
+        border: 2px solid currentColor;
+    }
+
+    .jc-action-icon-btn {
+        border-width: 2px;
+    }
+}
+
+/* ==========================================================================
+   🛠️ ইউটিলিটি ক্লাস
+   ========================================================================== */
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   📊 স্ক্রলবার কাস্টমাইজ
+   ========================================================================== */
+
+.job-post-card::-webkit-scrollbar {
+    width: 4px;
+}
+
+.job-post-card::-webkit-scrollbar-track {
+    background: var(--bg-elevated);
+}
+
+.job-post-card::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 10px;
+}
+
+.job-post-card::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+}
+
+.job-post-card {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-primary) var(--bg-elevated);
+}
+
+/* ============================================================
+   ⭐ রেটিং স্টার - মিনিমাল সাইজ
+   ============================================================ */
+
+.client-info .rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    font-size: 8px !important;
+}
+
+.client-info .rating-stars i {
+    font-size: 8px !important;
+}
+
+.client-info .rating-average {
+    font-size: 9px !important;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-left: 2px;
+}
+
+.client-info .rating-reviews-count {
+    font-size: 8px !important;
+    color: var(--text-muted);
+    display: flex;
+    gap: 3px;
+}
+
+.client-info .no-reviews,
+.client-info .rating-loading {
+    font-size: 8px !important;
+    color: var(--text-muted);
+}
+
+/* ============================================================
+   📱 মোবাইলে রেটিং আরও ছোট
+   ============================================================ */
+
+@media (max-width: 640px) {
+    .client-info .rating-stars {
+        font-size: 7px !important;
+    }
+    
+    .client-info .rating-stars i {
+        font-size: 7px !important;
+    }
+    
+    .client-info .rating-average {
+        font-size: 8px !important;
+    }
+    
+    .client-info .rating-reviews-count {
+        font-size: 7px !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .client-info .rating-stars {
+        font-size: 6px !important;
+    }
+    
+    .client-info .rating-stars i {
+        font-size: 6px !important;
+    }
+    
+    .client-info .rating-average {
+        font-size: 7px !important;
+    }
+    
+    .client-info .rating-reviews-count {
+        font-size: 6px !important;
+    }
+}
+
+/* ============================================================
+   🖼️ ইমেজ লোডিং স্টেট
+   ============================================================ */
+
+.jc-feed-live-img.hidden {
+    opacity: 0;
+    position: absolute;
+}
+
+.jc-feed-live-img.loaded {
+    opacity: 1;
+    position: relative;
+}
+
+.client-avatar-img.hidden {
+    opacity: 0;
+    position: absolute;
+}
+
+.client-avatar-img.loaded {
+    opacity: 1;
+    position: relative;
+}
+
+.jc-gallery-img-wrapper {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: var(--radius-md, 8px);
+    background: var(--bg-tertiary, #1a2030);
+}

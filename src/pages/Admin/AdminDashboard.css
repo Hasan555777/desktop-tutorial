@@ -1,0 +1,1849 @@
+/* ============================================================
+   🎛️ ADMIN DASHBOARD - সম্পূর্ণ CSS
+   WorkHub Admin Panel - Complete Styling
+   ============================================================ */
+
+/* ==========================================
+   1️⃣ কন্টেইনার
+   ========================================== */
+
+.admin-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: 20px;
+}
+
+.admin-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 40px var(--shadow-color);
+  overflow: hidden;
+  padding: 24px;
+  margin-left: 120px; /* Adjust this value based on your sidebar width */
+  transition: all var(--transition-normal);
+}
+
+@media (max-width: 768px){
+  .admin-wrapper {
+    margin-left: 0; /* Remove left margin on smaller screens */
+    padding: 16px;
+  }
+}
+
+/* ==========================================
+   2️⃣ হেডার
+   ========================================== */
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 20px 0;
+  border-bottom: 2px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-header h1 i {
+  color: var(--accent-primary);
+  font-size: 26px;
+}
+
+.admin-header .header-tab-name {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.header-actions .back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.header-actions .back-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.header-actions .refresh-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  font-size: 16px;
+}
+
+.header-actions .refresh-btn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: rotate(180deg);
+}
+
+/* ==========================================
+   3️⃣ ট্যাব নেভিগেশন
+   ========================================== */
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 16px 0 20px 0;
+  border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.admin-tabs::-webkit-scrollbar {
+  height: 3px;
+}
+
+.admin-tabs::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.tab-btn i {
+  font-size: 14px;
+}
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.tab-badge.danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+/* ==========================================
+   4️⃣ কন্টেন্ট এরিয়া
+   ========================================== */
+
+.admin-content {
+  padding: 20px 0 0 0;
+  min-height: 400px;
+}
+
+/* ==========================================
+   5️⃣ সেকশন হেডার (Needs Review)
+   ========================================== */
+
+.needs-review-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.section-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-header h3 i {
+  color: var(--accent-primary);
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ==========================================
+   6️⃣ ড্যাশবোর্ড স্ট্যাটস গ্রিড
+   ========================================== */
+
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==========================================
+   7️⃣ ইউজার ফিল্টার
+   ========================================== */
+
+.admin-users {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ==========================================
+   8️⃣ অ্যাডমিন নোটিফিকেশন
+   ========================================== */
+
+.admin-notifications-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ==========================================
+   9️⃣ রেসপনসিভ
+   ========================================== */
+
+/* ট্যাবলেট */
+@media (max-width: 1024px) {
+  .admin-container {
+    padding: 16px;
+  }
+
+  .admin-wrapper {
+    padding: 18px;
+    border-radius: var(--radius-md);
+  }
+
+  .admin-header h1 {
+    font-size: 20px;
+  }
+
+  .admin-tabs {
+    gap: 4px;
+  }
+
+  .tab-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .tab-btn i {
+    font-size: 12px;
+  }
+}
+
+/* মোবাইল */
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 10px;
+  }
+
+  .admin-wrapper {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 16px;
+  }
+
+  .admin-header h1 {
+    font-size: 18px;
+  }
+
+  .admin-header h1 i {
+    font-size: 20px;
+  }
+
+  .admin-header .header-tab-name {
+    font-size: 13px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .header-actions .back-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .header-actions .refresh-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+
+  .admin-tabs {
+    padding: 12px 0 16px 0;
+    gap: 4px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .tab-btn i {
+    font-size: 11px;
+  }
+
+  .tab-badge {
+    font-size: 9px;
+    padding: 0 6px;
+  }
+
+  .admin-content {
+    padding: 12px 0 0 0;
+    min-height: 300px;
+  }
+
+  .section-header h3 {
+    font-size: 16px;
+  }
+
+  .section-subtitle {
+    font-size: 13px;
+  }
+}
+
+/* ছোট ফোন */
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 6px;
+  }
+
+  .admin-wrapper {
+    padding: 10px;
+    border-radius: var(--radius-xs);
+  }
+
+  .admin-header h1 {
+    font-size: 16px;
+    gap: 8px;
+  }
+
+  .admin-header h1 i {
+    font-size: 18px;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .header-actions .back-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .header-actions .refresh-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .tab-btn {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .tab-btn i {
+    font-size: 10px;
+  }
+
+  .tab-badge {
+    font-size: 8px;
+    padding: 0 4px;
+  }
+
+  .admin-content {
+    padding: 8px 0 0 0;
+  }
+
+  .section-header h3 {
+    font-size: 14px;
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   🔟 ডার্ক/লাইট মোড
+   ========================================== */
+
+/* ডার্ক মোড ডিফল্ট - ভেরিয়েবল কাজ করবে */
+
+.light-mode .admin-wrapper {
+  background: var(--bg-secondary);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+}
+
+.light-mode .tab-btn {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .tab-btn:hover {
+  background: var(--bg-hover);
+}
+
+.light-mode .tab-btn.active {
+  background: var(--accent-glow);
+}
+
+.light-mode .header-actions .back-btn {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .header-actions .back-btn:hover {
+  background: var(--bg-hover);
+}
+
+.light-mode .header-actions .refresh-btn {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .header-actions .refresh-btn:hover {
+  background: var(--accent-glow);
+}
+
+/* ==========================================
+   ♿ অ্যাক্সেসিবিলিটি
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .header-actions .refresh-btn:hover {
+    transform: none !important;
+  }
+
+  .tab-btn,
+  .header-actions .back-btn,
+  .header-actions .refresh-btn {
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .admin-wrapper {
+    border: 2px solid var(--border-color);
+  }
+
+  .tab-btn.active {
+    border: 2px solid var(--accent-primary);
+  }
+
+  .tab-btn {
+    border: 1px solid var(--border-color);
+  }
+}
+
+/* ==========================================
+   ফোকাস ভিজিবিলিটি
+   ========================================== */
+
+.tab-btn:focus-visible,
+.header-actions .back-btn:focus-visible,
+.header-actions .refresh-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   স্ক্রলবার কাস্টমাইজ
+   ========================================== */
+
+.admin-tabs::-webkit-scrollbar {
+  height: 3px;
+}
+
+.admin-tabs::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+.admin-tabs::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.admin-tabs {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+}
+
+
+
+
+
+
+/* ============================================================
+   📑 ADMIN TABS - সম্পূর্ণ CSS (Mobile + Desktop Optimized)
+   Admin Panel - Navigation Tabs
+   ============================================================ */
+
+/* ==========================================
+   ট্যাব কন্টেইনার
+   ========================================== */
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 16px 0 20px 0;
+  border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+/* ── স্ক্রলবার ── */
+.admin-tabs::-webkit-scrollbar {
+  height: 3px;
+}
+
+.admin-tabs::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+.admin-tabs::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.admin-tabs {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+}
+
+/* ── স্ক্রল ইন্ডিকেটর (ডান পাশে গ্রেডিয়েন্ট) ── */
+.admin-tabs::after {
+  content: '';
+  position: sticky;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(to right, transparent, var(--bg-secondary));
+  pointer-events: none;
+  flex-shrink: 0;
+  display: none;
+}
+
+/* ==========================================
+   ট্যাব বাটন
+   ========================================== */
+
+.admin-tabs .tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: 40px;
+  position: relative;
+}
+
+.admin-tabs .tab-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.admin-tabs .tab-btn:active {
+  transform: scale(0.96);
+}
+
+.admin-tabs .tab-btn.active {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.admin-tabs .tab-btn i {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   ট্যাব ব্যাজ
+   ========================================== */
+
+.admin-tabs .tab-btn .tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  margin-left: 4px;
+  min-width: 18px;
+  height: 18px;
+  transition: all var(--transition-fast);
+}
+
+.admin-tabs .tab-btn .tab-badge.danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.admin-tabs .tab-btn.active .tab-badge {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.admin-tabs .tab-btn.active .tab-badge.danger {
+  background: var(--danger);
+  color: var(--text-inverse);
+}
+
+/* ==========================================
+   ল্যাপটপ / ডেস্কটপ (1024px এর বেশি)
+   ========================================== */
+
+@media (min-width: 1025px) {
+  .admin-tabs {
+    gap: 8px;
+    padding: 20px 0 24px 0;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+
+  .admin-tabs::after {
+    display: none;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    min-height: 44px;
+    border-radius: var(--radius-sm);
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 15px;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 11px;
+    padding: 1px 10px;
+    min-width: 20px;
+    height: 20px;
+  }
+
+  .admin-tabs .tab-btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* ==========================================
+   ট্যাবলেট (768px - 1024px)
+   ========================================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .admin-tabs {
+    gap: 6px;
+    padding: 14px 0 18px 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .admin-tabs::after {
+    display: block;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+    min-height: 38px;
+    flex-shrink: 0;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 13px;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 10px;
+    padding: 1px 7px;
+    min-width: 16px;
+    height: 16px;
+  }
+
+  .admin-tabs .tab-btn:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* ==========================================
+   মোবাইল (768px এর কম)
+   ========================================== */
+
+@media (max-width: 768px) {
+  .admin-tabs {
+    gap: 4px;
+    padding: 12px 0 16px 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-tabs::after {
+    display: block;
+    width: 30px;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+    min-height: 34px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 12px;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 9px;
+    padding: 0 6px;
+    min-width: 14px;
+    height: 14px;
+  }
+
+  .admin-tabs .tab-btn:active {
+    transform: scale(0.95);
+  }
+
+  .admin-tabs .tab-btn:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================
+   ছোট মোবাইল (480px এর কম)
+   ========================================== */
+
+@media (max-width: 480px) {
+  .admin-tabs {
+    gap: 3px;
+    padding: 10px 0 14px 0;
+  }
+
+  .admin-tabs::after {
+    width: 20px;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+    min-height: 30px;
+    border-radius: 4px;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 10px;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 8px;
+    padding: 0 4px;
+    min-width: 12px;
+    height: 12px;
+    margin-left: 2px;
+  }
+
+  .admin-tabs .tab-btn.active {
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  /* লম্বা ট্যাবের নাম ছোট করা */
+  .admin-tabs .tab-btn .tab-label-short {
+    display: inline;
+  }
+  
+  .admin-tabs .tab-btn .tab-label-long {
+    display: none;
+  }
+}
+
+/* ==========================================
+   অতিরিক্ত ছোট ফোন (360px এর কম)
+   ========================================== */
+
+@media (max-width: 360px) {
+  .admin-tabs {
+    gap: 2px;
+    padding: 8px 0 12px 0;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 4px 8px;
+    font-size: 9px;
+    min-height: 26px;
+    border-radius: 3px;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 9px;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 7px;
+    padding: 0 3px;
+    min-width: 10px;
+    height: 10px;
+  }
+}
+
+/* ==========================================
+   ডার্ক/লাইট মোড
+   ========================================== */
+
+.light-mode .admin-tabs .tab-btn {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .admin-tabs .tab-btn:hover {
+  background: var(--bg-hover);
+}
+
+.light-mode .admin-tabs .tab-btn.active {
+  background: var(--accent-glow);
+}
+
+.light-mode .admin-tabs .tab-btn .tab-badge {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .admin-tabs .tab-btn.active .tab-badge {
+  background: var(--accent-light);
+}
+
+.light-mode .admin-tabs .tab-btn.active .tab-badge.danger {
+  background: var(--danger);
+}
+
+.light-mode .admin-tabs::after {
+  background: linear-gradient(to right, transparent, var(--bg-secondary));
+}
+
+/* ==========================================
+   অ্যাক্সেসিবিলিটি
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-tabs .tab-btn {
+    transition: none !important;
+  }
+
+  .admin-tabs .tab-btn:hover {
+    transform: none !important;
+  }
+
+  .admin-tabs .tab-btn:active {
+    transform: none !important;
+  }
+
+  .admin-tabs .tab-btn .tab-badge.danger {
+    animation: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .admin-tabs .tab-btn {
+    border: 1px solid var(--border-color);
+  }
+
+  .admin-tabs .tab-btn.active {
+    border: 2px solid var(--accent-primary);
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ==========================================
+   ফোকাস ভিজিবিলিটি
+   ========================================== */
+
+.admin-tabs .tab-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* ==========================================
+   ট্যাব লেবেল হাইড (মোবাইলে নাম ছোট করা)
+   ========================================== */
+
+/* ডিফল্ট: লম্বা নাম দেখাবে */
+.tab-label-short {
+  display: none;
+}
+
+/* মোবাইলে: ছোট নাম দেখাবে, লম্বা নাম লুকাবে */
+@media (max-width: 480px) {
+  .tab-label-short {
+    display: inline;
+    
+  }
+  
+  .tab-label-long {
+    display: none;
+  }
+}
+
+
+
+
+
+/* src/pages/Admin/AdminDashboard.css */
+
+/* ── Admin Tabs Wrapper ── */
+.admin-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+  padding: 16px 0 20px 0;
+  border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.06));
+  max-width: 100%;
+}
+
+/* ── Individual Tab Button ── */
+.admin-tabs .tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 6px;
+  background: var(--bg-card, rgba(30, 41, 59, 0.4));
+  border: 1px solid var(--border-color, rgba(255,255,255,0.06));
+  border-radius: var(--radius-md, 12px);
+  color: var(--text-secondary, #94a3b8);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+  min-height: 70px;
+  position: relative;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+}
+
+/* ── Tab Icon ── */
+.admin-tabs .tab-btn i {
+  font-size: 20px;
+  color: var(--text-muted, #64748b);
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+/* ── Tab Label ── */
+.admin-tabs .tab-btn .tab-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-secondary, #94a3b8);
+  transition: all var(--transition-fast, 0.15s ease);
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+/* ── Hover State ── */
+.admin-tabs .tab-btn:hover {
+  background: var(--bg-hover, rgba(67, 142, 130, 0.08));
+  border-color: var(--accent-glow, rgba(67, 142, 130, 0.2));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-color, rgba(0,0,0,0.2));
+}
+
+.admin-tabs .tab-btn:hover i {
+  color: var(--accent-primary, #438e82);
+}
+
+.admin-tabs .tab-btn:hover .tab-label {
+  color: var(--text-primary, #f8fafc);
+}
+
+/* ── Active State ── */
+.admin-tabs .tab-btn.active {
+  background: var(--accent-glow, rgba(67, 142, 130, 0.15));
+  border-color: var(--accent-primary, #438e82);
+  box-shadow: 0 0 20px var(--accent-glow, rgba(67, 142, 130, 0.1));
+}
+
+.admin-tabs .tab-btn.active i {
+  color: var(--accent-primary, #438e82);
+}
+
+.admin-tabs .tab-btn.active .tab-label {
+  color: var(--text-primary, #f8fafc);
+}
+
+/* ── Tab Badge ── */
+.admin-tabs .tab-btn .tab-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-full, 9999px);
+  min-width: 18px;
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px var(--shadow-color, rgba(0,0,0,0.3));
+  z-index: 1;
+}
+
+.admin-tabs .tab-btn .tab-badge.danger {
+  background: var(--status-danger, #ef4444);
+  color: #ffffff;
+}
+
+.admin-tabs .tab-btn .tab-badge:not(.danger) {
+  background: var(--accent-primary, #438e82);
+  color: #ffffff;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   📱 RESPONSIVE - মোবাইল অনুযায়ী ছোট হবে
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Tablet (768px - 1024px) ── */
+@media (max-width: 1024px) {
+  .admin-tabs {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 10px 6px;
+    min-height: 64px;
+    font-size: 10px;
+    border-radius: var(--radius-sm, 10px);
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 18px;
+  }
+
+  .admin-tabs .tab-btn .tab-label {
+    font-size: 9px;
+  }
+}
+
+/* ── Small Tablet (600px - 768px) ── */
+@media (max-width: 768px) {
+  .admin-tabs {
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    gap: 8px;
+    padding: 14px 0 18px 0;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 8px 4px;
+    min-height: 58px;
+    font-size: 9px;
+    border-radius: var(--radius-sm, 8px);
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 16px;
+  }
+
+  .admin-tabs .tab-btn .tab-label {
+    font-size: 8px;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 8px;
+    min-width: 16px;
+    min-height: 16px;
+    padding: 1px 5px;
+    top: -3px;
+    right: -3px;
+  }
+}
+
+/* ── Mobile Large (480px - 600px) ── */
+@media (max-width: 600px) {
+  .admin-tabs {
+    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    gap: 6px;
+    padding: 12px 0 16px 0;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 6px 3px;
+    min-height: 50px;
+    font-size: 8px;
+    border-radius: var(--radius-sm, 8px);
+    gap: 4px;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 14px;
+  }
+
+  .admin-tabs .tab-btn .tab-label {
+    font-size: 7px;
+    line-height: 1;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 7px;
+    min-width: 14px;
+    min-height: 14px;
+    padding: 1px 4px;
+    top: -2px;
+    right: -2px;
+  }
+}
+
+/* ── Mobile Medium (380px - 480px) ── */
+@media (max-width: 480px) {
+  .admin-tabs {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    padding: 10px 0 14px 0;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 6px 3px;
+    min-height: 46px;
+    font-size: 7px;
+    border-radius: var(--radius-sm, 6px);
+    gap: 3px;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 12px;
+  }
+
+  .admin-tabs .tab-btn .tab-label {
+    font-size: 6px;
+    line-height: 1;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 6px;
+    min-width: 12px;
+    min-height: 12px;
+    padding: 1px 3px;
+    top: -2px;
+    right: -2px;
+  }
+}
+
+/* ── Mobile Small (320px - 380px) ── */
+@media (max-width: 380px) {
+  .admin-tabs {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    padding: 8px 0 12px 0;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 5px 2px;
+    min-height: 40px;
+    font-size: 6px;
+    border-radius: var(--radius-sm, 6px);
+    gap: 2px;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 10px;
+  }
+
+  .admin-tabs .tab-btn .tab-label {
+    font-size: 5px;
+    line-height: 1;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 5px;
+    min-width: 10px;
+    min-height: 10px;
+    padding: 1px 3px;
+    top: -2px;
+    right: -2px;
+  }
+}
+
+/* ── Very Small (below 320px) ── */
+@media (max-width: 320px) {
+  .admin-tabs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    padding: 6px 0 10px 0;
+  }
+
+  .admin-tabs .tab-btn {
+    padding: 4px 2px;
+    min-height: 36px;
+    font-size: 6px;
+    border-radius: 4px;
+    gap: 2px;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 9px;
+  }
+
+  .admin-tabs .tab-btn .tab-label {
+    font-size: 5px;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    font-size: 5px;
+    min-width: 10px;
+    min-height: 10px;
+    padding: 1px 2px;
+    top: -1px;
+    right: -1px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🌙 LIGHT MODE
+   ═══════════════════════════════════════════════════════════ */
+
+.light-mode .admin-tabs .tab-btn {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.light-mode .admin-tabs .tab-btn:hover {
+  background: #f1f5f9;
+  border-color: #0d9488;
+}
+
+.light-mode .admin-tabs .tab-btn.active {
+  background: rgba(13, 148, 136, 0.08);
+  border-color: #0d9488;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ♿ ACCESSIBILITY - Reduced Motion
+   ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-tabs .tab-btn {
+    transition: none !important;
+  }
+
+  .admin-tabs .tab-btn:hover {
+    transform: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🖨️ PRINT
+   ═══════════════════════════════════════════════════════════ */
+
+@media print {
+  .admin-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .admin-tabs .tab-btn {
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    color: #000 !important;
+    padding: 4px 8px !important;
+    min-height: auto !important;
+    border-radius: 4px !important;
+    font-size: 9px !important;
+  }
+
+  .admin-tabs .tab-btn i {
+    font-size: 12px !important;
+    color: #333 !important;
+  }
+
+  .admin-tabs .tab-btn .tab-label {
+    font-size: 8px !important;
+    color: #000 !important;
+  }
+
+  .admin-tabs .tab-btn.active {
+    background: #e0e0e0 !important;
+    border-color: #999 !important;
+  }
+
+  .admin-tabs .tab-btn .tab-badge {
+    display: none !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/* src/pages/Admin/AdminDashboard.css */
+
+/* ═══════════════════════════════════════════════════════════
+   🏠 ADMIN HEADER
+   ═══════════════════════════════════════════════════════════ */
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: var(--bg-card, rgba(30, 41, 59, 0.4));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-lg, 16px);
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ── Header Left ── */
+.admin-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.admin-header h1 i {
+  color: var(--accent-primary, #438e82);
+  font-size: 24px;
+}
+
+.admin-header .header-tab-name {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-muted, #64748b);
+}
+
+/* ── Header Right ── */
+.admin-header .header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* ── Global Search ── */
+.admin-header .header-actions .global-search-wrapper {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.admin-header .header-actions .global-search-wrapper input {
+  width: 100%;
+  padding: 8px 14px 8px 36px;
+  background: var(--bg-tertiary, #1a2030);
+  color: var(--text-primary, #f8fafc);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-full, 9999px);
+  font-size: 13px;
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+.admin-header .header-actions .global-search-wrapper input:focus {
+  border-color: var(--accent-primary, #438e82);
+  box-shadow: 0 0 0 3px var(--accent-glow, rgba(67, 142, 130, 0.15));
+}
+
+/* ── Header Buttons ── */
+.admin-header .header-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-md, 12px);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+  background: var(--bg-tertiary, #1a2030);
+  color: var(--text-secondary, #94a3b8);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+  white-space: nowrap;
+}
+
+.admin-header .header-actions button:hover {
+  background: var(--bg-hover, rgba(255, 255, 255, 0.05));
+  color: var(--text-primary, #f8fafc);
+  border-color: var(--accent-glow, rgba(67, 142, 130, 0.2));
+  transform: translateY(-1px);
+}
+
+.admin-header .header-actions button:active {
+  transform: scale(0.95);
+}
+
+/* ── Home Button ── */
+.admin-header .header-actions .back-btn {
+  background: var(--bg-tertiary, #1a2030);
+  color: var(--text-secondary, #94a3b8);
+}
+
+.admin-header .header-actions .back-btn:hover {
+  background: var(--accent-glow, rgba(67, 142, 130, 0.1));
+  color: var(--accent-primary, #438e82);
+  border-color: var(--accent-primary, #438e82);
+}
+
+.admin-header .header-actions .back-btn i {
+  color: var(--accent-primary, #438e82);
+}
+
+/* ── Refresh Button ── */
+.admin-header .header-actions .refresh-btn {
+  background: var(--bg-tertiary, #1a2030);
+  color: var(--text-secondary, #94a3b8);
+  padding: 8px 14px;
+}
+
+.admin-header .header-actions .refresh-btn:hover {
+  background: var(--status-info-bg, rgba(59, 130, 246, 0.1));
+  color: var(--status-info, #3b82f6);
+  border-color: var(--status-info, #3b82f6);
+}
+
+.admin-header .header-actions .refresh-btn i {
+  font-size: 14px;
+}
+
+.admin-header .header-actions .refresh-btn .fa-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ── Sound Settings ── */
+.admin-header .header-actions .sound-settings-compact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-tertiary, #1a2030);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radius-full, 9999px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+.admin-header .header-actions .sound-settings-compact:hover {
+  border-color: var(--accent-glow, rgba(67, 142, 130, 0.2));
+  background: var(--bg-hover, rgba(255, 255, 255, 0.05));
+}
+
+.admin-header .header-actions .sound-settings-compact i {
+  color: var(--text-muted, #64748b);
+  font-size: 16px;
+}
+
+.admin-header .header-actions .sound-settings-compact .volume-slider {
+  width: 60px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: var(--radius-full, 9999px);
+  outline: none;
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+.admin-header .header-actions .sound-settings-compact .volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--accent-primary, #438e82);
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   📱 RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .admin-header {
+    padding: 16px 20px;
+    gap: 14px;
+  }
+
+  .admin-header h1 {
+    font-size: 20px;
+  }
+
+  .admin-header .header-actions .global-search-wrapper {
+    min-width: 160px;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .admin-header h1 {
+    font-size: 18px;
+    justify-content: center;
+  }
+
+  .admin-header .header-tab-name {
+    font-size: 14px;
+  }
+
+  .admin-header .header-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .admin-header .header-actions .global-search-wrapper {
+    min-width: 100%;
+    max-width: 100%;
+    order: 1;
+  }
+
+  .admin-header .header-actions button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .admin-header .header-actions .back-btn span,
+  .admin-header .header-actions .refresh-btn span {
+    display: none;
+  }
+
+  .admin-header .header-actions .back-btn,
+  .admin-header .header-actions .refresh-btn {
+    padding: 8px 10px;
+  }
+
+  .admin-header .header-actions .back-btn i,
+  .admin-header .header-actions .refresh-btn i {
+    font-size: 16px;
+  }
+
+  .admin-header .header-actions .sound-settings-compact .volume-slider {
+    width: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header {
+    padding: 12px 14px;
+    gap: 10px;
+    border-radius: var(--radius-md, 12px);
+  }
+
+  .admin-header h1 {
+    font-size: 16px;
+    gap: 8px;
+  }
+
+  .admin-header h1 i {
+    font-size: 18px;
+  }
+
+  .admin-header .header-tab-name {
+    font-size: 12px;
+  }
+
+  .admin-header .header-actions {
+    gap: 6px;
+  }
+
+  .admin-header .header-actions .global-search-wrapper input {
+    font-size: 12px;
+    padding: 6px 12px 6px 32px;
+  }
+
+  .admin-header .header-actions button {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .admin-header .header-actions .sound-settings-compact {
+    padding: 4px 10px;
+  }
+
+  .admin-header .header-actions .sound-settings-compact .volume-slider {
+    width: 30px;
+  }
+
+  .admin-header .header-actions .sound-settings-compact i {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .admin-header {
+    padding: 10px 12px;
+  }
+
+  .admin-header h1 {
+    font-size: 14px;
+  }
+
+  .admin-header h1 i {
+    font-size: 16px;
+  }
+
+  .admin-header .header-tab-name {
+    font-size: 10px;
+  }
+
+  .admin-header .header-actions .global-search-wrapper input {
+    font-size: 11px;
+    padding: 5px 10px 5px 28px;
+  }
+
+  .admin-header .header-actions button {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .admin-header .header-actions .sound-settings-compact .volume-slider {
+    width: 20px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🌙 LIGHT MODE
+   ═══════════════════════════════════════════════════════════ */
+
+.light-mode .admin-header {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.light-mode .admin-header .header-actions .global-search-wrapper input {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.light-mode .admin-header .header-actions .global-search-wrapper input:focus {
+  border-color: #0d9488;
+}
+
+.light-mode .admin-header .header-actions button {
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+.light-mode .admin-header .header-actions button:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.light-mode .admin-header .header-actions .back-btn:hover {
+  background: rgba(13, 148, 136, 0.08);
+  color: #0d9488;
+  border-color: #0d9488;
+}
+
+.light-mode .admin-header .header-actions .refresh-btn:hover {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  border-color: #2563eb;
+}
+
+.light-mode .admin-header .header-actions .sound-settings-compact {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.light-mode .admin-header .header-actions .sound-settings-compact:hover {
+  border-color: #0d9488;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ♿ ACCESSIBILITY - Reduced Motion
+   ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-header .header-actions button {
+    transition: none !important;
+  }
+
+  .admin-header .header-actions button:hover {
+    transform: none !important;
+  }
+
+  .admin-header .header-actions button:active {
+    transform: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🖨️ PRINT
+   ═══════════════════════════════════════════════════════════ */
+
+@media print {
+  .admin-header {
+    background: #ffffff !important;
+    border: 1px solid #ddd !important;
+    padding: 12px 16px !important;
+  }
+
+  .admin-header h1 {
+    color: #000 !important;
+  }
+
+  .admin-header .header-actions .global-search-wrapper {
+    display: none !important;
+  }
+
+  .admin-header .header-actions .sound-settings-compact {
+    display: none !important;
+  }
+
+  .admin-header .header-actions .back-btn {
+    display: none !important;
+  }
+
+  .admin-header .header-actions .refresh-btn {
+    display: none !important;
+  }
+}
+
+/* ── Animation ── */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,596 @@
+/* ============================================================
+   📋 PENDING POSTS - সম্পূর্ণ CSS
+   Admin Panel - Pending Posts Management
+   ============================================================ */
+
+/* ==========================================
+   টেবিল হেডার
+   ========================================== */
+
+.data-table.pending-posts-table {
+  width: 100%;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--shadow-color);
+  padding: 20px;
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 16px 0;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.table-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-header h3 i {
+  color: var(--accent-primary);
+}
+
+.table-header .table-count {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.pending-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--status-warning);
+  margin-left: 8px;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.refresh-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.refresh-btn i {
+  font-size: 14px;
+}
+
+/* ==========================================
+   পোস্ট গ্রিড
+   ========================================== */
+
+.pending-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 16px 0 0 0;
+}
+
+/* ==========================================
+   পেন্ডিং পোস্ট কার্ড
+   ========================================== */
+
+.pending-post-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.pending-post-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+/* ── পোস্ট ইমেজ ── */
+.post-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+  flex-shrink: 0;
+}
+
+.post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.pending-post-card:hover .post-image img {
+  transform: scale(1.03);
+}
+
+/* ── পোস্ট কন্টেন্ট ── */
+.post-content {
+  padding: 16px 18px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+/* ── পোস্ট হেডার ── */
+.post-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.post-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 2.8em;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-badge.pending {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+}
+
+/* ── ডেসক্রিপশন ── */
+.post-description {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 3.8em;
+}
+
+/* ── মেটা ইনফো ── */
+.post-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.meta-item i {
+  font-size: 13px;
+  color: var(--accent-primary);
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.meta-item span {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  word-break: break-word;
+}
+
+/* ── অ্যাকশন বাটন ── */
+.post-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.action-btn.approve {
+  background: var(--gradient-success);
+  color: var(--text-inverse);
+}
+
+.action-btn.approve:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-glow);
+  filter: brightness(1.05);
+}
+
+.action-btn.reject {
+  background: var(--gradient-danger);
+  color: var(--text-inverse);
+}
+
+.action-btn.reject:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-color);
+  filter: brightness(1.05);
+}
+
+.action-btn:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================
+   খালি অবস্থা
+   ========================================== */
+
+.pending-posts-table .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  gap: 12px;
+}
+
+.pending-posts-table .empty-state i {
+  font-size: 48px;
+  color: var(--status-success);
+}
+
+.pending-posts-table .empty-state h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.pending-posts-table .empty-state p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 300px;
+}
+
+/* ==========================================
+   রেসপনসিভ
+   ========================================== */
+
+/* ট্যাবলেট */
+@media (max-width: 1024px) {
+  .pending-posts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .post-title {
+    font-size: 15px;
+  }
+
+  .post-meta {
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 12px;
+  }
+}
+
+/* মোবাইল */
+@media (max-width: 768px) {
+  .data-table.pending-posts-table {
+    padding: 14px;
+    border-radius: var(--radius-md);
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+
+  .table-header h3 {
+    font-size: 16px;
+    flex-wrap: wrap;
+  }
+
+  .pending-badge {
+    font-size: 10px;
+    padding: 1px 8px;
+  }
+
+  .refresh-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pending-posts-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 10px 0 0 0;
+  }
+
+  .post-content {
+    padding: 14px 16px 16px 16px;
+    gap: 8px;
+  }
+
+  .post-title {
+    font-size: 14px;
+  }
+
+  .post-description {
+    font-size: 12px;
+    -webkit-line-clamp: 2;
+    min-height: 2.8em;
+  }
+
+  .post-meta {
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 10px;
+    padding: 8px 0;
+  }
+
+  .meta-item {
+    font-size: 11px;
+  }
+
+  .meta-item i {
+    font-size: 12px;
+    width: 14px;
+  }
+
+  .post-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  /* ব্যাজ ছোট */
+  .negotiable-badge,
+  .range-badge {
+    font-size: 8px !important;
+    padding: 1px 5px !important;
+  }
+}
+
+/* ছোট ফোন */
+@media (max-width: 480px) {
+  .data-table.pending-posts-table {
+    padding: 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .table-header h3 {
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  .table-header .table-count {
+    font-size: 12px;
+  }
+
+  .pending-posts-grid {
+    gap: 12px;
+  }
+
+  .post-content {
+    padding: 12px 14px 14px 14px;
+  }
+
+  .post-title {
+    font-size: 13px;
+  }
+
+  .post-header .status-badge {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+
+  .post-description {
+    font-size: 11px;
+  }
+
+  .post-meta {
+    grid-template-columns: 1fr;
+    gap: 3px 0;
+  }
+
+  .meta-item {
+    font-size: 10px;
+  }
+
+  .action-btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .action-btn i {
+    font-size: 12px;
+  }
+
+  .post-image {
+    aspect-ratio: 16/10;
+  }
+
+  .pending-posts-table .empty-state {
+    padding: 40px 16px;
+  }
+
+  .pending-posts-table .empty-state i {
+    font-size: 36px;
+  }
+
+  .pending-posts-table .empty-state h4 {
+    font-size: 16px;
+  }
+
+  .pending-posts-table .empty-state p {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================
+   ডার্ক/লাইট মোড
+   ========================================== */
+
+/* ডার্ক মোড ডিফল্ট - ভেরিয়েবল কাজ করবে */
+
+.light-mode .data-table.pending-posts-table {
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.light-mode .pending-post-card {
+  background: var(--bg-secondary);
+}
+
+.light-mode .pending-post-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .post-image {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .refresh-btn {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .refresh-btn:hover {
+  background: var(--bg-hover);
+}
+
+/* ==========================================
+   অ্যাক্সেসিবিলিটি
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .pending-post-card,
+  .pending-post-card:hover,
+  .post-image img,
+  .pending-post-card:hover .post-image img,
+  .action-btn,
+  .action-btn:hover,
+  .refresh-btn,
+  .refresh-btn:hover {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .pending-post-card {
+    border: 2px solid var(--border-color);
+  }
+
+  .pending-post-card:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .action-btn {
+    border: 2px solid currentColor;
+  }
+
+  .status-badge {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ==========================================
+   ফোকাস ভিজিবিলিটি
+   ========================================== */
+
+.action-btn:focus-visible,
+.refresh-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   স্ক্রলবার
+   ========================================== */
+
+.pending-posts-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.pending-posts-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pending-posts-grid::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.pending-posts-grid {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) transparent;
+}

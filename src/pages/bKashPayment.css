@@ -1,0 +1,972 @@
+/* ==========================================================================
+   💰 bKash Payment Modal - Professional Edition
+   ========================================================================== */
+
+/* ==========================================================================
+   🎨 CSS Variables (Light/Dark Mode)
+   ========================================================================== */
+
+:root {
+    /* Light Mode */
+    --modal-overlay-bg: var(--status-info-bg);
+--modal-border: var(--border-color);
+    --modal-border-accent: var(--status-success-bg);
+--text-placeholder: var(--text-secondary);
+--accent-hover: var(--accent-primary);
+--bkash-pink: var(--accent-primary);
+    --bkash-pink-hover: var(--accent-primary);
+    --bkash-pink-light: var(--status-danger-bg);
+    --bkash-pink-glow: var(--status-danger-bg);
+    --danger: var(--status-danger);
+    --danger-bg: var(--status-danger-bg);
+    --success: var(--status-success);
+    --success-bg: var(--status-success-bg);
+    --warning: var(--status-warning);
+    --warning-bg: var(--status-warning-bg);
+    --info: var(--status-info);
+    --info-bg: var(--status-info-bg);
+    --shadow-modal: 0 25px 60px var(--shadow-color);
+    --shadow-btn: 0 4px 16px var(--status-danger-bg);
+    --shadow-btn-hover: 0 6px 24px var(--status-danger-bg);
+    --shadow-success: 0 4px 16px var(--status-success-bg);
+    --shadow-danger: 0 4px 16px var(--status-danger-bg);
+--input-border: var(--border-color);
+    --input-border-focus: var(--accent-secondary);
+    --amount-bg: var(--status-success-bg);
+    --amount-border: var(--status-success-bg);
+    --instruction-bg: var(--status-info-bg);
+    --instruction-border: var(--status-info-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --modal-overlay-bg: var(--shadow-color);
+--modal-border: var(--glass-bg);
+        --modal-border-accent: var(--status-success-bg);
+--text-placeholder: var(--text-muted);
+--accent-hover: var(--accent-light);
+--bkash-pink: var(--accent-primary);
+        --bkash-pink-hover: var(--accent-primary);
+        --bkash-pink-light: var(--status-danger-bg);
+        --bkash-pink-glow: var(--status-danger-bg);
+        --danger: var(--status-danger);
+        --danger-bg: var(--status-danger-bg);
+        --success: var(--status-success);
+        --success-bg: var(--status-success-bg);
+        --warning: var(--status-warning);
+        --warning-bg: var(--status-warning-bg);
+        --info: var(--status-info);
+        --info-bg: var(--status-info-bg);
+        --shadow-modal: 0 30px 80px var(--shadow-color);
+        --shadow-btn: 0 4px 20px var(--status-danger-bg);
+        --shadow-btn-hover: 0 6px 28px var(--status-danger-bg);
+        --shadow-success: 0 4px 20px var(--status-success-bg);
+        --shadow-danger: 0 4px 20px var(--status-danger-bg);
+--input-border: var(--text-secondary);
+        --input-border-focus: var(--accent-secondary);
+        --amount-bg: var(--status-success-bg);
+        --amount-border: var(--status-success-bg);
+        --instruction-bg: var(--status-info-bg);
+        --instruction-border: var(--status-info-bg);
+    }
+}
+
+/* Manual theme toggle */
+[data-theme="light"] {
+    --modal-overlay-bg: var(--status-info-bg);
+--modal-border: var(--border-color);
+    --modal-border-accent: var(--status-success-bg);
+--text-placeholder: var(--text-secondary);
+--accent-hover: var(--accent-primary);
+--bkash-pink: var(--accent-primary);
+    --bkash-pink-hover: var(--accent-primary);
+    --bkash-pink-light: var(--status-danger-bg);
+    --bkash-pink-glow: var(--status-danger-bg);
+    --danger: var(--status-danger);
+    --danger-bg: var(--status-danger-bg);
+    --success: var(--status-success);
+    --success-bg: var(--status-success-bg);
+    --warning: var(--status-warning);
+    --warning-bg: var(--status-warning-bg);
+    --info: var(--status-info);
+    --info-bg: var(--status-info-bg);
+    --shadow-modal: 0 25px 60px var(--shadow-color);
+    --shadow-btn: 0 4px 16px var(--status-danger-bg);
+    --shadow-btn-hover: 0 6px 24px var(--status-danger-bg);
+    --shadow-success: 0 4px 16px var(--status-success-bg);
+    --shadow-danger: 0 4px 16px var(--status-danger-bg);
+--input-border: var(--border-color);
+    --input-border-focus: var(--accent-secondary);
+    --amount-bg: var(--status-success-bg);
+    --amount-border: var(--status-success-bg);
+    --instruction-bg: var(--status-info-bg);
+    --instruction-border: var(--status-info-bg);
+}
+
+[data-theme="dark"] {
+    --modal-overlay-bg: var(--shadow-color);
+--modal-border: var(--glass-bg);
+    --modal-border-accent: var(--status-success-bg);
+--text-placeholder: var(--text-muted);
+--accent-hover: var(--accent-light);
+--bkash-pink: var(--accent-primary);
+    --bkash-pink-hover: var(--accent-primary);
+    --bkash-pink-light: var(--status-danger-bg);
+    --bkash-pink-glow: var(--status-danger-bg);
+    --danger: var(--status-danger);
+    --danger-bg: var(--status-danger-bg);
+    --success: var(--status-success);
+    --success-bg: var(--status-success-bg);
+    --warning: var(--status-warning);
+    --warning-bg: var(--status-warning-bg);
+    --info: var(--status-info);
+    --info-bg: var(--status-info-bg);
+    --shadow-modal: 0 30px 80px var(--shadow-color);
+    --shadow-btn: 0 4px 20px var(--status-danger-bg);
+    --shadow-btn-hover: 0 6px 28px var(--status-danger-bg);
+    --shadow-success: 0 4px 20px var(--status-success-bg);
+    --shadow-danger: 0 4px 20px var(--status-danger-bg);
+--input-border: var(--text-secondary);
+    --input-border-focus: var(--accent-secondary);
+    --amount-bg: var(--status-success-bg);
+    --amount-border: var(--status-success-bg);
+    --instruction-bg: var(--status-info-bg);
+    --instruction-border: var(--status-info-bg);
+}
+
+/* ==========================================================================
+   🌫️ Modal Overlay
+   ========================================================================== */
+
+.bkash-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--modal-overlay-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+    animation: overlayFadeIn 0.25s ease;
+    overflow-y: auto;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ==========================================================================
+   📦 Modal Container
+   ========================================================================== */
+
+.bkash-modal {
+    background: var(--modal-bg);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 480px;
+    border: 1px solid var(--modal-border-accent);
+    box-shadow: var(--shadow-modal);
+    overflow: hidden;
+    animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+.bkash-modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--bkash-pink), var(--accent-secondary));
+    opacity: 0.8;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ==========================================================================
+   🏷️ Modal Header
+   ========================================================================== */
+
+.bkash-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--modal-border);
+    position: relative;
+    z-index: 1;
+}
+
+.bkash-modal-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.bkash-modal-header h3 i {
+    color: var(--bkash-pink);
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+.bkash-modal:hover .bkash-modal-header h3 i {
+    transform: scale(1.1);
+}
+
+.bkash-modal-header .close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    font-family: inherit;
+}
+
+.bkash-modal-header .close-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--danger-bg);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    border-radius: 10px;
+}
+
+.bkash-modal-header .close-btn:hover {
+    color: var(--danger);
+    transform: rotate(90deg);
+}
+
+.bkash-modal-header .close-btn:hover::before {
+    opacity: 1;
+}
+
+.bkash-modal-header .close-btn i,
+.bkash-modal-header .close-btn svg {
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   📝 Modal Body
+   ========================================================================== */
+
+.bkash-modal-body {
+    padding: 24px 28px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   💰 Payment Init State
+   ========================================================================== */
+
+.payment-init {
+    text-align: center;
+}
+
+/* Amount Display */
+.amount-display {
+    background: var(--amount-bg);
+    border: 1.5px solid var(--amount-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+}
+
+.amount-display:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.amount-display span {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.amount-display strong {
+    font-size: 32px;
+    color: var(--accent-primary);
+    font-weight: 800;
+    letter-spacing: -1px;
+    display: block;
+    line-height: 1.2;
+}
+
+.amount-display .currency {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-left: 4px;
+}
+
+/* Instruction Box */
+.instruction {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    background: var(--instruction-bg);
+    border: 1.5px solid var(--instruction-border);
+    border-radius: 14px;
+    margin-bottom: 24px;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.instruction:hover {
+    border-color: var(--info);
+    background: var(--info-bg);
+}
+
+.instruction i {
+    font-size: 22px;
+    color: var(--info);
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: transform 0.3s ease;
+}
+
+.instruction:hover i {
+    transform: scale(1.1);
+}
+
+.instruction p {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.instruction p strong {
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+
+/* Pay Button */
+.pay-btn {
+    width: 100%;
+    padding: 16px 20px;
+    background: var(--bkash-pink);
+    border: none;
+    border-radius: 14px;
+    color: var(--text-inverse);
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: inherit;
+    box-shadow: var(--shadow-btn);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.3px;
+}
+
+.pay-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--glass-bg), transparent);
+    transition: left 0.5s ease;
+}
+
+.pay-btn:hover:not(:disabled) {
+    background: var(--bkash-pink-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-btn-hover);
+}
+
+.pay-btn:hover:not(:disabled)::before {
+    left: 100%;
+}
+
+.pay-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.pay-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.pay-btn:disabled::before {
+    display: none;
+}
+
+.pay-btn i {
+    font-size: 18px;
+}
+
+/* ==========================================================================
+   ⏳ Processing State
+   ========================================================================== */
+
+.payment-processing {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.spinner {
+    width: 64px;
+    height: 64px;
+    border: 3px solid var(--accent-light);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 24px;
+    position: relative;
+}
+
+.spinner::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 2px solid transparent;
+    border-top-color: var(--bkash-pink);
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite reverse;
+    opacity: 0.3;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.payment-processing h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.payment-processing p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0 0 4px;
+    line-height: 1.5;
+}
+
+.payment-processing small {
+    font-size: 12px;
+    color: var(--warning);
+    font-weight: 600;
+    display: block;
+    margin-top: 8px;
+}
+
+/* ==========================================================================
+   ✅ Success State
+   ========================================================================== */
+
+.payment-success {
+    text-align: center;
+    padding: 20px 0;
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.payment-success .success-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: var(--success-bg);
+    border: 2px solid var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    animation: successPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes successPop {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.payment-success .success-icon-wrapper i {
+    font-size: 36px;
+    color: var(--success);
+}
+
+.payment-success h4 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+}
+
+.payment-success p {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.payment-success .success-details {
+    background: var(--success-bg);
+    border: 1.5px solid var(--success);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.payment-success .success-details p {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.payment-success .success-details p:last-child {
+    margin-bottom: 0;
+}
+
+.payment-success .success-details strong {
+    color: var(--text-primary);
+}
+
+.done-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--success);
+    border: none;
+    border-radius: 14px;
+    color: var(--text-inverse);
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-success);
+    position: relative;
+    overflow: hidden;
+}
+
+.done-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--glass-bg), transparent);
+    transition: left 0.5s ease;
+}
+
+.done-btn:hover {
+    background: var(--status-success);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--status-success-bg);
+}
+
+.done-btn:hover::before {
+    left: 100%;
+}
+
+.done-btn:active {
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   ❌ Failed State
+   ========================================================================== */
+
+.payment-failed {
+    text-align: center;
+    padding: 20px 0;
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.payment-failed .failed-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: var(--danger-bg);
+    border: 2px solid var(--danger);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    animation: failShake 0.5s ease;
+}
+
+@keyframes failShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+}
+
+.payment-failed .failed-icon-wrapper i {
+    font-size: 36px;
+    color: var(--danger);
+}
+
+.payment-failed h4 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+}
+
+.payment-failed p {
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.payment-failed .error-details {
+    background: var(--danger-bg);
+    border: 1.5px solid var(--danger);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.payment-failed .error-details p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.retry-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--danger);
+    border: none;
+    border-radius: 14px;
+    color: var(--text-inverse);
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-danger);
+    position: relative;
+    overflow: hidden;
+}
+
+.retry-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--glass-bg), transparent);
+    transition: left 0.5s ease;
+}
+
+.retry-btn:hover {
+    background: var(--status-danger);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--status-danger-bg);
+}
+
+.retry-btn:hover::before {
+    left: 100%;
+}
+
+.retry-btn:active {
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   📱 Responsive
+   ========================================================================== */
+
+@media (max-width: 600px) {
+    .bkash-modal-overlay {
+        padding: 16px;
+        align-items: flex-end;
+    }
+
+    .bkash-modal {
+        max-width: 100%;
+        border-radius: 20px;
+        animation: slideUpMobile 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideUpMobile {
+        from {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .bkash-modal-header {
+        padding: 20px 22px 16px;
+    }
+
+    .bkash-modal-header h3 {
+        font-size: 18px;
+    }
+
+    .bkash-modal-body {
+        padding: 20px 22px;
+    }
+
+    .amount-display {
+        padding: 18px;
+    }
+
+    .amount-display strong {
+        font-size: 28px;
+    }
+
+    .instruction {
+        padding: 16px;
+    }
+
+    .instruction p {
+        font-size: 13px;
+    }
+
+    .pay-btn {
+        padding: 14px 18px;
+        font-size: 15px;
+    }
+
+    .spinner {
+        width: 56px;
+        height: 56px;
+    }
+
+    .payment-processing h4 {
+        font-size: 16px;
+    }
+
+    .payment-success .success-icon-wrapper,
+    .payment-failed .failed-icon-wrapper {
+        width: 70px;
+        height: 70px;
+    }
+
+    .payment-success .success-icon-wrapper i,
+    .payment-failed .failed-icon-wrapper i {
+        font-size: 30px;
+    }
+
+    .payment-success h4,
+    .payment-failed h4 {
+        font-size: 18px;
+    }
+
+    .done-btn,
+    .retry-btn {
+        padding: 13px 18px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .bkash-modal-overlay {
+        padding: 12px;
+    }
+
+    .bkash-modal {
+        border-radius: 18px;
+    }
+
+    .bkash-modal-header {
+        padding: 18px 18px 14px;
+    }
+
+    .bkash-modal-header h3 {
+        font-size: 16px;
+        gap: 10px;
+    }
+
+    .bkash-modal-header h3 i {
+        font-size: 20px;
+    }
+
+    .bkash-modal-body {
+        padding: 18px;
+    }
+
+    .amount-display {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .amount-display strong {
+        font-size: 24px;
+    }
+
+    .instruction {
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .instruction i {
+        font-size: 18px;
+    }
+
+    .pay-btn {
+        padding: 13px 16px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    .spinner {
+        width: 48px;
+        height: 48px;
+    }
+
+    .payment-processing h4 {
+        font-size: 15px;
+    }
+
+    .payment-processing p {
+        font-size: 13px;
+    }
+
+    .payment-success .success-icon-wrapper,
+    .payment-failed .failed-icon-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+
+    .payment-success .success-icon-wrapper i,
+    .payment-failed .failed-icon-wrapper i {
+        font-size: 26px;
+    }
+
+    .payment-success h4,
+    .payment-failed h4 {
+        font-size: 16px;
+    }
+
+    .payment-success p,
+    .payment-failed p {
+        font-size: 13px;
+    }
+
+    .done-btn,
+    .retry-btn {
+        padding: 12px 16px;
+        font-size: 13.5px;
+        border-radius: 12px;
+    }
+
+    .payment-success .success-details,
+    .payment-failed .error-details {
+        padding: 14px;
+    }
+}
+
+/* ==========================================================================
+   ♿ Accessibility
+   ========================================================================== */
+
+.pay-btn:focus-visible,
+.done-btn:focus-visible,
+.retry-btn:focus-visible,
+.bkash-modal-header .close-btn:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .bkash-modal-overlay,
+    .bkash-modal,
+    .spinner,
+    .spinner::after,
+    .payment-success,
+    .payment-failed,
+    .payment-success .success-icon-wrapper,
+    .payment-failed .failed-icon-wrapper {
+        animation: none;
+    }
+
+    .pay-btn::before,
+    .done-btn::before,
+    .retry-btn::before {
+        display: none;
+    }
+
+    .pay-btn,
+    .done-btn,
+    .retry-btn,
+    .bkash-modal-header .close-btn {
+        transition: none;
+    }
+}

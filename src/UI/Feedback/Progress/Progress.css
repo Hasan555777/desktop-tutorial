@@ -1,0 +1,330 @@
+/* UI/Feedback/Progress.css */
+
+/* ============================================================
+   Overlay
+   ============================================================ */
+.progress-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  pointer-events: all;
+  user-select: none;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ============================================================
+   Container
+   ============================================================ */
+.progress-container {
+  background: var(--color-bg-secondary, #1a1a2e);
+  border-radius: 20px;
+  padding: 40px 48px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================
+   Icon
+   ============================================================ */
+.progress-icon {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.progress-icon i {
+  font-size: 48px;
+  color: var(--color-primary, #14b8a6);
+  transition: all 0.3s ease;
+}
+
+.progress-icon.animated i {
+  animation: rotateCube 1.5s linear infinite;
+}
+
+.progress-checkmark {
+  position: absolute;
+  bottom: -4px;
+  right: -8px;
+  background: var(--color-success, #22c55e);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: white;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================
+   Typography
+   ============================================================ */
+.progress-message {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text, #ffffff);
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.progress-sub-message {
+  font-size: 14px;
+  color: var(--color-text-secondary, #94a3b8);
+  margin: 0 0 20px 0;
+}
+
+/* ============================================================
+   Progress Bar
+   ============================================================ */
+.progress-bar-wrapper {
+  width: 100%;
+  margin: 16px 0 12px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--color-bg-tertiary, #2d2d44);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary, #14b8a6), var(--color-primary-light, #5eead4));
+  border-radius: 100px;
+  transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.progress-fill.animated {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary, #14b8a6),
+    var(--color-primary-light, #5eead4),
+    var(--color-primary, #14b8a6)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.progress-fill.complete {
+  background: linear-gradient(90deg, var(--color-success, #22c55e), var(--color-success-light, #4ade80));
+  animation: none;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.progress-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.progress-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary, #94a3b8);
+}
+
+.progress-text.complete {
+  color: var(--color-success, #22c55e);
+}
+
+.progress-text.complete i {
+  margin-right: 6px;
+}
+
+.progress-eta {
+  font-size: 12px;
+  color: var(--color-text-muted, #64748b);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress-eta i {
+  font-size: 12px;
+}
+
+/* ============================================================
+   Actions (Children)
+   ============================================================ */
+.progress-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.progress-actions button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.progress-actions .cancel-btn {
+  background: var(--color-bg-tertiary, #2d2d44);
+  color: var(--color-text-secondary, #94a3b8);
+}
+
+.progress-actions .cancel-btn:hover {
+  background: var(--color-danger, #ef4444);
+  color: white;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rotateCube {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.1); }
+  50% { transform: rotate(180deg) scale(1); }
+  75% { transform: rotate(270deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   Light Mode
+   ============================================================ */
+[data-theme="light"] .progress-container,
+.light-mode .progress-container {
+  background: #ffffff;
+}
+
+[data-theme="light"] .progress-message,
+.light-mode .progress-message {
+  color: #0f172a;
+}
+
+[data-theme="light"] .progress-sub-message,
+.light-mode .progress-sub-message {
+  color: #475569;
+}
+
+[data-theme="light"] .progress-bar,
+.light-mode .progress-bar {
+  background: #e2e8f0;
+}
+
+[data-theme="light"] .progress-text,
+.light-mode .progress-text {
+  color: #475569;
+}
+
+[data-theme="light"] .progress-eta,
+.light-mode .progress-eta {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .progress-overlay,
+.light-mode .progress-overlay {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================================
+   Mobile Responsive
+   ============================================================ */
+@media (max-width: 640px) {
+  .progress-container {
+    padding: 32px 24px;
+    width: 95%;
+  }
+
+  .progress-icon i {
+    font-size: 36px;
+  }
+
+  .progress-message {
+    font-size: 16px;
+  }
+
+  .progress-footer {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .progress-actions {
+    flex-direction: column;
+  }
+
+  .progress-actions button {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+/* ============================================================
+   Reduced Motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .progress-overlay {
+    animation: none;
+  }
+  
+  .progress-container {
+    animation: none;
+  }
+  
+  .progress-icon.animated i,
+  .progress-fill.animated {
+    animation: none !important;
+  }
+  
+  .progress-checkmark {
+    animation: none !important;
+  }
+}

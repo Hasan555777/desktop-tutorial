@@ -1,0 +1,33 @@
+/* src/components/Navigation/Navigation.css */
+
+/* ===== Import ===== */
+@import './Button.css';
+@import './Header.css';
+
+/* ===== Additional Navigation Styles ===== */
+.nav-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.nav-main {
+  flex: 1;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-main {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-main {
+    padding: 8px;
+  }
+}

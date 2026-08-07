@@ -1,0 +1,692 @@
+/* ============================================================
+   🚩 REPORTS SECTION - সম্পূর্ণ CSS
+   Admin Panel - Reports & Feedback Management
+   ============================================================ */
+
+/* ==========================================
+   টেবিল কন্টেইনার
+   ========================================== */
+
+.data-table.reports-table {
+  width: 100%;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--shadow-color);
+  padding: 20px;
+}
+
+/* ==========================================
+   টেবিল হেডার
+   ========================================== */
+
+.data-table.reports-table .table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 16px 0;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.data-table.reports-table .table-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.data-table.reports-table .table-header h3 i {
+  color: var(--status-danger);
+}
+
+.data-table.reports-table .table-count {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.data-table.reports-table .pending-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--status-danger);
+  margin-left: 8px;
+}
+
+.data-table.reports-table .refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.data-table.reports-table .refresh-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.data-table.reports-table .refresh-btn i {
+  font-size: 14px;
+}
+
+/* ==========================================
+   টেবিল
+   ========================================== */
+
+.data-table.reports-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 800px;
+}
+
+.data-table.reports-table thead {
+  background: var(--bg-tertiary);
+}
+
+.data-table.reports-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.data-table.reports-table tbody tr {
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.data-table.reports-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.data-table.reports-table tbody tr.pending-row {
+  background: var(--status-danger-bg);
+}
+
+.data-table.reports-table tbody tr.pending-row:hover {
+  background: var(--status-danger-bg);
+  opacity: 0.8;
+}
+
+.data-table.reports-table tbody td {
+  padding: 12px 16px;
+  color: var(--text-primary);
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+/* ==========================================
+   ইউজার ইনফো
+   ========================================== */
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-info .user-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.user-info .user-email {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ==========================================
+   রিপোর্ট ব্যাজ
+   ========================================== */
+
+.report-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.report-badge.complaint {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+}
+
+.report-badge.suggestion {
+  color: var(--status-info);
+  background: var(--status-info-bg);
+  border: 1px solid var(--status-info);
+}
+
+.report-badge.feedback {
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success);
+}
+
+.report-badge.other {
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+}
+
+/* ==========================================
+   রিপোর্ট বিষয়
+   ========================================== */
+
+.report-subject {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 13px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* ==========================================
+   রিপোর্ট মেসেজ প্রিভিউ
+   ========================================== */
+
+.report-message-preview {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  line-height: 1.4;
+}
+
+/* ==========================================
+   স্ট্যাটাস ব্যাজ
+   ========================================== */
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.pending {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+}
+
+.status-badge.resolved {
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success);
+}
+
+.status-badge.cancelled {
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+}
+
+/* ==========================================
+   অ্যাকশন বাটন
+   ========================================== */
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  z-index: 2;
+}
+
+.action-btn.view:hover {
+  background: var(--status-info-bg);
+  border-color: var(--status-info);
+  color: var(--status-info);
+}
+
+.action-btn.approve:hover {
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+  color: var(--status-success);
+}
+
+.action-btn.reject:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+/* ==========================================
+   খালি অবস্থা
+   ========================================== */
+
+.data-table.reports-table .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  gap: 12px;
+}
+
+.data-table.reports-table .empty-state i {
+  font-size: 48px;
+}
+
+.data-table.reports-table .empty-state h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.data-table.reports-table .empty-state p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 300px;
+}
+
+/* ==========================================
+   রেসপনসিভ
+   ========================================== */
+
+/* ট্যাবলেট */
+@media (max-width: 1024px) {
+  .data-table.reports-table {
+    padding: 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .data-table.reports-table table {
+    font-size: 13px;
+    min-width: 700px;
+  }
+
+  .data-table.reports-table thead th,
+  .data-table.reports-table tbody td {
+    padding: 10px 12px;
+  }
+
+  .report-subject {
+    max-width: 120px;
+  }
+
+  .report-message-preview {
+    max-width: 150px;
+  }
+
+  .action-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+/* মোবাইল */
+@media (max-width: 768px) {
+  .data-table.reports-table {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+  }
+
+  .data-table.reports-table .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+
+  .data-table.reports-table .table-header h3 {
+    font-size: 16px;
+  }
+
+  .data-table.reports-table .table-count {
+    font-size: 12px;
+    padding: 2px 10px;
+  }
+
+  .data-table.reports-table .pending-badge {
+    font-size: 10px;
+    padding: 1px 8px;
+  }
+
+  .data-table.reports-table .refresh-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .data-table.reports-table table {
+    font-size: 12px;
+    min-width: 650px;
+  }
+
+  .data-table.reports-table thead th,
+  .data-table.reports-table tbody td {
+    padding: 8px 10px;
+  }
+
+  .data-table.reports-table thead th {
+    font-size: 10px;
+  }
+
+  .data-table.reports-table tbody td {
+    font-size: 12px;
+  }
+
+  .user-info .user-name {
+    font-size: 12px;
+  }
+
+  .user-info .user-email {
+    font-size: 10px;
+  }
+
+  .report-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .report-subject {
+    font-size: 12px;
+    max-width: 100px;
+  }
+
+  .report-message-preview {
+    font-size: 11px;
+    max-width: 120px;
+  }
+
+  .status-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .action-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+  }
+}
+
+/* ছোট ফোন */
+@media (max-width: 480px) {
+  .data-table.reports-table {
+    padding: 10px;
+    border-radius: var(--radius-xs);
+  }
+
+  .data-table.reports-table .table-header h3 {
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  .data-table.reports-table .table-header h3 i {
+    font-size: 14px;
+  }
+
+  .data-table.reports-table .table-count {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  .data-table.reports-table table {
+    font-size: 11px;
+    min-width: 550px;
+  }
+
+  .data-table.reports-table thead th,
+  .data-table.reports-table tbody td {
+    padding: 6px 8px;
+  }
+
+  .data-table.reports-table thead th {
+    font-size: 9px;
+  }
+
+  .data-table.reports-table tbody td {
+    font-size: 11px;
+  }
+
+  .user-info .user-name {
+    font-size: 11px;
+  }
+
+  .user-info .user-email {
+    font-size: 9px;
+  }
+
+  .report-badge {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+
+  .report-subject {
+    font-size: 11px;
+    max-width: 80px;
+  }
+
+  .report-message-preview {
+    font-size: 10px;
+    max-width: 100px;
+  }
+
+  .status-badge {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+
+  .action-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .action-buttons {
+    gap: 2px;
+  }
+
+  .data-table.reports-table .empty-state {
+    padding: 40px 16px;
+  }
+
+  .data-table.reports-table .empty-state i {
+    font-size: 36px;
+  }
+
+  .data-table.reports-table .empty-state h4 {
+    font-size: 16px;
+  }
+
+  .data-table.reports-table .empty-state p {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================
+   ডার্ক/লাইট মোড
+   ========================================== */
+
+.light-mode .data-table.reports-table {
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.light-mode .data-table.reports-table thead {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .data-table.reports-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.light-mode .data-table.reports-table tbody tr.pending-row {
+  background: rgba(239, 68, 68, 0.06);
+}
+
+.light-mode .data-table.reports-table tbody tr.pending-row:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.light-mode .data-table.reports-table .table-count {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .data-table.reports-table .refresh-btn {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .data-table.reports-table .refresh-btn:hover {
+  background: var(--bg-hover);
+}
+
+.light-mode .action-btn {
+  background: var(--bg-tertiary);
+}
+
+/* ==========================================
+   অ্যাক্সেসিবিলিটি
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .data-table.reports-table tbody tr:hover {
+    background: transparent;
+  }
+
+  .data-table.reports-table tbody tr.pending-row:hover {
+    background: var(--status-danger-bg);
+  }
+
+  .action-btn:hover {
+    transform: none !important;
+  }
+
+  .action-btn:active {
+    transform: none !important;
+  }
+
+  .action-btn {
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .data-table.reports-table {
+    border: 2px solid var(--border-color);
+  }
+
+  .data-table.reports-table thead th {
+    border-bottom: 3px solid var(--border-color);
+  }
+
+  .report-badge {
+    border-width: 2px;
+  }
+
+  .status-badge {
+    border-width: 2px;
+  }
+
+  .action-btn {
+    border-width: 2px;
+  }
+}
+
+/* ==========================================
+   ফোকাস ভিজিবিলিটি
+   ========================================== */
+
+.action-btn:focus-visible,
+.data-table.reports-table .refresh-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   স্ক্রলবার
+   ========================================== */
+
+.data-table.reports-table::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.data-table.reports-table::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+.data-table.reports-table::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.data-table.reports-table {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+}

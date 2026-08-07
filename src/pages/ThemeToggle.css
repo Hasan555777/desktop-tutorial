@@ -1,0 +1,81 @@
+/* ============================================
+   Theme Toggle Button Styles
+   ============================================ */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--status-info-bg);
+  border: 1px solid var(--status-success-bg);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.theme-toggle:hover {
+  background: var(--status-success-bg);
+  border-color: var(--accent-secondary);
+  transform: translateY(-2px);
+}
+
+.theme-toggle i {
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle .fa-sun {
+  color: var(--status-warning);
+}
+
+.theme-toggle .fa-moon {
+  color: var(--border-color);
+}
+
+.theme-text {
+  font-size: 13px;
+}
+
+/* ডেস্কটপ সাইডবারে থাকলে */
+.dock-item.theme-toggle {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  justify-content: center;
+}
+
+.dock-item.theme-toggle .theme-text {
+  display: none;
+}
+
+.dock-item.theme-toggle i {
+  font-size: 20px;
+}
+
+/* ড্রপডাউন মেনুতে থাকলে */
+.drop-item.theme-toggle {
+  width: 100%;
+  justify-content: flex-start;
+  background: transparent;
+}
+
+/* মোবাইলে */
+@media (max-width: 768px) {
+  .theme-toggle {
+    padding: 10px 14px;
+  }
+  
+  .theme-text {
+    font-size: 12px;
+  }
+  
+  .theme-toggle i {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,647 @@
+/* src/pages/Transactions.css */
+
+/* ========== কন্টেইনার ========== */
+.transactions-container {
+  min-height: 100vh;
+  /* background: var(--text-primary); */
+  padding: 20px;
+}
+
+.transactions-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ========== লোডিং ========== */
+.transactions-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 20px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ========== হেডার ========== */
+.transactions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.back-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--bg-tertiary);
+}
+
+.transactions-header h1 {
+  font-size: 24px;
+  /* color: var(--bg-tertiary); */
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.transactions-header h1 i {
+  color: var(--accent-primary);
+}
+
+.export-btn {
+  background: var(--bg-tertiary);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.export-btn:hover {
+  background: var(--border-color);
+  color: var(--bg-tertiary);
+}
+
+/* ========== সার্চ বার ========== */
+.search-bar {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s;
+  background: var(--text-inverse);
+  box-sizing: border-box;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--status-info-bg);
+}
+
+.clear-search {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.clear-search:hover {
+  color: var(--status-danger);
+  background: var(--accent-primary);
+}
+
+/* ========== স্ট্যাটাস কার্ড ========== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--text-inverse);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 1px 3px var(--shadow-color);
+  border: 1px solid var(--bg-tertiary);
+}
+
+.stat-card .stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.stat-card.credit .stat-icon {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.stat-card.debit .stat-icon {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.stat-card.withdraw .stat-icon {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+.stat-card.pending .stat-icon {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.stat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--bg-tertiary);
+}
+
+/* ========== ফিল্টার সেকশন ========== */
+.filter-section {
+  background: var(--text-inverse);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px var(--shadow-color);
+  border: 1px solid var(--bg-tertiary);
+}
+
+.filter-group {
+  margin-bottom: 12px;
+}
+
+.filter-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--text-inverse);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-btn:hover {
+  border-color: var(--text-secondary);
+  background: var(--text-primary);
+}
+
+.filter-btn.active {
+  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.filter-count {
+  background: var(--bg-tertiary);
+  padding: 1px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.filter-btn.active .filter-count {
+  background: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ✅ স্ট্যাটাস ফিল্টার */
+.status-filters .filter-btn {
+  font-size: 12px;
+  padding: 4px 12px;
+}
+
+/* ✅ ডেট ফিল্টার */
+.date-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.date-inputs input[type="date"] {
+  padding: 6px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--text-inverse);
+}
+
+.date-inputs input[type="date"]:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.date-inputs span {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* ✅ ক্লিয়ার ফিল্টার বাটন */
+.clear-filters-btn {
+  margin-top: 12px;
+  padding: 6px 16px;
+  background: var(--accent-primary);
+  border: 1px solid var(--accent-primary);
+  border-radius: 8px;
+  color: var(--status-danger);
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s;
+}
+
+.clear-filters-btn:hover {
+  background: var(--accent-primary);
+}
+
+/* ========== রেজাল্ট কাউন্ট ========== */
+.result-count {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filtered-info {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+/* ========== ট্রানজেকশন লিস্ট ========== */
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction-card {
+  background: var(--text-inverse);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  box-shadow: 0 1px 3px var(--shadow-color);
+  border: 1px solid var(--bg-tertiary);
+  transition: all 0.3s;
+}
+
+.transaction-card:hover {
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border-color: var(--border-color);
+}
+
+.tx-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tx-icon i {
+  font-size: 20px;
+}
+
+.tx-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tx-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.tx-header h4 {
+  font-size: 15px;
+  font-weight: 600;
+  /* color: var(--bg-tertiary); */
+  margin: 0;
+}
+
+.tx-time {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.tx-description {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 2px 0 10px 0;
+}
+
+.tx-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tx-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tx-meta span {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tx-method,
+.tx-ref {
+  background: var(--text-primary);
+  padding: 2px 10px;
+  border-radius: 4px;
+}
+
+.tx-status {
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.tx-status.completed {
+  color: var(--status-success);
+  background: var(--status-success-bg);
+}
+
+.tx-status.pending {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+}
+
+.tx-status.failed {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+}
+
+.tx-status.processing {
+  color: var(--status-info);
+  background: var(--status-info-bg);
+}
+
+.tx-status.cancelled {
+  color: var(--accent-primary);
+  background: var(--accent-primary);
+}
+
+.tx-amount {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.tx-amount.credit {
+  color: var(--status-success);
+}
+
+.tx-amount.debit {
+  color: var(--status-danger);
+}
+
+/* ========== নো ট্রানজেকশন ========== */
+.no-transactions {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--text-inverse);
+  border-radius: 12px;
+  border: 1px solid var(--bg-tertiary);
+}
+
+.no-transactions i {
+  font-size: 64px;
+  color: var(--border-color);
+  margin-bottom: 16px;
+}
+
+.no-transactions h3 {
+  color: var(--bg-tertiary);
+  margin-bottom: 8px;
+}
+
+.no-transactions p {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.browse-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-primary) 100%);
+  border: none;
+  border-radius: 10px;
+  color: var(--text-inverse);
+  font-size: 15px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.browse-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--status-info-bg);
+}
+
+/* ========== পেজিনেশন ========== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 12px;
+}
+
+.page-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--text-inverse);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.page-info {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ========== রেস্পন্সিভ ========== */
+@media (max-width: 768px) {
+  .transactions-container {
+    padding: 12px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .transactions-header h1 {
+    font-size: 20px;
+  }
+
+  .filter-btn {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .filter-buttons {
+    gap: 4px;
+  }
+
+  .tx-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tx-amount {
+    align-self: flex-end;
+  }
+
+  .date-inputs {
+    flex-direction: row;
+  }
+
+  .date-inputs input[type="date"] {
+    flex: 1;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 12px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+  }
+
+  .transaction-card {
+    padding: 12px;
+    flex-direction: row;
+  }
+
+  .tx-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

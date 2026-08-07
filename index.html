@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- ============================================================
+  ✅ PWA Manifest (সবচেয়ে গুরুত্বপূর্ণ)
+  ============================================================ -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+
+  <!-- ============================================================
+  ✅ Favicon
+  ============================================================ -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
+
+  <!-- ============================================================
+  ✅ Apple Touch Icon (iPhone, iPad)
+  ============================================================ -->
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+
+  <!-- ============================================================
+  ✅ Mask Icon (Safari)
+  ============================================================ -->
+  <link rel="mask-icon" href="/icons/icon-192x192-maskable.png" color="#0f1420" />
+
+  <!-- ============================================================
+  ✅ Viewport (Mobile Optimized)
+  ============================================================ -->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  />
+
+  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups" />
+  <meta http-equiv="Cross-Origin-Embedder-Policy" content="unsafe-none" />
+
+  <!-- ============================================================
+  ✅ PWA Meta Tags
+  ============================================================ -->
+  <meta name="theme-color" content="#0f1420" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="WorkTrustbd" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- ============================================================
+  ✅ Microsoft Tile (Windows)
+  ============================================================ -->
+  <meta name="msapplication-TileColor" content="#0f1420" />
+  <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
+
+  <!-- ============================================================
+  ✅ Primary SEO
+  ============================================================ -->
+  <title>WorkTrustbd | Trusted Freelance &amp; Service Marketplace</title>
+
+  <meta
+    name="description"
+    content="WorkTrustbd is a trusted freelance and service marketplace where clients and professionals connect securely with verified profiles, escrow payments, and admin-approved posts."
+  />
+
+  <meta
+    name="keywords"
+    content="WorkTrustbd, Freelance, Marketplace, Bangladesh, Jobs, Services, Escrow, Verified"
+  />
+
+  <meta name="author" content="WorkTrustbd" />
+
+  <!-- ============================================================
+  ✅ Open Graph (Facebook, LinkedIn, etc.)
+  ============================================================ -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="WorkTrustbd | Trusted Freelance &amp; Service Marketplace" />
+  <meta
+    property="og:description"
+    content="Trusted Freelance &amp; Service Marketplace in Bangladesh"
+  />
+  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:url" content="https://worktrustbd.com" />
+  <meta property="og:site_name" content="WorkTrustbd" />
+
+  <!-- ============================================================
+  ✅ Twitter Card
+  ============================================================ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="WorkTrustbd | Trusted Freelance &amp; Service Marketplace" />
+  <meta
+    name="twitter:description"
+    content="Trusted Freelance &amp; Service Marketplace in Bangladesh"
+  />
+  <meta name="twitter:image" content="/og-image.png" />
+  <meta name="twitter:site" content="@worktrustbd" />
+
+  <!-- ============================================================
+  ✅ Fonts & Styles
+  ============================================================ -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <link
+    href="https://banglawebfonts.pages.dev/css/bensen-handwriting.css"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="/index.css" />
+
+  <!-- ============================================================
+  ✅ Preconnect for Performance
+  ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link rel="preconnect" href="https://banglawebfonts.pages.dev" />
+
+  <!-- ============================================================
+  ✅ DNS Prefetch
+  ============================================================ -->
+  <link rel="dns-prefetch" href="https://firebase.googleapis.com" />
+  <link rel="dns-prefetch" href="https://securetoken.googleapis.com" />
+  <link rel="dns-prefetch" href="https://api.cloudinary.com" />
+  <link rel="dns-prefetch" href="https://www.google.com" />
+  <link rel="dns-prefetch" href="https://banglawebfonts.pages.dev" />
+
+  <!-- ============================================================
+  ✅ Service Worker Registration (Fixed)
+  ============================================================ -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        const isProd = window.location.hostname !== 'localhost' && 
+                       window.location.hostname !== '127.0.0.1' &&
+                       !window.location.hostname.includes('netlify.app');
+        
+        if (isProd) {
+          navigator.serviceWorker.register('/sw.js', {
+            scope: '/',
+          }).then(function(registration) {
+            console.log('✅ Service Worker registered from index.html');
+          }).catch(function(error) {
+            console.warn('⚠️ Service Worker registration failed:', error);
+          });
+        }
+      });
+    }
+
+    window.addEventListener('load', function() {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('📱 App running in standalone mode (PWA)');
+      }
+    });
+  </script>
+
+  <!-- ============================================================
+  ✅ Security Headers (CSP - UPDATED with ui-avatars.com and images.unsplash.com)
+  ============================================================ -->
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.firebase.com https://*.googleapis.com https://*.cloudinary.com https://apis.google.com https://*.firebaseio.com;
+      style-src 'self' 'unsafe-inline' https://*.googleapis.com https://cdnjs.cloudflare.com https://banglawebfonts.pages.dev;
+      font-src 'self' https://*.googleapis.com https://*.gstatic.com https://cdnjs.cloudflare.com https://banglawebfonts.pages.dev data:;
+      img-src 'self' data: https: http: https://*.cloudinary.com https://*.googleapis.com https://www.google.com https://*.google.com https://ui-avatars.com https://via.placeholder.com https://images.unsplash.com https://*.githubusercontent.com;
+      connect-src 'self' https://*.firebase.com https://*.googleapis.com https://*.cloudinary.com https://*.firebaseio.com https://*.firebaseapp.com wss://*.firebaseio.com https://www.google.com;
+      frame-src 'self' https://*.firebase.com https://apis.google.com https://*.firebaseapp.com;
+      worker-src 'self' blob:;
+    "
+  />
+
+</head>
+
+<body>
+  <!-- ============================================================
+  ✅ App Root
+  ============================================================ -->
+  <div id="root"></div>
+
+  <!-- ============================================================
+  ✅ Main Script
+  ============================================================ -->
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- ============================================================
+  ✅ Fallback: If JavaScript fails, show a message
+  ============================================================ -->
+  <noscript>
+    <div style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #090d16;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      text-align: center;
+      padding: 20px;
+    ">
+      <div>
+        <div style="font-size: 48px; margin-bottom: 16px;">🔧</div>
+        <h1 style="font-size: 24px; margin-bottom: 8px;">JavaScript is disabled</h1>
+        <p style="color: #94a3b8; max-width: 400px; margin: 0 auto; line-height: 1.6;">
+          Please enable JavaScript to use all features of WorkTrustbd.
+        </p>
+      </div>
+    </div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,629 @@
+/* ============================================================
+   ✏️ PENDING EDITS - সম্পূর্ণ CSS
+   Admin Panel - Pending Post Edits Management
+   ============================================================ */
+
+/* ==========================================
+   টেবিল কন্টেইনার
+   ========================================== */
+
+.data-table.pending-edits-table {
+  width: 100%;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--shadow-color);
+  padding: 20px;
+}
+
+/* ==========================================
+   টেবিল হেডার
+   ========================================== */
+
+.data-table.pending-edits-table .table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 16px 0;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.data-table.pending-edits-table .table-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.data-table.pending-edits-table .table-header h3 i {
+  color: var(--status-warning);
+}
+
+.data-table.pending-edits-table .table-count {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.data-table.pending-edits-table .pending-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--status-warning);
+  margin-left: 8px;
+}
+
+.data-table.pending-edits-table .refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.data-table.pending-edits-table .refresh-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.data-table.pending-edits-table .refresh-btn i {
+  font-size: 14px;
+}
+
+/* ==========================================
+   এডিট গ্রিড
+   ========================================== */
+
+.pending-edits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+  padding: 16px 0 0 0;
+}
+
+/* ==========================================
+   এডিট কার্ড
+   ========================================== */
+
+.pending-edit-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.pending-edit-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+/* ── হেডার ── */
+.edit-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.edit-header .edit-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.edit-header .status-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.edit-header .status-badge.pending {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+}
+
+/* ── ভার্সন কম্পেয়ার ── */
+.version-compare {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-primary);
+  min-height: 120px;
+}
+
+.version-compare .current-version,
+.version-compare .pending-version {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+}
+
+.version-compare .current-version {
+  border-color: var(--status-info);
+}
+
+.version-compare .pending-version {
+  border-color: var(--status-warning);
+}
+
+.version-compare h5 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.version-compare p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 2px 0;
+  word-break: break-word;
+}
+
+.version-compare p strong {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.version-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--text-muted);
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ── এডিট ইমেজ প্রিভিউ ── */
+.edit-images-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.edit-images-preview .edit-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+}
+
+.edit-images-preview span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ── মেটা ── */
+.edit-meta {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── অ্যাকশন ── */
+.edit-actions {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px 16px 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.edit-actions .action-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.edit-actions .action-btn.approve {
+  background: var(--gradient-success);
+  color: var(--text-inverse);
+}
+
+.edit-actions .action-btn.approve:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-glow);
+  filter: brightness(1.05);
+}
+
+.edit-actions .action-btn.reject {
+  background: var(--gradient-danger);
+  color: var(--text-inverse);
+}
+
+.edit-actions .action-btn.reject:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-color);
+  filter: brightness(1.05);
+}
+
+.edit-actions .action-btn:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================
+   খালি অবস্থা
+   ========================================== */
+
+.data-table.pending-edits-table .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  gap: 12px;
+}
+
+.data-table.pending-edits-table .empty-state i {
+  font-size: 48px;
+}
+
+.data-table.pending-edits-table .empty-state h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.data-table.pending-edits-table .empty-state p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 300px;
+}
+
+/* ==========================================
+   রেসপনসিভ
+   ========================================== */
+
+/* ট্যাবলেট */
+@media (max-width: 1024px) {
+  .data-table.pending-edits-table {
+    padding: 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .pending-edits-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .version-compare {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .version-arrow {
+    transform: rotate(90deg);
+    padding: 4px 0;
+  }
+}
+
+/* মোবাইল */
+@media (max-width: 768px) {
+  .data-table.pending-edits-table {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+  }
+
+  .data-table.pending-edits-table .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+
+  .data-table.pending-edits-table .table-header h3 {
+    font-size: 16px;
+  }
+
+  .data-table.pending-edits-table .table-count {
+    font-size: 12px;
+    padding: 2px 10px;
+  }
+
+  .data-table.pending-edits-table .pending-badge {
+    font-size: 10px;
+    padding: 1px 8px;
+  }
+
+  .data-table.pending-edits-table .refresh-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pending-edits-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 10px 0 0 0;
+  }
+
+  .edit-header {
+    padding: 12px 14px;
+  }
+
+  .edit-header .edit-title {
+    font-size: 14px;
+  }
+
+  .version-compare {
+    padding: 10px 12px;
+    grid-template-columns: 1fr;
+  }
+
+  .version-arrow {
+    transform: rotate(90deg);
+    padding: 4px 0;
+  }
+
+  .version-compare .current-version,
+  .version-compare .pending-version {
+    padding: 8px 10px;
+  }
+
+  .version-compare p {
+    font-size: 11px;
+  }
+
+  .edit-meta {
+    font-size: 10px;
+    padding: 6px 14px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 14px 14px 14px;
+  }
+
+  .edit-actions .action-btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .edit-images-preview .edit-thumb {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ছোট ফোন */
+@media (max-width: 480px) {
+  .data-table.pending-edits-table {
+    padding: 10px;
+    border-radius: var(--radius-xs);
+  }
+
+  .data-table.pending-edits-table .table-header h3 {
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  .data-table.pending-edits-table .table-header h3 i {
+    font-size: 14px;
+  }
+
+  .data-table.pending-edits-table .table-count {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  .edit-header .edit-title {
+    font-size: 13px;
+  }
+
+  .edit-header .status-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .version-compare p {
+    font-size: 10px;
+  }
+
+  .version-compare h5 {
+    font-size: 10px;
+  }
+
+  .edit-actions .action-btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .data-table.pending-edits-table .empty-state {
+    padding: 40px 16px;
+  }
+
+  .data-table.pending-edits-table .empty-state i {
+    font-size: 36px;
+  }
+
+  .data-table.pending-edits-table .empty-state h4 {
+    font-size: 16px;
+  }
+
+  .data-table.pending-edits-table .empty-state p {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================
+   ডার্ক/লাইট মোড
+   ========================================== */
+
+.light-mode .data-table.pending-edits-table {
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.light-mode .pending-edit-card {
+  background: var(--bg-secondary);
+}
+
+.light-mode .pending-edit-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .edit-header {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .version-compare .current-version,
+.light-mode .version-compare .pending-version {
+  background: var(--bg-secondary);
+}
+
+.light-mode .edit-meta {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .data-table.pending-edits-table .refresh-btn {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .data-table.pending-edits-table .refresh-btn:hover {
+  background: var(--bg-hover);
+}
+
+/* ==========================================
+   অ্যাক্সেসিবিলিটি
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .pending-edit-card,
+  .pending-edit-card:hover,
+  .edit-actions .action-btn,
+  .edit-actions .action-btn:hover {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .data-table.pending-edits-table .refresh-btn:hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .pending-edit-card {
+    border: 2px solid var(--border-color);
+  }
+
+  .pending-edit-card:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .edit-actions .action-btn {
+    border: 2px solid currentColor;
+  }
+
+  .version-compare .current-version {
+    border: 2px solid var(--status-info);
+  }
+
+  .version-compare .pending-version {
+    border: 2px solid var(--status-warning);
+  }
+
+  .edit-header .status-badge {
+    border-width: 2px;
+  }
+}
+
+/* ==========================================
+   ফোকাস ভিজিবিলিটি
+   ========================================== */
+
+.edit-actions .action-btn:focus-visible,
+.data-table.pending-edits-table .refresh-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   স্ক্রলবার
+   ========================================== */
+
+.pending-edits-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.pending-edits-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pending-edits-grid::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.pending-edits-grid {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) transparent;
+}

@@ -1,0 +1,907 @@
+/* ============================================================
+   📁 Deposit.css
+   ============================================================
+   Deposit কম্পোনেন্টের জন্য সম্পূর্ণ স্টাইল
+   গ্লোবাল CSS ভেরিয়েবল ব্যবহার করে তৈরি
+   ============================================================ */
+
+/* ============================================================
+   🏠 MAIN CONTAINER
+   ============================================================ */
+.deposit-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px 16px 40px;
+  background: var(--bg-primary);
+}
+
+/* ============================================================
+   💳 DEPOSIT CARD
+   ============================================================ */
+.deposit-card {
+  max-width: 520px;
+  width: 100%;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg, 16px);
+  padding: 24px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 40px var(--shadow-color);
+  transition: all var(--transition-normal);
+}
+
+.deposit-card:hover {
+  box-shadow: 0 12px 60px var(--shadow-color);
+}
+
+/* ============================================================
+   🔙 BACK BUTTON
+   ============================================================ */
+.back-btn-simple {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-normal);
+  font-weight: 500;
+}
+
+.back-btn-simple:hover {
+  color: var(--accent-primary);
+  transform: translateX(-4px);
+}
+
+/* ============================================================
+   📝 HEADER
+   ============================================================ */
+.deposit-header {
+  margin: 8px 0 20px 0;
+}
+
+.deposit-header h2 {
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deposit-header h2 i {
+  color: #3b82f6;
+}
+
+.deposit-header p {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ============================================================
+   📊 STATUS MESSAGE
+   ============================================================ */
+.status-message {
+  padding: 12px 16px;
+  border-radius: var(--radius-md, 12px);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.status-message.processing {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.status-message.success {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.status-message.error {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   ❌ ERROR MESSAGE
+   ============================================================ */
+.error-message {
+  padding: 12px 16px;
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border-radius: var(--radius-md, 12px);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  border-left: 3px solid var(--status-danger);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* ============================================================
+   💰 AMOUNT PRESETS
+   ============================================================ */
+.amount-presets {
+  margin-bottom: 16px;
+}
+
+.amount-presets label {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preset-btn {
+  padding: 6px 14px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm, 8px);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition-normal);
+}
+
+.preset-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.preset-btn.active {
+  background: var(--accent-primary);
+  color: #fff;
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.preset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📝 INPUT GROUP
+   ============================================================ */
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.input-group label i {
+  color: var(--accent-primary);
+  font-size: 14px;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm, 8px);
+  font-size: 14px;
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.input-group input:disabled,
+.input-group textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+}
+
+.input-hint {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-hint i {
+  font-size: 12px;
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   📱 METHOD OPTIONS
+   ============================================================ */
+.method-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.method-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm, 8px);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--transition-normal);
+  text-align: center;
+}
+
+.method-label:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+.method-label.active {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.method-label input[type="radio"] {
+  display: none;
+}
+
+.method-label i {
+  font-size: 16px;
+}
+
+.method-label:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   🏦 BANK DETAILS SECTION
+   ============================================================ */
+.bank-details-section {
+  margin-bottom: 16px;
+}
+
+.bank-details-section h4 {
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bank-details-section h4 i {
+  color: var(--accent-primary);
+}
+
+.bank-info-card {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md, 12px);
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+}
+
+.bank-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 13px;
+}
+
+.bank-info-row:last-child {
+  border-bottom: none;
+}
+
+.bank-info-row span {
+  color: var(--text-muted);
+}
+
+.bank-info-row strong {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📎 FILE UPLOAD
+   ============================================================ */
+.file-upload-area {
+  position: relative;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md, 12px);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+}
+
+.file-upload-area:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.file-upload-area .file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.file-upload-placeholder i {
+  font-size: 36px;
+  color: var(--accent-primary);
+}
+
+.file-upload-placeholder p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.file-upload-placeholder small {
+  font-size: 12px;
+}
+
+.file-upload-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.receipt-preview {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: var(--radius-sm, 8px);
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+}
+
+.file-name-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--border-color);
+}
+
+.file-name-display i {
+  font-size: 24px;
+  color: var(--status-danger);
+}
+
+.file-name-display span {
+  font-size: 13px;
+  color: var(--text-primary);
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.remove-file-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+}
+
+.remove-file-btn:hover {
+  background: var(--status-danger);
+  color: #fff;
+}
+
+.remove-file-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📋 PAYMENT INSTRUCTIONS
+   ============================================================ */
+.payment-instructions {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md, 12px);
+  padding: 16px 20px;
+  margin: 16px 0;
+  border: 1px solid var(--border-color);
+}
+
+.payment-instructions h4 {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.payment-instructions h4 i {
+  color: var(--status-info);
+}
+
+.payment-instructions ol {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.payment-instructions ol li strong {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   🚀 SUBMIT BUTTON
+   ============================================================ */
+.deposit-btn {
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: var(--radius-md, 12px);
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--gradient-primary);
+  margin-top: 8px;
+}
+
+.deposit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--shadow-glow);
+}
+
+.deposit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.deposit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.deposit-btn.loading {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+}
+
+.deposit-btn i {
+  font-size: 16px;
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+.deposit-footer {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.deposit-footer p {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.deposit-footer p i {
+  font-size: 13px;
+}
+
+.deposit-footer .footer-note {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .deposit-card {
+    padding: 16px;
+  }
+
+  .deposit-header h2 {
+    font-size: 20px;
+  }
+
+  .method-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .method-label {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .preset-buttons {
+    gap: 6px;
+  }
+
+  .preset-btn {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+
+  .bank-info-card {
+    padding: 12px;
+  }
+
+  .bank-info-row {
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+
+  .payment-instructions {
+    padding: 12px 14px;
+  }
+
+  .payment-instructions ol {
+    font-size: 12px;
+    padding-left: 16px;
+  }
+
+  .deposit-btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .file-upload-area {
+    min-height: 100px;
+    padding: 16px;
+  }
+
+  .receipt-preview {
+    max-width: 100px;
+    max-height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .deposit-container {
+    padding: 12px 8px 30px;
+  }
+
+  .deposit-card {
+    padding: 12px;
+  }
+
+  .deposit-header h2 {
+    font-size: 18px;
+  }
+
+  .deposit-header p {
+    font-size: 13px;
+  }
+
+  .method-options {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .method-label {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  .method-label i {
+    font-size: 14px;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .bank-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 4px 0;
+  }
+
+  .bank-info-row strong {
+    font-size: 13px;
+  }
+
+  .preset-btn {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .status-message {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+
+  .error-message {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .status-message,
+  .error-message,
+  .deposit-btn,
+  .back-btn-simple,
+  .preset-btn,
+  .method-label,
+  .file-upload-area {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+@media print {
+  .deposit-container {
+    background: #fff;
+    padding: 20px;
+  }
+
+  .deposit-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  .deposit-btn,
+  .back-btn-simple,
+  .remove-file-btn {
+    display: none !important;
+  }
+
+  .file-upload-area {
+    border: 1px solid #ddd;
+  }
+}
+
+/* ============================================================
+   🎨 DARK MODE SPECIFIC
+   ============================================================ */
+.dark-mode .deposit-card {
+  background: var(--bg-secondary);
+}
+
+.dark-mode .bank-info-card {
+  background: var(--bg-secondary);
+}
+
+.dark-mode .file-upload-area {
+  background: var(--bg-secondary);
+}
+
+.dark-mode .file-upload-area:hover {
+  background: var(--bg-hover);
+}
+
+/* ============================================================
+   🌟 LIGHT MODE SPECIFIC
+   ============================================================ */
+.light-mode .deposit-card {
+  background: #ffffff;
+}
+
+.light-mode .bank-info-card {
+  background: #f8fafc;
+}
+
+.light-mode .file-upload-area {
+  background: #f8fafc;
+}
+
+.light-mode .file-upload-area:hover {
+  background: #f1f5f9;
+}
+
+.light-mode .payment-instructions {
+  background: #f8fafc;
+}
+
+/* ============================================================
+   🎯 BANK TRANSFER SPECIFIC
+   ============================================================ */
+.bank-transfer-active .deposit-card {
+  border-color: var(--accent-primary);
+}
+
+.bank-transfer-active .deposit-header h2 i {
+  color: var(--accent-primary);
+}
+
+/* ── Bank Transfer Badge ── */
+.bank-transfer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ── Bank Info Card Hover ── */
+.bank-info-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  transition: all var(--transition-normal);
+}
+
+/* ── Receipt Upload Success ── */
+.receipt-upload-success {
+  color: var(--status-success);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.receipt-upload-success i {
+  font-size: 16px;
+}
+
+/* ── File Upload Drag & Drop ── */
+.file-upload-area.dragover {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+  transform: scale(1.02);
+}
+
+.file-upload-area .upload-progress {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.file-upload-area .upload-progress-bar {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* ============================================================
+   🎉 SUCCESS ANIMATIONS
+   ============================================================ */
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.deposit-btn.success {
+  animation: successPulse 0.5s ease;
+}
+
+@keyframes checkmark {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.status-message.success i {
+  animation: checkmark 0.5s ease;
+}

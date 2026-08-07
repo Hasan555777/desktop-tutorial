@@ -1,0 +1,277 @@
+/* UI/Feedback/Modal.css */
+
+/* ============================================================
+   Overlay
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  will-change: opacity;
+}
+
+/* ============================================================
+   Container
+   ============================================================ */
+.modal-container {
+  background: var(--color-bg-secondary, #1a1a2e);
+  border-radius: 20px;
+  max-height: 90vh;
+  max-width: 90vw;
+  width: 100%;
+  overflow-y: auto;
+  position: relative;
+  outline: none;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  will-change: transform, opacity;
+}
+
+/* Scrollbar Styling */
+.modal-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-container::-webkit-scrollbar-thumb {
+  background: var(--color-border-hover, #3d3d5c);
+  border-radius: 100px;
+}
+
+.modal-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted, #64748b);
+}
+
+/* ============================================================
+   Sizes
+   ============================================================ */
+.modal-sm {
+  max-width: 400px;
+}
+
+.modal-md {
+  max-width: 560px;
+}
+
+.modal-lg {
+  max-width: 720px;
+}
+
+.modal-xl {
+  max-width: 900px;
+}
+
+.modal-fullscreen {
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ============================================================
+   Animations - Fade
+   ============================================================ */
+.modal-fade-in {
+  animation: modalFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-fade-out {
+  animation: modalFadeOut 0.3s ease forwards;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Animations - Slide
+   ============================================================ */
+.modal-slide-in {
+  animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-slide-out {
+  animation: modalSlideOut 0.3s ease forwards;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modalSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+}
+
+/* ============================================================
+   Animations - Scale
+   ============================================================ */
+.modal-scale-in {
+  animation: modalScaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-scale-out {
+  animation: modalScaleOut 0.3s ease forwards;
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes modalScaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/* ============================================================
+   Animation - None
+   ============================================================ */
+.modal-none-in,
+.modal-none-out {
+  animation: none !important;
+}
+
+/* ============================================================
+   Hidden State
+   ============================================================ */
+.modal-hidden {
+  display: none !important;
+}
+
+/* ============================================================
+   Light Mode
+   ============================================================ */
+[data-theme="light"] .modal-container,
+.light-mode .modal-container {
+  background: #ffffff;
+}
+
+[data-theme="light"] .modal-overlay,
+.light-mode .modal-overlay {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================================
+   Mobile Responsive
+   ============================================================ */
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .modal-container {
+    border-radius: 16px 16px 0 0;
+    max-height: 85vh;
+  }
+
+  .modal-sm,
+  .modal-md,
+  .modal-lg,
+  .modal-xl {
+    max-width: 100%;
+  }
+
+  .modal-fullscreen {
+    border-radius: 0;
+  }
+
+  /* Bottom sheet style animation on mobile */
+  .modal-slide-in {
+    animation: modalBottomSheetIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .modal-slide-out {
+    animation: modalBottomSheetOut 0.3s ease forwards;
+  }
+
+  @keyframes modalBottomSheetIn {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes modalBottomSheetOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+  }
+}
+
+/* ============================================================
+   Reduced Motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .modal-fade-in,
+  .modal-fade-out,
+  .modal-slide-in,
+  .modal-slide-out,
+  .modal-scale-in,
+  .modal-scale-out {
+    animation: none !important;
+  }
+}

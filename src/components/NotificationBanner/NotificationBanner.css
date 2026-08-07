@@ -1,0 +1,264 @@
+/* src/components/NotificationBanner/NotificationBanner.css */
+
+.notification-banner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  max-width: 420px;
+  width: 100%;
+  animation: slideUp 0.5s ease;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px var(--shadow-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.notification-banner-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+}
+
+.banner-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 4px;
+  position: relative;
+}
+
+.banner-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.banner-text h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.banner-text p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.banner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.banner-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.banner-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-enable {
+  background: var(--gradient-primary);
+  color: #ffffff;
+}
+
+.btn-enable:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+}
+
+.btn-not-now {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.btn-not-now:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Admin Variant ── */
+.admin-banner {
+  background: var(--gradient-primary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-banner .banner-text h4 {
+  color: #ffffff;
+}
+
+.admin-banner .banner-text p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.admin-banner .admin-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-banner .admin-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.admin-banner .admin-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.admin-banner .admin-not-now {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.admin-banner .admin-not-now:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* ── Compact Variant ── */
+.compact-banner {
+  max-width: 360px;
+}
+
+.compact-content {
+  padding: 12px 16px;
+  align-items: center;
+}
+
+.compact-icon {
+  font-size: 20px;
+}
+
+.compact-text p {
+  font-size: 13px;
+}
+
+.compact-actions {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.compact-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.compact-btn-close {
+  padding: 6px 8px;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.compact-btn-close:hover {
+  color: var(--text-primary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .notification-banner {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+    width: auto;
+  }
+  
+  .notification-banner-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .banner-actions {
+    flex-direction: row;
+    width: 100%;
+  }
+  
+  .banner-btn {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .compact-content {
+    flex-direction: row;
+    padding: 10px 14px;
+  }
+  
+  .compact-actions {
+    flex: 1;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-banner {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+  }
+  
+  .banner-actions {
+    flex-direction: column;
+  }
+  
+  .banner-btn {
+    flex: none;
+    width: 100%;
+  }
+}

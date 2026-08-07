@@ -1,0 +1,1370 @@
+/* ==========================================================================
+   WorkHub Inbox - Mobile + Desktop Optimized (Fixed Version)
+   ========================================================================== */
+
+/* ==========================================
+   PART 1: ভেরিয়েবল (ডার্ক মোড + লাইট মোড)
+   ========================================== */
+
+/* ডার্ক মোড (ডিফল্ট) */
+:root {
+--accent-gradient: linear-gradient(135deg, var(--accent-light) 0%, var(--accent-secondary) 100%);
+--shadow-sm: var(--shadow-color);
+  --shadow-md: var(--shadow-color);
+  --shadow-lg: var(--shadow-color);
+/* ✅ FIX: Added missing variable */
+  --online-color: var(--status-success);
+  --unread-bg: var(--accent-light);
+  --unread-text: var(--bg-primary);
+  --danger-color: var(--status-danger);
+  --danger-bg: var(--status-danger-bg);
+  --success-color: var(--status-success);
+  --success-bg: var(--status-success-bg);
+  --inbox-sidebar-width: 320px;
+  --inbox-chat-width: calc(100% - 320px);
+}
+
+/* লাইট মোড */
+.light-mode {
+--accent-gradient: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+--shadow-sm: var(--shadow-color);
+  --shadow-md: var(--shadow-color);
+  --shadow-lg: var(--shadow-color);
+/* ✅ FIX: Light mode dropdown */
+  --online-color: var(--status-success);
+  --unread-bg: var(--accent-primary);
+  --unread-text: var(--text-inverse);
+  --danger-color: var(--status-danger);
+  --danger-bg: var(--status-danger-bg);
+  --success-color: var(--status-success);
+  --success-bg: var(--status-success-bg);
+}
+
+/* ==========================================
+   PART 2: বেস স্টাইল
+   ========================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ==========================================
+   PART 3: মোবাইল স্টাইল (0 - 768px)
+   ========================================== */
+
+.inbox-page-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;  /* ✅ FIX: Removed negative margin, use 100vh */
+  background: var(--bg-primary);
+  overflow: hidden;
+  transition: background 0.3s ease;
+  /* margin-top: -50px; */
+  
+}
+
+/* চ্যাট ওপেন হলে লিস্ট লুকানো */
+.inbox-page-layout.chat-active .workspace-inbox-wrapper {
+  display: none;
+}
+
+.inbox-page-layout.chat-active .active-chat-area {
+  display: flex;
+  width: 100%;  /* ✅ FIX: Full width on mobile */
+}
+
+/* মোবাইল সাইডবার */
+.workspace-inbox-wrapper {
+  width: 100%;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;  /* ✅ পরিবর্তন: 100% → 100vh */
+  max-height: 100vh;  /* ✅ যোগ করুন: overflow ঠিক রাখতে */
+  overflow: hidden;  /* ✅ যোগ করুন: চাইল্ড স্ক্রল করবে, প্যারেন্ট নয় */
+}
+
+/* মোবাইল হেডার */
+.w-header {
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px;
+  flex-shrink: 0;
+}
+
+/* .w-header-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+} */
+
+/* মোবাইল মোড সুইচার */
+.inbox-mode-switcher {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mode-switch-btn {
+  padding: 10px 16px;  /* ✅ FIX: Better padding for row layout */
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  flex: 1;  /* ✅ FIX: Flex grow for equal width */
+  min-width: 80px;  /* ✅ FIX: Minimum width */
+  transition: all 0.2s ease;
+}
+
+.mode-switch-btn:active {
+  transform: scale(0.98);
+}
+
+.mode-switch-btn.active {
+  background: var(--accent-gradient);
+  color: var(--unread-text);
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+/* ✅ FIX: Dark mode active button text color */
+:root .mode-switch-btn.active {
+  color: var(--bg-primary);
+}
+
+.light-mode .mode-switch-btn.active {
+  color: var(--text-inverse);
+}
+
+.mode-badge-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--status-danger);
+  color: var(--text-inverse);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 20px;
+  min-width: 18px;
+  text-align: center;
+  z-index: 2;
+}
+
+/* মোবাইল ফিল্টার ট্যাব */
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 12px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  padding-bottom: 4px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+}
+
+.filter-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-chip {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-chip:active {
+  transform: scale(0.96);
+}
+
+.tab-chip.active {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: var(--accent-light);
+}
+
+/* মোবাইল সার্চ বক্স */
+.search-box {
+  position: relative;
+  margin: 12px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 12px;
+  z-index: 1;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 14px 10px 40px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 40px;
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.search-box input:focus {
+  border-color: var(--accent-primary);
+  background: var(--card-bg);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* মোবাইল চ্যাট লিস্ট */
+.inbox-rows-container {
+  flex: 1;
+  overflow-y: auto;  /* ✅ এটাই স্ক্রল এনাবল করবে */
+  padding: 12px;
+  min-height: 0;  /* ✅ গুরুত্বপূর্ণ: flex চাইল্ডকে সঙ্কোচনের অনুমতি দেয় */
+}
+
+/* মোবাইল চ্যাট কার্ড */
+.workspace-card-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  background: var(--card-bg);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+  position: relative;
+  box-shadow: 0 2px 8px var(--shadow-sm);
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.workspace-card-item:active {
+  transform: scale(0.99);
+  background: var(--bg-hover);
+}
+
+.workspace-card-item.active {
+  background: var(--accent-light);
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+/* ✅ FIX: Blocked state styling */
+.workspace-card-item.blocked {
+  opacity: 0.7;
+  border-color: var(--status-danger-bg);
+}
+
+.workspace-card-item.blocked:hover {
+  opacity: 0.9;
+}
+
+/* অবতার */
+.avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar-square {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-inverse);
+  background: var(--accent-gradient);
+  box-shadow: 0 4px 12px var(--accent-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* ✅ FIX: Unified online indicator - matches UserStatus component */
+.online-dot,
+.user-status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background: var(--online-color);
+  border-radius: 50%;
+  border: 2px solid var(--card-bg);
+  box-shadow: 0 0 8px var(--online-color);
+}
+
+.online-dot.offline,
+.user-status-indicator.offline {
+  background: var(--text-muted);
+  box-shadow: none;
+}
+
+/* চ্যাট কন্টেন্ট */
+.card-content-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-top-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.card-top-line h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-time-badge {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.project-context-tag {
+  font-size: 11px;
+  color: var(--accent-primary);
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-msg-preview {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* আনরিড ইন্ডিকেটর */
+.card-status-right {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.unread-badge {
+  background: var(--unread-bg);
+  color: var(--unread-text);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px var(--accent-glow);
+}
+
+.unread-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--unread-bg);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* ✅ FIX: ৩ ডট মেনু বাটন - mobile এ always visible */
+.menu-dots-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  opacity: 0.6;  /* ✅ FIX: Always somewhat visible on mobile */
+  margin-left: 4px;
+}
+
+.menu-dots-btn:hover,
+.menu-dots-btn:active {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+/* ✅ FIX: Dropdown menu positioning */
+.chat-menu-dropdown {
+  position: absolute;
+  right: 10px;
+  top: 40px;  /* ✅ FIX: Position below the button, not center */
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 6px 0;
+  min-width: 180px;
+  box-shadow: 0 10px 40px var(--shadow-lg);
+  backdrop-filter: blur(20px);
+  z-index: 100;
+  animation: menuFadeIn 0.2s ease;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ✅ FIX: Menu item colors using variables */
+.chat-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-align: left;
+}
+
+.chat-menu-item:hover {
+  background: var(--bg-hover);
+}
+
+.chat-menu-item i {
+  font-size: 14px;
+  width: 18px;
+  text-align: center;
+}
+
+/* ✅ FIX: Delete item using variables */
+.chat-menu-item.delete {
+  color: var(--danger-color);
+}
+
+.chat-menu-item.delete i {
+  color: var(--danger-color);
+}
+
+.chat-menu-item.delete:hover {
+  background: var(--danger-bg);
+}
+
+.chat-menu-item.delete.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.chat-menu-item.delete.disabled i {
+  color: var(--text-muted);
+}
+
+/* ✅ FIX: Block item using variables */
+.chat-menu-item.block {
+  color: var(--danger-color);
+}
+
+.chat-menu-item.block i {
+  color: var(--danger-color);
+}
+
+.chat-menu-item.block:hover {
+  background: var(--danger-bg);
+}
+
+/* ✅ FIX: Unblock item using variables */
+.chat-menu-item.unblock {
+  color: var(--success-color);
+}
+
+.chat-menu-item.unblock i {
+  color: var(--success-color);
+}
+
+.chat-menu-item.unblock:hover {
+  background: var(--success-bg);
+}
+
+.chat-menu-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 12px;
+}
+
+/* ✅ FIX: Blocked badge using variables */
+.blocked-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--danger-bg);
+  color: var(--danger-color);
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.blocked-badge i {
+  font-size: 9px;
+}
+
+/* ✅ FIX: Removed old .delete-chat-btn - now using 3-dot menu */
+
+/* চ্যাট এরিয়া */
+.active-chat-area {
+  flex: 1;
+  display: none;  /* Hidden by default on mobile */
+  flex-direction: column;
+  background: var(--bg-secondary);
+  width: 100%;  /* ✅ FIX: Full width */
+}
+
+/* কোন চ্যাট সিলেক্ট না থাকলে */
+.no-chat-selected-message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  padding: 40px;
+}
+
+.no-chat-selected-message i {
+  font-size: 56px;
+  color: var(--bg-tertiary);
+  opacity: 0.5;
+}
+
+.no-chat-selected-message p {
+  font-size: 13px;
+  max-width: 280px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* চ্যাট লিস্টে কোন চ্যাট না থাকলে */
+.no-chats-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.no-chats-message i {
+  font-size: 48px;
+  color: var(--bg-tertiary);
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.5;
+}
+
+/* লোডিং স্টেট */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* স্ক্রলবার */
+.inbox-rows-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.inbox-rows-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.inbox-rows-container::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+/* ছোট ফোন (480px পর্যন্ত) */
+@media (max-width: 480px) {
+  .inbox-page-layout {
+    width: 100vw;
+    height: 100vh;
+    margin-top: 0;  /* ✅ FIX: Removed negative margin */
+  }
+
+  .w-header {
+    padding: 12px;
+  }
+
+  /* .w-header-top h2 {
+    font-size: 16px;
+  } */
+
+  .mode-switch-btn {
+    padding: 8px 12px;
+    font-size: 11px;
+    min-width: 60px;
+  }
+
+  .tab-chip {
+    padding: 5px 12px;
+    font-size: 10px;
+  }
+
+  .search-box {
+    margin: 10px;
+  }
+
+  .search-box input {
+    padding: 9px 12px 9px 36px;
+    font-size: 12px;
+  }
+
+  .workspace-card-item {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .avatar-square {
+    width: 42px;
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .online-dot,
+  .user-status-indicator {
+    width: 10px;
+    height: 10px;
+  }
+
+  .card-top-line h4 {
+    font-size: 13px;
+  }
+
+  .card-time-badge {
+    font-size: 9px;
+  }
+
+  .project-context-tag {
+    font-size: 10px;
+  }
+
+  .card-msg-preview {
+    font-size: 11px;
+  }
+
+  .inbox-rows-container {
+    padding: 8px;
+  }
+
+  /* ✅ FIX: Smaller dropdown on small phones */
+  .chat-menu-dropdown {
+    min-width: 150px;
+    right: 5px;
+  }
+
+  .chat-menu-item {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   PART 4: ডেস্কটপ স্টাইল (768px এবং উপরে)
+   ========================================== */
+
+@media (min-width: 768px) {
+  /* ডেস্কটপ লেআউট - রো আকারে */
+  .inbox-page-layout {
+    flex-direction: row;
+    height: 100vh;
+    gap: 0;
+  }
+
+  /* ✅ FIX: Always show sidebar on desktop */
+  .inbox-page-layout.chat-active .workspace-inbox-wrapper {
+    display: flex;
+  }
+
+  .inbox-page-layout.chat-active .active-chat-area {
+    display: flex;
+    width: auto;  /* ✅ FIX: Let flexbox handle width */
+  }
+
+  /* ডেস্কটপ সাইডবার */
+  .workspace-inbox-wrapper {
+    height: 100dvh;  /* ✅ dynamic viewport height – মোবাইলের জন্য ভালো */
+    max-height: 100dvh;
+  }
+
+  /* ডেস্কটপ হেডার */
+  .w-header {
+    padding: 20px;
+  }
+
+  .w-header-top {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  /* .w-header-top h2 {
+    font-size: 20px;
+  } */
+
+  /* ডেস্কটপ মোড সুইচার */
+  .inbox-mode-switcher {
+    flex-direction: row;
+    gap: 8px;
+    width: auto;
+  }
+
+  .mode-switch-btn {
+    padding: 8px 20px;
+    width: auto;
+    flex: none;  /* ✅ FIX: Don't stretch on desktop */
+  }
+
+  .mode-switch-btn:hover {
+    background: var(--bg-hover);
+    transform: translateY(-2px);
+  }
+
+  /* ডেস্কটপ ফিল্টার ট্যাব */
+  .filter-tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    margin-top: 16px;
+  }
+
+  .tab-chip:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    background: var(--bg-hover);
+    transform: translateY(-2px);
+  }
+
+  /* ডেস্কটপ সার্চ বক্স */
+  .search-box {
+    margin: 16px 20px;
+  }
+
+  .search-box i {
+    font-size: 14px;
+    left: 16px;
+  }
+
+  .search-box input {
+    padding: 12px 16px 12px 44px;
+    font-size: 14px;
+  }
+
+  /* ডেস্কটপ চ্যাট লিস্ট */
+  .inbox-rows-container {
+    padding: 16px;
+  }
+
+  /* ডেস্কটপ চ্যাট কার্ড */
+  .workspace-card-item {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .workspace-card-item:hover {
+    background: var(--bg-hover);
+    transform: translateX(4px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 15px var(--shadow-md);
+  }
+
+  .workspace-card-item.active {
+    background: var(--accent-light);
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 15px var(--accent-glow);
+  }
+
+  /* ডেস্কটপ অবতার */
+  .avatar-square {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    font-size: 18px;
+  }
+
+  .online-dot,
+  .user-status-indicator {
+    width: 14px;
+    height: 14px;
+    border: 3px solid var(--card-bg);
+  }
+
+  /* ডেস্কটপ চ্যাট কন্টেন্ট */
+  .card-top-line h4 {
+    font-size: 15px;
+  }
+
+  .card-time-badge {
+    font-size: 11px;
+  }
+
+  .project-context-tag {
+    font-size: 12px;
+  }
+
+  .card-msg-preview {
+    font-size: 13px;
+  }
+
+  /* ✅ FIX: 3-dot menu only visible on hover for desktop */
+  .menu-dots-btn {
+    opacity: 0;
+  }
+
+  .workspace-card-item:hover .menu-dots-btn {
+    opacity: 0.6;
+  }
+
+  .menu-dots-btn:hover {
+    opacity: 1 !important;
+  }
+
+  /* ✅ FIX: Dropdown positioned correctly on desktop */
+  .chat-menu-dropdown {
+    right: 10px;
+    top: 45px;
+  }
+
+  /* ডেস্কটপ আনরিড ব্যাজ */
+  .unread-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    min-width: 24px;
+  }
+
+  /* ডেস্কটপ চ্যাট এরিয়া */
+  .active-chat-area {
+    display: flex;
+    width: auto;
+  }
+
+  .no-chat-selected-message i {
+    font-size: 72px;
+  }
+
+  .no-chat-selected-message p {
+    font-size: 15px;
+    max-width: 320px;
+  }
+
+  /* ডেস্কটপ স্ক্রলবার */
+  .inbox-rows-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .inbox-rows-container::-webkit-scrollbar-thumb {
+    background: var(--accent-gradient);
+  }
+}
+
+/* ==========================================
+   PART 5: বড় ডেস্কটপ (1200px এবং উপরে)
+   ========================================== */
+
+@media (min-width: 1200px) {
+  .workspace-inbox-wrapper {
+    width: 420px;
+    min-width: 420px;
+    margin-left: 120px;
+  }
+
+  .active-chat-area {
+    max-width: none;  /* ✅ FIX: Let it fill remaining space */
+  }
+
+  .inbox-rows-container {
+    padding: 20px;
+  }
+}
+
+/* ==========================================
+   PART 6: ল্যান্ডস্কেপ মোড (মোবাইল)
+   ========================================== */
+@media (min-width: 640px) and (max-width: 1023px) {
+
+    .inbox-page-layout{
+      margin-left: 120px;
+    }
+}
+
+
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .inbox-page-layout {
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  .workspace-card-item {
+    padding: 10px;
+  }
+
+  .avatar-square {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .active-chat-area {
+    max-width: none;
+  }
+
+  .card-top-line h4 {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================
+   PART 7: লাইট মোড ওভাররাইড
+   ========================================== */
+
+.light-mode .inbox-page-layout {
+  background: var(--bg-primary);
+}
+
+.light-mode .workspace-inbox-wrapper {
+  background: var(--card-bg);
+}
+
+.light-mode .avatar-square {
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.light-mode .workspace-card-item {
+  box-shadow: 0 2px 8px var(--shadow-sm);
+}
+
+.light-mode .workspace-card-item:hover {
+  box-shadow: 0 4px 15px var(--shadow-md);
+}
+
+.light-mode .workspace-card-item.active {
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+/* ✅ FIX: Removed duplicate .dark-mode - using :root default */
+
+/* ==========================================
+   PART 8: অ্যাক্সেসিবিলিটি
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+}
+
+  .light-mode {
+}
+}
+
+
+
+/* ✅ অ্যাভাটারের ওপর স্ট্যাটাস ডট */
+.avatar-square {
+  position: relative;
+}
+
+.online-status-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--text-inverse);
+  z-index: 2;
+}
+
+.online-status-dot.online {
+  background: var(--status-success);
+}
+
+.online-status-dot.offline {
+  background: var(--accent-primary);
+}
+
+/* ✅ স্ট্যাটাস টেক্সট */
+.user-status-text {
+  margin-top: 2px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+}
+
+.status-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.status-text.online {
+  color: var(--status-success);
+}
+
+.status-text.online i {
+  font-size: 7px;
+  color: var(--status-success);
+}
+
+.status-text.offline {
+  color: var(--accent-primary);
+}
+
+.status-text.offline i {
+  font-size: 7px;
+  color: var(--accent-primary);
+}
+
+
+
+
+
+
+
+
+/* Inbox.css - ইউজার নামের জন্য */
+
+.workspace-card-item .card-top-line h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.workspace-card-item .blocked-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  font-size: 9px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.workspace-card-item .user-status-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.workspace-card-item .status-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.workspace-card-item .status-text.online {
+  color: var(--status-success);
+}
+
+.workspace-card-item .status-text.offline {
+  color: var(--text-muted);
+}
+
+.workspace-card-item .status-text i {
+  font-size: 6px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   INBOX - স্ক্রল ফিক্স (শুধু প্রয়োজনীয় অংশ)
+   ========================================== */
+
+/* ১. প্যারেন্ট কন্টেইনার - পুরো স্ক্রিন দখল করবে */
+.inbox-page-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh; /* মোবাইলের জন্য dynamic viewport */
+  background: var(--bg-primary);
+  overflow: hidden; /* প্যারেন্ট স্ক্রল করবে না */
+  transition: background 0.3s ease;
+}
+
+/* ২. সাইডবার - নির্দিষ্ট উচ্চতা পাবে */
+.workspace-inbox-wrapper {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* নিজে স্ক্রল করবে না */
+  flex-shrink: 0; /* সঙ্কুচিত হবে না */
+}
+
+/* ৩. ইনবক্সের ভেতরের কন্টেইনার - বাকি জায়গা নেবে */
+.workspace-inbox {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; /* 🔥 গুরুত্বপূর্ণ: flex-চাইল্ড সঙ্কোচনের অনুমতি */
+  overflow: hidden;
+}
+
+/* ৪. স্ক্রল কন্টেইনার - এটাই আসলে স্ক্রল করবে */
+.inbox-rows-container {
+  flex: 1;
+  overflow-y: auto; /* ✅ স্ক্রল এনাবল */
+  overflow-x: hidden;
+  padding: 8px 12px 20px 12px;
+  min-height: 0; /* 🔥 গুরুত্বপূর্ণ: flex সঙ্কোচন */
+  height: 100%; /* ব্যাকআপ */
+  max-height: 100%; /* ব্যাকআপ */
+  
+  /* স্ক্রলবার স্টাইল */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) transparent;
+}
+
+/* ৫. স্ক্রলবার কাস্টমাইজেশন (WebKit) */
+.inbox-rows-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.inbox-rows-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.inbox-rows-container::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+/* ৬. প্রতিটি চ্যাট আইটেমের প্যারেন্ট */
+.inbox-rows-container > div {
+  flex-shrink: 0; /* আইটেমগুলো সঙ্কুচিত হবে না */
+}
+
+/* ৭. খালি অবস্থার মেসেজ - স্ক্রল ব্লক করবে না */
+.inbox-rows-container .empty-state-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  height: 100%;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   ডেস্কটপ (768px এবং উপরে)
+   ========================================== */
+
+@media (min-width: 768px) {
+  .inbox-page-layout {
+    flex-direction: row;
+    height: 100vh;
+  }
+
+  .workspace-inbox-wrapper {
+    width: 380px;
+    min-width: 380px;
+    max-width: 420px;
+    height: 100vh;
+    max-height: 100vh;
+    border-right: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  .inbox-rows-container {
+    padding: 12px 16px 20px 16px;
+  }
+}
+
+/* ==========================================
+   বড় ডেস্কটপ (1200px এবং উপরে)
+   ========================================== */
+
+@media (min-width: 1200px) {
+  .workspace-inbox-wrapper {
+    width: 420px;
+    min-width: 420px;
+    margin-left: 120px;
+  }
+}
+
+/* ==========================================
+   মোবাইল ল্যান্ডস্কেপ (640-1023px)
+   ========================================== */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .workspace-inbox-wrapper {
+    margin-left: 120px;
+  }
+}
+
+/* ==========================================
+   ছোট ফোন (480px পর্যন্ত)
+   ========================================== */
+
+@media (max-width: 480px) {
+  .inbox-rows-container {
+    padding: 6px 8px 16px 8px;
+  }
+
+  .workspace-inbox-wrapper {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+/* ==========================================
+   অ্যাক্সেসিবিলিটি - মোশন রিডিউস
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .inbox-rows-container {
+    scroll-behavior: auto !important;
+  }
+}
