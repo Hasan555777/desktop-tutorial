@@ -1795,7 +1795,7 @@
   }
 }
 
-/* ── Reduced motion accessibility ── */
+/* ── Reduced motion accessibility──*/
 @media (prefers-reduced-motion: reduce) {
   .avatar-zoom-overlay,
   .avatar-zoom-image {
