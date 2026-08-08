@@ -619,7 +619,7 @@ const AdminDashboard = () => {
             onClick={() => setActiveTab('needs-review')}
           >
             <i className="fa-solid fa-rotate"></i> 
-            Re-review Needed
+            রিভিউ 
             {needsReviewCount > 0 && (
               <span className="tab-badge danger">{needsReviewCount}</span>
             )}
@@ -729,7 +729,7 @@ const AdminDashboard = () => {
             onClick={() => setActiveTab('admin-notifications')}
           >
             <i className="fa-solid fa-bell"></i> 
-            অ্যাডমিন নোটিফিকেশন
+            নোটিফিকেশন
             {adminUnreadCount > 0 && (
               <span className="tab-badge danger">{adminUnreadCount}</span>
             )}

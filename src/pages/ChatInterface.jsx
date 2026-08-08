@@ -20,7 +20,11 @@ import {
   approveDeal,
   rejectDeal,
   reopenDeal,
-  checkActiveDealBetweenUsers
+  checkActiveDealBetweenUsers,
+  extractBudgetValue,
+  extractDeadlineValue,
+  formatBudgetDisplay,
+  formatDeadlineDisplay
 } from './chatHelpers';
 
 // Hooks
@@ -140,11 +144,26 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
   const [message, setMessage] = useState('');
   const [uploading, setUploading] = useState(false);
   const [showProposalModal, setShowProposalModal] = useState(false);
-  const [proposalData, setProposalData] = useState({
-    budget: chatContext?.budget || '',
-    deadline: chatContext?.deadline || '',
-    details: ''
+  
+  // ✅ FIXED: proposalData with safe extraction
+  const [proposalData, setProposalData] = useState(() => {
+    const rawBudget = chatContext?.budget || chatContext?.price || '';
+    const budgetValue = typeof rawBudget === 'object' 
+      ? (rawBudget.amount || rawBudget.max || 0) 
+      : rawBudget;
+    
+    const rawDeadline = chatContext?.deadline || chatContext?.deliveryDays || '';
+    const deadlineValue = typeof rawDeadline === 'object'
+      ? (rawDeadline.days || rawDeadline.max || 0)
+      : rawDeadline;
+    
+    return {
+      budget: typeof budgetValue === 'number' ? String(budgetValue) : String(budgetValue || ''),
+      deadline: typeof deadlineValue === 'number' ? String(deadlineValue) : String(deadlineValue || ''),
+      details: ''
+    };
   });
+  
   const [contextMenu, setContextMenu] = useState({ 
     visible: false, x: 0, y: 0, messageId: null, messageText: null, 
     messageImage: null, senderName: null, senderId: null 
@@ -203,7 +222,7 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
     checkActiveDeal();
   }, [currentUser?.uid, otherPartyId]);
 
-  // ========== Post Data (ট্রাংকেট সহ) ==========
+  // ========== Post Data (ট্রাংকেট + Budget/Deadline Fix) ==========
   const postData = useMemo(() => {
     const data = chatContext?.fullData || chatContext || {};
     
@@ -213,14 +232,20 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
     const rawDescription = data.description || data.jobDescription || data.details || chatContext?.description || chatContext?.details || 'No description provided';
     const truncatedDescription = truncateText(rawDescription, 50);
     
+    // ✅ FIXED: Use extract helpers for budget and deadline
+    const rawBudget = data.budget || data.price || chatContext?.budget || chatContext?.price || 0;
+    const rawDeadline = data.deadline || data.deliveryDays || chatContext?.deadline || chatContext?.deliveryDays || 0;
+    
     return {
       id: data.id || chatContext?.id || chatContext?.postId || 'unknown',
       title: truncatedTitle,
       fullTitle: rawTitle,
       description: truncatedDescription,
       fullDescription: rawDescription,
-      budget: Number(data.budget || data.price || chatContext?.budget || chatContext?.price || 0),
-      deadline: Number(data.deadline || data.deliveryDays || chatContext?.deadline || chatContext?.deliveryDays || 0),
+      budget: extractBudgetValue(rawBudget),
+      deadline: extractDeadlineValue(rawDeadline),
+      budgetDisplay: formatBudgetDisplay(rawBudget),
+      deadlineDisplay: formatDeadlineDisplay(rawDeadline),
       image: data.images?.[0] || data.postImage || data.image || data.jobImage || 
              chatContext?.images?.[0] || chatContext?.postImage || chatContext?.image || 
              getInitialsAvatar(data.clientName || chatContext?.clientName || 'User'),
@@ -234,7 +259,7 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
   }, [chatContext, postType]);
 
   // ============================================================
-  // ✅ ডিপোজিট করার পর অটোমেটিক প্রপোজাল রি-সাবমিট
+  // ✅ ডিপোজিট করার পর অটোমেটিক প্রপোজাল রি-সাবমিট (FIXED)
   // ============================================================
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -251,9 +276,20 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
           const parsed = JSON.parse(pendingOffer);
           sessionStorage.removeItem('pendingProposal');
           
+          // ✅ Extract budget value safely
+          const rawBudget = parsed.data?.budget || parsed.budget || '';
+          const budgetValue = typeof rawBudget === 'object'
+            ? (rawBudget.amount || rawBudget.max || 0)
+            : rawBudget;
+          
+          const rawDeadline = parsed.data?.deadline || parsed.deadline || '';
+          const deadlineValue = typeof rawDeadline === 'object'
+            ? (rawDeadline.days || rawDeadline.max || 0)
+            : rawDeadline;
+          
           setProposalData({
-            budget: parsed.data?.budget || parsed.budget || '',
-            deadline: parsed.data?.deadline || parsed.deadline || '',
+            budget: typeof budgetValue === 'number' ? String(budgetValue) : String(budgetValue || ''),
+            deadline: typeof deadlineValue === 'number' ? String(deadlineValue) : String(deadlineValue || ''),
             details: parsed.data?.details || parsed.details || ''
           });
           
@@ -427,7 +463,6 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
     closeContextMenu();
   };
 
-  // ✅ FIXED: handleDeleteMessage with Feedback
   const handleDeleteMessage = async () => {
     if (!contextMenu.messageId) return;
 
@@ -684,7 +719,6 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
         activeDealCount={activeDealCount}
         onBlockUser={handleBlockUser}
         onDeleteChat={handleDeleteChat}
-        // ✅ Mode Info
         currentMode={currentMode}
         userRole={userRole}
         postType={postType}
@@ -693,6 +727,8 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
       {/* Post Detail Card */}
       <PostDetailCard 
         postData={postData}
+        budgetDisplay={postData.budgetDisplay}
+        deadlineDisplay={postData.deadlineDisplay}
         onViewPost={() => {
           const postId = chatContext?.id || chatContext?.postId;
           if (postId) {
@@ -748,7 +784,6 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
         }}
         existingDeal={existingDeal}
         getPendingBadgeText={getPendingBadgeText}
-        // ✅ Mode Info
         currentMode={currentMode}
         userRole={userRole}
         postType={postType}
@@ -775,7 +810,6 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
         blockedBy={blockedBy}
         uploading={uploading}
         inputRef={chatInputRef}
-        // ✅ Mode Info
         currentMode={currentMode}
         userRole={userRole}
         postType={postType}

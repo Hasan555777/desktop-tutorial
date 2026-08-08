@@ -3817,3 +3817,405 @@ background: var(--pp-bg);
     transform: none !important;
   }
 }
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   📁 src/pages/Profile.css
+   ============================================================ */
+
+/* ============================================================
+   📌 BUDGET TYPE SELECTOR (Edit Modal)
+   ============================================================ */
+
+.budget-type-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.budget-type-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.budget-type-btn:hover:not(.active) {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.budget-type-btn.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* ============================================================
+   📌 RANGE INPUTS (Edit Modal)
+   ============================================================ */
+
+.range-inputs {
+  display: flex;
+  gap: 12px;
+}
+
+.range-inputs .input-with-icon {
+  flex: 1;
+}
+
+.range-inputs .input-with-icon .input-icon {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 NEGOTIABLE TOGGLE (Edit Modal)
+   ============================================================ */
+
+.negotiable-toggle {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: color var(--transition-normal);
+}
+
+.toggle-label:hover {
+  color: var(--text-primary);
+}
+
+.toggle-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📌 READONLY INPUT STYLES (Edit Modal)
+   ============================================================ */
+
+.edit-input.readonly {
+  background: var(--bg-tertiary) !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  user-select: none;
+}
+
+.edit-input.readonly:focus {
+  border-color: var(--border-color);
+  box-shadow: none;
+}
+
+/* ============================================================
+   📌 INPUT HINT TEXT
+   ============================================================ */
+
+.input-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 8px;
+  white-space: nowrap;
+  font-weight: 400;
+}
+
+.input-hint i {
+  margin-right: 4px;
+}
+
+/* ============================================================
+   📌 PB ROW TWIN (Two Columns)
+   ============================================================ */
+
+.pb-row-twin {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  .pb-row-twin {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .range-inputs {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* ============================================================
+   📌 EDIT MODAL IMPROVEMENTS
+   ============================================================ */
+
+.edit-post-modal .edit-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 16px;
+}
+
+.edit-post-modal .edit-modal-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.edit-post-modal .modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal);
+}
+
+.edit-post-modal .modal-close-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.edit-post-modal .edit-form {
+  padding: 0 20px 20px;
+}
+
+.edit-post-modal .pb-group {
+  margin-bottom: 16px;
+}
+
+.edit-post-modal .pb-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.edit-post-modal .pb-group label .required-star {
+  color: var(--status-danger);
+  margin-left: 2px;
+}
+
+.edit-post-modal .pb-group .char-count {
+  display: block;
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   📌 INPUT WITH ICON
+   ============================================================ */
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.input-with-icon .input-icon-right {
+  position: absolute;
+  right: 12px;
+  color: var(--text-muted);
+  font-size: 13px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.input-with-icon .edit-input.with-icon {
+  padding-left: 36px;
+  padding-right: 12px;
+}
+
+.input-with-icon .edit-input.with-icon-right {
+  padding-right: 56px;
+  padding-left: 12px;
+}
+
+/* ============================================================
+   📌 EDIT IMAGES SECTION
+   ============================================================ */
+
+.edit-images-section {
+  margin-top: 8px;
+}
+
+.edit-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.edit-image-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+}
+
+.edit-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.edit-image-item .remove-image-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+}
+
+.edit-image-item .remove-image-btn:hover {
+  background: var(--status-danger);
+  transform: scale(1.1);
+}
+
+.edit-image-item .image-order-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 UPLOAD DROP ZONE SMALL
+   ============================================================ */
+
+.upload-drop-zone-small {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  background: var(--bg-tertiary);
+}
+
+.upload-drop-zone-small:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.upload-drop-zone-small i {
+  font-size: 28px;
+  color: var(--accent-primary);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.upload-drop-zone-small p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0 0 4px;
+}
+
+.upload-drop-zone-small span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ============================================================
+   📌 IMAGE HINT
+   ============================================================ */
+
+.image-hint {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.image-hint i {
+  margin-right: 4px;
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 RESPONSIVE FIXES
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .edit-post-modal .edit-modal-header h3 {
+    font-size: 16px;
+  }
+  
+  .edit-post-modal .edit-form {
+    padding: 0 12px 16px;
+  }
+  
+  .edit-image-item {
+    min-height: 80px;
+  }
+  
+  .upload-drop-zone-small {
+    padding: 16px;
+  }
+  
+  .upload-drop-zone-small i {
+    font-size: 20px;
+  }
+}

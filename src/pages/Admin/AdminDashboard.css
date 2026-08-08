@@ -30,6 +30,7 @@
   .admin-wrapper {
     margin-left: 0; /* Remove left margin on smaller screens */
     padding: 16px;
+    margin-bottom: 30px;
   }
 }
 

@@ -594,3 +594,259 @@
   scrollbar-width: thin;
   scrollbar-color: var(--accent-primary) transparent;
 }
+
+
+
+
+/* ============================================================
+   📁 src/pages/Admin/components/PendingPosts.css
+   ============================================================ */
+
+/* ✅ Multiple Images Container */
+.post-images-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.post-images-container {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+}
+
+.post-images-container.single {
+  grid-template-columns: 1fr;
+}
+
+.post-images-container.multiple {
+  grid-template-columns: 1fr 1fr;
+}
+
+.post-image-item {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+}
+
+.post-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-image-item .image-count-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .post-images-container.multiple {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-images-container.multiple {
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+}
+
+
+
+/* ============================================================
+   📁 src/pages/Admin/components/PendingPosts.css
+   ============================================================ */
+
+/* ✅ Image Zoom Overlay */
+.image-zoom-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.post-image-item:hover .image-zoom-overlay {
+  opacity: 1;
+}
+
+.image-zoom-overlay i {
+  color: #fff;
+  font-size: 28px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 12px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.post-image-item:hover .image-zoom-overlay i {
+  transform: scale(1.1);
+}
+
+/* ✅ Image Zoom Modal */
+.image-zoom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: zoomFadeIn 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+@keyframes zoomFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.image-zoom-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-zoom-modal-content img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.image-zoom-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.image-zoom-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .image-zoom-modal-content img {
+    max-width: 95vw;
+    max-height: 80vh;
+  }
+  
+  .image-zoom-close {
+    top: -40px;
+    font-size: 24px;
+    padding: 4px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .image-zoom-modal-content img {
+    max-width: 98vw;
+    max-height: 70vh;
+  }
+  
+  .image-zoom-close {
+    top: -35px;
+    font-size: 20px;
+    padding: 4px 10px;
+  }
+}
+
+/* ✅ Image Count Badge */
+.image-count-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+/* ✅ Multiple Images Container */
+.post-images-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.post-images-container {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+}
+
+.post-images-container.single {
+  grid-template-columns: 1fr;
+}
+
+.post-images-container.multiple {
+  grid-template-columns: 1fr 1fr;
+}
+
+.post-image-item {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+}
+
+.post-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .post-images-container.multiple {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-images-container.multiple {
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+}

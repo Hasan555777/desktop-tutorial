@@ -238,6 +238,9 @@ const UserProfilePage = () => {
   // ✅ নতুন: অনলাইন স্ট্যাটাস
   const [isOnline, setIsOnline] = useState(false);
 
+  // ✅ নতুন: Facebook-স্টাইল অ্যাভাটার ফুলস্ক্রিন জুম
+  const [showAvatarZoom, setShowAvatarZoom] = useState(false);
+
   // ── রিভিউ ফেচ ফাংশন ──
   const fetchReviews = useCallback(async () => {
     if (!userId) return;
@@ -318,6 +321,20 @@ const UserProfilePage = () => {
   useEffect(() => {
     fetchReviews();
   }, [fetchReviews]);
+
+  // ✅ নতুন: অ্যাভাটার জুম খোলা থাকলে Esc দিয়ে বন্ধ + পেজ স্ক্রল লক
+  useEffect(() => {
+    if (!showAvatarZoom) return;
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') setShowAvatarZoom(false);
+    };
+    document.addEventListener('keydown', handleEsc);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = '';
+    };
+  }, [showAvatarZoom]);
 
   // ✅ ফলো টগল ফাংশন
   const handleFollowToggle = async () => {
@@ -429,6 +446,34 @@ const UserProfilePage = () => {
     fetchReviews();
   }, [fetchReviews]);
 
+  // ============================================================
+  // ✅ নতুন হেল্পার — বাজেট সেফলি ফরম্যাট করা (number অথবা
+  // {type, amount/min/max, isNegotiable} — দুটোই সাপোর্ট করে)।
+  // এটা যোগ করা হয়েছে কারণ post.budget সরাসরি JSX-এ বসালে
+  // (যখন এটা অবজেক্ট হয়) "Objects are not valid as a React child"
+  // এরর দিয়ে পুরো পেজ ক্র্যাশ করত।
+  // ============================================================
+  const formatPostBudget = (post) => {
+    const raw = post?.budget ?? post?.price;
+    if (raw && typeof raw === 'object') {
+      const range = raw.type === 'range' ? `${raw.min ?? 0}-${raw.max ?? 0}` : `${raw.amount ?? 0}`;
+      return raw.isNegotiable ? `${range} (আলোচনাসাপেক্ষ)` : range;
+    }
+    return raw ?? 0;
+  };
+
+  // ============================================================
+  // ✅ নতুন হেল্পার — Firestore Timestamp/string/number/Date
+  // যেকোনো ফরম্যাট থেকে নিরাপদে "Joined ..." তারিখ বের করা।
+  // আগে new Date(TimestampObject) সরাসরি কল করায় "Invalid Date"
+  // দেখাত, কারণ Firestore createdAt একটা Timestamp object, স্ট্রিং না।
+  // ============================================================
+  const formatJoinDate = (createdAt) => {
+    if (!createdAt) return 'Recently';
+    const d = createdAt?.toDate ? createdAt.toDate() : new Date(createdAt);
+    return isNaN(d.getTime()) ? 'Recently' : d.toDateString();
+  };
+
 if (loading) {
   return (
     <Loading 
@@ -481,8 +526,10 @@ if (loading) {
   animation: 'gradientGlow 3s ease-in-out infinite',
   boxShadow: '0 0 20px rgba(20, 184, 166, 0.3), 0 0 60px rgba(20, 184, 166, 0.1)',
   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-  cursor: 'pointer'
-}}>
+  cursor: 'zoom-in'
+}}
+  onClick={() => setShowAvatarZoom(true)}
+>
   <img 
     src={userData.photoURL || `https://ui-avatars.com/api/?name=${userData.displayName || 'User'}&background=14b8a6&color=fff&bold=true&size=120`} 
     alt={userData.displayName || 'User'} 
@@ -578,7 +625,7 @@ if (loading) {
               {/* ✅ জয়েন তারিখ */}
               <span>
                 <i className="fa-solid fa-calendar"></i> 
-                Joined {userData.createdAt ? new Date(userData.createdAt).toDateString() : 'Recently'}
+                Joined {formatJoinDate(userData.createdAt)}
               </span>
             </div>
           </div>
@@ -732,7 +779,7 @@ if (loading) {
               </div>
               <div className="info-item">
                 <i className="fa-solid fa-calendar"></i>
-                <span>Joined {userData.createdAt ? new Date(userData.createdAt).toDateString() : 'Recently'}</span>
+                <span>Joined {formatJoinDate(userData.createdAt)}</span>
               </div>
             </div>
           </div>
@@ -751,7 +798,7 @@ if (loading) {
                     <div className="post-info">
                       <h4>{post.title}</h4>
                       <p>{post.description?.substring(0, 60)}...</p>
-                      <span className="post-budget">৳ {post.budget} BDT</span>
+                      <span className="post-budget">৳ {formatPostBudget(post)} BDT</span>
                     </div>
                   </div>
                 ))}
@@ -986,6 +1033,28 @@ if (loading) {
           onReviewSubmitted={handleReviewSubmitted}
           hasReviewed={hasReviewed}
         />
+      )}
+
+      {/* ✅ নতুন: Facebook-স্টাইল ফুলস্ক্রিন অ্যাভাটার জুম */}
+      {showAvatarZoom && (
+        <div className="avatar-zoom-overlay" onClick={() => setShowAvatarZoom(false)}>
+          <button
+            className="avatar-zoom-close"
+            onClick={(e) => { e.stopPropagation(); setShowAvatarZoom(false); }}
+            aria-label="Close"
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+          <img
+            src={
+              userData.photoURL ||
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.displayName || 'User')}&background=14b8a6&color=fff&bold=true&size=400`
+            }
+            alt={userData.displayName || 'User'}
+            className="avatar-zoom-image"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
       )}
     </div>
   );

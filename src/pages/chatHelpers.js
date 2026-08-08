@@ -81,6 +81,144 @@ export const formatTime = (ts) => {
 };
 
 // ============================================================
+// ✅ BUDGET & DEADLINE HELPERS (NEW)
+// ============================================================
+
+/**
+ * Extract budget value from object or number
+ * Supports: number, string, {amount, isNegotiable}, {type:'range', min, max, isNegotiable}
+ * 
+ * @param {any} budget - The budget value (number, string, or object)
+ * @returns {number} - Extracted number value
+ * 
+ * @example
+ * extractBudgetValue(1000) // 1000
+ * extractBudgetValue({ amount: 1000 }) // 1000
+ * extractBudgetValue({ type: 'range', min: 500, max: 1000 }) // 1000
+ */
+export const extractBudgetValue = (budget) => {
+  if (budget === null || budget === undefined) return 0;
+  if (typeof budget === 'number') return budget;
+  if (typeof budget === 'string') {
+    const parsed = parseFloat(budget);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  if (typeof budget === 'object') {
+    // Handle {amount, isNegotiable} format
+    if (budget.amount !== undefined) {
+      return typeof budget.amount === 'number' ? budget.amount : parseFloat(budget.amount) || 0;
+    }
+    // Handle {type:'range', min, max} format
+    if (budget.type === 'range') {
+      const min = budget.min || 0;
+      const max = budget.max || 0;
+      return Math.max(min, max); // Return max for display
+    }
+    // Handle {type:'range', min, max, isNegotiable} format
+    if (budget.min !== undefined || budget.max !== undefined) {
+      const min = budget.min || 0;
+      const max = budget.max || 0;
+      return Math.max(min, max);
+    }
+  }
+  return 0;
+};
+
+/**
+ * Extract deadline value from object or number
+ * 
+ * @param {any} deadline - The deadline value (number, string, or object)
+ * @returns {number} - Extracted number value
+ * 
+ * @example
+ * extractDeadlineValue(7) // 7
+ * extractDeadlineValue({ days: 7 }) // 7
+ * extractDeadlineValue({ type: 'range', min: 3, max: 7 }) // 7
+ */
+export const extractDeadlineValue = (deadline) => {
+  if (deadline === null || deadline === undefined) return 0;
+  if (typeof deadline === 'number') return deadline;
+  if (typeof deadline === 'string') {
+    const parsed = parseFloat(deadline);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  if (typeof deadline === 'object') {
+    // Handle {days, type} format
+    if (deadline.days !== undefined) {
+      return typeof deadline.days === 'number' ? deadline.days : parseFloat(deadline.days) || 0;
+    }
+    // Handle {type:'range', min, max} format
+    if (deadline.type === 'range') {
+      const min = deadline.min || 0;
+      const max = deadline.max || 0;
+      return Math.max(min, max);
+    }
+    if (deadline.min !== undefined || deadline.max !== undefined) {
+      const min = deadline.min || 0;
+      const max = deadline.max || 0;
+      return Math.max(min, max);
+    }
+  }
+  return 0;
+};
+
+/**
+ * Format budget for display (returns string with Bangla negotiable text)
+ * 
+ * @param {any} budget - The budget value (number, string, or object)
+ * @returns {string} - Formatted display string
+ * 
+ * @example
+ * formatBudgetDisplay(1000) // "1000"
+ * formatBudgetDisplay({ amount: 1000, isNegotiable: true }) // "1000 (আলোচনাসাপেক্ষ)"
+ * formatBudgetDisplay({ type: 'range', min: 500, max: 1000 }) // "500-1000"
+ */
+export const formatBudgetDisplay = (budget) => {
+  if (budget === null || budget === undefined) return '0';
+  if (typeof budget === 'number') return String(budget);
+  if (typeof budget === 'string') return budget;
+  if (typeof budget === 'object') {
+    if (budget.type === 'range') {
+      const min = budget.min || 0;
+      const max = budget.max || 0;
+      const negotiable = budget.isNegotiable ? ' (আলোচনাসাপেক্ষ)' : '';
+      return `${min}-${max}${negotiable}`;
+    }
+    const amount = budget.amount || 0;
+    const negotiable = budget.isNegotiable ? ' (আলোচনাসাপেক্ষ)' : '';
+    return `${amount}${negotiable}`;
+  }
+  return String(budget);
+};
+
+/**
+ * Format deadline for display (returns string)
+ * 
+ * @param {any} deadline - The deadline value (number, string, or object)
+ * @returns {string} - Formatted display string
+ * 
+ * @example
+ * formatDeadlineDisplay(7) // "7"
+ * formatDeadlineDisplay({ days: 7 }) // "7"
+ * formatDeadlineDisplay({ type: 'range', min: 3, max: 7 }) // "3-7"
+ */
+export const formatDeadlineDisplay = (deadline) => {
+  if (deadline === null || deadline === undefined) return '0';
+  if (typeof deadline === 'number') return String(deadline);
+  if (typeof deadline === 'string') return deadline;
+  if (typeof deadline === 'object') {
+    if (deadline.type === 'range') {
+      const min = deadline.min || 0;
+      const max = deadline.max || 0;
+      return `${min}-${max}`;
+    }
+    const days = deadline.days || 0;
+    return String(days);
+  }
+  return String(deadline);
+};
+
+// ============================================================
 // ✅ sendProposal - FIXED (returns dealId)
 // ============================================================
 export const sendProposal = async (
