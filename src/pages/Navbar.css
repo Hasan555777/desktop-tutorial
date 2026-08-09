@@ -1605,3 +1605,131 @@ mark.search-highlight {
     font-size: 13px;
   }
 }
+
+
+
+
+
+
+/* ============================================================
+   🆕 DUAL-MODE SEARCH — Navbar.css-এর একদম শেষে পেস্ট করো
+   ============================================================ */
+
+/* ── Section header (current-mode results) ── */
+.search-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary, #94a3b8);
+  background: var(--bg-secondary, rgba(255,255,255,0.03));
+  border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.08));
+}
+
+.search-section-header .count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 20px;
+  background: var(--accent-primary, #14b8a6);
+  color: #04120f;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ── Empty state within the current-mode section ── */
+.search-empty-mode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text-muted, #64748b);
+}
+
+.search-empty-mode i {
+  color: var(--text-muted, #64748b);
+}
+
+/* ── Divider between current-mode and other-mode sections ── */
+.search-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--border-color, rgba(255,255,255,0.08));
+}
+
+/* ── Other-mode footer block ── */
+.other-mode-search-footer {
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.other-mode-search-footer > span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.other-mode-results-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0.85;
+}
+
+/* Reuse .search-result-item styling but slightly dimmed to signal
+   "this is from the other mode" until the person switches. */
+.other-mode-results-preview .search-result-item {
+  border-radius: 8px;
+}
+
+.switch-mode-search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent-gradient, linear-gradient(135deg, #14b8a6, #0d9488));
+  color: #04120f;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.switch-mode-search-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(20, 184, 166, 0.35);
+}
+
+.switch-mode-search-btn i {
+  font-size: 12px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .search-section-header {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+
+  .other-mode-search-footer {
+    padding: 10px 14px 14px;
+  }
+
+  .switch-mode-search-btn {
+    width: 100%;
+    padding: 12px 16px;
+  }
+}

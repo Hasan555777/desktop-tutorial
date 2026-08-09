@@ -1,18 +1,33 @@
 // src/pages/Home.jsx
+//
+// ⚠️ NEW: `onRequireModeSwitch` prop — when a targeted post (from the URL,
+// e.g. /post/:postId) isn't found in the CURRENT mode's Firestore query, we
+// no longer immediately assume "not found". We do one direct getDoc() check:
+//   - Doesn't exist at all           -> "Post Not Found" toast (as before)
+//   - Exists but not approved yet    -> "Post Pending" toast
+//   - Exists, approved, wrong mode   -> call onRequireModeSwitch(requiredMode)
+//     instead of failing. This effect then re-runs once the parent flips
+//     `currentMode` and the new mode's listener delivers the post, so it
+//     scrolls + highlights normally.
+// This covers entry points Navbar's search click can't: shared/bookmarked
+// links, browser back/forward, or a page refresh while viewing a post that
+// belongs to the other mode.
+
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { db } from '@/firebase';
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
 import JobCard from './JobCard';
 import './Home.css';
 
 function Home({ 
-  currentMode = 'seller', // ✅ ডিফল্ট 'seller'
+  currentMode = 'seller',
   currentUser, 
   searchTerm = '', 
   highlightText: propHighlightText, 
-  onBidAndChatClick 
+  onBidAndChatClick,
+  onRequireModeSwitch, // ✅ NEW
 }) {
   console.count("🏠 Home Render");
 
@@ -44,18 +59,29 @@ function Home({
   const listenerActiveRef = useRef(false);
   const currentModeRef = useRef(currentMode || 'seller');
 
+  // ✅ Keep the ref in sync every render so async callbacks (verifyPost)
+  // always compare against the LATEST mode, not a stale closure value.
+  useEffect(() => {
+    currentModeRef.current = currentMode || 'seller';
+  }, [currentMode]);
+
   const searchParams = new URLSearchParams(location.search);
   const postIdFromQuery = searchParams.get('postId');
   const targetPostId = postId || postIdFromQuery;
   const [highlightedPostId, setHighlightedPostId] = useState(targetPostId);
 
+  // ✅ Track which postId we've already run the "verify + maybe switch mode"
+  // fallback for, so we don't spam getDoc() calls if the effect re-runs for
+  // other reasons (e.g. posts array reference changing) while still on the
+  // same missing post.
+  const verifiedForPostIdRef = useRef(null);
 
-useEffect(() => {
-  console.log("🎯 URL Target Post ID:", targetPostId);
-  setHighlightedPostId(targetPostId);
-}, [targetPostId]);
+  useEffect(() => {
+    console.log("🎯 URL Target Post ID:", targetPostId);
+    setHighlightedPostId(targetPostId);
+    verifiedForPostIdRef.current = null; // reset guard for the new target
+  }, [targetPostId]);
 
-  
   const highlightText = propHighlightText || ((text, searchTerm) => {
     if (!searchTerm || !text || searchTerm.trim() === '') return text;
     try {
@@ -80,114 +106,103 @@ useEffect(() => {
     }
   }, []);
 
-
-
-const setupListener = useCallback(() => {
-  if (listenerActiveRef.current) {
-    console.log("ℹ️ Home: Listener already active, skipping...");
-    return;
-  }
-
-  const mode = currentModeRef.current || 'seller';
-  console.log("🔥 Home: Setting up posts listener for mode:", mode);
-  setLoading(true);
-
-  const postsRef = collection(db, 'posts');
-  let q;
-
-  // ✅ আপনার Firestore-এ type: 'service' এবং 'hire'
-  if (mode === 'seller') {
-    // seller mode: service টাইপের পোস্ট
-    q = query(
-      postsRef,
-      where('status', '==', 'approved'),
-      where('type', '==', 'service'), // ✅ 'service'
-      orderBy('createdAt', 'desc')
-    );
-  } else if (mode === 'buyer') {
-    // buyer mode: hire টাইপের পোস্ট
-    q = query(
-      postsRef,
-      where('status', '==', 'approved'),
-      where('type', '==', 'hire'), // ✅ 'hire'
-      orderBy('createdAt', 'desc')
-    );
-  } else {
-    // ডিফল্ট: সব approved পোস্ট
-    console.log("🔥 Home: Using default query (all approved posts)");
-    q = query(
-      postsRef,
-      where('status', '==', 'approved'),
-      orderBy('createdAt', 'desc')
-    );
-  }
-
-  console.log("🔍 Home: Query created for mode:", mode);
-
-  const unsubscribe = onSnapshot(q,
-    (snapshot) => {
-      if (!isMountedRef.current) {
-        console.log("⏭️ Home: Component unmounted, skipping update");
-        return;
-      }
-
-      console.log("🔥🔥🔥 Home: Real-time update received! Docs:", snapshot.docs.length);
-
-      if (snapshot.docs.length === 0) {
-        console.warn("⚠️ Home: No posts found for mode:", mode);
-        console.warn(`⚠️ Check if posts have type: '${mode === 'seller' ? 'service' : 'hire'}' and status: 'approved'`);
-        setPosts([]);
-        setLoading(false);
-        return;
-      }
-
-      const postsArray = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-
-      console.log("📊 Home: Approved posts loaded:", postsArray.length);
-      setPosts(postsArray);
-      setLoading(false);
-    },
-    (error) => {
-      if (!isMountedRef.current) return;
-
-      console.error("❌ Home: Error fetching posts:", error);
-      console.error("❌ Error code:", error.code);
-      console.error("❌ Error message:", error.message);
-      setLoading(false);
-
-      if (error.code === 'failed-precondition' || error.message.includes('index')) {
-        feedbackRef.current?.showError?.(
-          'Index Required',
-          'Please create the required Firestore index. Check console for link.',
-          'INDEX_ERROR'
-        );
-        console.error('🔗 Create index:', error.message.match(/https:\/\/console\.firebase\.google\.com[^\s]+/)?.[0]);
-      } else {
-        feedbackRef.current?.showError?.(
-          'Failed to Load Posts',
-          error.message || 'Could not fetch posts. Please refresh.',
-          'LOAD_ERROR'
-        );
-      }
+  const setupListener = useCallback(() => {
+    if (listenerActiveRef.current) {
+      console.log("ℹ️ Home: Listener already active, skipping...");
+      return;
     }
-  );
 
-  unsubscribeRef.current = unsubscribe;
-  listenerActiveRef.current = true;
-}, []);
+    const mode = currentModeRef.current || 'seller';
+    console.log("🔥 Home: Setting up posts listener for mode:", mode);
+    setLoading(true);
+
+    const postsRef = collection(db, 'posts');
+    let q;
+
+    // ✅ type: 'service' -> Seller Mode, type: 'hire' -> Buyer Mode
+    if (mode === 'seller') {
+      q = query(
+        postsRef,
+        where('status', '==', 'approved'),
+        where('type', '==', 'service'),
+        orderBy('createdAt', 'desc')
+      );
+    } else if (mode === 'buyer') {
+      q = query(
+        postsRef,
+        where('status', '==', 'approved'),
+        where('type', '==', 'hire'),
+        orderBy('createdAt', 'desc')
+      );
+    } else {
+      console.log("🔥 Home: Using default query (all approved posts)");
+      q = query(
+        postsRef,
+        where('status', '==', 'approved'),
+        orderBy('createdAt', 'desc')
+      );
+    }
+
+    console.log("🔍 Home: Query created for mode:", mode);
+
+    const unsubscribe = onSnapshot(q,
+      (snapshot) => {
+        if (!isMountedRef.current) {
+          console.log("⏭️ Home: Component unmounted, skipping update");
+          return;
+        }
+
+        console.log("🔥🔥🔥 Home: Real-time update received! Docs:", snapshot.docs.length);
+
+        if (snapshot.docs.length === 0) {
+          console.warn("⚠️ Home: No posts found for mode:", mode);
+          setPosts([]);
+          setLoading(false);
+          return;
+        }
+
+        const postsArray = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        console.log("📊 Home: Approved posts loaded:", postsArray.length);
+        setPosts(postsArray);
+        setLoading(false);
+      },
+      (error) => {
+        if (!isMountedRef.current) return;
+
+        console.error("❌ Home: Error fetching posts:", error);
+        setLoading(false);
+
+        if (error.code === 'failed-precondition' || error.message.includes('index')) {
+          feedbackRef.current?.showError?.(
+            'Index Required',
+            'Please create the required Firestore index. Check console for link.',
+            'INDEX_ERROR'
+          );
+          console.error('🔗 Create index:', error.message.match(/https:\/\/console\.firebase\.google\.com[^\s]+/)?.[0]);
+        } else {
+          feedbackRef.current?.showError?.(
+            'Failed to Load Posts',
+            error.message || 'Could not fetch posts. Please refresh.',
+            'LOAD_ERROR'
+          );
+        }
+      }
+    );
+
+    unsubscribeRef.current = unsubscribe;
+    listenerActiveRef.current = true;
+  }, []);
 
   // ✅ Single effect to handle mounting, unmounting, and mode changes robustly
   useEffect(() => {
     console.log("🟢 Home Effect: Setting up listener for mode:", currentMode);
     isMountedRef.current = true;
-    
-    // Always sync the ref with the latest mode prop
     currentModeRef.current = currentMode || 'seller';
 
-    // Clean up any existing listener before setting up the new one
     cleanupListener();
     setupListener();
 
@@ -198,22 +213,15 @@ const setupListener = useCallback(() => {
     };
   }, [currentMode, setupListener, cleanupListener]);
 
-  // ✅ highlightedPostId effect
+  // ============================================================
+  // ✅ Highlight/scroll effect + self-healing mode-mismatch fallback
+  // ============================================================
   useEffect(() => {
-    if (!loading && highlightedPostId && posts.length > 0) {
-      const postExists = posts.some(p => p.id === highlightedPostId);
+    if (loading || !highlightedPostId) return;
 
-      if (!postExists) {
-        console.log("⚠️ Post not found in current list");
-        feedbackRef.current?.toast?.({
-          variant: 'warning',
-          title: 'Post Not Found',
-          message: 'The requested post is not available or pending approval.',
-          duration: 3000
-        });
-        return;
-      }
+    const postExists = posts.some(p => p.id === highlightedPostId);
 
+    if (postExists) {
       setTimeout(() => {
         const postElement = document.getElementById(`post-${highlightedPostId}`);
 
@@ -227,8 +235,79 @@ const setupListener = useCallback(() => {
           }, 3000);
         }
       }, 1000);
+      return;
     }
-  }, [loading, highlightedPostId, posts]);
+
+    // ── Post not in the current mode's list ──
+    // Avoid re-checking the same missing postId repeatedly (e.g. if this
+    // effect re-fires because `posts` got a new array reference for an
+    // unrelated snapshot update while we're still resolving the same post).
+    if (verifiedForPostIdRef.current === highlightedPostId) return;
+
+    let cancelled = false;
+
+    const verifyPost = async () => {
+      try {
+        const snap = await getDoc(doc(db, 'posts', highlightedPostId));
+        if (cancelled) return;
+
+        verifiedForPostIdRef.current = highlightedPostId;
+
+        if (!snap.exists()) {
+          console.log("⚠️ Post not found in Firestore at all");
+          feedbackRef.current?.toast?.({
+            variant: 'warning',
+            title: 'Post Not Found',
+            message: 'The requested post is not available or has been removed.',
+            duration: 3000
+          });
+          return;
+        }
+
+        const data = snap.data();
+
+        if (data.status !== 'approved') {
+          feedbackRef.current?.toast?.({
+            variant: 'info',
+            title: 'Post Pending',
+            message: 'This post is still awaiting admin approval and is not publicly visible yet.',
+            duration: 3000
+          });
+          return;
+        }
+
+        const requiredMode = data.type === 'hire' ? 'buyer' : 'seller';
+
+        if (requiredMode !== currentModeRef.current) {
+          if (onRequireModeSwitch) {
+            console.log(`🔀 Post belongs to ${requiredMode} mode — switching automatically`);
+            onRequireModeSwitch(requiredMode);
+            // This effect will re-run once the `currentMode` prop updates
+            // and the new mode's onSnapshot listener delivers this post —
+            // at that point `postExists` above becomes true and it scrolls.
+          } else {
+            feedbackRef.current?.toast?.({
+              variant: 'warning',
+              title: 'Post Not Found',
+              message: 'The requested post is not available or is pending approval.',
+              duration: 3000
+            });
+          }
+          return;
+        }
+
+        // Same mode but still missing from `posts`? Extremely unlikely
+        // (would mean the snapshot listener hasn't caught up yet) — don't
+        // show an error, just let a future snapshot update resolve it.
+      } catch (error) {
+        console.error('Error verifying post existence:', error);
+      }
+    };
+
+    verifyPost();
+
+    return () => { cancelled = true; };
+  }, [loading, highlightedPostId, posts, onRequireModeSwitch]);
 
   // ✅ সার্চ ফিল্টার
   const filteredBySearch = useMemo(() => {

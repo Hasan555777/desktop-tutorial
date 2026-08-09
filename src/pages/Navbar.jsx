@@ -1,4 +1,18 @@
 // src/pages/Navbar.jsx
+//
+// 🔍 SEARCH ARCHITECTURE (per agreed plan):
+//   App.jsx already fetches ALL posts (no type/status filter). It now filters
+//   to APPROVED posts only before text-matching for search (bug fix — pending
+//   /rejected posts used to leak into search results and 404 when clicked).
+//   That approved+matched list (both post types mixed) is passed down here as
+//   `searchResults`. Navbar splits it into:
+//     - currentModeResults: posts matching the person's active mode
+//     - otherModeResults:   posts that belong to the OTHER mode
+//   Clicking a current-mode result just navigates. Clicking an other-mode
+//   result (or the "Switch to X Mode" footer button) flips `currentMode`
+//   first, then navigates — Home.jsx's Firestore query re-subscribes for the
+//   new mode and the highlight/scroll effect picks the post up once it
+//   arrives.
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -11,6 +25,10 @@ import './Navbar.css';
 import FloatingFeedbackButton from '@components/FloatingFeedbackButton/FloatingFeedbackButton';
 import SettingsDropdown from '@components/SettingsDropdown';
 import { useLayout } from "@/context/LayoutContext";
+
+// ✅ Post type -> required app mode. 'hire' posts belong to Buyer Mode,
+// 'service' posts belong to Seller Mode (matches Home.jsx's Firestore query).
+const modeForPost = (post) => (post.type === 'hire' ? 'buyer' : 'seller');
 
 const Navbar = ({ 
   children, 
@@ -284,30 +302,62 @@ const Navbar = ({
     }
   }, [localSearchQuery, navigate]);
 
-  // ✅ FIXED: handleSearchResultClick with defensive fallback
-const handleSearchResultClick = useCallback((result) => {
-  console.log("🔍 SEARCH RESULT CLICKED:", result);
+  // ============================================================
+  // ✅ Dual-mode split of the incoming (already approved-only) search
+  // results. `searchResults` mixes both post types — this is where we
+  // separate "belongs to my current mode" from "belongs to the other mode".
+  // ============================================================
+  const currentModeResults = useMemo(
+    () => searchResults.filter(r => modeForPost(r) === currentMode),
+    [searchResults, currentMode]
+  );
+  const otherModeResults = useMemo(
+    () => searchResults.filter(r => modeForPost(r) !== currentMode),
+    [searchResults, currentMode]
+  );
+  const otherMode = currentMode === 'buyer' ? 'seller' : 'buyer';
+  const otherModeLabel = otherMode === 'buyer' ? 'Buyer Mode' : 'Seller Mode';
+  const currentModeLabel = currentMode === 'buyer' ? 'Buyer Mode Jobs' : 'Seller Mode Services';
 
-  const postId = result.id || result.postId;
+  // ============================================================
+  // ✅ Clicking a result: navigate directly if it's already in the
+  // person's current mode; otherwise switch mode first, then navigate.
+  // Home.jsx re-subscribes its Firestore query when `currentMode` changes
+  // and will pick up + highlight the post once the new mode's data arrives.
+  // ============================================================
+  const handleSearchResultClick = useCallback((result) => {
+    const postId = result.id || result.postId;
 
-  console.log("🆔 Extracted Post ID:", postId);
+    if (!postId) {
+      console.error("❌ No post ID found:", result);
+      return;
+    }
 
-  if (!postId) {
-    console.error("❌ No post ID found:", result);
-    return;
-  }
+    setLocalSearchQuery('');
+    setShowSearchResults(false);
+    if (onSearch) onSearch('');
 
-  setLocalSearchQuery('');
-  setShowSearchResults(false);
+    const requiredMode = modeForPost(result);
+    if (requiredMode !== currentMode) {
+      setCurrentMode(requiredMode);
+      localStorage.setItem('currentMode', requiredMode);
+    }
 
-  if (onSearch) {
-    onSearch('');
-  }
+    navigate(`/post/${postId}`);
+  }, [onSearch, navigate, currentMode, setCurrentMode]);
 
-  console.log("🚀 Navigating to:", `/post/${postId}`);
-
-  navigate(`/post/${postId}`);
-}, [onSearch, navigate]);
+  // ✅ "Switch to X Mode" footer button — just flips the mode and stays on
+  // the home feed; Home.jsx re-queries for the new mode and re-applies the
+  // same (still-active) search term via its own `searchTerm` prop, so the
+  // person immediately sees the other mode's matching posts in the feed.
+  const handleSwitchModeForSearch = useCallback(() => {
+    setCurrentMode(otherMode);
+    localStorage.setItem('currentMode', otherMode);
+    setShowSearchResults(false);
+    if (location.pathname !== '/') {
+      navigate('/');
+    }
+  }, [otherMode, setCurrentMode, navigate, location.pathname]);
 
   const handleModeSwitch = useCallback((e, mode) => {
     e.stopPropagation();
@@ -415,8 +465,33 @@ const handleSearchResultClick = useCallback((result) => {
     </div>
   ), [userData, isAdmin, isDark, toggleTheme, handleLogoutClick, handleNavigate, handleWalletNavigate, handleSettingsNavigate]);
 
-  // ✅ Compute search result count
-  const searchResultCount = searchResults.length;
+  // ============================================================
+  // ✅ Renders one result row (used for both current-mode and
+  // other-mode lists so the markup/behavior stays identical).
+  // ============================================================
+  const renderResultItem = (result) => {
+    const isJobType = result.type === 'job' || result.type === 'hire';
+    return (
+      <div
+        key={result.id || result.postId || result.title}
+        className="search-result-item"
+        onClick={() => handleSearchResultClick(result)}
+      >
+        <div className="result-icon">
+          <i className={isJobType ? 'fa-solid fa-briefcase' : 'fa-solid fa-laptop-code'}></i>
+        </div>
+        <div className="result-info">
+          <h4>{highlightText(result.title || result.name, localSearchQuery)}</h4>
+          <p>{highlightText(result.category || (isJobType ? 'Job' : 'Service'), localSearchQuery)}</p>
+        </div>
+        <div className="result-badge">
+          <span className={isJobType ? 'badge-job' : 'badge-service'}>
+            {isJobType ? 'Job' : 'Service'}
+          </span>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="dark-cyber-theme-container">
@@ -590,47 +665,59 @@ const handleSearchResultClick = useCallback((result) => {
                 />
               </div>
               
-              {/* ✅ Updated Search Results Dropdown with Header & No Results State */}
+              {/* ✅ Dual-mode search results dropdown */}
               {showSearchResults && (
                 <div className="search-results-dropdown">
-                  {/* ✅ Header: Show result count */}
-                  {searchResults.length > 0 && (
-                    <div className="search-results-header">
-                      <span className="result-count">
-                        <i className="fa-solid fa-magnifying-glass"></i> 
-                        {searchResultCount} {searchResultCount === 1 ? 'result' : 'results'} found
-                      </span>
-                    </div>
-                  )}
-                  
-                  {/* ✅ Results List */}
-                  {searchResults.length > 0 ? (
-                    searchResults.map((result) => (
-                      <div 
-key={result.id || result.postId || result.title}                        className="search-result-item" 
-                        onClick={() => handleSearchResultClick(result)}
-                      >
-                        <div className="result-icon">
-                          <i className={result.type === 'job' || result.type === 'hire' ? 'fa-solid fa-briefcase' : 'fa-solid fa-laptop-code'}></i>
-                        </div>
-                        <div className="result-info">
-                          <h4>{highlightText(result.title || result.name, localSearchQuery)}</h4>
-                          <p>{highlightText(result.category || (result.type === 'job' || result.type === 'hire' ? 'Job' : 'Service'), localSearchQuery)}</p>
-                        </div>
-                        <div className="result-badge">
-                          <span className={result.type === 'job' || result.type === 'hire' ? 'badge-job' : 'badge-service'}>
-                            {result.type === 'job' || result.type === 'hire' ? 'Job' : 'Service'}
-                          </span>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    /* ✅ No Results Found State */
+                  {searchResults.length === 0 ? (
                     <div className="search-no-results">
                       <i className="fa-solid fa-search-minus"></i>
                       <p>No results found for "<strong>{localSearchQuery}</strong>"</p>
                       <span>Try adjusting your search terms</span>
                     </div>
+                  ) : (
+                    <>
+                      {/* ── Current mode section ── */}
+                      <div className="search-section-header">
+                        <span>
+                          {currentMode === 'seller' ? '🛒' : '💼'} {currentModeLabel}
+                        </span>
+                        <span className="count-badge">{currentModeResults.length}</span>
+                      </div>
+
+                      {currentModeResults.length > 0 ? (
+                        currentModeResults.map(renderResultItem)
+                      ) : (
+                        <div className="search-empty-mode">
+                          <i className="fa-solid fa-circle-info"></i>
+                          এই মোডে কোনো ফলাফল নেই
+                        </div>
+                      )}
+
+                      {/* ── Other mode section (count + switch shortcut) ── */}
+                      {otherModeResults.length > 0 && (
+                        <>
+                          <div className="search-divider"></div>
+                          <div className="other-mode-search-footer">
+                            <span>
+                              {otherMode === 'seller' ? '🛒' : '💼'} {otherModeResults.length} results in {otherModeLabel}
+                            </span>
+
+                            {/* Quick links straight into specific other-mode posts */}
+                            <div className="other-mode-results-preview">
+                              {otherModeResults.slice(0, 3).map(renderResultItem)}
+                            </div>
+
+                            <button
+                              type="button"
+                              className="switch-mode-search-btn"
+                              onClick={handleSwitchModeForSearch}
+                            >
+                              Switch to {otherModeLabel} <i className="fa-solid fa-arrow-right"></i>
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -679,7 +766,6 @@ key={result.id || result.postId || result.title}                        classNam
             setActiveTab={setActiveTab}
             onItemClick={() => {
               setShowMobileMenu(false);
-              setShowMobileMenu(false); 
             }}
           />
         </div>

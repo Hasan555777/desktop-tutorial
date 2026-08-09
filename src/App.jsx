@@ -229,6 +229,14 @@ const AppContent = () => {
   } = useAnnouncement();
 
   // ============================================================
+  // ✅ NEW: approvedPosts memo (posts state-এর পরে)
+  // ============================================================
+  const approvedPosts = useMemo(
+    () => posts.filter(p => p.status === 'approved'),
+    [posts]
+  );
+
+  // ============================================================
   // ✅ App Lock Initial Check - CRITICAL FIX
   // ============================================================
 
@@ -691,7 +699,7 @@ const AppContent = () => {
         
         const fetchedPosts = Array.from(uniqueMap.values());
         setPosts(fetchedPosts);
-        setFilteredPosts(fetchedPosts);
+        setFilteredPosts([]); // ✅ Reset filtered posts when posts update
         setPostsLoading(false);
       }, 
       (error) => {
@@ -913,20 +921,23 @@ const AppContent = () => {
     setUnreadNotificationsCount(count);
   }, []);
 
+  // ============================================================
+  // ✅ NEW: handleGlobalSearch (পুরনোটা রিপ্লেস)
+  // ============================================================
   const handleGlobalSearch = useCallback((searchTerm) => {
     setSearchQuery(searchTerm);
     if (!searchTerm || searchTerm.trim() === '') {
-      setFilteredPosts(posts);
-    } else {
-      const lowerQuery = searchTerm.toLowerCase();
-      const filtered = posts.filter(post => 
-        post.title?.toLowerCase().includes(lowerQuery) ||
-        post.description?.toLowerCase().includes(lowerQuery) ||
-        post.clientName?.toLowerCase().includes(lowerQuery)
-      );
-      setFilteredPosts(filtered);
+      setFilteredPosts([]);
+      return;
     }
-  }, [posts]);
+    const lowerQuery = searchTerm.toLowerCase();
+    const filtered = approvedPosts.filter(post =>
+      post.title?.toLowerCase().includes(lowerQuery) ||
+      post.description?.toLowerCase().includes(lowerQuery) ||
+      post.clientName?.toLowerCase().includes(lowerQuery)
+    );
+    setFilteredPosts(filtered);
+  }, [approvedPosts]);
 
   const handleLogout = useCallback(async () => {
     const confirmed = await feedbackRef.current?.confirm?.({
@@ -1023,9 +1034,8 @@ const AppContent = () => {
   }, [currentUser, navigate]);
 
   // ============================================================
-  // ✅ Home Component
+  // ✅ NEW: homeComponent (handleModeChange যোগ করা হয়েছে)
   // ============================================================
-
   const homeComponent = useMemo(() => (
     <Home 
       key="home"
@@ -1033,8 +1043,9 @@ const AppContent = () => {
       currentUser={currentUser}
       searchTerm={searchQuery}
       onBidAndChatClick={handleInitiateBidAndChat}
+      onRequireModeSwitch={handleModeChange}
     />
-  ), [currentMode, currentUser, searchQuery, handleInitiateBidAndChat]);
+  ), [currentMode, currentUser, searchQuery, handleInitiateBidAndChat, handleModeChange]);
 
   // ============================================================
   // ✅ Loading Screen
@@ -1279,7 +1290,7 @@ const AppContent = () => {
 };
 
 // ============================================================
-// ✅ App Component thanks 
+// ✅ App Component
 // ============================================================
 
 function App() {
