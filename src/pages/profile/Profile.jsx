@@ -25,7 +25,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Profile.css';
+import './profile.css';
 import { auth, db } from '@/firebase';
 import {
   doc,
