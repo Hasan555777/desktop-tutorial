@@ -1,4 +1,5 @@
 // src/pages/Navbar.jsx
+
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -13,7 +14,7 @@ import { useLayout } from "@/context/LayoutContext";
 
 const Navbar = ({ 
   children, 
-  currentMode = 'seller', // ✅ ডিফল্ট 'seller'
+  currentMode = 'seller',
   setCurrentMode, 
   onLogout, 
   activeTab, 
@@ -283,12 +284,30 @@ const Navbar = ({
     }
   }, [localSearchQuery, navigate]);
 
-  const handleSearchResultClick = useCallback((result) => {
-    setLocalSearchQuery('');
-    setShowSearchResults(false);
-    if (onSearch) onSearch('');
-    navigate(`/post/${result.id}`);
-  }, [onSearch, navigate]);
+  // ✅ FIXED: handleSearchResultClick with defensive fallback
+const handleSearchResultClick = useCallback((result) => {
+  console.log("🔍 SEARCH RESULT CLICKED:", result);
+
+  const postId = result.id || result.postId;
+
+  console.log("🆔 Extracted Post ID:", postId);
+
+  if (!postId) {
+    console.error("❌ No post ID found:", result);
+    return;
+  }
+
+  setLocalSearchQuery('');
+  setShowSearchResults(false);
+
+  if (onSearch) {
+    onSearch('');
+  }
+
+  console.log("🚀 Navigating to:", `/post/${postId}`);
+
+  navigate(`/post/${postId}`);
+}, [onSearch, navigate]);
 
   const handleModeSwitch = useCallback((e, mode) => {
     e.stopPropagation();
@@ -395,6 +414,9 @@ const Navbar = ({
       </button>
     </div>
   ), [userData, isAdmin, isDark, toggleTheme, handleLogoutClick, handleNavigate, handleWalletNavigate, handleSettingsNavigate]);
+
+  // ✅ Compute search result count
+  const searchResultCount = searchResults.length;
 
   return (
     <div className="dark-cyber-theme-container">
@@ -504,7 +526,6 @@ const Navbar = ({
               }}
             >
               <div className="title-flex-trigger">
-                {/* ✅ সরাসরি Seller / Buyer Mode */}
                 <h1>
                   {currentMode === 'seller' ? (
                     <>
@@ -522,7 +543,6 @@ const Navbar = ({
               </div>
               
               <div className={`mode-switcher-dropdown ${showModeSwitcher ? 'show' : ''}`}>
-                {/* ✅ Seller Mode */}
                 <div 
                   className={`mode-opt ${currentMode === 'seller' ? 'selected' : ''}`} 
                   onClick={(e) => handleModeSwitch(e, 'seller')}
@@ -539,7 +559,6 @@ const Navbar = ({
                   )}
                 </div>
                 
-                {/* ✅ Buyer Mode */}
                 <div 
                   className={`mode-opt ${currentMode === 'buyer' ? 'selected' : ''}`} 
                   onClick={(e) => handleModeSwitch(e, 'buyer')}
@@ -571,24 +590,48 @@ const Navbar = ({
                 />
               </div>
               
-              {showSearchResults && searchResults.length > 0 && (
+              {/* ✅ Updated Search Results Dropdown with Header & No Results State */}
+              {showSearchResults && (
                 <div className="search-results-dropdown">
-                  {searchResults.map((result) => (
-                    <div key={result.id} className="search-result-item" onClick={() => handleSearchResultClick(result)}>
-                      <div className="result-icon">
-                        <i className={result.type === 'job' || result.type === 'hire' ? 'fa-solid fa-briefcase' : 'fa-solid fa-laptop-code'}></i>
-                      </div>
-                      <div className="result-info">
-                        <h4>{highlightText(result.title || result.name, localSearchQuery)}</h4>
-                        <p>{highlightText(result.category || (result.type === 'job' || result.type === 'hire' ? 'Job' : 'Service'), localSearchQuery)}</p>
-                      </div>
-                      <div className="result-badge">
-                        <span className={result.type === 'job' || result.type === 'hire' ? 'badge-job' : 'badge-service'}>
-                          {result.type === 'job' || result.type === 'hire' ? 'Job' : 'Service'}
-                        </span>
-                      </div>
+                  {/* ✅ Header: Show result count */}
+                  {searchResults.length > 0 && (
+                    <div className="search-results-header">
+                      <span className="result-count">
+                        <i className="fa-solid fa-magnifying-glass"></i> 
+                        {searchResultCount} {searchResultCount === 1 ? 'result' : 'results'} found
+                      </span>
                     </div>
-                  ))}
+                  )}
+                  
+                  {/* ✅ Results List */}
+                  {searchResults.length > 0 ? (
+                    searchResults.map((result) => (
+                      <div 
+key={result.id || result.postId || result.title}                        className="search-result-item" 
+                        onClick={() => handleSearchResultClick(result)}
+                      >
+                        <div className="result-icon">
+                          <i className={result.type === 'job' || result.type === 'hire' ? 'fa-solid fa-briefcase' : 'fa-solid fa-laptop-code'}></i>
+                        </div>
+                        <div className="result-info">
+                          <h4>{highlightText(result.title || result.name, localSearchQuery)}</h4>
+                          <p>{highlightText(result.category || (result.type === 'job' || result.type === 'hire' ? 'Job' : 'Service'), localSearchQuery)}</p>
+                        </div>
+                        <div className="result-badge">
+                          <span className={result.type === 'job' || result.type === 'hire' ? 'badge-job' : 'badge-service'}>
+                            {result.type === 'job' || result.type === 'hire' ? 'Job' : 'Service'}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    /* ✅ No Results Found State */
+                    <div className="search-no-results">
+                      <i className="fa-solid fa-search-minus"></i>
+                      <p>No results found for "<strong>{localSearchQuery}</strong>"</p>
+                      <span>Try adjusting your search terms</span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

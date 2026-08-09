@@ -58,7 +58,7 @@ import Navbar from "./pages/Navbar";
 import Inbox from './pages/Inbox';
 import Notifications from './pages/Notifications';
 import DealManager from './pages/DealManager';
-import Profile from './pages/Profile';
+import Profile from './pages/profile/Profile';
 import Withdraw from './pages/Withdraw';
 import Transactions from './pages/Transactions';
 import PaymentGateway from './pages/PaymentGateway';

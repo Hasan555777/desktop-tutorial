@@ -2148,9 +2148,9 @@ const formatDeadline = (post) => {
         </div>
 
         {/* ── ✅ Budget & Deadline (NEW READONLY VERSION) ── */}
-        {/* <div className="pb-row-twin"> */}
+        <div className="pb-row-twin">
           {/* Budget - Readonly for now */}
-          {/* <div className="pb-group">
+          <div className="pb-group">
             <label>Budget / Price <span className="required-star">*</span></label>
             <div className="input-with-icon">
               <span className="input-icon">৳</span>
@@ -2163,10 +2163,10 @@ const formatDeadline = (post) => {
               />
               <span className="input-hint">🔒 Edit coming soon</span>
             </div>
-          </div> */}
+          </div>
 
           {/* Deadline - Readonly for now */}
-          {/* <div className="pb-group">
+          <div className="pb-group">
             <label>Deadline / Delivery Days <span className="required-star">*</span></label>
             <div className="input-with-icon">
               <input
@@ -2180,7 +2180,7 @@ const formatDeadline = (post) => {
               <span className="input-hint">Edit coming soon</span>
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* ── Images ── */}
         {editingPost?.images?.length > 0 && (

@@ -49,6 +49,13 @@ function Home({
   const targetPostId = postId || postIdFromQuery;
   const [highlightedPostId, setHighlightedPostId] = useState(targetPostId);
 
+
+useEffect(() => {
+  console.log("🎯 URL Target Post ID:", targetPostId);
+  setHighlightedPostId(targetPostId);
+}, [targetPostId]);
+
+  
   const highlightText = propHighlightText || ((text, searchTerm) => {
     if (!searchTerm || !text || searchTerm.trim() === '') return text;
     try {

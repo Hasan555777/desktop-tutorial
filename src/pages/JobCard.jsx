@@ -316,6 +316,13 @@ function JobCard({
     });
   }, [images]);
 
+  // ✅ FIX: postImages বদলালে (যেমন পোস্ট এডিট করে ছবি বদলানো হলে)
+  // পুরনো imagesLoaded flag-গুলো রয়ে যেত, ফলে নতুন ছবির জন্য আর
+  // loading skeleton দেখাত না। এখন postImages বদলালে রিসেট হবে।
+  useEffect(() => {
+    setImagesLoaded({});
+  }, [postImages]);
+
   // ============================================================
   // ✅ ইমেজ এরর হ্যান্ডলার
   // ============================================================
@@ -463,6 +470,26 @@ function JobCard({
   }, [title, highlightText, searchTerm]);
 
   // ============================================================
+  // ✅ FIX: আগে JSX-এর ভেতরে সরাসরি
+  // `${clientProfile.clientPhoto.split('?')[0]}?v=${Date.now()}`
+  // লেখা ছিল — মানে প্রতিটা re-render-এ Date.now() নতুন মান দিত,
+  // ফলে <img src> প্রতিবার বদলে যেত এবং ব্রাউজার প্রতি re-render-এ
+  // ছবিটা আবার নতুন করে ডাউনলোড করত (flicker + অপ্রয়োজনীয় নেটওয়ার্ক
+  // রিকোয়েস্ট)। এখন useMemo দিয়ে স্থির রাখা হলো — শুধু clientPhoto
+  // সত্যিই বদলালেই নতুন URL তৈরি হবে।
+  // ============================================================
+  const avatarCacheBustedUrl = useMemo(() => {
+    if (!clientProfile.clientPhoto) return '';
+    return `${clientProfile.clientPhoto.split('?')[0]}?v=${Date.now()}`;
+  }, [clientProfile.clientPhoto]);
+
+  // ✅ FIX: clientPhoto বদলালে (fetchClientProfile থেকে নতুন ছবি এলে)
+  // avatarLoaded রিসেট হবে, যাতে নতুন ছবির জন্য skeleton আবার দেখা যায়।
+  useEffect(() => {
+    setAvatarLoaded(false);
+  }, [clientProfile.clientPhoto]);
+
+  // ============================================================
   // ✅ রেন্ডার
   // ============================================================
   return (
@@ -475,32 +502,15 @@ function JobCard({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="client-profile-block" style={{ display: 'flex', gap: '10px', minWidth: 0 }}>
-            {/* Avatar with Loading State */}
+            {/* Avatar with Facebook-style shimmer skeleton */}
             <div className="client-avatar" style={{ flexShrink: 0, position: 'relative' }}>
               {clientProfile.clientPhoto ? (
                 <>
                   {!avatarLoaded && (
-                    <div style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: 'var(--bg-tertiary, #1a2030)',
-                      borderRadius: '50%',
-                      zIndex: 1
-                    }}>
-                      <i className="fa-solid fa-spinner fa-spin" style={{
-                        color: 'var(--accent-primary, #14b8a6)',
-                        fontSize: '18px'
-                      }}></i>
-                    </div>
+                    <div className="jc-skeleton jc-skeleton-avatar" aria-hidden="true"></div>
                   )}
                   <img 
-                    src={`${clientProfile.clientPhoto.split('?')[0]}?v=${Date.now()}`} 
+                    src={avatarCacheBustedUrl} 
                     alt={clientProfile.clientName || 'User'} 
                     className={`client-avatar-img ${avatarLoaded ? 'loaded' : 'hidden'}`}
                     onLoad={handleAvatarLoad}
@@ -625,7 +635,7 @@ function JobCard({
         </p>
       </div>
 
-      {/* ── ইমেজ গ্যালারি ── */}
+      {/* ── ইমেজ গ্যালারি (Facebook-স্টাইল shimmer skeleton) ── */}
       {postImages.length > 0 && (
         <div className={`jc-image-gallery-grid gallery-cols-${Math.min(postImages.length, 3)}`}>
           {postImages.slice(0, 3).map((imgUrl, index) => (
@@ -636,27 +646,7 @@ function JobCard({
               style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden' }}
             >
               {!imagesLoaded[index] && (
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'var(--bg-tertiary, #1a2030)',
-                  color: 'var(--text-muted, #64748b)',
-                  gap: '8px',
-                  zIndex: 1
-                }}>
-                  <i className="fa-solid fa-spinner fa-spin" style={{
-                    fontSize: '24px',
-                    color: 'var(--accent-primary, #14b8a6)'
-                  }}></i>
-                  <span style={{ fontSize: '12px', color: 'var(--text-muted, #64748b)' }}>Loading...</span>
-                </div>
+                <div className="jc-skeleton jc-skeleton-image" aria-hidden="true"></div>
               )}
               
               <img 
