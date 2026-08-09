@@ -52,20 +52,31 @@ const EditPostModal = ({ post, onClose, onSave, feedback }) => {
   // ============================================================
   // ✅ Image handlers
   // ============================================================
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    const remainingSlots = 2 - totalImageCount;
-
-    if (files.length > remainingSlots) {
-      feedback?.alert?.warning?.({ message: `You can only add ${remainingSlots} more image(s). Maximum 2 images allowed!` });
-      return;
-    }
-
-    const previews = files.map(file => URL.createObjectURL(file));
-    setNewImageFiles(prev => [...prev, ...files]);
-    setNewImagePreviews(prev => [...prev, ...previews]);
+const handleImageChange = (e) => {
+  // ✅ Only posts that already have images can edit/replace images
+  if ((post?.images || []).length === 0) {
+    feedback?.alert?.warning?.({
+      message: 'এই পোস্টে আগে কোনো ছবি ছিল না, তাই ছবির Edit করা যাবে না।'
+    });
     e.target.value = '';
-  };
+    return;
+  }
+
+  const files = Array.from(e.target.files);
+  const remainingSlots = 2 - totalImageCount;
+
+  if (files.length > remainingSlots) {
+    feedback?.alert?.warning?.({
+      message: `You can only add ${remainingSlots} more image(s). Maximum 2 images allowed!`
+    });
+    return;
+  }
+
+  const previews = files.map(file => URL.createObjectURL(file));
+  setNewImageFiles(prev => [...prev, ...files]);
+  setNewImagePreviews(prev => [...prev, ...previews]);
+  e.target.value = '';
+};
 
   const removeExistingImage = (url) => {
     setKeptImages(prev => prev.filter(img => img !== url));
@@ -361,7 +372,7 @@ const EditPostModal = ({ post, onClose, onSave, feedback }) => {
                   </button>
                 </div>
               ))}
-              {totalImageCount < 2 && (
+              {(post?.images || []).length > 0 && totalImageCount < 2 && (
                 <label style={{ width: 80, height: 80, border: '2px dashed var(--border-color)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                   <i className="fa-solid fa-plus"></i>
                   <input type="file" accept="image/*" multiple hidden onChange={handleImageChange} />
