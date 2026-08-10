@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { auth, db } from '@/firebase';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
 import useHideBottomNav from "@/hooks/useHideBottomNav";
+import DealGuideModal from '@/components/DealGuideModal';
 
 import './ChatInterface.css';
 
@@ -144,6 +145,11 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
   const [message, setMessage] = useState('');
   const [uploading, setUploading] = useState(false);
   const [showProposalModal, setShowProposalModal] = useState(false);
+
+  // ✅ NEW: "read the rules" guide popup shown before the Send Offer form
+  // even opens — satisfies "sender must acknowledge the Deal Manager
+  // workflow before sending an offer".
+  const [showSendGuideModal, setShowSendGuideModal] = useState(false);
   
   // ✅ FIXED: proposalData with safe extraction
   const [proposalData, setProposalData] = useState(() => {
@@ -661,6 +667,24 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
   return (
     <div className="chat-container">
       {/* Modals */}
+
+      {/* ✅ NEW: guide popup — shown BEFORE the Send Offer form opens.
+          Clicking "Send Offer" no longer opens ProposalModal directly;
+          it opens this guide first, and only once the sender has ticked
+          the checkbox and pressed "বুঝেছি, এগিয়ে যান" does the actual
+          Send Offer form appear. handleManualSend / sendProposal are
+          completely untouched by this — it only gates *when* the form
+          opens. */}
+      <DealGuideModal
+        show={showSendGuideModal}
+        role="sender"
+        onConfirm={() => {
+          setShowSendGuideModal(false);
+          setShowProposalModal(true);
+        }}
+        onCancel={() => setShowSendGuideModal(false)}
+      />
+
       <ProposalModal 
         show={showProposalModal}
         onClose={() => {
@@ -741,7 +765,7 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
           }
         }}
         canSendOffer={canSendOffer() && !hasActiveDealWithChatUser}
-        onSendOffer={() => setShowProposalModal(true)}
+        onSendOffer={() => setShowSendGuideModal(true)}
         canApproveDeal={canApproveDeal() && !hasActiveDealWithChatUser}
         onApproveDeal={async () => {
           if (hasActiveDealWithChatUser) {

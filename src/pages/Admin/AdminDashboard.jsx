@@ -1,4 +1,11 @@
 // src/pages/Admin/AdminDashboard.jsx
+//
+// ✅ ADDED:
+// - New "Disputes" tab (⚖️) rendering DisputesTable, with badge count.
+// - New UserFullAccessModal wired via a new `selectedFullAccessUser` state,
+//   triggered by the 💰 button added in UsersTable.jsx (onFullAccess prop).
+//   This is ADDITIVE — the existing UserDetailModal (KYC review) is
+//   untouched and still works exactly as before.
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -27,6 +34,8 @@ import ReportsSection from './components/ReportsSection';
 import NotificationsSection from './components/NotificationsSection';
 import AdminNotifications from './components/AdminNotifications';
 import UserDetailModal from './components/UserDetailModal';
+import UserFullAccessModal from './components/UserFullAccessModal'; // ✅ NEW
+import DisputesTable from './components/DisputesTable'; // ✅ NEW
 import ReportDetailModal from './components/ReportDetailModal';
 import RejectModal from './components/RejectModal';
 import VerificationReviewModal from './components/VerificationReviewModal';
@@ -80,6 +89,8 @@ const AdminDashboard = () => {
     reports,
     reportsLoading,
     notifications,
+    disputes,          // ✅ NEW
+    disputesLoading,    // ✅ NEW
     searchQuery,
     searchResults,
     isSearching,
@@ -130,6 +141,7 @@ const AdminDashboard = () => {
     loadPendingDeposits,
     loadAllDeposits,
     loadReports,
+    loadDisputes,       // ✅ NEW
     loadAllData,
     reloadAllData,
 
@@ -139,6 +151,14 @@ const AdminDashboard = () => {
     toggleBlockUser,
     deleteUser,
     saveVerificationReview, 
+
+    // ✅ NEW — full user access
+    fetchUserDeals,
+    fetchUserWallet,
+    fetchUserPosts,
+    adminAdjustWallet,
+    adminCancelDeal,
+    adminResolveDispute,
 
     // Post operations
     handleDeletePost,
@@ -184,6 +204,7 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedVerificationUser, setSelectedVerificationUser] = useState(null);
+  const [selectedFullAccessUser, setSelectedFullAccessUser] = useState(null); // ✅ NEW
 
   // ============================================================
   // 2️⃣ useMemo - Pending Users Count
@@ -274,7 +295,7 @@ const AdminDashboard = () => {
             console.log("❌ User document not found!");
           }
           if (isMounted) {
-            await feedback.showError('❌ ইউজার ডেটা পাওয়া যায়নি', 'আপনার অ্যাকাউন্ট খুঁজে পাওয়া যায়নি।');
+            await feedback.showError('❌ ইউজার ডেটা পাওয়া যায়নি', 'আপনার অ্যাকাউন্ট খুঁজে পাওয়া যায়নি।');
           }
           navigate('/');
           return;
@@ -378,6 +399,7 @@ const AdminDashboard = () => {
         onToggleBlock={toggleBlockUser}
         onDeleteUser={deleteUser}
         onReviewVerification={setSelectedVerificationUser}
+        onFullAccess={setSelectedFullAccessUser}
       />
     </div>
   );
@@ -464,6 +486,17 @@ const AdminDashboard = () => {
     />
   );
 
+  // ── ✅ NEW: Disputes ──
+  const renderDisputes = () => (
+    <DisputesTable
+      disputes={disputes}
+      isLoading={disputesLoading}
+      onResolve={adminResolveDispute}
+      onRefresh={loadDisputes}
+      formatDateFn={formatDate}
+    />
+  );
+
   // ── Notifications ──
   const renderNotifications = () => (
     <NotificationsSection 
@@ -505,6 +538,19 @@ const AdminDashboard = () => {
         onToggleBlock={toggleBlockUser}
         onSaveReview={saveVerificationReview}  
         formatDate={formatDate}
+      />
+
+      {/* ✅ NEW — Full Access modal (wallet/deals/posts) */}
+      <UserFullAccessModal
+        user={selectedFullAccessUser}
+        onClose={() => setSelectedFullAccessUser(null)}
+        fetchUserWallet={fetchUserWallet}
+        fetchUserDeals={fetchUserDeals}
+        fetchUserPosts={fetchUserPosts}
+        adminAdjustWallet={adminAdjustWallet}
+        adminCancelDeal={adminCancelDeal}
+        adminResolveDispute={adminResolveDispute}
+        onDeletePost={handleDeletePost}
       />
       
       <VerificationReviewModal 
@@ -657,6 +703,20 @@ const AdminDashboard = () => {
               <span className="tab-badge">{deals.length}</span>
             )}
           </button>
+
+          {/* ✅ NEW — Disputes tab */}
+          <button
+            className={`tab-btn ${activeTab === 'disputes' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveTab('disputes');
+              loadDisputes();
+            }}
+          >
+            <i className="fa-solid fa-scale-balanced"></i> ডিসপিউট
+            {disputes.length > 0 && (
+              <span className="tab-badge danger">{disputes.length}</span>
+            )}
+          </button>
           
           <button 
             className={`tab-btn ${activeTab === 'withdrawals' ? 'active' : ''}`}
@@ -742,6 +802,7 @@ const AdminDashboard = () => {
           {activeTab === 'users' && renderUsers()}
           {activeTab === 'posts' && renderPosts()}
           {activeTab === 'deals' && renderDeals()}
+          {activeTab === 'disputes' && renderDisputes()}
           {activeTab === 'withdrawals' && renderWithdrawals()}
           {activeTab === 'deposits' && renderDeposits()} 
           {activeTab === 'pending-posts' && renderPendingPosts()}
@@ -772,6 +833,7 @@ const AdminDashboard = () => {
                 onToggleBlock={toggleBlockUser}
                 onDeleteUser={deleteUser}
                 onReviewVerification={setSelectedVerificationUser}
+                onFullAccess={setSelectedFullAccessUser}
               />
             </div>
           )}
@@ -784,3 +846,34 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
+
+
+
+
+
+
+
+
+
+
+
+// 🔴 এখন সবচেয়ে জরুরি — Firestore Security Rules
+
+// এই কোড এখন সরাসরি অন্য ইউজারের wallets/{uid} ও deals/{id} ডকুমেন্টে admin থেকে write করছে। Rules-এ অন্তত এই লজিক থাকা লাগবে:
+// function isAdmin() {
+//   return request.auth != null &&
+//     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+// }
+
+// match /wallets/{userId} {
+//   allow write: if isAdmin() || request.auth.uid == userId;
+// }
+
+// match /deals/{dealId} {
+//   allow write: if isAdmin() || request.auth.uid in resource.data.participants;
+// }
+
+// match /transactions/{txId} {
+//   allow create: if isAdmin() || request.auth.uid == request.resource.data.userId;
+// }

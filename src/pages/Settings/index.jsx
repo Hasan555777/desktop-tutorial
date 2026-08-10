@@ -39,7 +39,7 @@ import CertificationsTab from './tabs/CertificationsTab';
 import SocialTab from './tabs/SocialTab';
 import SecurityTab from './tabs/SecurityTab';
 import NotificationsTab from './tabs/NotificationsTab';
-import SoundTab from './tabs/SoundTab';
+// import SoundTab from './tabs/SoundTab';
 import AppDeviceTab from './tabs/AppDeviceTab';
 import AnnouncementsTab from './tabs/AnnouncementsTab';
 
@@ -1006,18 +1006,6 @@ const Settings = ({
             }}
           />
         );
-      case 'sound':
-        return (
-          <SoundTab
-            localSoundSettings={localSoundSettings}
-            setLocalSoundSettings={setLocalSoundSettings}
-            onSoundUpdate={handleSoundUpdate}
-            onVolumeUpdate={handleVolumeUpdate}
-            onResetSound={handleResetSound}
-            soundLoading={soundLoading}
-            sound={sound}
-          />
-        );
       case 'app-device':
         return <AppDeviceTab />;
       case 'announcements':
@@ -1132,14 +1120,7 @@ const Settings = ({
             onClick={() => setActiveTab('notifications')}
           >
             <div className="card-icon"><i className="fa-solid fa-bell"></i></div>
-            <span className="card-label">নোটিফিকেশন</span>
-          </button>
-          <button 
-            className={`settings-card ${activeTab === 'sound' ? 'active' : ''}`} 
-            onClick={() => setActiveTab('sound')}
-          >
-            <div className="card-icon"><i className="fa-solid fa-volume-high"></i></div>
-            <span className="card-label">নোটিফিকেশন সাউন্ড</span>
+            <span className="card-label">নোটিফিকেশন ও সাউন্ড</span>
           </button>
           <button 
             className={`settings-card ${activeTab === 'app-device' ? 'active' : ''}`} 

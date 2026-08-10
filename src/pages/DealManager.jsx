@@ -1,48 +1,55 @@
 // DealManager.jsx - NotificationProvider Fully Integrated
 // 2-Person Confirmation + Overdue/Grace Period + Dispute + Extension Limit
 // + Escrow-based Money Flow (balance lock/unlock at deal activation)
+// + Offer Expiry (auto-cancel unanswered offers) + Submission Deadline
+//   (auto-refund a funded milestone if the seller doesn't submit work in
+//   time) + Explicit Accept/Reject review step + "read the rules" guide
+//   popup before accepting an offer.
 //
 // ⚠️ IMPORTANT (read before deploying):
-// - Auto-Complete after buyer inactivity (72h/5days) and scheduled reminders
-//   (48h/24h/6h/1h before deadline) CANNOT be reliably done from this client
-//   component — they need a server-side cron (Firebase Cloud Functions +
-//   Cloud Scheduler). This file only handles what's possible/safe from the
-//   client: real-time overdue detection while a user has the page open, and
-//   a manual "Open Dispute" flow.
+// - Offer-expiry auto-cancel, Auto-Refund-on-no-submission, Auto-Complete
+//   after buyer inactivity, and scheduled reminders CANNOT be reliably done
+//   from this client component alone — they only run while a user actually
+//   has this page open (best-effort). For guaranteed enforcement you need a
+//   server-side cron (Firebase Cloud Functions + Cloud Scheduler) that runs
+//   the same checks. This file implements the client-side best-effort
+//   version plus a manual "Open Dispute" flow.
 // - Trust Score / Late-Delivery % must be computed server-side (Cloud
 //   Function) — never trust the client to write its own trust score.
 // - Add these keys to NOTIFICATION_EVENTS (NotificationEvents.js) if not
-//   already present: DEAL_OVERDUE, DISPUTE_OPENED
+//   already present: DEAL_OVERDUE, DISPUTE_OPENED, OFFER_EXPIRED,
+//   MILESTONE_SUBMITTED, MILESTONE_REJECTED, MILESTONE_REFUNDED.
 //
 // 💰 MONEY FLOW (read this before touching wallet-related code):
-// 1. Deal becomes ACTIVE (offer accepted) → buyer's available balance
-//    (balance - lockedBalance) is checked against the full deal budget.
-//    If enough, the ENTIRE budget is locked: wallets/{buyerId}.lockedBalance
-//    += budget. This blocks the buyer from withdrawing money that's
-//    committed to this deal. If not enough, the deal CANNOT be activated.
+// 1. Deal becomes ACTIVE (offer accepted, after the guide popup is
+//    acknowledged) → buyer's available balance (balance - lockedBalance)
+//    is checked against the full deal budget. If enough, the ENTIRE budget
+//    is locked: wallets/{buyerId}.lockedBalance += budget. If not enough,
+//    the deal CANNOT be activated.
 // 2. Buyer funds a milestone ("Pay & Fund", in PaymentGateway.jsx):
 //    buyer.balance -= amount AND buyer.lockedBalance -= amount (the money
-//    leaves the buyer's wallet entirely and sits in escrow — it is NOT
-//    credited to the seller yet). Milestone status: pending -> funded.
-// 3. Seller submits work ("Submit Work"): milestone status: funded -> review.
-//    Sellers can only submit work AFTER a milestone is funded — this is
-//    enforced by the button only appearing for status === 'funded'.
-// 4. Buyer reviews and releases ("Release Payment", in DealManager.jsx):
-//    THIS is the only place seller.balance actually increases. Milestone
-//    status: review -> released.
+//    leaves the buyer's wallet entirely and sits in escrow). Milestone
+//    status: pending -> funded, and `fundedAt` is stamped — the seller now
+//    has a limited window (SUBMIT_DEADLINE_AFTER_FUND_MS) to submit work.
+// 3. Seller submits work ("Submit Work", with a proof link/note): milestone
+//    status: funded -> review. If the seller does NOT submit within the
+//    window, this file auto-refunds the buyer and sets status -> refunded.
+// 4. Buyer reviews the submitted proof and either:
+//      a) Accepts ("Accept & Release") — THIS is the only place seller's
+//         balance actually increases. Milestone status: review -> released.
+//      b) Rejects (reason required) — milestone status: review -> funded
+//         again (with a fresh submission deadline), so the seller can fix
+//         and resubmit. No money moves on a rejection.
 // 5. Deal is marked 'completed' only when ALL milestones are 'released' —
 //    never when they are merely 'funded'.
 // 6. Deal cancellation (2-person approval) is only allowed while NO
 //    milestone has been funded/released yet (hasPayment guard). On
-//    approval, the full locked budget is released back to the buyer
-//    (wallets/{buyerId}.lockedBalance -= budget) since none of it has
-//    actually left the buyer's wallet.
+//    approval, the full locked budget is released back to the buyer.
 // 7. Your Withdraw.jsx / send-money flow (not included here) MUST check
 //    `balance - lockedBalance` as the withdrawable amount, not raw
-//    `balance` — otherwise a buyer could still withdraw money that's
-//    committed to an active deal.
+//    `balance`.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '@/firebase';
 import {
@@ -55,6 +62,7 @@ import Swal from 'sweetalert2';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
 import { useNotification } from '@/UI/Notification/NotificationProvider';
 import { NOTIFICATION_EVENTS } from '@/UI/Notification/NotificationEvents';
+import DealGuideModal from '@/components/DealGuideModal';
 
 // ============================================================
 // ✅ Constants
@@ -62,6 +70,14 @@ import { NOTIFICATION_EVENTS } from '@/UI/Notification/NotificationEvents';
 const GRACE_PERIOD_MS = 24 * 60 * 60 * 1000; // 24 hours
 const MAX_EXTENSIONS = 3;
 const EXTENSION_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+// ✅ NEW: how long a 'pending' offer waits before it's auto-cancelled if
+// nobody responds.
+const OFFER_EXPIRY_MS = 48 * 60 * 60 * 1000; // 48 hours
+
+// ✅ NEW: how long a seller has, after a milestone is funded, to submit
+// work before the buyer is automatically refunded.
+const SUBMIT_DEADLINE_AFTER_FUND_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 // ============================================================
 // ✅ Escrow Helpers — balance lock / unlock (run as Firestore transactions)
@@ -114,8 +130,8 @@ const activateDealWithEscrowLock = async ({ dealId, buyerId, budget, extraDealFi
 /**
  * Releases the buyer's locked budget back to available balance. Only call
  * this for deals that reach 'cancelled' status while still having their
- * FULL budget locked and NO milestone funded/released — that invariant is
- * enforced by handleCancelDeal's hasPayment guard before a cancellation
+ * FULL budget locked and NO milestone funded/released yet — that invariant
+ * is enforced by handleCancelDeal's hasPayment guard before a cancellation
  * request can even be created.
  */
 const releaseEscrowLock = async ({ buyerId, amount }) => {
@@ -198,7 +214,16 @@ const DealManager = () => {
 
   const [submittingMilestone, setSubmittingMilestone] = useState(null);
   const [releasingPayment, setReleasingPayment] = useState(null);
+  const [rejectingWork, setRejectingWork] = useState(null);
   const [markingOverdue, setMarkingOverdue] = useState(false);
+
+  // ✅ NEW: inline "submit work" form state (per milestone)
+  const [openSubmitForm, setOpenSubmitForm] = useState(null);
+  const [workDraft, setWorkDraft] = useState({});
+
+  // ✅ NEW: guide popup shown before an offer is accepted
+  const [showGuideModal, setShowGuideModal] = useState(false);
+  const guideActionRef = useRef(null);
 
   // ============================================================
   // ✅ Auth Check
@@ -217,6 +242,27 @@ const DealManager = () => {
     setCurrentMode(mode);
     localStorage.setItem('dealMode', mode);
     setSelectedDeal(null);
+  };
+
+  // ============================================================
+  // ✅ NEW: Guide-popup wrapper — runs an action only after the user has
+  // read and acknowledged the Deal Manager guide.
+  // ============================================================
+  const runWithGuide = (actionFn) => {
+    guideActionRef.current = actionFn;
+    setShowGuideModal(true);
+  };
+
+  const handleGuideConfirm = () => {
+    setShowGuideModal(false);
+    const action = guideActionRef.current;
+    guideActionRef.current = null;
+    if (action) action();
+  };
+
+  const handleGuideCancel = () => {
+    setShowGuideModal(false);
+    guideActionRef.current = null;
   };
 
   // ============================================================
@@ -313,6 +359,158 @@ const DealManager = () => {
   };
 
   // ============================================================
+  // ✅ NEW: Mark an unanswered offer as expired (auto-cancel)
+  // ============================================================
+  const markOfferExpired = async (dealToExpire) => {
+    if (!dealToExpire || dealToExpire.status !== 'pending') return;
+    if (dealToExpire.offerExpired) return; // already handled
+
+    try {
+      const dealRef = doc(db, 'deals', dealToExpire.id);
+      const now = new Date().toISOString();
+      const reason = 'অফারের মেয়াদ শেষ হয়ে গেছে (৪৮ ঘণ্টার মধ্যে কোনো সাড়া পাওয়া যায়নি)।';
+
+      await updateDoc(dealRef, {
+        status: 'cancelled',
+        cancelledAt: now,
+        cancelledBy: 'system',
+        cancellationReason: reason,
+        offerExpired: true,
+        updatedAt: serverTimestamp()
+      });
+
+      notification.notify({
+        event: NOTIFICATION_EVENTS.OFFER_EXPIRED,
+        data: {
+          userId: dealToExpire.buyerId,
+          buyerId: dealToExpire.buyerId,
+          sellerId: dealToExpire.sellerId,
+          dealId: dealToExpire.id,
+          postTitle: dealToExpire.postTitle || 'Untitled Deal',
+        }
+      });
+      notification.notify({
+        event: NOTIFICATION_EVENTS.OFFER_EXPIRED,
+        data: {
+          userId: dealToExpire.sellerId,
+          buyerId: dealToExpire.buyerId,
+          sellerId: dealToExpire.sellerId,
+          dealId: dealToExpire.id,
+          postTitle: dealToExpire.postTitle || 'Untitled Deal',
+        }
+      });
+
+      await sendDealChatMessage(
+        dealToExpire.chatId,
+        `⌛ **Offer Expired**\n\nএই অফারটি ৪৮ ঘণ্টার মধ্যে গ্রহণ করা হয়নি, তাই এটি স্বয়ংক্রিয়ভাবে বাতিল হয়ে গেছে। প্রয়োজনে নতুন করে অফার পাঠান।`
+      );
+
+      if (selectedDeal?.id === dealToExpire.id) {
+        setSelectedDeal(prev => prev ? { ...prev, status: 'cancelled', cancellationReason: reason, offerExpired: true } : prev);
+      }
+    } catch (error) {
+      console.error("Error marking offer expired:", error);
+    }
+  };
+
+  // ============================================================
+  // ✅ NEW: Auto-refund a funded milestone whose submission deadline passed
+  // ============================================================
+  const autoRefundMilestone = async (dealForMilestone, milestone) => {
+    try {
+      const dealRef = doc(db, 'deals', dealForMilestone.id);
+      const buyerWalletRef = doc(db, 'wallets', dealForMilestone.buyerId);
+      let refundedAmount = 0;
+
+      await runTransaction(db, async (transaction) => {
+        const freshDealSnap = await transaction.get(dealRef);
+        if (!freshDealSnap.exists()) return;
+        const freshDeal = freshDealSnap.data();
+        const freshMilestone = (freshDeal.milestones || []).find(m => String(m.id) === String(milestone.id));
+        // Guard: someone may have submitted/rejected/resubmitted it already
+        // between the scan and now — only refund if it's still 'funded'.
+        if (!freshMilestone || freshMilestone.status !== 'funded') return;
+
+        const buyerWalletSnap = await transaction.get(buyerWalletRef);
+        if (!buyerWalletSnap.exists()) return;
+        const buyerBalance = buyerWalletSnap.data().balance || 0;
+        refundedAmount = freshMilestone.amount || 0;
+
+        transaction.update(buyerWalletRef, {
+          balance: buyerBalance + refundedAmount,
+          updatedAt: serverTimestamp()
+        });
+
+        const updatedMilestones = freshDeal.milestones.map(m =>
+          String(m.id) === String(milestone.id)
+            ? { ...m, status: 'refunded', refundedAt: new Date().toISOString(), refundReason: 'seller_no_submission' }
+            : m
+        );
+
+        transaction.update(dealRef, { milestones: updatedMilestones, updatedAt: serverTimestamp() });
+
+        const txRef = doc(collection(db, 'transactions'));
+        transaction.set(txRef, {
+          userId: dealForMilestone.buyerId,
+          amount: refundedAmount,
+          type: 'credit',
+          status: 'completed',
+          title: `Auto-Refund: ${freshMilestone.title}`,
+          description: `Seller did not submit work within the deadline — funds automatically refunded.`,
+          dealId: dealForMilestone.id,
+          milestoneId: milestone.id,
+          isEscrow: true,
+          createdAt: serverTimestamp(),
+          completedAt: serverTimestamp()
+        });
+      });
+
+      if (refundedAmount <= 0) return; // nothing was actually refunded (already handled)
+
+      notification.notify({
+        event: NOTIFICATION_EVENTS.MILESTONE_REFUNDED,
+        data: {
+          userId: dealForMilestone.buyerId,
+          buyerId: dealForMilestone.buyerId,
+          sellerId: dealForMilestone.sellerId,
+          dealId: dealForMilestone.id,
+          postTitle: dealForMilestone.postTitle || 'Untitled Deal',
+          milestoneTitle: milestone.title,
+          amount: refundedAmount,
+        }
+      });
+      notification.notify({
+        event: NOTIFICATION_EVENTS.MILESTONE_REFUNDED,
+        data: {
+          userId: dealForMilestone.sellerId,
+          buyerId: dealForMilestone.buyerId,
+          sellerId: dealForMilestone.sellerId,
+          dealId: dealForMilestone.id,
+          postTitle: dealForMilestone.postTitle || 'Untitled Deal',
+          milestoneTitle: milestone.title,
+          amount: refundedAmount,
+        }
+      });
+
+      await sendDealChatMessage(
+        dealForMilestone.chatId,
+        `⏳➡️💸 **Auto-Refunded**\n\nমাইলস্টোন **"${milestone.title}"**-এর জন্য নির্ধারিত ৭ দিনের মধ্যে কাজ জমা দেওয়া হয়নি, তাই ৳${refundedAmount.toLocaleString()} স্বয়ংক্রিয়ভাবে Buyer-এর ওয়ালেটে ফেরত দেওয়া হয়েছে।`
+      );
+
+      if (selectedDeal?.id === dealForMilestone.id) {
+        setSelectedDeal(prev => prev ? {
+          ...prev,
+          milestones: prev.milestones.map(m => String(m.id) === String(milestone.id)
+            ? { ...m, status: 'refunded', refundedAt: new Date().toISOString() }
+            : m)
+        } : prev);
+      }
+    } catch (error) {
+      console.error('Error auto-refunding milestone:', error);
+    }
+  };
+
+  // ============================================================
   // ✅ Timer Effect (with Grace Period + Overdue detection)
   // ============================================================
   useEffect(() => {
@@ -375,6 +573,63 @@ const DealManager = () => {
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDeal?.id, selectedDeal?.status, selectedDeal?.deadline, selectedDeal?.startedAt]);
+
+  // ============================================================
+  // ✅ NEW: Timer Effect — auto-cancel unanswered offers (best-effort,
+  // scans all currently-loaded deals, not just the selected one, since a
+  // pending offer might sit unopened in the list).
+  // ============================================================
+  useEffect(() => {
+    if (!deals || deals.length === 0) return;
+
+    const checkExpiredOffers = () => {
+      const now = Date.now();
+      deals.forEach((deal) => {
+        if (deal.status !== 'pending' || deal.offerExpired) return;
+        const proposedAtRaw = deal.proposedAt || deal.createdAt;
+        const proposedAtMs = proposedAtRaw?.toDate
+          ? proposedAtRaw.toDate().getTime()
+          : (proposedAtRaw ? new Date(proposedAtRaw).getTime() : null);
+        if (!proposedAtMs) return;
+        if (now - proposedAtMs > OFFER_EXPIRY_MS) {
+          markOfferExpired(deal);
+        }
+      });
+    };
+
+    checkExpiredOffers();
+    const interval = setInterval(checkExpiredOffers, 60000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deals]);
+
+  // ============================================================
+  // ✅ NEW: Timer Effect — auto-refund funded milestones whose submission
+  // deadline has passed (best-effort, scans all currently-loaded deals).
+  // ============================================================
+  useEffect(() => {
+    if (!deals || deals.length === 0) return;
+
+    const checkFundedDeadlines = () => {
+      const now = Date.now();
+      deals.forEach((deal) => {
+        if (deal.status !== 'active' && deal.status !== 'overdue') return;
+        if (!Array.isArray(deal.milestones)) return;
+        deal.milestones.forEach((m) => {
+          if (m.status !== 'funded' || !m.fundedAt) return;
+          const fundedAtMs = new Date(m.fundedAt).getTime();
+          if (now - fundedAtMs > SUBMIT_DEADLINE_AFTER_FUND_MS) {
+            autoRefundMilestone(deal, m);
+          }
+        });
+      });
+    };
+
+    checkFundedDeadlines();
+    const interval = setInterval(checkFundedDeadlines, 60000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deals]);
 
   // ============================================================
   // ⚠️ REMOVED: the old "Locked Amount Update" effect used to recompute
@@ -562,7 +817,8 @@ const DealManager = () => {
   };
 
   // ============================================================
-  // ✅ ✅ ✅ Submit Work for Review (Seller)
+  // ✅ ✅ ✅ Submit Work for Review (Seller) — now carries a proof
+  // link/note taken from the inline "Submit Work" form (workDraft state).
   // ============================================================
   const handleSubmitWork = async (milestoneId) => {
     if (!selectedDeal) return;
@@ -576,6 +832,15 @@ const DealManager = () => {
     // ✅ Check if user is Seller
     if (currentUser?.uid !== selectedDeal.sellerId) {
       feedback.alert.warning({ message: "Only the seller can submit work!" });
+      return;
+    }
+
+    const draft = workDraft[milestoneId] || {};
+    const proofLink = (draft.link || '').trim();
+    const proofNote = (draft.note || '').trim();
+
+    if (!proofLink && !proofNote) {
+      feedback.alert.warning({ message: 'দয়া করে একটা প্রুফ লিংক অথবা নোট দিন — খালি অবস্থায় জমা দেওয়া যাবে না।' });
       return;
     }
 
@@ -600,6 +865,8 @@ const DealManager = () => {
             status: 'review',
             workSubmittedAt: new Date().toISOString(),
             submittedBy: currentUser?.uid,
+            workProofLink: proofLink || null,
+            workProofNote: proofNote || null,
           };
         }
         return m;
@@ -615,9 +882,17 @@ const DealManager = () => {
         milestones: updatedMilestones
       }));
 
-      // ✅ Send notification to BUYER
+      // ✅ Clear the draft form for this milestone
+      setWorkDraft(prev => {
+        const next = { ...prev };
+        delete next[milestoneId];
+        return next;
+      });
+      setOpenSubmitForm(null);
+
+      // ✅ Send notification to BUYER (and confirmation to the seller)
       notification.notify({
-        event: NOTIFICATION_EVENTS.MILESTONE_REVIEW,
+        event: NOTIFICATION_EVENTS.MILESTONE_SUBMITTED,
         data: {
           userId: selectedDeal.buyerId,
           buyerId: selectedDeal.buyerId,
@@ -629,11 +904,26 @@ const DealManager = () => {
           requesterName: currentUser?.displayName || 'Someone',
         }
       });
+      notification.notify({
+        event: NOTIFICATION_EVENTS.MILESTONE_SUBMITTED,
+        data: {
+          userId: selectedDeal.sellerId,
+          buyerId: selectedDeal.buyerId,
+          sellerId: selectedDeal.sellerId,
+          dealId: selectedDeal.id,
+          postTitle: selectedDeal.postTitle || 'Untitled Deal',
+          milestoneTitle: milestone.title,
+          amount: milestone.amount,
+        }
+      });
 
-      // ✅ Send chat message
+      // ✅ Send chat message (include proof link if given)
       await sendDealChatMessage(
         selectedDeal.chatId,
-        `📤 **Work Submitted for Review**\n\n${currentUser?.displayName || 'Someone'} has submitted work for milestone **"${milestone.title}"**.\n\n💰 Amount: ${milestone.amount} BDT\n\n⏳ Waiting for Buyer's review...`
+        `📤 **Work Submitted for Review**\n\n${currentUser?.displayName || 'Someone'} has submitted work for milestone **"${milestone.title}"**.\n\n💰 Amount: ${milestone.amount} BDT` +
+        (proofLink ? `\n🔗 Proof: ${proofLink}` : '') +
+        (proofNote ? `\n📝 Note: ${proofNote}` : '') +
+        `\n\n⏳ Waiting for Buyer's review...`
       );
 
       feedback.alert.success({
@@ -649,7 +939,117 @@ const DealManager = () => {
   };
 
   // ============================================================
-  // ✅ ✅ ✅ Release Payment (Buyer) - real wallet transaction
+  // ✅ NEW: Reject submitted work (Buyer) — reason required. Milestone
+  // goes back to 'funded' with a fresh deadline so the seller can fix and
+  // resubmit; no money moves.
+  // ============================================================
+  const handleRejectWork = async (milestoneId) => {
+    if (!selectedDeal) return;
+
+    const milestone = selectedDeal.milestones.find(m => m.id === milestoneId);
+    if (!milestone || milestone.status !== 'review') {
+      feedback.alert.warning({ message: "This milestone is not under review!" });
+      return;
+    }
+
+    if (currentUser?.uid !== selectedDeal.buyerId) {
+      feedback.alert.warning({ message: "Only the buyer can reject submitted work!" });
+      return;
+    }
+
+    const reason = await feedback.prompt({
+      title: '❌ কাজ প্রত্যাখ্যান করুন',
+      message: 'কেন কাজটি প্রত্যাখ্যান করছেন তা লিখুন — সেলার এটা দেখে সংশোধন করে আবার জমা দিতে পারবে।',
+      placeholder: 'কারণ লিখুন...',
+      confirmText: 'জমা দিন',
+      cancelText: 'বাতিল',
+      inputType: 'text'
+    });
+
+    if (!reason || reason.trim() === '') {
+      feedback.alert.warning({ message: 'প্রত্যাখ্যানের কারণ আবশ্যক!' });
+      return;
+    }
+
+    setRejectingWork(milestoneId);
+
+    try {
+      const dealRef = doc(db, 'deals', selectedDeal.id);
+      // ✅ Reset fundedAt to now so the seller gets a FULL fresh
+      // SUBMIT_DEADLINE_AFTER_FUND_MS window to fix and resubmit — without
+      // this, a rejection close to the original 7-day mark could get the
+      // milestone auto-refunded before the seller has a fair chance.
+      const updatedMilestones = selectedDeal.milestones.map((m) => {
+        if (m.id === milestoneId) {
+          return {
+            ...m,
+            status: 'funded',
+            fundedAt: new Date().toISOString(),
+            workRejectedAt: new Date().toISOString(),
+            workRejectReason: reason.trim(),
+            workRejectedBy: currentUser?.uid,
+            previousWorkProofLink: m.workProofLink || null,
+            previousWorkProofNote: m.workProofNote || null,
+            workProofLink: null,
+            workProofNote: null,
+          };
+        }
+        return m;
+      });
+
+      await updateDoc(dealRef, {
+        milestones: updatedMilestones,
+        updatedAt: serverTimestamp()
+      });
+
+      setSelectedDeal(prev => ({
+        ...prev,
+        milestones: updatedMilestones
+      }));
+
+      notification.notify({
+        event: NOTIFICATION_EVENTS.MILESTONE_REJECTED,
+        data: {
+          userId: selectedDeal.sellerId,
+          buyerId: selectedDeal.buyerId,
+          sellerId: selectedDeal.sellerId,
+          dealId: selectedDeal.id,
+          postTitle: selectedDeal.postTitle || 'Untitled Deal',
+          milestoneTitle: milestone.title,
+          reason: reason.trim(),
+        }
+      });
+      notification.notify({
+        event: NOTIFICATION_EVENTS.MILESTONE_REJECTED,
+        data: {
+          userId: selectedDeal.buyerId,
+          buyerId: selectedDeal.buyerId,
+          sellerId: selectedDeal.sellerId,
+          dealId: selectedDeal.id,
+          postTitle: selectedDeal.postTitle || 'Untitled Deal',
+          milestoneTitle: milestone.title,
+          reason: reason.trim(),
+        }
+      });
+
+      await sendDealChatMessage(
+        selectedDeal.chatId,
+        `❌ **Work Rejected**\n\n${currentUser?.displayName || 'Someone'} rejected the submitted work for **"${milestone.title}"**.\n\n📝 Reason: ${reason.trim()}\n\n🔁 Seller has a fresh 7-day window to fix and resubmit.`
+      );
+
+      feedback.alert.warning({ message: 'কাজ প্রত্যাখ্যান করা হয়েছে। সেলারকে জানানো হয়েছে।' });
+
+    } catch (error) {
+      console.error("Error rejecting work:", error);
+      feedback.alert.error({ message: "Failed to reject work. Please try again." });
+    } finally {
+      setRejectingWork(null);
+    }
+  };
+
+  // ============================================================
+  // ✅ ✅ ✅ Release Payment (Buyer, i.e. "Accept" the submitted work) -
+  // real wallet transaction
   // ============================================================
   const handleReleasePayment = async (milestoneId) => {
     if (!selectedDeal) return;
@@ -667,9 +1067,9 @@ const DealManager = () => {
     }
 
     const confirmed = await feedback.confirm({
-      title: '💰 Release Payment',
-      message: `Are you sure you want to release ${milestone.amount} BDT for "${milestone.title}"?\n\nThis will transfer the payment to the seller.`,
-      confirmText: 'Yes, Release',
+      title: '💰 Accept & Release Payment',
+      message: `Are you sure you want to accept this work and release ${milestone.amount} BDT for "${milestone.title}"?\n\nThis will transfer the payment to the seller.`,
+      confirmText: 'Yes, Accept & Release',
       cancelText: 'Cancel',
       variant: 'success'
     });
@@ -836,7 +1236,7 @@ const DealManager = () => {
       } else {
         await sendDealChatMessage(
           selectedDeal.chatId,
-          `✅ **Payment Released!**\n\n${currentUser?.displayName || 'Someone'} has released payment for milestone **"${milestone.title}"**.\n\n💰 Amount: ${milestone.amount} BDT\n\n📊 ${updatedMilestones.filter(m => m.status === 'released').length}/${updatedMilestones.length} milestones completed.`
+          `✅ **Work Accepted — Payment Released!**\n\n${currentUser?.displayName || 'Someone'} has accepted the work and released payment for milestone **"${milestone.title}"**.\n\n💰 Amount: ${milestone.amount} BDT\n\n📊 ${updatedMilestones.filter(m => m.status === 'released').length}/${updatedMilestones.length} milestones completed.`
         );
 
         feedback.alert.success({
@@ -1015,7 +1415,7 @@ const DealManager = () => {
   };
 
   // ============================================================
-  // ✅ Confirm Deal
+  // ✅ Confirm Deal (accept a pending offer)
   // ============================================================
   const handleConfirmDeal = async () => {
     if (!selectedDeal || selectedDeal.status !== 'pending') {
@@ -1053,9 +1453,25 @@ const DealManager = () => {
 
       setSelectedDeal(prev => ({ ...prev, status: 'active', startedAt: new Date().toISOString() }));
 
+      // ✅ FIXED BUG: this used to be ONE notify() call with buyerId/sellerId
+      // stuffed into `data` but no `userId` — meaning the notification
+      // never reliably reached either party. Now it's sent explicitly to
+      // both, matching the pattern used everywhere else in this file.
       notification.notify({
         event: NOTIFICATION_EVENTS.DEAL_CONFIRMED,
         data: {
+          userId: selectedDeal.buyerId,
+          buyerId: selectedDeal.buyerId,
+          sellerId: selectedDeal.sellerId,
+          dealId: selectedDeal.id,
+          postTitle: selectedDeal.postTitle || 'Untitled Deal',
+          budget: selectedDeal.budget,
+        }
+      });
+      notification.notify({
+        event: NOTIFICATION_EVENTS.DEAL_CONFIRMED,
+        data: {
+          userId: selectedDeal.sellerId,
           buyerId: selectedDeal.buyerId,
           sellerId: selectedDeal.sellerId,
           dealId: selectedDeal.id,
@@ -1111,7 +1527,7 @@ const DealManager = () => {
       return;
     }
 
-    const hasPayment = selectedDeal.milestones?.some(m => m.status === 'funded' || m.status === 'released');
+    const hasPayment = selectedDeal.milestones?.some(m => m.status === 'funded' || m.status === 'released' || m.status === 'review');
     if (hasPayment) {
       feedback.alert.warning({ message: "⚠️ This deal has payments made. Cannot cancel. Please contact support or open a dispute." });
       return;
@@ -1267,10 +1683,29 @@ const DealManager = () => {
           feedback.alert.success({ message: 'ক্যানসেল রিকোয়েস্ট রিজেক্ট করা হয়েছে।' });
 
         } else {
+          const dealTitle = selectedDeal.postTitle || 'Untitled Deal';
+          const senderId = selectedDeal.proposedBy;
+
           await deleteDoc(dealRef);
           setDeals(prev => prev.filter(d => d.id !== selectedDeal.id));
           setSelectedDeal(null);
           navigate('/deal-manager');
+
+          // ✅ Both parties get told the offer was rejected — this branch
+          // previously only showed a local alert to the person clicking
+          // reject; the other party never found out.
+          const otherPartyId = currentUser?.uid === selectedDeal.buyerId ? selectedDeal.sellerId : selectedDeal.buyerId;
+          notification.notify({
+            event: NOTIFICATION_EVENTS.CANCELLATION_REJECTED,
+            data: {
+              userId: otherPartyId,
+              dealId: selectedDeal.id,
+              postTitle: dealTitle,
+              rejectedBy: currentUser?.displayName || 'Someone',
+              isOfferRejection: true,
+            }
+          });
+
           feedback.alert.error({ message: 'অফারটি ডিলিট করা হয়েছে।' });
         }
       } catch (error) {
@@ -1316,6 +1751,31 @@ const DealManager = () => {
           }
 
           setSelectedDeal(prev => ({ ...prev, status: 'active' }));
+
+          // ✅ FIXED: this path was missing any notification at all —
+          // added the same both-party notify pattern as handleConfirmDeal.
+          notification.notify({
+            event: NOTIFICATION_EVENTS.DEAL_CONFIRMED,
+            data: {
+              userId: selectedDeal.buyerId,
+              buyerId: selectedDeal.buyerId,
+              sellerId: selectedDeal.sellerId,
+              dealId: selectedDeal.id,
+              postTitle: selectedDeal.postTitle || 'Untitled Deal',
+              budget: selectedDeal.budget,
+            }
+          });
+          notification.notify({
+            event: NOTIFICATION_EVENTS.DEAL_CONFIRMED,
+            data: {
+              userId: selectedDeal.sellerId,
+              buyerId: selectedDeal.buyerId,
+              sellerId: selectedDeal.sellerId,
+              dealId: selectedDeal.id,
+              postTitle: selectedDeal.postTitle || 'Untitled Deal',
+              budget: selectedDeal.budget,
+            }
+          });
 
           await sendDealChatMessage(
             selectedDeal.chatId,
@@ -1521,6 +1981,7 @@ const DealManager = () => {
       case 'funded': return { text: '💰 Funded', class: 'status-funded' };
       case 'review': return { text: '📝 Under Review', class: 'status-review' };
       case 'released': return { text: '✅ Released', class: 'status-released' };
+      case 'refunded': return { text: '↩️ Refunded', class: 'status-refunded' };
       default: return { text: '📌 New', class: 'status-pending' };
     }
   };
@@ -1534,6 +1995,20 @@ const DealManager = () => {
       case 'cancelled': return { text: '❌ Cancelled', class: 'status-cancelled' };
       default: return { text: '📌 New', class: 'status-pending' };
     }
+  };
+
+  // ✅ NEW: how much time is left before a 'funded' milestone gets
+  // auto-refunded. Not a live per-second countdown (recomputed on each
+  // render/re-render), which is good enough given it's shown next to a
+  // simple day/hour readout.
+  const getSubmitDeadlineText = (milestone) => {
+    if (!milestone?.fundedAt) return null;
+    const deadlineMs = new Date(milestone.fundedAt).getTime() + SUBMIT_DEADLINE_AFTER_FUND_MS;
+    const remain = deadlineMs - Date.now();
+    if (remain <= 0) return { text: '⏳ সময় শেষ — শীঘ্রই অটো-রিফান্ড হবে', urgent: true };
+    const days = Math.floor(remain / 86400000);
+    const hours = Math.floor((remain % 86400000) / 3600000);
+    return { text: `⏳ কাজ জমা দিন: বাকি ${days}দ ${hours}ঘ (নাহলে অটো-রিফান্ড)`, urgent: days < 1 };
   };
 
   // ============================================================
@@ -1569,7 +2044,7 @@ const DealManager = () => {
           <div style={{ display: 'flex', gap: '10px' }}>
             {postType === 'service' && selectedDeal.sellerId === currentUser?.uid && (
               <>
-                <button className="btn-confirm-deal" onClick={handleConfirmDeal}>
+                <button className="btn-confirm-deal" onClick={() => runWithGuide(handleConfirmDeal)}>
                   <i className="fa-solid fa-check-circle"></i> অফার গ্রহণ করুন
                 </button>
                 <button
@@ -1584,7 +2059,7 @@ const DealManager = () => {
 
             {postType === 'hire' && selectedDeal.buyerId === currentUser?.uid && (
               <>
-                <button className="btn-confirm-deal" onClick={handleConfirmDeal}>
+                <button className="btn-confirm-deal" onClick={() => runWithGuide(handleConfirmDeal)}>
                   <i className="fa-solid fa-check-circle"></i> অফার গ্রহণ করুন
                 </button>
                 <button
@@ -1606,11 +2081,18 @@ const DealManager = () => {
               </span>
             )}
           </div>
+
+          {selectedDeal.proposedAt && (
+            <p style={{ fontSize: '12px', color: 'var(--text-muted, #94a3b8)', marginTop: '8px' }}>
+              <i className="fa-solid fa-hourglass-half"></i> এই অফারটি ৪৮ ঘণ্টার মধ্যে গ্রহণ না করা হলে স্বয়ংক্রিয়ভাবে বাতিল হয়ে যাবে।
+            </p>
+          )}
         </div>
       )}
 
       {selectedDeal.milestones.map((milestone, index) => {
         const statusBadge = getMilestoneStatusBadge(milestone.status);
+        const deadlineInfo = milestone.status === 'funded' ? getSubmitDeadlineText(milestone) : null;
 
         return (
           <div key={milestone.id} className={`milestone-row ${milestone.status}`}>
@@ -1619,6 +2101,23 @@ const DealManager = () => {
               <div className="m-details">
                 <h4>{milestone.title}</h4>
                 <p className="m-amount">💰 Amount: {milestone.amount?.toLocaleString()} BDT</p>
+                {milestone.status === 'funded' && milestone.workRejectReason && (
+                  <p style={{ fontSize: '12px', color: '#ef4444', margin: '4px 0 0' }}>
+                    <i className="fa-solid fa-triangle-exclamation"></i> পূর্বের সাবমিশন প্রত্যাখ্যাত হয়েছে: {milestone.workRejectReason}
+                  </p>
+                )}
+                {deadlineInfo && (
+                  <p style={{ fontSize: '12px', color: deadlineInfo.urgent ? '#ef4444' : '#f59e0b', margin: '4px 0 0' }}>
+                    {deadlineInfo.text}
+                  </p>
+                )}
+                {milestone.status === 'refunded' && (
+                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: '4px 0 0' }}>
+                    <i className="fa-solid fa-rotate-left"></i> {milestone.refundReason === 'seller_no_submission'
+                      ? 'সময়মতো কাজ জমা না দেওয়ায় অটো-রিফান্ড হয়েছে।'
+                      : 'Buyer-কে টাকা ফেরত দেওয়া হয়েছে।'}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -1638,32 +2137,93 @@ const DealManager = () => {
               )}
 
               {isActive && isBuyer && milestone.status === 'review' && (
-                <button
-                  className="btn-review-release"
-                  onClick={() => handleReleasePayment(milestone.id)}
-                  disabled={releasingPayment === milestone.id}
-                >
-                  {releasingPayment === milestone.id ? (
-                    <><i className="fa-solid fa-spinner fa-spin"></i> Releasing...</>
-                  ) : (
-                    <><i className="fa-solid fa-money-bill-wave"></i> Review & Release</>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+                  {(milestone.workProofLink || milestone.workProofNote) && (
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted, #94a3b8)', textAlign: 'right', maxWidth: '260px' }}>
+                      {milestone.workProofLink && (
+                        <div>
+                          <a href={milestone.workProofLink} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary, #14b8a6)' }}>
+                            <i className="fa-solid fa-link"></i> Proof Link দেখুন
+                          </a>
+                        </div>
+                      )}
+                      {milestone.workProofNote && <div style={{ marginTop: '2px' }}>📝 {milestone.workProofNote}</div>}
+                    </div>
                   )}
-                </button>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      className="btn-review-release"
+                      onClick={() => handleReleasePayment(milestone.id)}
+                      disabled={releasingPayment === milestone.id}
+                    >
+                      {releasingPayment === milestone.id ? (
+                        <><i className="fa-solid fa-spinner fa-spin"></i> ...</>
+                      ) : (
+                        <><i className="fa-solid fa-check"></i> Accept & Release</>
+                      )}
+                    </button>
+                    <button
+                      className="btn-reject-work"
+                      onClick={() => handleRejectWork(milestone.id)}
+                      disabled={rejectingWork === milestone.id}
+                      style={{ backgroundColor: '#ef4444', color: '#fff', border: 'none', borderRadius: '6px', padding: '8px 14px', cursor: 'pointer' }}
+                    >
+                      {rejectingWork === milestone.id ? (
+                        <><i className="fa-solid fa-spinner fa-spin"></i> ...</>
+                      ) : (
+                        <><i className="fa-solid fa-times"></i> Reject</>
+                      )}
+                    </button>
+                  </div>
+                </div>
               )}
 
               {/* ── Seller Actions ── */}
               {isActive && isSeller && milestone.status === 'funded' && (
-                <button
-                  className="btn-submit-work"
-                  onClick={() => handleSubmitWork(milestone.id)}
-                  disabled={submittingMilestone === milestone.id}
-                >
-                  {submittingMilestone === milestone.id ? (
-                    <><i className="fa-solid fa-spinner fa-spin"></i> Submitting...</>
-                  ) : (
-                    <><i className="fa-solid fa-upload"></i> Submit Work</>
-                  )}
-                </button>
+                openSubmitForm === milestone.id ? (
+                  <div className="work-submit-form" style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '240px' }}>
+                    <input
+                      type="text"
+                      placeholder="🔗 Proof link (স্ক্রিনশট/ফাইল/ড্রাইভ লিংক)"
+                      value={workDraft[milestone.id]?.link || ''}
+                      onChange={(e) => setWorkDraft(prev => ({ ...prev, [milestone.id]: { ...prev[milestone.id], link: e.target.value } }))}
+                      style={{ padding: '8px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: 'inherit', fontSize: '13px' }}
+                    />
+                    <textarea
+                      placeholder="নোট (যেমন: বাকি ফাইল WhatsApp/Messenger-এ পাঠানো হয়েছে)"
+                      value={workDraft[milestone.id]?.note || ''}
+                      onChange={(e) => setWorkDraft(prev => ({ ...prev, [milestone.id]: { ...prev[milestone.id], note: e.target.value } }))}
+                      rows={2}
+                      style={{ padding: '8px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: 'inherit', resize: 'vertical', fontSize: '13px' }}
+                    />
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button
+                        className="btn-submit-work"
+                        onClick={() => handleSubmitWork(milestone.id)}
+                        disabled={submittingMilestone === milestone.id}
+                      >
+                        {submittingMilestone === milestone.id ? (
+                          <><i className="fa-solid fa-spinner fa-spin"></i> Submitting...</>
+                        ) : (
+                          <><i className="fa-solid fa-paper-plane"></i> Submit</>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => setOpenSubmitForm(null)}
+                        style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: 'var(--text-muted, #94a3b8)', cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        বাতিল
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    className="btn-submit-work"
+                    onClick={() => setOpenSubmitForm(milestone.id)}
+                  >
+                    <i className="fa-solid fa-upload"></i> Submit Work
+                  </button>
+                )
               )}
 
               {/* ── Status Badges ── */}
@@ -1728,6 +2288,14 @@ if (loading) {
   return (
     <div className="dashboard-container-wrapper">
       <div className="dashboard-wrapper">
+
+        {/* ✅ NEW: Guide popup — shown before an offer is accepted */}
+        <DealGuideModal
+          show={showGuideModal}
+          role="accepter"
+          onConfirm={handleGuideConfirm}
+          onCancel={handleGuideCancel}
+        />
 
         {/* Mode Switcher */}
         <div className="deal-mode-switcher">

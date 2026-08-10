@@ -157,7 +157,8 @@
   </script>
 
   <!-- ============================================================
-  ✅ Security Headers (CSP - UPDATED with ui-avatars.com and images.unsplash.com)
+  ✅ Security Headers (CSP - UPDATED with blob: for image previews)
+  ✅ Fixed: Added blob: to img-src for URL.createObjectURL() support
   ============================================================ -->
   <meta
     http-equiv="Content-Security-Policy"
@@ -166,10 +167,11 @@
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.firebase.com https://*.googleapis.com https://*.cloudinary.com https://apis.google.com https://*.firebaseio.com;
       style-src 'self' 'unsafe-inline' https://*.googleapis.com https://cdnjs.cloudflare.com https://banglawebfonts.pages.dev;
       font-src 'self' https://*.googleapis.com https://*.gstatic.com https://cdnjs.cloudflare.com https://banglawebfonts.pages.dev data:;
-      img-src 'self' data: https: http: https://*.cloudinary.com https://*.googleapis.com https://www.google.com https://*.google.com https://ui-avatars.com https://via.placeholder.com https://images.unsplash.com https://*.githubusercontent.com;
+      img-src 'self' data: https: http: blob: https://*.cloudinary.com https://*.googleapis.com https://www.google.com https://*.google.com https://ui-avatars.com https://via.placeholder.com https://images.unsplash.com https://*.githubusercontent.com;
       connect-src 'self' https://*.firebase.com https://*.googleapis.com https://*.cloudinary.com https://*.firebaseio.com https://*.firebaseapp.com wss://*.firebaseio.com https://www.google.com;
       frame-src 'self' https://*.firebase.com https://apis.google.com https://*.firebaseapp.com;
       worker-src 'self' blob:;
+      media-src 'self' blob: https://*.cloudinary.com;
     "
   />
 

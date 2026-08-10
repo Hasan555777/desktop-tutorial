@@ -1,4 +1,19 @@
 // src/pages/Admin/hooks/useAdminData.js
+//
+// ✅ ADDED (full user access for admin):
+// - fetchUserDeals(userId)   — every deal a user is part of (buyer or seller)
+// - fetchUserWallet(userId)  — a user's wallet doc (balance/locked/earned)
+// - fetchUserPosts(userId)   — every post a user has made
+// - adminAdjustWallet(userId, amount, type, reason) — admin credits/debits a
+//   wallet directly, with a transaction record + user notification
+// - adminCancelDeal(deal, reason) — admin force-cancels a deal; any
+//   funded-but-not-released escrow money is refunded to the buyer
+// - adminResolveDispute(deal, resolution, note) — admin resolves an open
+//   dispute by releasing funded/review milestones to the seller or
+//   refunding them to the buyer
+// - loadDisputes() / disputes / disputesLoading — list of all deals with an
+//   open dispute, for a dedicated admin "Disputes" tab
+// Everything else in this file is unchanged from the original.
 
 import { useState, useCallback, useRef, useMemo  } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -59,6 +74,10 @@ export const useAdminData = () => {
   const [reports, setReports] = useState([]);
   const [reportsLoading, setReportsLoading] = useState(false);
   const [notifications, setNotifications] = useState([]);
+
+  // ── ✅ NEW: Disputes ──
+  const [disputes, setDisputes] = useState([]);
+  const [disputesLoading, setDisputesLoading] = useState(false);
 
   // ── Search States ──
   const [searchQuery, setSearchQuery] = useState('');
@@ -460,6 +479,33 @@ export const useAdminData = () => {
   }, [feedback]);
 
   // ============================================================
+  // 📌 ✅ NEW: LOAD DISPUTES (all deals with an open dispute)
+  // ============================================================
+
+  const loadDisputes = useCallback(async () => {
+    setDisputesLoading(true);
+    try {
+      const q = query(
+        collection(db, 'deals'),
+        where('disputeStatus', '==', 'open')
+      );
+      const snapshot = await getDocs(q);
+      const disputesList = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if (import.meta.env.DEV) {
+        console.log("📊 Open disputes loaded:", disputesList.length);
+      }
+
+      setDisputes(disputesList);
+    } catch (error) {
+      console.error('Load disputes error:', error);
+      await feedback.showError('❌ ডিসপিউট লোড ব্যর্থ', 'ডিসপিউট লোড করতে সমস্যা হয়েছে');
+    } finally {
+      setDisputesLoading(false);
+    }
+  }, [feedback]);
+
+  // ============================================================
   // 📌 LOAD ALL DEPOSITS (Pending + History)
   // ============================================================
 
@@ -525,7 +571,8 @@ export const useAdminData = () => {
         { name: 'All Deposits', fn: loadAllDeposits },
         { name: 'Pending Deposits', fn: loadPendingDeposits },
         { name: 'Reports', fn: loadReports },
-        { name: 'Pending Edits', fn: loadPendingEdits }
+        { name: 'Pending Edits', fn: loadPendingEdits },
+        { name: 'Disputes', fn: loadDisputes }
       ];
       
       await Promise.allSettled(
@@ -550,7 +597,7 @@ export const useAdminData = () => {
     } finally {
       setLoading(false);
     }
-  }, [loadUsers, loadPosts, loadPendingPosts, loadDeals, loadWithdrawals, loadStats, loadNotifications, loadAllDeposits, loadPendingDeposits, loadReports, loadPendingEdits, feedback]);
+  }, [loadUsers, loadPosts, loadPendingPosts, loadDeals, loadWithdrawals, loadStats, loadNotifications, loadAllDeposits, loadPendingDeposits, loadReports, loadPendingEdits, loadDisputes, feedback]);
 
   const reloadAllData = useCallback(async () => {
     try {
@@ -565,12 +612,13 @@ export const useAdminData = () => {
         loadAllDeposits(),
         loadPendingDeposits(),
         loadReports(),
-        loadPendingEdits()
+        loadPendingEdits(),
+        loadDisputes()
       ]);
     } catch (error) {
       console.error("Reload error:", error);
     }
-  }, [loadUsers, loadPosts, loadPendingPosts, loadDeals, loadWithdrawals, loadStats, loadNotifications, loadAllDeposits, loadPendingDeposits, loadReports, loadPendingEdits]);
+  }, [loadUsers, loadPosts, loadPendingPosts, loadDeals, loadWithdrawals, loadStats, loadNotifications, loadAllDeposits, loadPendingDeposits, loadReports, loadPendingEdits, loadDisputes]);
 
   // ============================================================
   // 📌 USER OPERATIONS
@@ -832,6 +880,417 @@ export const useAdminData = () => {
       await feedback.showError('❌ ডিলিট ব্যর্থ', 'ডিলিট করতে সমস্যা হয়েছে: ' + (error?.message || 'অজানা ত্রুটি'));
     }
   }, [feedback, reloadAllData]);
+
+  // ============================================================
+  // 📌 ✅ NEW: FULL USER ACCESS — FETCH FUNCTIONS
+  // (used by UserFullAccessModal — fetched on-demand, not part of the
+  //  global loadAllData sweep, since these are per-user and could be many)
+  // ============================================================
+
+  // ✅ Every deal this user is part of, as buyer OR seller. Primary query
+  // uses the `participants` array field (present on deals created via the
+  // current flow). Falls back to separate buyerId/sellerId queries merged
+  // together in case some older deals don't have `participants` set.
+  const fetchUserDeals = useCallback(async (userId) => {
+    try {
+      const q = query(
+        collection(db, 'deals'),
+        where('participants', 'array-contains', userId)
+      );
+      const snap = await getDocs(q);
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      if (list.length > 0) {
+        return list.sort((a, b) => {
+          const aTime = a.createdAt?.seconds || new Date(a.createdAt || 0).getTime() / 1000 || 0;
+          const bTime = b.createdAt?.seconds || new Date(b.createdAt || 0).getTime() / 1000 || 0;
+          return bTime - aTime;
+        });
+      }
+      // fall through to legacy fallback if nothing found (participants
+      // field might genuinely not exist on this deal set)
+      throw new Error('no-participants-field');
+    } catch (error) {
+      try {
+        const buyerQ = query(collection(db, 'deals'), where('buyerId', '==', userId));
+        const sellerQ = query(collection(db, 'deals'), where('sellerId', '==', userId));
+        const [buyerSnap, sellerSnap] = await Promise.all([getDocs(buyerQ), getDocs(sellerQ)]);
+        const map = new Map();
+        buyerSnap.docs.forEach(d => map.set(d.id, { id: d.id, ...d.data() }));
+        sellerSnap.docs.forEach(d => map.set(d.id, { id: d.id, ...d.data() }));
+        return Array.from(map.values()).sort((a, b) => {
+          const aTime = a.createdAt?.seconds || new Date(a.createdAt || 0).getTime() / 1000 || 0;
+          const bTime = b.createdAt?.seconds || new Date(b.createdAt || 0).getTime() / 1000 || 0;
+          return bTime - aTime;
+        });
+      } catch (fallbackError) {
+        console.error('fetchUserDeals error:', fallbackError);
+        await feedback.showError('❌ ব্যর্থ', 'ইউজারের ডিল লোড করতে সমস্যা হয়েছে');
+        return [];
+      }
+    }
+  }, [feedback]);
+
+  const fetchUserWallet = useCallback(async (userId) => {
+    try {
+      const snap = await getDoc(doc(db, 'wallets', userId));
+      return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+    } catch (error) {
+      console.error('fetchUserWallet error:', error);
+      await feedback.showError('❌ ব্যর্থ', 'ওয়ালেট লোড করতে সমস্যা হয়েছে');
+      return null;
+    }
+  }, [feedback]);
+
+  const fetchUserPosts = useCallback(async (userId) => {
+    try {
+      const q = query(
+        collection(db, 'posts'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc')
+      );
+      const snap = await getDocs(q);
+      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (error) {
+      console.error('fetchUserPosts error:', error);
+      await feedback.showError('❌ ব্যর্থ', 'ইউজারের পোস্ট লোড করতে সমস্যা হয়েছে');
+      return [];
+    }
+  }, [feedback]);
+
+  // ============================================================
+  // 📌 ✅ NEW: ADMIN — ADJUST WALLET BALANCE DIRECTLY
+  // ============================================================
+
+  const adminAdjustWallet = useCallback(async (userId, amount, type, reason) => {
+    const numAmount = Number(amount);
+    if (!numAmount || numAmount <= 0) {
+      await feedback.showWarning('⚠️ ভুল পরিমাণ', 'দয়া করে একটি সঠিক পরিমাণ দিন');
+      return false;
+    }
+    if (!reason || !reason.trim()) {
+      await feedback.showWarning('⚠️ কারণ আবশ্যক', 'ব্যালেন্স পরিবর্তনের কারণ লিখুন');
+      return false;
+    }
+
+    const confirmed = await feedback.confirm({
+      title: type === 'credit' ? '➕ ব্যালেন্স যোগ করুন' : '➖ ব্যালেন্স কর্তন করুন',
+      message: `${numAmount.toLocaleString()} BDT ${type === 'credit' ? 'যোগ' : 'কর্তন'} করবেন?\n\nকারণ: ${reason}`,
+      variant: 'confirm',
+      confirmText: 'নিশ্চিত করুন',
+      cancelText: 'বাতিল করুন'
+    });
+    if (!confirmed) return false;
+
+    try {
+      const walletRef = doc(db, 'wallets', userId);
+
+      await runTransaction(db, async (transaction) => {
+        const walletSnap = await transaction.get(walletRef);
+        if (!walletSnap.exists()) {
+          throw new Error('এই ইউজারের ওয়ালেট পাওয়া যায়নি');
+        }
+        const data = walletSnap.data();
+        const currentBalance = data.balance || 0;
+
+        if (type === 'debit' && currentBalance < numAmount) {
+          throw new Error(`ব্যালেন্স অপর্যাপ্ত — বর্তমান ব্যালেন্স ${currentBalance.toLocaleString()} BDT`);
+        }
+
+        const newBalance = type === 'credit' ? currentBalance + numAmount : currentBalance - numAmount;
+
+        transaction.update(walletRef, {
+          balance: newBalance,
+          ...(type === 'credit' ? { totalEarned: (data.totalEarned || 0) + numAmount } : {}),
+          updatedAt: serverTimestamp(),
+        });
+
+        const txRef = doc(collection(db, 'transactions'));
+        transaction.set(txRef, {
+          userId,
+          amount: numAmount,
+          type: type === 'credit' ? 'credit' : 'debit',
+          status: 'completed',
+          title: type === 'credit' ? 'Admin Balance Adjustment (Credit)' : 'Admin Balance Adjustment (Debit)',
+          description: reason.trim(),
+          adminAdjustment: true,
+          adjustedBy: auth.currentUser?.uid || 'admin',
+          adjustedByEmail: auth.currentUser?.email || 'admin',
+          createdAt: serverTimestamp(),
+          completedAt: serverTimestamp(),
+        });
+      });
+
+      await createUserNotification(
+        userId,
+        type === 'credit'
+          ? `💰 অ্যাডমিন আপনার ওয়ালেটে ${numAmount.toLocaleString()} BDT যোগ করেছেন।\nকারণ: ${reason}`
+          : `💸 অ্যাডমিন আপনার ওয়ালেট থেকে ${numAmount.toLocaleString()} BDT কর্তন করেছেন।\nকারণ: ${reason}`,
+        type === 'credit' ? 'success' : 'warning'
+      );
+
+      await feedback.showSuccess('✅ সফল', 'ওয়ালেট আপডেট করা হয়েছে');
+      return true;
+    } catch (error) {
+      console.error('adminAdjustWallet error:', error);
+      await feedback.showError('❌ ব্যর্থ', error.message || 'ওয়ালেট আপডেট করতে সমস্যা হয়েছে');
+      return false;
+    }
+  }, [feedback, createUserNotification]);
+
+  // ============================================================
+  // 📌 ✅ NEW: ADMIN — FORCE CANCEL A DEAL
+  // Refunds any funded-but-not-released escrow money to the buyer and
+  // releases any still-locked (never funded) budget reservation.
+  // Cannot be used once any milestone has already been released to the
+  // seller (that money has already moved — use adminAdjustWallet manually
+  // for exceptional corrections in that case).
+  // ============================================================
+
+  const adminCancelDeal = useCallback(async (deal, reason) => {
+    if (!reason || !reason.trim()) {
+      await feedback.showWarning('⚠️ কারণ আবশ্যক', 'ডিল বাতিলের কারণ লিখুন');
+      return false;
+    }
+    if (deal.status === 'completed' || deal.status === 'cancelled') {
+      await feedback.showWarning('⚠️ সম্ভব না', 'সম্পন্ন বা ইতিমধ্যে বাতিল হওয়া ডিল আবার বাতিল করা যাবে না');
+      return false;
+    }
+
+    const milestones = deal.milestones || [];
+    const hasReleased = milestones.some(m => m.status === 'released');
+
+    if (hasReleased) {
+      await feedback.showWarning(
+        '⚠️ সরাসরি বাতিল সম্ভব না',
+        'এই ডিলে কিছু পেমেন্ট ইতিমধ্যে সেলারকে রিলিজ হয়ে গেছে — সরাসরি ক্যানসেল করা যাবে না। প্রয়োজনে ওয়ালেট Adjust ব্যবহার করে ম্যানুয়ালি সংশোধন করুন।'
+      );
+      return false;
+    }
+
+    const fundedMilestones = milestones.filter(m => m.status === 'funded' || m.status === 'review');
+    const refundTotal = fundedMilestones.reduce((sum, m) => sum + (m.amount || 0), 0);
+    const stillPendingTotal = milestones.filter(m => m.status === 'pending').reduce((sum, m) => sum + (m.amount || 0), 0);
+
+    const confirmed = await feedback.confirm({
+      title: '⚠️ অ্যাডমিন ডিল বাতিল',
+      message: `এই ডিলটি বাতিল করবেন?\n\nকারণ: ${reason}${refundTotal > 0 ? `\n\n💸 ${refundTotal.toLocaleString()} BDT বায়ারকে ফেরত দেওয়া হবে (escrow-এ ছিল)।` : ''}`,
+      variant: 'delete',
+      confirmText: 'হ্যাঁ, বাতিল করুন',
+      cancelText: 'বাতিল করুন'
+    });
+    if (!confirmed) return false;
+
+    try {
+      const dealRef = doc(db, 'deals', deal.id);
+      const buyerWalletRef = doc(db, 'wallets', deal.buyerId);
+
+      await runTransaction(db, async (transaction) => {
+        const buyerWalletSnap = await transaction.get(buyerWalletRef);
+
+        if (buyerWalletSnap.exists()) {
+          const walletData = buyerWalletSnap.data();
+          transaction.update(buyerWalletRef, {
+            balance: (walletData.balance || 0) + refundTotal,
+            lockedBalance: Math.max(0, (walletData.lockedBalance || 0) - stillPendingTotal),
+            updatedAt: serverTimestamp(),
+          });
+        }
+
+        const updatedMilestones = milestones.map(m =>
+          (m.status === 'funded' || m.status === 'review')
+            ? { ...m, status: 'refunded', refundedAt: new Date().toISOString() }
+            : m
+        );
+
+        transaction.update(dealRef, {
+          status: 'cancelled',
+          milestones: updatedMilestones,
+          cancelledAt: new Date().toISOString(),
+          cancelledBy: 'admin',
+          cancelledByAdmin: auth.currentUser?.uid || 'admin',
+          cancellationReason: reason.trim(),
+          disputeStatus: deal.disputeStatus === 'open' ? 'resolved' : (deal.disputeStatus || null),
+          updatedAt: serverTimestamp(),
+        });
+
+        if (refundTotal > 0) {
+          const txRef = doc(collection(db, 'transactions'));
+          transaction.set(txRef, {
+            userId: deal.buyerId,
+            amount: refundTotal,
+            type: 'credit',
+            status: 'completed',
+            title: `Admin Refund: ${deal.postTitle || 'Deal'} (Cancelled by Admin)`,
+            description: reason.trim(),
+            dealId: deal.id,
+            adminAdjustment: true,
+            adjustedBy: auth.currentUser?.uid || 'admin',
+            createdAt: serverTimestamp(),
+            completedAt: serverTimestamp(),
+          });
+        }
+      });
+
+      await createUserNotification(
+        deal.buyerId,
+        `❌ অ্যাডমিন আপনার ডিল "${deal.postTitle || 'Untitled'}" বাতিল করেছেন।\nকারণ: ${reason}${refundTotal > 0 ? `\n💸 ${refundTotal.toLocaleString()} BDT আপনার ওয়ালেটে ফেরত দেওয়া হয়েছে।` : ''}`,
+        'warning'
+      );
+      await createUserNotification(
+        deal.sellerId,
+        `❌ অ্যাডমিন ডিল "${deal.postTitle || 'Untitled'}" বাতিল করেছেন।\nকারণ: ${reason}`,
+        'warning'
+      );
+
+      await feedback.showSuccess('✅ ডিল বাতিল হয়েছে', 'অ্যাডমিন সফলভাবে ডিলটি বাতিল করেছেন');
+      await loadDisputes();
+      return true;
+    } catch (error) {
+      console.error('adminCancelDeal error:', error);
+      await feedback.showError('❌ ব্যর্থ', error.message || 'ডিল বাতিল করতে সমস্যা হয়েছে');
+      return false;
+    }
+  }, [feedback, createUserNotification, loadDisputes]);
+
+  // ============================================================
+  // 📌 ✅ NEW: ADMIN — RESOLVE A DISPUTE
+  // resolution: 'release' (pay funded/review milestones to seller)
+  //           | 'refund'  (refund funded/review milestones to buyer)
+  // ============================================================
+
+  const adminResolveDispute = useCallback(async (deal, resolution, note = '') => {
+    if (deal.disputeStatus !== 'open') {
+      await feedback.showWarning('⚠️', 'এই ডিলে কোনো active dispute নেই');
+      return false;
+    }
+
+    const milestones = deal.milestones || [];
+    const disputedMilestones = milestones.filter(m => m.status === 'funded' || m.status === 'review');
+    const totalAmount = disputedMilestones.reduce((sum, m) => sum + (m.amount || 0), 0);
+
+    if (totalAmount === 0) {
+      try {
+        await updateDoc(doc(db, 'deals', deal.id), {
+          disputeStatus: 'resolved',
+          disputeResolution: resolution,
+          disputeResolutionNote: note || '',
+          disputeResolvedAt: serverTimestamp(),
+          disputeResolvedBy: auth.currentUser?.uid || 'admin',
+          updatedAt: serverTimestamp(),
+        });
+        await feedback.showSuccess('✅', 'Dispute সমাধান হয়েছে (কোনো escrow টাকা স্থানান্তরের দরকার ছিল না)');
+        await loadDisputes();
+        return true;
+      } catch (error) {
+        console.error('adminResolveDispute (no-amount) error:', error);
+        await feedback.showError('❌', 'Dispute সমাধান করতে সমস্যা হয়েছে');
+        return false;
+      }
+    }
+
+    const confirmed = await feedback.confirm({
+      title: resolution === 'release' ? '✅ সেলারকে টাকা রিলিজ করুন' : '↩️ বায়ারকে টাকা ফেরত দিন',
+      message: `${totalAmount.toLocaleString()} BDT ${resolution === 'release' ? 'সেলারকে দেওয়া হবে' : 'বায়ারকে ফেরত যাবে'}।\n\nনিশ্চিত?`,
+      variant: 'confirm',
+      confirmText: 'নিশ্চিত করুন',
+      cancelText: 'বাতিল করুন',
+    });
+    if (!confirmed) return false;
+
+    try {
+      const dealRef = doc(db, 'deals', deal.id);
+      const buyerWalletRef = doc(db, 'wallets', deal.buyerId);
+      const sellerWalletRef = doc(db, 'wallets', deal.sellerId);
+
+      await runTransaction(db, async (transaction) => {
+        const updatedMilestones = milestones.map(m =>
+          (m.status === 'funded' || m.status === 'review')
+            ? { ...m, status: resolution === 'release' ? 'released' : 'refunded', resolvedAt: new Date().toISOString() }
+            : m
+        );
+        const allDone = updatedMilestones.every(m => m.status === 'released' || m.status === 'refunded' || m.status === 'pending');
+
+        if (resolution === 'release') {
+          const sellerSnap = await transaction.get(sellerWalletRef);
+          if (sellerSnap.exists()) {
+            const sd = sellerSnap.data();
+            transaction.update(sellerWalletRef, {
+              balance: (sd.balance || 0) + totalAmount,
+              totalEarned: (sd.totalEarned || 0) + totalAmount,
+              updatedAt: serverTimestamp(),
+            });
+          } else {
+            transaction.set(sellerWalletRef, {
+              balance: totalAmount,
+              totalEarned: totalAmount,
+              totalWithdrawn: 0,
+              pendingWithdraw: 0,
+              lockedBalance: 0,
+              userId: deal.sellerId,
+              walletId: `WL-${Date.now().toString(36).toUpperCase()}`,
+              currency: 'BDT',
+              isActive: true,
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            });
+          }
+        } else {
+          const buyerSnap = await transaction.get(buyerWalletRef);
+          if (buyerSnap.exists()) {
+            transaction.update(buyerWalletRef, {
+              balance: (buyerSnap.data().balance || 0) + totalAmount,
+              updatedAt: serverTimestamp(),
+            });
+          }
+        }
+
+        transaction.update(dealRef, {
+          milestones: updatedMilestones,
+          disputeStatus: 'resolved',
+          disputeResolution: resolution,
+          disputeResolutionNote: note || '',
+          disputeResolvedAt: serverTimestamp(),
+          disputeResolvedBy: auth.currentUser?.uid || 'admin',
+          ...(allDone && { status: resolution === 'release' ? 'completed' : 'cancelled' }),
+          updatedAt: serverTimestamp(),
+        });
+
+        const txRef = doc(collection(db, 'transactions'));
+        transaction.set(txRef, {
+          userId: resolution === 'release' ? deal.sellerId : deal.buyerId,
+          amount: totalAmount,
+          type: 'credit',
+          status: 'completed',
+          title: `Dispute Resolved: ${deal.postTitle || 'Deal'}`,
+          description: note || `Admin resolved dispute — ${resolution === 'release' ? 'released to seller' : 'refunded to buyer'}`,
+          dealId: deal.id,
+          adminAdjustment: true,
+          adjustedBy: auth.currentUser?.uid || 'admin',
+          createdAt: serverTimestamp(),
+          completedAt: serverTimestamp(),
+        });
+      });
+
+      await createUserNotification(
+        deal.buyerId,
+        `⚖️ Dispute সমাধান হয়েছে: ${resolution === 'release' ? 'সেলারকে escrow টাকা রিলিজ করা হয়েছে' : `${totalAmount.toLocaleString()} BDT আপনাকে ফেরত দেওয়া হয়েছে`}${note ? `\nনোট: ${note}` : ''}`,
+        'info'
+      );
+      await createUserNotification(
+        deal.sellerId,
+        `⚖️ Dispute সমাধান হয়েছে: ${resolution === 'release' ? `${totalAmount.toLocaleString()} BDT আপনাকে দেওয়া হয়েছে` : 'escrow টাকা বায়ারকে ফেরত দেওয়া হয়েছে'}${note ? `\nনোট: ${note}` : ''}`,
+        'info'
+      );
+
+      await feedback.showSuccess('✅ Dispute সমাধান হয়েছে', '');
+      await loadDisputes();
+      return true;
+    } catch (error) {
+      console.error('adminResolveDispute error:', error);
+      await feedback.showError('❌ ব্যর্থ', error.message || 'Dispute সমাধান করতে সমস্যা হয়েছে');
+      return false;
+    }
+  }, [feedback, createUserNotification, loadDisputes]);
 
   // ============================================================
   // 📌 POST OPERATIONS
@@ -1600,6 +2059,8 @@ export const useAdminData = () => {
     reports,
     reportsLoading,
     notifications,
+    disputes,           // ✅ NEW
+    disputesLoading,     // ✅ NEW
     searchQuery,
     searchResults,
     isSearching,
@@ -1652,6 +2113,7 @@ export const useAdminData = () => {
     loadPendingDeposits,
     loadAllDeposits,
     loadReports,
+    loadDisputes,       // ✅ NEW
     loadAllData,
     reloadAllData,
 
@@ -1661,6 +2123,14 @@ export const useAdminData = () => {
     toggleBlockUser,
     deleteUser,
     saveVerificationReview, 
+
+    // ✅ NEW — Full user access
+    fetchUserDeals,
+    fetchUserWallet,
+    fetchUserPosts,
+    adminAdjustWallet,
+    adminCancelDeal,
+    adminResolveDispute,
 
     // Post operations
     handleDeletePost,

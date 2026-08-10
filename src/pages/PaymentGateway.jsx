@@ -6,7 +6,9 @@
 //      হয়ে গেছে, তাই লক থেকে সরিয়ে ফেলা হলো — DealManager.jsx-এর
 //      activateDealWithEscrowLock যে lockedBalance += budget করেছিল, ফান্ড করার
 //      সময় সেটা ধীরে ধীরে কমে আসে)
-//   3. milestone.status: 'pending' -> 'funded'
+//   3. milestone.status: 'pending' -> 'funded' (+ fundedAt স্ট্যাম্প — সেলারের
+//      কাছে এখন থেকে ৭ দিন সময় আছে কাজ জমা দেওয়ার জন্য, নাহলে DealManager.jsx
+//      অটোমেটিক বায়ারকে টাকা ফেরত দেবে — দেখুন SUBMIT_DEADLINE_AFTER_FUND_MS)
 // এই মুহূর্তে সেলারের ওয়ালেটে কোনো টাকা যায় না — সেটা হয় শুধুমাত্র
 // DealManager.jsx-এর handleReleasePayment-এ, বায়ার রিভিউ করে Release করলে।
 //
@@ -17,7 +19,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { auth, db } from '@/firebase';
-import { doc, getDoc, runTransaction, serverTimestamp, collection } from 'firebase/firestore';
+import { doc, getDoc, runTransaction, serverTimestamp, collection, addDoc } from 'firebase/firestore';
 import './PaymentGateway.css';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
 import {
@@ -40,6 +42,12 @@ const TRANSACTION_TYPE = {
   DEBIT: 'debit',
 };
 
+// ✅ NEW: mirrors DealManager.jsx's SUBMIT_DEADLINE_AFTER_FUND_MS — kept in
+// sync manually since the two files don't share a constants module. Only
+// used here for the human-readable "you have 7 days" chat message; the
+// actual auto-refund enforcement lives in DealManager.jsx.
+const SUBMIT_DEADLINE_DAYS = 7;
+
 const generateTransferId = () => {
   const date = new Date();
   const dateStr = date.getFullYear() +
@@ -47,6 +55,28 @@ const generateTransferId = () => {
     String(date.getDate()).padStart(2, '0');
   const random = Math.random().toString(36).substring(2, 8).toUpperCase();
   return `PAY-${dateStr}-${random}`;
+};
+
+// ✅ NEW: small local helper (same pattern as DealManager.jsx's
+// sendDealChatMessage) so we can post a system message into the deal's
+// chat right after funding succeeds, telling the seller their submission
+// window has started.
+const sendDealChatMessage = async (chatId, message, type = 'system') => {
+  if (!chatId) {
+    console.warn('⚠️ No chatId provided for deal chat message');
+    return;
+  }
+  try {
+    await addDoc(collection(db, 'chats', chatId, 'messages'), {
+      text: message,
+      sender: 'system',
+      senderId: 'system',
+      createdAt: serverTimestamp(),
+      type,
+    });
+  } catch (error) {
+    console.error('❌ Error sending deal chat message:', error);
+  }
 };
 
 // ✅ Milestone id can be a Firestore-generated string ("m_abc123") or a
@@ -336,6 +366,15 @@ const PaymentGateway = () => {
         console.error('⚠️ Notification error:', notifError);
       }
 
+      // ✅ NEW: post a chat message spelling out the submission deadline —
+      // sendDealPaymentNotification above may or may not mention timing
+      // (its template isn't visible from this file), so this guarantees
+      // the seller sees the "you have 7 days" warning somewhere concrete.
+      await sendDealChatMessage(
+        dealData.chatId,
+        `💰 **Milestone Funded**\n\n"${milestone.title}"-এর জন্য ৳${amount.toLocaleString()} escrow-তে জমা হয়েছে।\n\n⏳ সেলারকে অনুরোধ: এই মাইলস্টোনের কাজ **${SUBMIT_DEADLINE_DAYS} দিনের মধ্যে** জমা দিন (প্রুফ লিংক/স্ক্রিনশট + নোট সহ)। এই সময়ের মধ্যে জমা না দিলে টাকা স্বয়ংক্রিয়ভাবে Buyer-এর ওয়ালেটে ফেরত চলে যাবে।`
+      );
+
       feedback.alert.success({
         message: `✅ ${milestone.title}-এর জন্য ৳${amount} escrow-তে ফান্ড করা হয়েছে। সেলার এখন কাজ শুরু/জমা দিতে পারবে।`
       });
@@ -516,6 +555,11 @@ const PaymentGateway = () => {
               <i className="fa-solid fa-shield-halved"></i> এই টাকা এখনই সেলারকে যাবে না — escrow-তে জমা থাকবে, আপনি কাজ রিভিউ করে Release না করা পর্যন্ত।
             </span>
           </div>
+          <div className="detail-row" style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+            <span colSpan={2}>
+              <i className="fa-solid fa-hourglass-half"></i> ফান্ড করার পর সেলারের কাছে কাজ জমা দেওয়ার জন্য {SUBMIT_DEADLINE_DAYS} দিন সময় থাকবে — নাহলে এই টাকা স্বয়ংক্রিয়ভাবে আপনার কাছে ফেরত আসবে।
+            </span>
+          </div>
         </div>
 
         {/* Step 1: Payment Options - Only Buyer */}
@@ -578,6 +622,9 @@ const PaymentGateway = () => {
             <i className="fa-solid fa-circle-check success-icon"></i>
             <h3>Milestone Funded!</h3>
             <p>Your payment is now held in escrow. The seller can begin/submit work.</p>
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+              <i className="fa-solid fa-hourglass-half"></i> Seller has {SUBMIT_DEADLINE_DAYS} days to submit work, or the funds will be automatically refunded to you.
+            </p>
 
             <div className="transaction-details">
               <div className="tx-row">

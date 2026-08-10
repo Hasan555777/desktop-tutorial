@@ -1,14 +1,12 @@
 // src/components/profile/EditPostModal.jsx
 //
-// ⚠️ FIXED BUG (was in Profile.jsx before this file was split out):
-// Budget and Deadline inputs used to be `readOnly` with a "🔒 Edit coming
-// soon" label, AND `handleUpdatePost` forced `budget: originalBudget,
-// deadline: originalDeadline` regardless of what was typed — so editing
-// price/deadline was completely non-functional. This component now has a
-// real Fixed/Range editor for both, with validation, and always returns
-// the edited values to the parent's onSave callback.
+// ✅ UPDATED: Automatic image compression on upload
+// ✅ UPDATED: No text shown for posts without images (entire section hidden)
+// ✅ Fixed all image handling bugs
+// ✅ Memory leak fixed (revokes blob URLs)
+// ✅ Single source of truth for images
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   budgetToFormState,
   formStateToBudget,
@@ -17,6 +15,128 @@ import {
   uploadToCloudinary,
 } from '../utils/profileHelpers';
 
+const MAX_IMAGES = 2;
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const TARGET_QUALITY = 0.85; // 85% quality after compression
+const MAX_WIDTH = 1200;
+const MAX_HEIGHT = 1200;
+
+// ============================================================
+// ✅ Image Compression Function
+// ============================================================
+const compressImage = (file) => {
+  return new Promise((resolve, reject) => {
+    // If file is already small enough, return as-is
+    if (file.size <= MAX_FILE_SIZE && file.type !== 'image/gif') {
+      resolve(file);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        
+        // Calculate new dimensions (maintain aspect ratio)
+        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+          const ratio = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Determine output format
+        let mimeType = file.type;
+        let quality = TARGET_QUALITY;
+        
+        // If it's a PNG, keep PNG but compress
+        if (file.type === 'image/png') {
+          mimeType = 'image/png';
+          quality = 0.9;
+        }
+        // If it's a GIF, keep as GIF (don't compress)
+        else if (file.type === 'image/gif') {
+          resolve(file);
+          return;
+        }
+        // For others, use JPEG with quality
+        else if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+          mimeType = 'image/jpeg';
+          quality = TARGET_QUALITY;
+        }
+        // For webp, keep webp
+        else if (file.type === 'image/webp') {
+          mimeType = 'image/webp';
+          quality = TARGET_QUALITY;
+        }
+        // Default to JPEG
+        else {
+          mimeType = 'image/jpeg';
+          quality = TARGET_QUALITY;
+        }
+        
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error('Failed to compress image'));
+              return;
+            }
+            
+            // If compressed file is larger than original, use original
+            if (blob.size > file.size && file.size < MAX_FILE_SIZE) {
+              resolve(file);
+              return;
+            }
+            
+            const compressedFile = new File(
+              [blob], 
+              file.name.replace(/\.[^.]+$/, '') + '.jpg',
+              { type: mimeType }
+            );
+            
+            resolve(compressedFile);
+          },
+          mimeType,
+          quality
+        );
+      };
+      
+      img.onerror = () => {
+        reject(new Error('Failed to load image for compression'));
+      };
+    };
+    
+    reader.onerror = () => {
+      reject(new Error('Failed to read file'));
+    };
+  });
+};
+
+// ============================================================
+// ✅ Build initial images
+// ============================================================
+const buildInitialImages = (post) =>
+  (post?.images || [])
+    .filter(img => typeof img === 'string' && img.startsWith('http'))
+    .map(url => ({ id: url, kind: 'existing', url }));
+
+// ============================================================
+// ✅ Main Component
+// ============================================================
 const EditPostModal = ({ post, onClose, onSave, feedback }) => {
   const [title, setTitle] = useState(post?.title || '');
   const [description, setDescription] = useState(post?.description || '');
@@ -28,63 +148,146 @@ const EditPostModal = ({ post, onClose, onSave, feedback }) => {
     deadlineToFormState(post?.deadline ?? post?.deliveryDays)
   );
 
-  const existingImages = (post?.images || []).filter(img => typeof img === 'string' && img.startsWith('http'));
-  const [keptImages, setKeptImages] = useState(existingImages);
-  const [newImageFiles, setNewImageFiles] = useState([]);
-  const [newImagePreviews, setNewImagePreviews] = useState([]);
-  const [saving, setSaving] = useState(false);
+  const [images, setImages] = useState(() => buildInitialImages(post));
+  const [hasOriginalImages, setHasOriginalImages] = useState(
+    () => buildInitialImages(post).length > 0
+  );
 
+  const [saving, setSaving] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [compressing, setCompressing] = useState(false);
+  const fileInputRef = useRef(null);
+
+  // Re-sync on post change
   useEffect(() => {
     setTitle(post?.title || '');
     setDescription(post?.description || '');
     setBudgetState(budgetToFormState(post?.budget ?? post?.price));
     setDeadlineState(deadlineToFormState(post?.deadline ?? post?.deliveryDays));
-    const existing = (post?.images || []).filter(img => typeof img === 'string' && img.startsWith('http'));
-    setKeptImages(existing);
-    setNewImageFiles([]);
-    setNewImagePreviews([]);
+
+    setImages(prev => {
+      prev.forEach(img => {
+        if (img.kind === 'new' && img.url) URL.revokeObjectURL(img.url);
+      });
+      return buildInitialImages(post);
+    });
+    setHasOriginalImages(buildInitialImages(post).length > 0);
   }, [post]);
+
+  // Revoke blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      images.forEach(img => {
+        if (img.kind === 'new' && img.url) URL.revokeObjectURL(img.url);
+      });
+    };
+  }, [images]);
 
   if (!post) return null;
 
-  const totalImageCount = keptImages.length + newImagePreviews.length;
+  const totalImageCount = images.length;
+  const canAddMoreImages = hasOriginalImages && totalImageCount < MAX_IMAGES;
 
   // ============================================================
-  // ✅ Image handlers
+  // ✅ Image handlers with compression
   // ============================================================
-const handleImageChange = (e) => {
-  // ✅ Only posts that already have images can edit/replace images
-  if ((post?.images || []).length === 0) {
-    feedback?.alert?.warning?.({
-      message: 'এই পোস্টে আগে কোনো ছবি ছিল না, তাই ছবির Edit করা যাবে না।'
-    });
-    e.target.value = '';
-    return;
-  }
+  const handleImageChange = async (e) => {
+    if (!hasOriginalImages) {
+      feedback?.alert?.warning?.({
+        message: 'এই পোস্টে আগে কোনো ছবি ছিল না, তাই ছবির Edit করা যাবে না।'
+      });
+      e.target.value = '';
+      return;
+    }
 
-  const files = Array.from(e.target.files);
-  const remainingSlots = 2 - totalImageCount;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
-  if (files.length > remainingSlots) {
-    feedback?.alert?.warning?.({
-      message: `You can only add ${remainingSlots} more image(s). Maximum 2 images allowed!`
-    });
-    return;
-  }
+    const remainingSlots = MAX_IMAGES - totalImageCount;
 
-  const previews = files.map(file => URL.createObjectURL(file));
-  setNewImageFiles(prev => [...prev, ...files]);
-  setNewImagePreviews(prev => [...prev, ...previews]);
-  e.target.value = '';
-};
+    if (files.length > remainingSlots) {
+      feedback?.alert?.warning?.({
+        message: `You can only add ${remainingSlots} more image(s). Maximum ${MAX_IMAGES} images allowed!`
+      });
+      e.target.value = '';
+      return;
+    }
 
-  const removeExistingImage = (url) => {
-    setKeptImages(prev => prev.filter(img => img !== url));
+    // Check file types
+    const invalidFiles = files.filter(file => !file.type.startsWith('image/'));
+    if (invalidFiles.length > 0) {
+      feedback?.alert?.warning?.({
+        message: 'Please select only image files (jpg, png, gif, webp).'
+      });
+      e.target.value = '';
+      return;
+    }
+
+    setCompressing(true);
+
+    try {
+      const compressedItems = [];
+
+      for (const file of files) {
+        // Compress image
+        const compressedFile = await compressImage(file);
+        
+        compressedItems.push({
+          id: `new-${Date.now()}-${compressedItems.length}-${file.name}`,
+          kind: 'new',
+          file: compressedFile,
+          url: URL.createObjectURL(compressedFile),
+          originalSize: file.size,
+          compressedSize: compressedFile.size,
+        });
+      }
+
+      setImages(prev => [...prev, ...compressedItems]);
+      
+      const totalSaved = compressedItems.reduce(
+        (sum, item) => sum + (item.originalSize - item.compressedSize), 
+        0
+      );
+      
+      if (totalSaved > 0 && feedback) {
+        const savedKB = Math.round(totalSaved / 1024);
+        feedback.toast?.({
+          variant: 'info',
+          title: '📸 Image Compressed',
+          message: `Saved ${savedKB}KB by optimizing image size.`,
+          duration: 3000,
+        });
+      }
+
+    } catch (error) {
+      console.error('Compression error:', error);
+      feedback?.alert?.warning?.({
+        message: 'Could not compress image. Using original file.'
+      });
+      
+      // Fallback: add without compression
+      const newItems = files.map((file, i) => ({
+        id: `new-${Date.now()}-${i}-${file.name}`,
+        kind: 'new',
+        file,
+        url: URL.createObjectURL(file),
+      }));
+      setImages(prev => [...prev, ...newItems]);
+      
+    } finally {
+      setCompressing(false);
+      e.target.value = '';
+    }
   };
 
-  const removeNewImage = (index) => {
-    setNewImageFiles(prev => prev.filter((_, i) => i !== index));
-    setNewImagePreviews(prev => prev.filter((_, i) => i !== index));
+  const removeImage = (id) => {
+    setImages(prev => {
+      const item = prev.find(i => i.id === id);
+      if (item?.kind === 'new' && item.url) {
+        URL.revokeObjectURL(item.url);
+      }
+      return prev.filter(i => i.id !== id);
+    });
   };
 
   // ============================================================
@@ -136,8 +339,7 @@ const handleImageChange = (e) => {
       }
     }
 
-    const hadImagesBefore = (post.images || []).length > 0;
-    if (hadImagesBefore && totalImageCount === 0) {
+    if (hasOriginalImages && totalImageCount === 0) {
       feedback?.alert?.warning?.({ message: 'Please keep at least one image for your post.' });
       return false;
     }
@@ -151,17 +353,43 @@ const handleImageChange = (e) => {
   const handleSave = async () => {
     if (!validate()) return;
     setSaving(true);
+    setUploadProgress(0);
 
     try {
+      const newImages = images.filter(img => img.kind === 'new');
+      const existingUrls = images.filter(i => i.kind === 'existing').map(i => i.url);
+
       let uploadedUrls = [];
-      if (newImageFiles.length > 0) {
-        for (const file of newImageFiles) {
-          const url = await uploadToCloudinary(file);
-          if (url) uploadedUrls.push(url);
+
+      if (newImages.length > 0) {
+        let completed = 0;
+        const total = newImages.length;
+
+        for (const img of newImages) {
+          try {
+            const url = await uploadToCloudinary(img.file);
+            if (url) uploadedUrls.push(url);
+          } catch (uploadError) {
+            console.error('Error uploading image:', uploadError);
+            feedback?.alert?.error?.({
+              message: `Failed to upload image: ${uploadError.message}`
+            });
+          }
+          completed++;
+          setUploadProgress(Math.round((completed / total) * 100));
         }
       }
 
-      const finalImages = [...keptImages, ...uploadedUrls];
+      const finalImages = [...existingUrls, ...uploadedUrls];
+
+      if (hasOriginalImages && finalImages.length === 0) {
+        feedback?.alert?.error?.({
+          message: 'Failed to upload images. Please try again.'
+        });
+        setSaving(false);
+        return;
+      }
+
       const budget = formStateToBudget(budgetState);
       const deadline = formStateToDeadline(deadlineState);
 
@@ -172,14 +400,133 @@ const handleImageChange = (e) => {
         budget,
         deadline,
       });
+
     } catch (error) {
       console.error('EditPostModal save error:', error);
       feedback?.alert?.error?.({ message: 'Failed to save changes: ' + error.message });
     } finally {
       setSaving(false);
+      setUploadProgress(0);
     }
   };
 
+  // ============================================================
+  // ✅ Render - HIDE ENTIRE IMAGE SECTION if no original images
+  // ============================================================
+  const renderImageSection = () => {
+    // ✅ যদি পোস্টে আগে কোনো ছবি না থাকে, তাহলে কিছুই রেন্ডার করবে না
+    if (!hasOriginalImages) {
+      return null;
+    }
+
+    return (
+      <div className="pb-group">
+        <label>Images ({totalImageCount}/{MAX_IMAGES})</label>
+
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '8px' }}>
+          {images.map((img) => (
+            <div key={img.id} style={{ position: 'relative' }}>
+              <img
+                src={img.url}
+                alt={img.kind === 'new' ? 'New upload' : 'Post image'}
+                style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '2px solid var(--border-color)' }}
+              />
+              <button
+                type="button"
+                onClick={() => removeImage(img.id)}
+                style={{ 
+                  position: 'absolute', 
+                  top: -6, 
+                  right: -6, 
+                  background: '#ef4444', 
+                  color: '#fff', 
+                  border: 'none', 
+                  borderRadius: '50%', 
+                  width: 20, 
+                  height: 20, 
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <i className="fa-solid fa-xmark" style={{ fontSize: 10 }}></i>
+              </button>
+            </div>
+          ))}
+
+          {canAddMoreImages && (
+            <label
+              style={{ 
+                width: 80, 
+                height: 80, 
+                border: '2px dashed var(--border-color)', 
+                borderRadius: 8, 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                cursor: compressing ? 'wait' : 'pointer',
+                transition: 'all 0.2s',
+                background: 'var(--bg-secondary)',
+                opacity: compressing ? 0.5 : 1,
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+            >
+              {compressing ? (
+                <i className="fa-solid fa-spinner fa-spin" style={{ fontSize: 20, color: 'var(--accent-primary)' }} />
+              ) : (
+                <i className="fa-solid fa-plus" style={{ fontSize: 24, color: 'var(--text-muted)' }} />
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                hidden
+                onChange={handleImageChange}
+                disabled={compressing}
+              />
+            </label>
+          )}
+        </div>
+
+        {compressing && (
+          <div style={{ marginTop: '8px' }}>
+            <small style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              <i className="fa-solid fa-spinner fa-spin"></i> Optimizing images...
+            </small>
+          </div>
+        )}
+
+        {saving && uploadProgress > 0 && uploadProgress < 100 && (
+          <div style={{ marginTop: '10px' }}>
+            <div style={{ 
+              width: '100%', 
+              height: '4px', 
+              background: 'var(--bg-secondary)', 
+              borderRadius: '2px',
+              overflow: 'hidden'
+            }}>
+              <div style={{ 
+                width: `${uploadProgress}%`, 
+                height: '100%', 
+                background: 'var(--accent-primary)',
+                transition: 'width 0.3s ease'
+              }} />
+            </div>
+            <small style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              Uploading images... {uploadProgress}%
+            </small>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // ============================================================
+  // ✅ Main Render
+  // ============================================================
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="edit-modal edit-post-modal" onClick={(e) => e.stopPropagation()}>
@@ -222,7 +569,7 @@ const handleImageChange = (e) => {
             <small className="char-count">{description.length}/2000</small>
           </div>
 
-          {/* ── ✅ Budget editor (Fixed / Range) ── */}
+          {/* ── Budget editor ── */}
           <div className="pb-group">
             <label>Budget / Price <span className="required-star">*</span></label>
 
@@ -292,7 +639,7 @@ const handleImageChange = (e) => {
             </label>
           </div>
 
-          {/* ── ✅ Deadline editor (Fixed / Range) ── */}
+          {/* ── Deadline editor ── */}
           <div className="pb-group">
             <label>Deadline / Delivery Days <span className="required-star">*</span></label>
 
@@ -344,55 +691,27 @@ const handleImageChange = (e) => {
             )}
           </div>
 
-          {/* ── Images ── */}
-          <div className="pb-group">
-            <label>Images ({totalImageCount}/2)</label>
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '8px' }}>
-              {keptImages.map((img) => (
-                <div key={img} style={{ position: 'relative' }}>
-                  <img src={img} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8 }} />
-                  <button
-                    type="button"
-                    onClick={() => removeExistingImage(img)}
-                    style={{ position: 'absolute', top: -6, right: -6, background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer' }}
-                  >
-                    <i className="fa-solid fa-xmark" style={{ fontSize: 10 }}></i>
-                  </button>
-                </div>
-              ))}
-              {newImagePreviews.map((src, idx) => (
-                <div key={src} style={{ position: 'relative' }}>
-                  <img src={src} alt="" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8 }} />
-                  <button
-                    type="button"
-                    onClick={() => removeNewImage(idx)}
-                    style={{ position: 'absolute', top: -6, right: -6, background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: 20, height: 20, cursor: 'pointer' }}
-                  >
-                    <i className="fa-solid fa-xmark" style={{ fontSize: 10 }}></i>
-                  </button>
-                </div>
-              ))}
-              {(post?.images || []).length > 0 && totalImageCount < 2 && (
-                <label style={{ width: 80, height: 80, border: '2px dashed var(--border-color)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                  <i className="fa-solid fa-plus"></i>
-                  <input type="file" accept="image/*" multiple hidden onChange={handleImageChange} />
-                </label>
-              )}
-            </div>
-          </div>
+          {/* ── ✅ Images Section (হidden if no original images) ── */}
+          {renderImageSection()}
 
           {/* ── Action Buttons ── */}
           <div className="edit-actions">
-            <button className="cancel-btn" onClick={onClose} disabled={saving}>
+            <button className="cancel-btn" onClick={onClose} disabled={saving || compressing}>
               <i className="fa-solid fa-times"></i> Cancel
             </button>
             <button
               className="save-btn"
               onClick={handleSave}
-              disabled={saving || !title.trim() || !description.trim()}
+              disabled={saving || compressing || !title.trim() || !description.trim()}
+              style={{ 
+                opacity: (saving || compressing || !title.trim() || !description.trim()) ? 0.5 : 1,
+                cursor: (saving || compressing || !title.trim() || !description.trim()) ? 'not-allowed' : 'pointer'
+              }}
             >
               {saving ? (
-                <><i className="fa-solid fa-spinner fa-spin"></i> Updating...</>
+                <><i className="fa-solid fa-spinner fa-spin"></i> {uploadProgress > 0 ? `Uploading ${uploadProgress}%` : 'Updating...'}</>
+              ) : compressing ? (
+                <><i className="fa-solid fa-spinner fa-spin"></i> Optimizing...</>
               ) : (
                 <><i className="fa-solid fa-check"></i> Update Post</>
               )}

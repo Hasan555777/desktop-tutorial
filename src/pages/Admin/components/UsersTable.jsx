@@ -1,4 +1,8 @@
 // src/pages/Admin/components/UsersTable.jsx
+//
+// ✅ ADDED: "Full Access" button (💰) — opens UserFullAccessModal via the new
+// `onFullAccess` prop, giving admin full control over this user's wallet,
+// deals, and posts. Everything else in this file is unchanged.
 
 import React from 'react';
 import { 
@@ -24,7 +28,8 @@ const UsersTable = ({
   onUnverifyUser,
   onToggleBlock, 
   onDeleteUser,
-  onReviewVerification
+  onReviewVerification,
+  onFullAccess, // ✅ NEW — opens UserFullAccessModal (wallet/deals/posts)
 }) => {
   const feedback = useFeedback();
 
@@ -134,6 +139,17 @@ const UsersTable = ({
                     >
                       👁️
                     </button>
+
+                    {/* 💰 Full Access Button — wallet + deals + posts */}
+                    {onFullAccess && (
+                      <button
+                        className="action-btn full-access"
+                        onClick={() => onFullAccess(user)}
+                        title="সম্পূর্ণ এক্সেস (ওয়ালেট, ডিল, পোস্ট)"
+                      >
+                        💰
+                      </button>
+                    )}
                     
                     {/* 🛂 Review KYC Button */}
                     {isPendingVerification && !isBlocked && (

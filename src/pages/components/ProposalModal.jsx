@@ -116,7 +116,7 @@ export const ProposalModal = ({
               rows="4" 
               value={proposalData.details} 
               onChange={(e) => setProposalData({...proposalData, details: e.target.value})} 
-              placeholder="Describe your work..." 
+              placeholder="দয়া করে এখানে কাজের বিস্তারিত বর্ণনা লিখুন..."  
             />
           </div>
         </div>

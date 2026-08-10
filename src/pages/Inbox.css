@@ -254,6 +254,14 @@ html, body {
   min-height: 0;  /* ✅ গুরুত্বপূর্ণ: flex চাইল্ডকে সঙ্কোচনের অনুমতি দেয় */
 }
 
+@media (max-width: 768px){
+ .inbox-rows-container {
+   
+    
+    margin-bottom: 40px;
+  }
+}
+
 /* মোবাইল চ্যাট কার্ড */
 .workspace-card-item {
   display: flex;

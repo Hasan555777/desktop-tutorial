@@ -570,12 +570,20 @@ body {
   color: var(--text-muted);
 }
 
+.dashboard-container-wrapper{
+  margin-left: 50px;
+}
+
 /* ==========================================================================
    Responsive - Tablet
    ========================================================================== */
 @media (max-width: 768px) {
   .dashboard-container-wrapper {
-    /* padding: 70px 16px 30px; */
+    margin-left: 0;
+    margin-bottom: 50px;
+  }
+  .milestone-container{
+    margin-bottom: 40px;
   }
 
   .deal-mode-switcher {
@@ -634,8 +642,12 @@ body {
    ========================================================================== */
 @media (max-width: 480px) {
   .dashboard-container-wrapper {
-    /* padding: 60px 12px 20px; */
+    margin-left: 0;
+    margin-bottom: 50px;
     
+  }
+  .milestone-container{
+    margin-bottom: 40px;
   }
 
   .deal-mode-switcher {
@@ -706,11 +718,7 @@ body {
 /* ==========================================================================
    Responsive - Desktop
    ========================================================================== */
-@media (min-width: 1200px) {
-  .dashboard-wrapper {
-    max-width: 1400px;
-  }
-}
+
 
 /* ==========================================================================
    Light Mode

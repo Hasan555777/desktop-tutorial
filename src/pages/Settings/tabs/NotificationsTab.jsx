@@ -10,6 +10,7 @@ import { SOUND_EVENTS } from '@/UI/Sound/SoundEvents';
 import { auth, db } from '@/firebase';
 import { doc, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import './NotificationsTab.css';
+import './SoundTab.css';
 
 // ✅ Constants
 const NOTIFICATION_SETTINGS_KEY = 'workhub_notification_settings';
@@ -129,6 +130,26 @@ const NotificationsTab = ({
     reviewNotifications: true,
     verificationNotifications: true,
     systemNotifications: true,
+  });
+
+  // ── Sound States ──
+  const [isTesting, setIsTesting] = useState(false);
+  const [testSoundType, setTestSoundType] = useState('notification');
+  const volumeRef = useRef(null);
+  const [soundSettings, setSoundSettings] = useState({
+    enabled: true,
+    volume: 0.8,
+    muted: false,
+    chat: true,
+    wallet: true,
+    notification: true,
+    admin: true,
+    offer: true,
+    deal: true,
+    verification: true,
+    review: true,
+    system: true,
+    click: true,
   });
 
   // ── Refs ──
@@ -584,6 +605,179 @@ const NotificationsTab = ({
   }, [feedback, saveSettings]);
 
   // ============================================================
+  // ✅ Sound Helper Functions
+  // ============================================================
+
+  // ── Save sound settings to localStorage and apply ──
+  const saveSoundSettings = useCallback((newSettings) => {
+    localStorage.setItem('workhub_sound_settings', JSON.stringify(newSettings));
+    setSoundSettings(newSettings);
+  }, []);
+
+  // ── Load sound settings from localStorage ──
+  useEffect(() => {
+    const saved = localStorage.getItem('workhub_sound_settings');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setSoundSettings(prev => ({ ...prev, ...parsed }));
+        if (sound?.setMuted) sound.setMuted(parsed.muted || false);
+        if (sound?.setVolume) sound.setVolume(parsed.volume || 0.8);
+      } catch (e) {
+        console.error('Error loading sound settings from localStorage:', e);
+      }
+    }
+  }, [sound]);
+
+  // ── Update a single sound setting ──
+  const handleSoundUpdate = useCallback((key, value) => {
+    setSoundSettings(prev => {
+      const newSettings = { ...prev, [key]: value };
+      saveSoundSettings(newSettings);
+      
+      if (key === 'enabled') {
+        if (sound?.setMuted) sound.setMuted(!value);
+      }
+      if (key === 'muted') {
+        if (sound?.setMuted) sound.setMuted(value);
+      }
+      if (key === 'volume') {
+        if (sound?.setVolume) sound.setVolume(value);
+      }
+
+      if (key === 'enabled' && value === true) {
+        setTimeout(() => {
+          sound?.playEvent(SOUND_EVENTS.SUCCESS);
+        }, 300);
+      }
+      return newSettings;
+    });
+  }, [sound, saveSoundSettings]);
+
+  // ── Update volume ──
+  const handleVolumeUpdate = useCallback((value) => {
+    setSoundSettings(prev => {
+      const newSettings = { ...prev, volume: value };
+      saveSoundSettings(newSettings);
+      if (sound?.setVolume) sound.setVolume(value);
+      return newSettings;
+    });
+  }, [sound, saveSoundSettings]);
+
+  // ── Reset sound settings to default ──
+  const handleResetSound = useCallback(async () => {
+    const confirmed = await feedback.confirm({
+      title: 'Reset Sound Settings',
+      message: 'Are you sure you want to reset all sound settings to default?',
+      variant: 'confirm',
+      confirmText: 'Yes, Reset',
+      cancelText: 'Cancel',
+    });
+
+    if (!confirmed) return;
+
+    const defaultSettings = {
+      enabled: true,
+      volume: 0.8,
+      muted: false,
+      chat: true,
+      wallet: true,
+      notification: true,
+      admin: true,
+      offer: true,
+      deal: true,
+      verification: true,
+      review: true,
+      system: true,
+      click: true,
+    };
+
+    saveSoundSettings(defaultSettings);
+
+    if (sound?.setMuted) sound.setMuted(false);
+    if (sound?.setVolume) sound.setVolume(0.8);
+    
+    setTimeout(() => {
+      sound?.playEvent(SOUND_EVENTS.SUCCESS);
+    }, 300);
+
+    feedback.showSuccess('✅ সাউন্ড রিসেট', 'সব সাউন্ড সেটিংস ডিফল্টে রিসেট করা হয়েছে!');
+  }, [feedback, sound, saveSoundSettings]);
+
+  // ── Test Sound ──
+  const handleTestSound = useCallback((type = 'notification') => {
+    if (isTesting) return;
+    
+    if (soundSettings.muted || !soundSettings.enabled) {
+      feedback.showWarning('⚠️ সাউন্ড বন্ধ', 'সাউন্ড টেস্ট করতে প্রথমে সাউন্ড চালু করুন।');
+      return;
+    }
+
+    setIsTesting(true);
+    setTestSoundType(type);
+    
+    try {
+      const soundMap = {
+        notification: SOUND_EVENTS.NOTIFICATION,
+        success: SOUND_EVENTS.SUCCESS,
+        warning: SOUND_EVENTS.WARNING,
+        error: SOUND_EVENTS.ERROR,
+        chat: SOUND_EVENTS.CHAT_MESSAGE,
+        wallet: SOUND_EVENTS.WALLET,
+        admin: SOUND_EVENTS.ADMIN_NOTIFICATION,
+        offer: SOUND_EVENTS.OFFER,
+        deal: SOUND_EVENTS.DEAL,
+        click: SOUND_EVENTS.CLICK,
+      };
+
+      const event = soundMap[type] || SOUND_EVENTS.NOTIFICATION;
+      
+      const categoryMap = {
+        notification: 'notification',
+        success: 'notification',
+        warning: 'notification',
+        error: 'notification',
+        chat: 'chat',
+        wallet: 'wallet',
+        admin: 'admin',
+        offer: 'offer',
+        deal: 'deal',
+        click: 'click',
+      };
+      
+      const category = categoryMap[type] || 'notification';
+      
+      if (!soundSettings[category]) {
+        feedback.showWarning('⚠️ সাউন্ড বন্ধ', `"${category}" ক্যাটাগরির সাউন্ড বন্ধ আছে।`);
+        setIsTesting(false);
+        return;
+      }
+
+      if (soundSettings.volume === 0) {
+        feedback.showWarning('⚠️ ভলিউম শূন্য', 'ভলিউম বাড়িয়ে আবার চেষ্টা করুন।');
+        setIsTesting(false);
+        return;
+      }
+
+      if (sound?.playEvent) {
+        sound.setVolume(soundSettings.volume);
+        sound.playEvent(event);
+        feedback.showSuccess('🔊 টেস্ট সাউন্ড', `${type} সাউন্ড বাজানো হচ্ছে...`);
+      } else {
+        feedback.showError('❌ সাউন্ড এরর', 'সাউন্ড সিস্টেম কাজ করছে না।');
+      }
+      
+    } catch (error) {
+      console.error('Test sound error:', error);
+      feedback.showError('❌ টেস্ট ব্যর্থ', 'সাউন্ড টেস্ট করতে সমস্যা হয়েছে।');
+    } finally {
+      setTimeout(() => {
+        setIsTesting(false);
+      }, 1000);
+    }
+  }, [isTesting, soundSettings, sound, feedback]);
+
+  // ============================================================
   // ✅ Components
   // ============================================================
 
@@ -623,6 +817,24 @@ const NotificationsTab = ({
       </div>
     );
   }, [notificationSettings, toggleSetting, ToggleSwitch]);
+
+  const SoundCategory = useCallback(({ icon, label, categoryKey, description }) => {
+    const isChecked = soundSettings?.[categoryKey] !== false;
+    
+    return (
+      <div className="noti-category">
+        <div className="noti-category-icon">{icon}</div>
+        <div className="noti-category-info">
+          <span className="noti-category-name">{label}</span>
+          <span className="noti-category-desc">{description}</span>
+        </div>
+        <ToggleSwitch
+          checked={isChecked}
+          onChange={() => handleSoundUpdate(categoryKey, !isChecked)}
+        />
+      </div>
+    );
+  }, [soundSettings, handleSoundUpdate, ToggleSwitch]);
 
   // ============================================================
   // ✅ Render
@@ -809,11 +1021,170 @@ const NotificationsTab = ({
         </div>
       </div>
 
+      {/* ── Sound Settings Section ── */}
+      <div className="noti-email-section" style={{ marginTop: '32px', borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
+        <h3 className="section-title">
+          <i className="fa-solid fa-volume-high"></i>
+          নোটিফিকেশন সাউন্ড (Sound Settings)
+        </h3>
+
+        {/* Master Switches */}
+        <div className="sound-master-controls" style={{ marginTop: '16px' }}>
+          <div className="master-toggle">
+            <div className="master-info">
+              <span className="master-icon">
+                <i className={`fa-solid ${soundSettings.enabled ? 'fa-volume-high' : 'fa-volume-xmark'}`}></i>
+              </span>
+              <div className="master-text">
+                <h4>সাউন্ড চালু/বন্ধ</h4>
+                <p>সব সাউন্ড একসাথে চালু বা বন্ধ করুন</p>
+              </div>
+            </div>
+            <ToggleSwitch
+              checked={soundSettings.enabled !== false}
+              onChange={() => handleSoundUpdate('enabled', !soundSettings.enabled)}
+            />
+          </div>
+
+          <div className="master-mute">
+            <div className="master-info">
+              <span className="master-icon">
+                <i className={`fa-solid ${soundSettings.muted ? 'fa-volume-xmark' : 'fa-volume-low'}`}></i>
+              </span>
+              <div className="master-text">
+                <h4>মিউট</h4>
+                <p>সব সাউন্ড মিউট করুন</p>
+              </div>
+            </div>
+            <ToggleSwitch
+              checked={soundSettings.muted === true}
+              onChange={() => handleSoundUpdate('muted', !soundSettings.muted)}
+            />
+          </div>
+        </div>
+
+        {/* Volume Slider */}
+        <div className="volume-control" style={{ marginTop: '20px' }}>
+          <div className="volume-header">
+            <span className="volume-label">
+              <i className="fa-solid fa-sliders"></i>
+              ভলিউম
+            </span>
+            <span className="volume-value">{Math.round(soundSettings.volume * 100)}%</span>
+          </div>
+          <input
+            ref={volumeRef}
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={soundSettings.volume}
+            onChange={(e) => handleVolumeUpdate(parseFloat(e.target.value))}
+            className="volume-slider-main"
+            disabled={soundSettings.muted || !soundSettings.enabled}
+            style={{
+              background: `linear-gradient(to right, var(--accent-primary) 0%, var(--accent-primary) ${soundSettings.volume * 100}%, var(--bg-tertiary) ${soundSettings.volume * 100}%, var(--bg-tertiary) 100%)`
+            }}
+          />
+          <div className="volume-marks">
+            <span>০%</span>
+            <span>৫০%</span>
+            <span>১০০%</span>
+          </div>
+        </div>
+
+        {/* Sound Categories */}
+        <div className="noti-categories" style={{ marginTop: '24px', borderTop: 'none', padding: 0 }}>
+          <h4 className="categories-title" style={{ fontSize: '15px' }}>
+            <i className="fa-solid fa-list"></i>
+            সাউন্ড ক্যাটাগরি
+          </h4>
+          <div className="noti-categories-grid" style={{ marginTop: '12px' }}>
+            <SoundCategory
+              icon="💬"
+              label="চ্যাট সাউন্ড"
+              categoryKey="chat"
+              description="নতুন চ্যাট মেসেজ এবং ইমেজ আপলোড"
+            />
+            <SoundCategory
+              icon="🤝"
+              label="ডিল সাউন্ড"
+              categoryKey="deal"
+              description="ডিল একসেপ্ট ও স্টেট পরিবর্তন"
+            />
+            <SoundCategory
+              icon="💰"
+              label="ওয়ালেট সাউন্ড"
+              categoryKey="wallet"
+              description="ডিপোজিট ও উইথড্র ট্রানজেকশন"
+            />
+            <SoundCategory
+              icon="🔔"
+              label="নোটিফিকেশন সাউন্ড"
+              categoryKey="notification"
+              description="সাধারণ অ্যাপ নোটিফিকেশন"
+            />
+            <SoundCategory
+              icon="📢"
+              label="অ্যাডমিন সাউন্ড"
+              categoryKey="admin"
+              description="অ্যাডমিন ঘোষণা ও বিশেষ সিগন্যাল"
+            />
+            <SoundCategory
+              icon="📄"
+              label="অফার সাউন্ড"
+              categoryKey="offer"
+              description="নতুন অফার ও প্রপোজাল"
+            />
+            <SoundCategory
+              icon="✅"
+              label="ভেরিফিকেশন সাউন্ড"
+              categoryKey="verification"
+              description="ডকুমেন্ট ও ফেস ভেরিফিকেশন আপডেট"
+            />
+            <SoundCategory
+              icon="⭐"
+              label="রিভিউ সাউন্ড"
+              categoryKey="review"
+              description="নতুন রেটিং ও ফিডব্যাক রিভিউ"
+            />
+            <SoundCategory
+              icon="⚙️"
+              label="সিস্টেম সাউন্ড"
+              categoryKey="system"
+              description="সিস্টেম অ্যালার্ট ও টেকনিক্যাল এরর"
+            />
+            <SoundCategory
+              icon="🖱️"
+              label="ক্লিক সাউন্ড"
+              categoryKey="click"
+              description="ইন্টারেক্টিভ বাটন ও মেনু ক্লিক"
+            />
+          </div>
+        </div>
+
+        {/* Test Buttons */}
+        <div style={{ marginTop: '24px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <button className="push-btn primary" onClick={() => handleTestSound('chat')} disabled={isTesting}>
+            💬 চ্যাট টেস্ট
+          </button>
+          <button className="push-btn primary" onClick={() => handleTestSound('wallet')} disabled={isTesting}>
+            💰 ওয়ালেট টেস্ট
+          </button>
+          <button className="push-btn primary" onClick={() => handleTestSound('notification')} disabled={isTesting}>
+            🔔 নোটি টেস্ট
+          </button>
+          <button className="push-btn danger" onClick={handleResetSound} style={{ marginLeft: 'auto' }}>
+            🔄 রিসেট
+          </button>
+        </div>
+      </div>
+
       {/* ── Reset Button ── */}
-      <div className="noti-reset">
+      <div className="noti-reset" style={{ marginTop: '32px', borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
         <button className="reset-btn" onClick={handleReset}>
           <i className="fa-solid fa-rotate"></i>
-          ডিফল্ট সেটিংস রিসেট করুন
+          ডিফল্ট নোটিফিকেশন রিসেট করুন
         </button>
         <p className="reset-note">সব নোটিফিকেশন সেটিংস ডিফল্টে ফিরিয়ে আনবে</p>
       </div>

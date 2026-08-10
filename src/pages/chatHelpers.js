@@ -81,7 +81,7 @@ export const formatTime = (ts) => {
 };
 
 // ============================================================
-// ✅ BUDGET & DEADLINE HELPERS (NEW)
+// ✅ BUDGET & DEADLINE HELPERS
 // ============================================================
 
 /**
@@ -219,7 +219,22 @@ export const formatDeadlineDisplay = (deadline) => {
 };
 
 // ============================================================
-// ✅ sendProposal - FIXED (returns dealId)
+// ✅ sendProposal - FIXED (returns dealId + notifies BOTH parties)
+//
+// ⚠️ TWO BUGS FIXED HERE:
+// 1. `proposedBy` used to be hardcoded to `sellerId`. That's correct for
+//    'hire' posts (the sender IS the seller/bidder), but WRONG for
+//    'service' posts, where the sender is actually the buyer (the client
+//    requesting the service). Anything that reads `proposedBy` to know
+//    who sent the offer was getting the wrong answer for service posts.
+// 2. The "you got a new proposal" notification used to always target
+//    `userId: buyerId`. For 'hire' posts that's correct (buyer is the
+//    recipient). But for 'service' posts, buyer IS the sender — so the
+//    notification was going to the person who just sent the offer, and
+//    the actual recipient (the seller) never got notified at all.
+// Both are fixed below: the real recipient now gets the "new proposal"
+// notification, and the sender gets a separate confirmation — so both
+// parties are notified when an offer is sent, as intended.
 // ============================================================
 export const sendProposal = async (
   proposalData,
@@ -296,6 +311,14 @@ export const sendProposal = async (
   const chatId = chatContext?.id || chatContext?.postId || `deal_${Date.now()}`;
   const milestones = generateMilestones(proposalData.budget);
 
+  // ✅ FIXED: the actual sender is whoever is clicking "Send Proposal"
+  // right now — currentUser — not a hardcoded role. Since we already know
+  // buyerId/sellerId above, we can figure out who the "other party"
+  // (recipient) is regardless of postType.
+  const senderId = currentUser?.uid;
+  const senderDisplayName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Someone';
+  const recipientId = senderId === buyerId ? sellerId : buyerId;
+
   try {
     const dealPayload = {
       postId: chatContext?.id || chatContext?.postId || 'unknown_post',
@@ -311,7 +334,7 @@ export const sendProposal = async (
       status: 'pending',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      proposedBy: sellerId,
+      proposedBy: senderId, // ✅ FIXED — was hardcoded to sellerId
       proposedAt: serverTimestamp(),
       chatId: chatId
     };
@@ -319,24 +342,44 @@ export const sendProposal = async (
     const dealRef = await addDoc(collection(db, 'deals'), dealPayload);
     const dealId = dealRef.id;
 
+    // ✅ FIXED: notify the REAL recipient (the other party), not always
+    // buyerId.
     await addDoc(collection(db, 'notifications'), {
-      userId: buyerId,
+      userId: recipientId,
       event: NOTIFICATION_EVENTS.DEAL_CREATED,
-      senderId: sellerId,
-      senderName: sellerName || currentUser?.displayName || 'Someone',
+      senderId: senderId,
+      senderName: senderDisplayName,
       projectTitle: chatContext?.title || 'a project',
       dealId: dealId,
       dealIdNumber: dealIdNumber,
       budget: proposalData.budget,
       deadline: proposalData.deadline,
-      message: `${sellerName || 'Someone'} sent you a new proposal for "${chatContext?.title || 'a project'}"`,
+      message: `${senderDisplayName} sent you a new proposal for "${chatContext?.title || 'a project'}"`,
+      isUnread: true,
+      createdAt: serverTimestamp(),
+    });
+
+    // ✅ NEW: confirmation notification back to the sender, so both
+    // parties are notified when an offer is sent — including a heads-up
+    // that the offer auto-expires if there's no response in 48 hours.
+    await addDoc(collection(db, 'notifications'), {
+      userId: senderId,
+      event: NOTIFICATION_EVENTS.DEAL_CREATED,
+      senderId: senderId,
+      senderName: senderDisplayName,
+      projectTitle: chatContext?.title || 'a project',
+      dealId: dealId,
+      dealIdNumber: dealIdNumber,
+      budget: proposalData.budget,
+      deadline: proposalData.deadline,
+      message: `✅ আপনার প্রপোজাল "${chatContext?.title || 'a project'}"-এর জন্য সফলভাবে পাঠানো হয়েছে। ৪৮ ঘণ্টার মধ্যে সাড়া না পেলে অফারটি স্বয়ংক্রিয়ভাবে বাতিল হয়ে যাবে।`,
       isUnread: true,
       createdAt: serverTimestamp(),
     });
 
     if (chatId) {
       await addDoc(collection(db, 'chats', chatId, 'messages'), {
-        text: `📄 **New Offer Sent!**\n\n💰 Budget: ${proposalData.budget} BDT\n⏱️ Deadline: ${proposalData.deadline} Days\n\n👤 From: ${sellerName}\n\n📋 Details: ${proposalData.details}`,
+        text: `📄 **New Offer Sent!**\n\n💰 Budget: ${proposalData.budget} BDT\n⏱️ Deadline: ${proposalData.deadline} Days\n\n👤 From: ${senderDisplayName}\n\n📋 Details: ${proposalData.details}\n\n⌛ এই অফারটি ৪৮ ঘণ্টার মধ্যে গ্রহণ না করা হলে স্বয়ংক্রিয়ভাবে বাতিল হয়ে যাবে।`,
         sender: 'system',
         senderId: 'system',
         createdAt: serverTimestamp(),

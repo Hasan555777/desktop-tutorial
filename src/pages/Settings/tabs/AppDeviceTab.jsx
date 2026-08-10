@@ -91,7 +91,7 @@ const AppDeviceTab = () => {
   // ── Navigate to Sound Settings ──
   const goToSoundSettings = useCallback(() => {
     sound?.playEvent(SOUND_EVENTS.CLICK);
-    navigate('/settings', { state: { activeTab: 'sound' } });
+    navigate('/settings', { state: { activeTab: 'notifications' } });
   }, [navigate, sound]);
 
   // ── Test Sound ──
