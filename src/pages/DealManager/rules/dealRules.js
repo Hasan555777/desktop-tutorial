@@ -13,65 +13,28 @@
 
 /**
  * Deal Status Constants
- * Enterprise Level - প্রতিটি Status-এর স্পষ্ট সংজ্ঞা
+ *
+ * ✅ MERGED: this used to define its own copy of DEAL_STATUS /
+ * ACTIVE_DEAL_STATUSES / TERMINAL_STATUSES, which had silently drifted
+ * from the simpler 5-value status set the live DealManager flow actually
+ * uses (e.g. it was missing 'overdue' from ACTIVE_DEAL_STATUSES). Now both
+ * files import the same constants from dealManager.constants.js, so they
+ * can't drift apart again. TERMINAL_STATUSES is re-exported under its old
+ * name here so nothing importing from this file breaks.
  */
-export const DEAL_STATUS = {
-  // Draft/Initial States
-  DRAFT: 'draft',                     // খসড়া, এখনও সম্পূর্ণ হয়নি
-  WAITING_PAYMENT: 'waiting_payment', // Buyer-এর Payment Waiting
-  WAITING_ACCEPT: 'waiting_accept',   // Seller-এর Acceptance Waiting
-  
-  // Active States (যেগুলোকে Active Deal হিসেবে বিবেচনা করা হবে)
-  PENDING: 'pending',                 // Escrow পেন্ডিং, Buyer Accept করেনি
-  ACTIVE: 'active',                   // চালু আছে, কাজ চলছে
-  STARTED: 'started',                 // কাজ শুরু হয়েছে
-  FUNDED: 'funded',                   // Escrow ফান্ডেড হয়েছে
-  PROCESSING: 'processing',           // প্রসেসিং হচ্ছে
-  REVIEW: 'review',                   // রিভিউ চলছে
-  REVIEWING: 'reviewing',             // রিভিউ চলছে
-  EXTENDED: 'extended',               // এক্সটেন্ডেড হয়েছে
-  DISPUTED: 'disputed',               // ডিসপিউট চলছে
-  
-  // Terminal States
-  COMPLETED: 'completed',             // সম্পন্ন হয়েছে
-  CANCELLED: 'cancelled',             // বাতিল হয়েছে
-  REJECTED: 'rejected',               // প্রত্যাখ্যান হয়েছে
-  EXPIRED: 'expired',                 // মেয়াদ শেষ
-};
+import { DEAL_STATUS, ACTIVE_DEAL_STATUSES, TERMINAL_DEAL_STATUSES, MAX_EXTENSIONS as SHARED_MAX_EXTENSIONS } from '../dealManager.constants';
 
-/**
- * Active Deal Statuses
- * যেসব Status-কে "Active" হিসেবে বিবেচনা করা হবে
- */
-export const ACTIVE_DEAL_STATUSES = [
-  DEAL_STATUS.PENDING,
-  DEAL_STATUS.ACTIVE,
-  DEAL_STATUS.STARTED,
-  DEAL_STATUS.FUNDED,
-  DEAL_STATUS.PROCESSING,
-  DEAL_STATUS.REVIEW,
-  DEAL_STATUS.REVIEWING,
-  DEAL_STATUS.EXTENDED,
-  DEAL_STATUS.DISPUTED,
-];
-
-/**
- * Terminal Statuses
- * যে Status-গুলোতে Deal আর Active নয়
- */
-export const TERMINAL_STATUSES = [
-  DEAL_STATUS.COMPLETED,
-  DEAL_STATUS.CANCELLED,
-  DEAL_STATUS.REJECTED,
-  DEAL_STATUS.EXPIRED,
-];
+export { DEAL_STATUS, ACTIVE_DEAL_STATUSES };
+export const TERMINAL_STATUSES = TERMINAL_DEAL_STATUSES;
 
 // ============================================================
 // 📌 CONFIGURATION (Constants থেকে আনা)
 // ============================================================
 
 export const DEAL_CONFIG = {
-  MAX_EXTENSIONS: 3,
+  // Shared with dealManager.constants.js — was a separately-typed "3"
+  // here before, so the two could have silently drifted if one changed.
+  MAX_EXTENSIONS: SHARED_MAX_EXTENSIONS,
   MAX_EXTENSION_DAYS: 30,
   AUTO_COMPLETE_DAYS: 7,
   MIN_DISPUTE_REASON_LENGTH: 10,
@@ -417,5 +380,3 @@ export default {
   // Helpers
   dealStatusHelpers,
 };
-
-

@@ -2,9 +2,43 @@
 // 📁 src/pages/Settings/index.jsx
 // ============================================================
 // Enterprise Grade Settings Component with Rule Engine Integration
+//
+// 🔧 FIXES APPLIED (search "FIX" to jump to each spot):
+// 1. Removed the duplicate `useAppLock()` / `useBiometric()` hook
+//    calls. App.js already owns ONE instance of each and passes the
+//    live state + toggle functions down as props (appLockStatus,
+//    onAppLockToggle, biometricStatus, onBiometricToggle, onChangePin,
+//    onSecurityCheckup) — but this file was ignoring every one of
+//    those props and building a second, completely disconnected copy
+//    of the same state instead. Effect: toggling App Lock from
+//    Settings never updated App.js's copy, so the lock screen didn't
+//    engage until a full page refresh.
+// 2. Removed the local `handleAppLockToggle` / `handleBiometricToggle`
+//    wrapper functions. They duplicated the feedback+sound that
+//    SecurityTab.jsx ALSO shows for the same action — toggling App
+//    Lock or biometric was showing two success toasts and playing the
+//    success sound twice. SecurityTab now receives the raw props
+//    straight from App.js and is the only layer that shows feedback.
+// 3. Removed the `useSoundSettings(user?.uid)` hook call and the
+//    dead `localSoundSettings` state + handlers. Nothing in this file
+//    ever rendered them (SoundTab is commented out, and
+//    NotificationsTab doesn't receive them as props) — but the hook's
+//    own effect still ran on every Settings mount, reading
+//    `users/{uid}.soundSettings` from Firestore and OVERWRITING
+//    `localStorage['workhub_sound_settings']` with it. Since
+//    NotificationsTab.jsx only ever writes sound settings to
+//    localStorage (never to Firestore), this meant: every time the
+//    user reopened Settings, their sound toggles silently reverted to
+//    whatever was last saved in Firestore. This was very likely the
+//    root cause of "sound off করলেও আবার চালু হয়ে যায়".
+// 4. `activeTab` now also reads `location.state?.activeTab` on first
+//    render, so AppDeviceTab's "সব সাউন্ড সেটিংস দেখুন" button (which
+//    navigates with that state) actually lands on the notifications
+//    tab instead of silently staying on Profile.
+// ============================================================
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   doc, getDoc, updateDoc, serverTimestamp,
   collection, query, where, getDocs, deleteDoc, 
@@ -17,14 +51,9 @@ import {
 import { auth, db } from '@/firebase';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
 import { useSound } from '@/UI/Sound';
-import { useSoundSettings } from '@/UI/Sound/SoundSettings';
 import './Settings.css';
 import RulesTab from './tabs/RulesTab';
 import { SOUND_EVENTS } from '@/UI/Sound/SoundEvents';
-
-// ✅ Import Security Hooks
-import { useAppLock } from '@/hooks/useAppLock';
-import { useBiometric } from '@/hooks/useBiometric';
 
 // ✅ Import Rule Engine
 import { accountRules } from '@/rules/accountRules';
@@ -39,7 +68,6 @@ import CertificationsTab from './tabs/CertificationsTab';
 import SocialTab from './tabs/SocialTab';
 import SecurityTab from './tabs/SecurityTab';
 import NotificationsTab from './tabs/NotificationsTab';
-// import SoundTab from './tabs/SoundTab';
 import AppDeviceTab from './tabs/AppDeviceTab';
 import AnnouncementsTab from './tabs/AnnouncementsTab';
 
@@ -107,7 +135,8 @@ const compressImage = (file) => {
 // ============================================================
 // 📌 MAIN COMPONENT
 // ============================================================
-
+// 🔧 FIX: all of these props are now actually used (previously
+// accepted but silently ignored — see fixes #1-#2 above).
 const Settings = ({ 
   biometricStatus = false,
   biometricType = '',
@@ -120,51 +149,17 @@ const Settings = ({
   onSecurityCheckup = null,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = auth.currentUser;
   const feedback = useFeedback();
-
-  // ── Security Hooks ──
-  const { 
-    isEnabled: appLockEnabled,
-    hasPin,
-    isLoading: appLockLoading,
-    toggle: toggleAppLock,
-    setPin,
-    verifyPin,
-    remainingAttempts,
-    isLockedOut,
-    resetLockout,
-    clearPin,
-    changePin: changeAppLockPin
-  } = useAppLock();
-
-  const {
-    isSupported: biometricSupported,
-    isAvailable: biometricAvailable,
-    isEnabled: biometricEnabled,
-    biometricType: detectedBiometricType,
-    isLoading: biometricLoading,
-    toggle: toggleBiometric,
-    authenticate: authenticateBiometric,
-    registerBiometric,
-    getBiometricLabel,
-    getBiometricIcon
-  } = useBiometric();
-
-  // ── Sound Hooks ──
   const sound = useSound();
-  const { 
-    settings: soundSettings,
-    loading: soundLoading,
-    updateSetting,
-    resetToDefault,
-  } = useSoundSettings(user?.uid);
 
   // ── States ──
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [activeTab, setActiveTab] = useState('profile');
+  // 🔧 FIX #4: honor router state (e.g. from AppDeviceTab's shortcut)
+  const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'profile');
   const [userData, setUserData] = useState(null);
   const [walletData, setWalletData] = useState(null);
 
@@ -208,23 +203,6 @@ const Settings = ({
     bankAccount: '',
     bankName: '',
     accountHolder: ''
-  });
-
-  // ── Sound Settings ──
-  const [localSoundSettings, setLocalSoundSettings] = useState({
-    enabled: true,
-    volume: 0.8,
-    chat: true,
-    wallet: true,
-    notification: true,
-    admin: true,
-    offer: true,
-    deal: true,
-    verification: true,
-    review: true,
-    system: true,
-    click: true,
-    muted: false,
   });
 
   // ── Experience ──
@@ -272,66 +250,16 @@ const Settings = ({
   }, [feedback]);
 
   // ============================================================
-  // ✅ Security Handlers
+  // ✅ Security Checkup — 🔧 FIX: now uses the appLockStatus /
+  // biometricStatus PROPS (App.js's single source of truth) instead
+  // of a second, disconnected useAppLock()/useBiometric() instance.
   // ============================================================
-
-  const handleAppLockToggle = useCallback(async (pin = null) => {
-    try {
-      const result = await toggleAppLock(pin);
-      if (result.success) {
-        feedback?.showSuccess(
-          result.enabled ? '✅ অ্যাপ লক চালু হয়েছে' : 'ℹ️ অ্যাপ লক বন্ধ হয়েছে',
-          result.enabled 
-            ? 'অ্যাপ খুলতে এখন PIN দিতে হবে।' 
-            : 'অ্যাপ লক বন্ধ করা হয়েছে।'
-        );
-        sound?.playEvent(result.enabled ? SOUND_EVENTS.SUCCESS : SOUND_EVENTS.CLICK);
-        return result;
-      } else {
-        feedback?.showError('❌ ব্যর্থ', result.error || 'অ্যাপ লক টগল করতে সমস্যা হয়েছে');
-        return result;
-      }
-    } catch (error) {
-      console.error('❌ App lock toggle error:', error);
-      feedback?.showError('❌ ব্যর্থ', error.message);
-      return { success: false, error: error.message };
-    }
-  }, [toggleAppLock, feedback, sound]);
-
-  const handleBiometricToggle = useCallback(async () => {
-    try {
-      if (!biometricAvailable) {
-        feedback?.showWarning('⚠️ সমর্থন নেই', 'আপনার ডিভাইসে বায়োমেট্রিক সেন্সর পাওয়া যায়নি।');
-        return { success: false, error: 'Biometric not available' };
-      }
-
-      const result = await toggleBiometric();
-      if (result.success) {
-        feedback?.showSuccess(
-          result.enabled ? '✅ বায়োমেট্রিক চালু হয়েছে' : 'ℹ️ বায়োমেট্রিক বন্ধ হয়েছে',
-          result.enabled 
-            ? 'আপনার ফিঙ্গারপ্রিন্ট/ফেস ব্যবহার করে লগইন করতে পারবেন।' 
-            : 'বায়োমেট্রিক লক বন্ধ করা হয়েছে।'
-        );
-        sound?.playEvent(result.enabled ? SOUND_EVENTS.SUCCESS : SOUND_EVENTS.CLICK);
-        return result;
-      } else {
-        feedback?.showError('❌ ব্যর্থ', result.error || 'বায়োমেট্রিক টগল করতে সমস্যা হয়েছে');
-        return result;
-      }
-    } catch (error) {
-      console.error('❌ Biometric toggle error:', error);
-      feedback?.showError('❌ ব্যর্থ', error.message);
-      return { success: false, error: error.message };
-    }
-  }, [biometricAvailable, toggleBiometric, feedback, sound]);
 
   const handleSecurityCheckup = useCallback(() => {
     const checks = [];
     let score = 0;
     let total = 4;
 
-    // Check actual security status from userData
     const hasPassword = userData?.passwordSet !== false;
     if (hasPassword) {
       checks.push({ name: 'পাসওয়ার্ড', status: '✅ সেট করা আছে', score: 25 });
@@ -347,14 +275,14 @@ const Settings = ({
       checks.push({ name: '2FA', status: '⚠️ নিষ্ক্রিয়', score: 0 });
     }
 
-    if (biometricEnabled) {
+    if (biometricStatus) {
       checks.push({ name: 'বায়োমেট্রিক', status: '✅ সক্রিয়', score: 25 });
       score += 25;
     } else {
       checks.push({ name: 'বায়োমেট্রিক', status: '⚠️ নিষ্ক্রিয়', score: 0 });
     }
 
-    if (appLockEnabled) {
+    if (appLockStatus) {
       checks.push({ name: 'অ্যাপ লক', status: '✅ সক্রিয়', score: 25 });
       score += 25;
     } else {
@@ -373,103 +301,11 @@ const Settings = ({
     }
     
     sound?.playEvent(SOUND_EVENTS.CLICK);
-  }, [userData, biometricEnabled, appLockEnabled, feedback, sound]);
+  }, [userData, biometricStatus, appLockStatus, feedback, sound]);
 
-  // ============================================================
-  // ✅ Sound Functions
-  // ============================================================
-
-  const handleSoundUpdate = async (key, value) => {
-    try {
-      setLocalSoundSettings(prev => ({ ...prev, [key]: value }));
-      
-      const userRef = doc(db, 'users', user.uid);
-      await updateDoc(userRef, {
-        [`soundSettings.${key}`]: value,
-        updatedAt: serverTimestamp()
-      });
-      
-      const updatedSettings = { ...localSoundSettings, [key]: value };
-      localStorage.setItem('workhub_sound_settings', JSON.stringify(updatedSettings));
-      
-      if (key === 'enabled' && value) {
-        setTimeout(() => sound?.playEvent('click'), 300);
-      }
-      
-      if (key === 'muted' && value) {
-        sound?.stopAll();
-      }
-      
-    } catch (error) {
-      console.error('Sound update error:', error);
-      feedback.showError('❌ সেভ ব্যর্থ', 'সাউন্ড সেটিংস সেভ করতে সমস্যা হয়েছে');
-    }
-  };
-
-  const handleVolumeUpdate = async (value) => {
-    try {
-      setLocalSoundSettings(prev => ({ ...prev, volume: value }));
-      sound?.setVolume(value);
-      
-      const userRef = doc(db, 'users', user.uid);
-      await updateDoc(userRef, {
-        'soundSettings.volume': value,
-        updatedAt: serverTimestamp()
-      });
-      
-      const updatedSettings = { ...localSoundSettings, volume: value };
-      localStorage.setItem('workhub_sound_settings', JSON.stringify(updatedSettings));
-      
-    } catch (error) {
-      console.error('Volume update error:', error);
-      feedback.showError('❌ সেভ ব্যর্থ', 'ভলিউম সেভ করতে সমস্যা হয়েছে');
-    }
-  };
-
-  const handleResetSound = async () => {
-    const confirmed = await feedback.confirm({
-      title: 'Reset Sound Settings',
-      message: 'Are you sure you want to reset all sound settings to default?',
-      variant: 'confirm',
-      confirmText: 'Yes, Reset',
-      cancelText: 'Cancel'
-    });
-
-    if (confirmed) {
-      try {
-        const defaultSettings = {
-          enabled: true,
-          volume: 0.8,
-          chat: true,
-          wallet: true,
-          notification: true,
-          admin: true,
-          offer: true,
-          deal: true,
-          verification: true,
-          review: true,
-          system: true,
-          click: true,
-          muted: false,
-        };
-        
-        setLocalSoundSettings(defaultSettings);
-        
-        const userRef = doc(db, 'users', user.uid);
-        await updateDoc(userRef, {
-          soundSettings: defaultSettings,
-          updatedAt: serverTimestamp()
-        });
-        
-        localStorage.setItem('workhub_sound_settings', JSON.stringify(defaultSettings));
-        sound?.playEvent('success');
-        feedback.showSuccess('✅ সাউন্ড রিসেট', 'সব সাউন্ড সেটিংস ডিফল্টে রিসেট করা হয়েছে!');
-      } catch (error) {
-        console.error('Reset error:', error);
-        feedback.showError('❌ রিসেট ব্যর্থ', 'সাউন্ড রিসেট করতে সমস্যা হয়েছে');
-      }
-    }
-  };
+  // Prefer the richer checkup above; fall back to the parent's
+  // (App.js's) if this component is ever rendered without userData.
+  const effectiveSecurityCheckup = onSecurityCheckup || handleSecurityCheckup;
 
   // ============================================================
   // ✅ User Data Load - Real-time with Wallet
@@ -979,6 +815,9 @@ const Settings = ({
           />
         );
       case 'security':
+        // 🔧 FIX #1/#2: pass the PROPS straight through — no more
+        // local useAppLock()/useBiometric() instances, no more
+        // wrapper functions that duplicated SecurityTab's own feedback.
         return (
           <SecurityTab
             securityData={securityData}
@@ -986,15 +825,15 @@ const Settings = ({
             onChangePassword={handleChangePassword}
             onTwoFactorToggle={handleTwoFactorToggle}
             saving={saving}
-            biometricStatus={biometricEnabled}
-            biometricType={detectedBiometricType || biometricType}
-            isBiometricSupported={biometricSupported || isBiometricSupported}
-            isBiometricAvailable={biometricAvailable || isBiometricAvailable}
-            appLockStatus={appLockEnabled}
-            onBiometricToggle={handleBiometricToggle}
-            onAppLockToggle={handleAppLockToggle}
-            onChangePin={changeAppLockPin}
-            onSecurityCheckup={handleSecurityCheckup}
+            biometricStatus={biometricStatus}
+            biometricType={biometricType}
+            isBiometricSupported={isBiometricSupported}
+            isBiometricAvailable={isBiometricAvailable}
+            appLockStatus={appLockStatus}
+            onBiometricToggle={onBiometricToggle}
+            onAppLockToggle={onAppLockToggle}
+            onChangePin={onChangePin}
+            onSecurityCheckup={effectiveSecurityCheckup}
           />
         );
       case 'notifications':
@@ -1020,8 +859,12 @@ const Settings = ({
   // ============================================================
   // ✅ Loading State
   // ============================================================
+  // 🔧 FIX: no longer waits on appLockLoading/biometricLoading — those
+  // belonged to the removed duplicate hooks. App.js's own loading
+  // gate already ensures appLockStatus/biometricStatus are settled
+  // before this component ever mounts.
 
-  if (loading || appLockLoading || biometricLoading) {
+  if (loading) {
     return (
       <div style={{ 
         display: 'flex', 

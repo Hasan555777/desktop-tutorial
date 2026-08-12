@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:pwa": "vite build --mode production",
+    "build": "vite build && node scripts/inject-sw-config.js",
+    "build:pwa": "vite build --mode production && node scripts/inject-sw-config.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "backend": "cd backend && npm run dev",

@@ -59,7 +59,7 @@ export const storage = {
   },
 
   /**
-   * Clear all storage (only worktrustx keys)
+   * Clear all storage (only worktrustbd keys)
    * @returns {boolean} Success status
    */
   clear() {
@@ -88,7 +88,7 @@ export const storage = {
   },
 
   /**
-   * Get all storage keys (only worktrustx keys)
+   * Get all storage keys (only worktrustbd keys)
    * @returns {string[]} Array of keys
    */
   getAllKeys() {
@@ -103,7 +103,7 @@ export const storage = {
   },
 
   /**
-   * Get all storage data (only worktrustx keys)
+   * Get all storage data (only worktrustbd keys)
    * @returns {Object} All stored data
    */
   getAll() {

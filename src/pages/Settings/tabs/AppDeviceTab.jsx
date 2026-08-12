@@ -1,4 +1,22 @@
 // src/pages/Settings/tabs/AppDeviceTab.jsx - FIXED VERSION
+// ============================================================
+// 🔧 FIXES APPLIED:
+// 1. Sound state was reading/writing `sound_muted` / `sound_volume` —
+//    keys that NOTHING else in the app writes to (the real sound
+//    settings live under `workhub_sound_settings`, used by
+//    NotificationsTab.jsx and NotificationProvider.jsx). Because of
+//    this mismatch, muting sound from the main Settings > Notification
+//    tab had ZERO effect here: the "টেস্ট" button and the automatic
+//    online/offline/cache-clear sounds kept playing regardless. Now
+//    reads the real key and stays in sync via both the `storage` event
+//    (cross-tab) and the `workhub:sound-settings` custom event
+//    (same-tab — see NotificationsTab.fixed.jsx).
+// 2. `goToSoundSettings` navigated with `state: { activeTab:
+//    'notifications' }`, but Settings/index.jsx never reads that
+//    router state — the "Sound Settings" shortcut silently landed on
+//    the Profile tab instead. Left a note below; the one-line fix
+//    belongs in Settings/index.jsx (see chat message).
+// ============================================================
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +29,19 @@ import './AppDeviceTab.css';
 // ✅ Build info from environment
 const APP_VERSION = import.meta.env.VITE_APP_VERSION || '1.0.0';
 const BUILD_DATE = import.meta.env.VITE_BUILD_DATE || new Date().toISOString().split('T')[0];
+
+// 🔧 FIX: the real, shared sound-settings key (matches NotificationsTab.jsx)
+const SOUND_SETTINGS_KEY = 'workhub_sound_settings';
+
+const getSoundSettings = () => {
+  try {
+    const saved = localStorage.getItem(SOUND_SETTINGS_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.error('Error loading sound settings:', e);
+  }
+  return null;
+};
 
 const AppDeviceTab = () => {
   const navigate = useNavigate();
@@ -43,10 +74,19 @@ const AppDeviceTab = () => {
     deferredPrompt,
   } = usePWA();
 
-  // ── Sound States ──
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [soundVolume, setSoundVolume] = useState(80);
-  const [isSoundMuted, setIsSoundMuted] = useState(false);
+  // ── Sound Settings — 🔧 FIX: now sourced from the real
+  // workhub_sound_settings object, not the dead sound_muted/sound_volume keys ──
+  const [soundSettings, setSoundSettings] = useState(() => getSoundSettings() || {
+    enabled: true,
+    volume: 0.8,
+    muted: false,
+    notification: true,
+  });
+
+  // Derived, for readability in the JSX below (keeps old variable names working)
+  const soundEnabled = soundSettings.enabled !== false;
+  const soundVolume = Math.round((soundSettings.volume ?? 0.8) * 100);
+  const isSoundMuted = soundSettings.muted === true;
 
   // ── UI States ──
   const [cachedSize, setCachedSize] = useState(0);
@@ -74,36 +114,59 @@ const AppDeviceTab = () => {
     full: `WorkTrustbd v${APP_VERSION} (Build ${BUILD_DATE})`
   }), []);
 
-  // ── Load sound settings ──
+  // ── Load + stay synced with the real sound settings — 🔧 FIX ──
   useEffect(() => {
-    const savedMuted = localStorage.getItem('sound_muted');
-    const savedVolume = localStorage.getItem('sound_volume');
-    
-    if (savedMuted !== null) {
-      setIsSoundMuted(savedMuted === 'true');
-      setSoundEnabled(savedMuted !== 'true');
-    }
-    if (savedVolume !== null) {
-      setSoundVolume(parseInt(savedVolume) || 80);
-    }
+    setSoundSettings(getSoundSettings() || {
+      enabled: true,
+      volume: 0.8,
+      muted: false,
+      notification: true,
+    });
+
+    const handleStorageChange = (e) => {
+      if (e.key === SOUND_SETTINGS_KEY) {
+        setSoundSettings(getSoundSettings() || {});
+      }
+    };
+    // Same-tab updates (e.g. user just toggled sound in the
+    // Notification tab) — see NotificationsTab.fixed.jsx which
+    // dispatches this event.
+    const handleSoundSettingsEvent = (e) => {
+      setSoundSettings(e.detail || getSoundSettings() || {});
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('workhub:sound-settings', handleSoundSettingsEvent);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('workhub:sound-settings', handleSoundSettingsEvent);
+    };
   }, []);
 
   // ── Navigate to Sound Settings ──
+  // 🔧 NOTE: Settings/index.jsx currently ignores this router state —
+  // see the one-line fix needed there (mentioned in chat).
   const goToSoundSettings = useCallback(() => {
     sound?.playEvent(SOUND_EVENTS.CLICK);
     navigate('/settings', { state: { activeTab: 'notifications' } });
   }, [navigate, sound]);
 
-  // ── Test Sound ──
+  // ── Test Sound — 🔧 FIX: now checks the real sound settings,
+  // including the "notification" category toggle, matching what
+  // NotificationProvider actually checks for real notifications.
   const handleTestSound = useCallback(() => {
     if (isSoundMuted || !soundEnabled || soundVolume === 0) {
       feedback?.showWarning('🔇 সাউন্ড বন্ধ', 'সাউন্ড টেস্ট করতে দয়া করে সাউন্ড সেটিংস থেকে সাউন্ড চালু করুন।');
       return;
     }
+    if (soundSettings.notification === false) {
+      feedback?.showWarning('🔇 নোটিফিকেশন সাউন্ড বন্ধ', '"নোটিফিকেশন সাউন্ড" ক্যাটাগরিটি Settings > নোটিফিকেশন থেকে বন্ধ আছে।');
+      return;
+    }
     
     sound?.playEvent(SOUND_EVENTS.NOTIFICATION);
     feedback?.showSuccess('🔊 টেস্ট সাউন্ড', 'নোটিফিকেশন সাউন্ড বাজানো হচ্ছে!');
-  }, [isSoundMuted, soundEnabled, soundVolume, sound, feedback]);
+  }, [isSoundMuted, soundEnabled, soundVolume, soundSettings.notification, sound, feedback]);
 
   // ── Test Notification ──
   const handleTestNotification = useCallback(() => {
@@ -125,7 +188,7 @@ const AppDeviceTab = () => {
     }
   }, [notificationPermission, feedback]);
 
-  // ── Play sound helper ──
+  // ── Play sound helper — 🔧 FIX: now gated by the real sound settings ──
   const playSound = useCallback((event, message = '') => {
     if (sound?.playEvent && !isSoundMuted && soundEnabled) {
       sound.playEvent(event);
@@ -376,24 +439,13 @@ const AppDeviceTab = () => {
     });
   }, [buildInfo, feedback, playSound]);
 
-  // ── ✅ INSTALL APP - COMPLETELY FIXED ──
+  // ── ✅ INSTALL APP ──
   const handleInstallApp = useCallback(async () => {
-    console.log('🔧 Install button clicked - User gesture present!');
-    console.log('  - isInstallable:', isInstallable);
-    console.log('  - canInstall:', canInstall);
-    console.log('  - hasDeferredPrompt:', !!deferredPrompt);
-    console.log('  - window.deferredPrompt:', !!window.deferredPrompt);
-    console.log('  - isIOS:', isIOS);
-    console.log('  - isInstalled:', isInstalled);
-    console.log('  - isStandalone:', isStandalone);
-    
-    // ✅ Check if already installed
     if (isInstalled || isStandalone) {
       feedback?.showInfo('✅ Already Installed', 'WorkTrustbd is already installed on your device.');
       return;
     }
 
-    // ✅ iOS fallback
     if (isIOS) {
       feedback?.showInfo(
         '📱 Install on iOS',
@@ -402,32 +454,25 @@ const AppDeviceTab = () => {
       return;
     }
 
-    // ✅ Prevent multiple install clicks
     if (isInstalling) {
       feedback?.showInfo('⏳ Please wait', 'Installation is already in progress.');
       return;
     }
 
-    // ✅ Try to get prompt from multiple sources
     let prompt = deferredPrompt || window.deferredPrompt;
     
     if (!prompt) {
-      console.warn('❌ No deferredPrompt found');
-      
-      // ✅ Check if installable but prompt not ready
       if (isInstallable) {
         feedback?.showInfo(
           '⏳ Loading',
           'Install prompt is loading. Please try again in a moment.'
         );
-        // ✅ Refresh status after 2 seconds
         setTimeout(async () => {
           await refreshPWAStatus();
         }, 2000);
         return;
       }
       
-      // ✅ Show browser instruction
       feedback?.showInfo(
         '📱 Install via Browser',
         'Open this page in Chrome or Edge browser and select "Install App" from the browser menu.\n\n' +
@@ -437,29 +482,18 @@ const AppDeviceTab = () => {
       return;
     }
 
-    // ✅ Set installing state
     setIsInstalling(true);
     playSound(SOUND_EVENTS.CLICK, '📥 Installing app...');
     
     try {
-      console.log('📱 Showing install prompt...');
-      
-      // ✅ Show the install prompt (User gesture is present from click!)
       await prompt.prompt();
-      
-      // ✅ Wait for user choice
       const choiceResult = await prompt.userChoice;
-      console.log('📱 User choice:', choiceResult);
-      
-      // ✅ Clear the prompt
       window.deferredPrompt = null;
       
       if (choiceResult.outcome === 'accepted') {
-        console.log('✅ User accepted install');
         feedback?.showSuccess('✅ Installed!', 'WorkTrustbd installed successfully!');
         await refreshPWAStatus();
       } else {
-        console.log('❌ User dismissed install');
         feedback?.showInfo('⏭️ Skipped', 'Installation skipped. You can try again later.');
       }
     } catch (error) {
@@ -565,21 +599,6 @@ const AppDeviceTab = () => {
     }
   };
 
-  // ── Debug Log ──
-  useEffect(() => {
-    console.log('📱 AppDeviceTab PWA Status:', {
-      isInstallable,
-      isInstalled,
-      isStandalone,
-      canInstall,
-      hasDeferredPrompt: !!deferredPrompt,
-      hasWindowPrompt: !!window.deferredPrompt,
-      platform,
-      browser,
-      isIOS
-    });
-  }, [isInstallable, isInstalled, isStandalone, canInstall, deferredPrompt, platform, browser, isIOS]);
-
   if (isLoading || pwaLoading) {
     return (
       <div className="app-device-tab">
@@ -603,7 +622,7 @@ const AppDeviceTab = () => {
         </p>
       </div>
 
-      {/* ── Installation Card - FIXED ✅ ── */}
+      {/* ── Installation Card ── */}
       <div className="app-device-card">
         <div className="card-header">
           <div className="card-icon">
@@ -630,7 +649,6 @@ const AppDeviceTab = () => {
                 Install WorkTrustbd on your device for a faster, offline-ready experience.
               </p>
               
-              {/* ✅ ALWAYS show install button if not installed */}
               <button 
                 className="install-btn" 
                 onClick={handleInstallApp}
@@ -664,11 +682,6 @@ const AppDeviceTab = () => {
         </div>
       </div>
 
-
-
-
-
-
       {/* ── Update Card ── */}
       <div className="app-device-card">
         <div className="card-header">
@@ -681,7 +694,6 @@ const AppDeviceTab = () => {
               <span className="status-badge update-available">🔄 Update Available</span>
             )}
           </div>
-
         </div>
 
         <div className="card-body">
@@ -766,7 +778,7 @@ const AppDeviceTab = () => {
             <button 
               className="clear-cache-btn" 
               onClick={clearCache}
-              disabled={false}  // ✅ Enabled now
+              disabled={false}
             >
               <i className="fa-solid fa-trash"></i>
               Clear Cache
@@ -819,7 +831,46 @@ const AppDeviceTab = () => {
         </div>
       </div>
 
-
+      {/* ── Sound & Notification Test Card ── */}
+      <div className="app-device-card">
+        <div className="card-header">
+          <div className="card-icon">
+            <i className="fa-solid fa-volume-high"></i>
+          </div>
+          <div className="card-title">
+            <h3>Sound & Notification Test</h3>
+            <span className={`status-badge ${!isSoundMuted && soundEnabled ? 'online' : 'offline'}`}>
+              {!isSoundMuted && soundEnabled ? `🔊 ${soundVolume}%` : '🔇 বন্ধ'}
+            </span>
+          </div>
+        </div>
+        <div className="card-body">
+          <div className="network-info">
+            <div className="network-detail">
+              <span>Notification Permission</span>
+              <span>{getNotificationLabel()}</span>
+            </div>
+            <button className="check-network-btn" onClick={handleTestSound}>
+              <i className="fa-solid fa-volume-high"></i>
+              টেস্ট সাউন্ড বাজান
+            </button>
+            <button className="check-network-btn" onClick={handleTestNotification}>
+              <i className="fa-solid fa-bell"></i>
+              টেস্ট নোটিফিকেশন পাঠান
+            </button>
+            {notificationPermission !== 'granted' && (
+              <button className="check-network-btn" onClick={handleRequestPermission}>
+                <i className="fa-solid fa-bell"></i>
+                পারমিশন দিন
+              </button>
+            )}
+            <button className="check-network-btn" onClick={goToSoundSettings}>
+              <i className="fa-solid fa-sliders"></i>
+              সব সাউন্ড সেটিংস দেখুন
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* ── Device Info Card ── */}
       <div className="app-device-card">

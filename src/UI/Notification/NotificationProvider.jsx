@@ -1,4 +1,27 @@
 // src/UI/Notification/NotificationProvider.jsx
+// ============================================================
+// 🔧 FIXES APPLIED (search "FIX" to jump to each spot):
+// 1. Now listens for a `workhub:notification-settings` CustomEvent (in
+//    addition to the native `storage` event) so toggling a setting in
+//    the SAME tab takes effect immediately. The native `storage` event
+//    never fires in the tab that made the change — only in OTHER tabs —
+//    so before this fix, muting a category here required a full page
+//    refresh to take effect. NotificationsTab.jsx now dispatches this
+//    event whenever it saves settings (see that file).
+// 2. Loads `workhub_sound_settings` too, and notify() now checks the
+//    per-category SOUND toggle before playing a sound. Before this fix,
+//    the sound category toggles (চ্যাট/ওয়ালেট/অ্যাডমিন সাউন্ড ইত্যাদি)
+//    only affected the Settings page's "টেস্ট" button — they were never
+//    consulted when a REAL notification came in.
+// 3. Uses the shared `notificationCategory.js` util instead of a
+//    locally-duplicated category map, so this file, App.js, and
+//    Notifications.jsx can never drift out of sync again.
+// 4. createFirestoreNotification() is now idempotent when a stable id
+//    (dealId/relatedId/transactionId/milestoneId) is available, using
+//    the same setDoc-with-existence-check pattern as notificationHelper.js.
+//    Before this fix it always used addDoc with no de-dup at all, so
+//    calling notify() twice for the same event created two documents.
+// ============================================================
 
 import React, { createContext, useContext, useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { useSound } from '@/UI/Sound';
@@ -19,66 +42,39 @@ import {
   updateDoc,
   doc,
   getDoc,
-  getDocs,
+  setDoc,
 } from 'firebase/firestore';
+import {
+  getCategoryForEvent,
+  isCategoryEnabled,
+  isSoundCategoryEnabled,
+} from '@/utils/notificationCategory';
 
 // ============================================================
-// 🔔 NOTIFICATION SETTINGS HELPERS
+// 🔔 NOTIFICATION / SOUND SETTINGS HELPERS
 // ============================================================
 
 const NOTIFICATION_SETTINGS_KEY = 'workhub_notification_settings';
+const SOUND_SETTINGS_KEY = 'workhub_sound_settings';
 
-/**
- * Get notification settings from localStorage
- */
 const getNotificationSettings = () => {
   try {
     const saved = localStorage.getItem(NOTIFICATION_SETTINGS_KEY);
-    if (saved) {
-      return JSON.parse(saved);
-    }
+    if (saved) return JSON.parse(saved);
   } catch (e) {
     console.error('Error loading notification settings:', e);
   }
   return null;
 };
 
-/**
- * Check if a specific category is enabled
- */
-const isCategoryEnabled = (category, settings) => {
-  if (!settings) return true; // Default: enabled
-  
-  // Category to settings key mapping
-  const categoryMap = {
-    'message': 'messageNotifications',
-    'deal': 'dealUpdates',
-    'wallet': 'walletNotifications',
-    'admin': 'adminNotifications',
-    'review': 'reviewNotifications',
-    'verification': 'verificationNotifications',
-    'system': 'systemNotifications',
-  };
-  
-  const key = categoryMap[category] || 'systemNotifications';
-  
-  // Check if push notifications are globally disabled
-  if (settings.pushNotifications === false) return false;
-  
-  // Check category-specific setting (default: true)
-  return settings[key] !== false;
-};
-
-/**
- * Get category from notification event
- */
-const getEventCategory = (event) => {
-  const template = NotificationTemplates[event];
-  if (!template) return 'system';
-  
-  // Call template with empty data to get category
-  const result = template({});
-  return result.category || 'system';
+const getSoundSettings = () => {
+  try {
+    const saved = localStorage.getItem(SOUND_SETTINGS_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.error('Error loading sound settings:', e);
+  }
+  return null;
 };
 
 // ============================================================
@@ -97,12 +93,11 @@ export const NotificationProvider = ({ children }) => {
   const [isSupported, setIsSupported] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const [adminUnreadCount, setAdminUnreadCount] = useState(0);
-  
-  // ✅ NEW: Settings state
+
   const [settings, setSettings] = useState(null);
+  const [soundSettings, setSoundSettings] = useState(null);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
-  // ✅ Refs
   const processedIds = useRef(new Set());
   const adminProcessedIds = useRef(new Set());
   const isInitialSnapshot = useRef(true);
@@ -114,65 +109,70 @@ export const NotificationProvider = ({ children }) => {
   const notifyRef = useRef(null);
 
   // ============================================================
-  // ✅ NEW: Load Settings from localStorage
+  // ✅ Load Settings (notification + sound) from localStorage,
+  // and stay in sync via BOTH the native `storage` event (cross-tab)
+  // AND a custom event (same-tab — see FIX #1 above).
   // ============================================================
   useEffect(() => {
     const loadSettings = () => {
-      const savedSettings = getNotificationSettings();
-      setSettings(savedSettings);
+      setSettings(getNotificationSettings());
+      setSoundSettings(getSoundSettings());
       setSettingsLoaded(true);
-      
-      if (import.meta.env.DEV) {
-        console.log('🔔 Notification settings loaded:', savedSettings);
-      }
     };
-    
+
     loadSettings();
-    
-    // ✅ Listen for settings changes from other tabs
+
     const handleStorageChange = (e) => {
       if (e.key === NOTIFICATION_SETTINGS_KEY) {
-        const newSettings = getNotificationSettings();
-        setSettings(newSettings);
-        
-        if (import.meta.env.DEV) {
-          console.log('🔔 Notification settings updated from another tab:', newSettings);
-        }
+        setSettings(getNotificationSettings());
+      }
+      if (e.key === SOUND_SETTINGS_KEY) {
+        setSoundSettings(getSoundSettings());
       }
     };
-    
+
+    // 🔧 FIX #1: same-tab settings changes.
+    const handleNotificationSettingsEvent = (e) => {
+      setSettings(e.detail || getNotificationSettings());
+      if (import.meta.env.DEV) {
+        console.log('🔔 Notification settings updated (same-tab event):', e.detail);
+      }
+    };
+    const handleSoundSettingsEvent = (e) => {
+      setSoundSettings(e.detail || getSoundSettings());
+      if (import.meta.env.DEV) {
+        console.log('🔊 Sound settings updated (same-tab event):', e.detail);
+      }
+    };
+
     window.addEventListener('storage', handleStorageChange);
-    
+    window.addEventListener('workhub:notification-settings', handleNotificationSettingsEvent);
+    window.addEventListener('workhub:sound-settings', handleSoundSettingsEvent);
+
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('workhub:notification-settings', handleNotificationSettingsEvent);
+      window.removeEventListener('workhub:sound-settings', handleSoundSettingsEvent);
     };
   }, []);
 
   // ============================================================
-  // ✅ ১. Check initial permission status
+  // ✅ Check initial permission status
   // ============================================================
   useEffect(() => {
     if (!('Notification' in window)) {
       setIsSupported(false);
       setPermissionStatus('unsupported');
-      if (import.meta.env.DEV) {
-        console.warn('🔔 Browser does not support notifications.');
-      }
       return;
     }
     setPermissionStatus(Notification.permission);
   }, []);
 
   // ============================================================
-  // ✅ ২. Request Notification Permission
+  // ✅ Request Notification Permission
   // ============================================================
   const requestPermission = async () => {
-    if (!('Notification' in window)) {
-      if (import.meta.env.DEV) {
-        console.warn('🔔 Browser does not support notifications.');
-      }
-      return false;
-    }
+    if (!('Notification' in window)) return false;
 
     if (Notification.permission === 'granted') {
       setPermissionStatus('granted');
@@ -181,30 +181,17 @@ export const NotificationProvider = ({ children }) => {
 
     if (Notification.permission === 'denied') {
       setPermissionStatus('denied');
-      if (import.meta.env.DEV) {
-        console.warn('🔔 Notification permission already denied.');
-      }
       return false;
     }
 
     try {
-      if (import.meta.env.DEV) {
-        console.log('🔔 Requesting notification permission...');
-      }
       const permission = await Notification.requestPermission();
-      
       setPermissionStatus(permission);
-      
+
       if (permission === 'granted') {
-        if (import.meta.env.DEV) {
-          console.log('🔔 Notification permission granted! ✅');
-        }
         sound?.playEvent(SOUND_EVENTS.SUCCESS);
         return true;
       } else {
-        if (import.meta.env.DEV) {
-          console.warn('🔔 Notification permission denied. ❌');
-        }
         sound?.playEvent(SOUND_EVENTS.WARNING);
         return false;
       }
@@ -214,24 +201,18 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // ============================================================
-  // ✅ ৩. Check if permission is granted
-  // ============================================================
   const hasPermission = useCallback(() => {
     if (!('Notification' in window)) return false;
     return Notification.permission === 'granted';
   }, []);
 
-  // ============================================================
-  // ✅ ৪. Get current permission status
-  // ============================================================
   const getPermissionStatus = useCallback(() => {
     if (!('Notification' in window)) return 'unsupported';
     return Notification.permission;
   }, []);
 
   // ============================================================
-  // ✅ ৫. Show Browser Notification
+  // ✅ Show Browser Notification
   // ============================================================
   const showNotification = useCallback(({
     title,
@@ -246,19 +227,8 @@ export const NotificationProvider = ({ children }) => {
     vibrate = null,
     actions = [],
   }) => {
-    if (!('Notification' in window)) {
-      if (import.meta.env.DEV) {
-        console.warn('🔔 Browser does not support notifications.');
-      }
-      return null;
-    }
-
-    if (Notification.permission !== 'granted') {
-      if (import.meta.env.DEV) {
-        console.warn('🔔 Notification permission not granted.');
-      }
-      return null;
-    }
+    if (!('Notification' in window)) return null;
+    if (Notification.permission !== 'granted') return null;
 
     try {
       const options = {
@@ -275,7 +245,6 @@ export const NotificationProvider = ({ children }) => {
       if (actions && actions.length > 0) options.actions = actions;
 
       const notification = new Notification(title || 'WorkTrustbd', options);
-
       const clickUrl = data?.url || data?.path || null;
 
       notification.onclick = () => {
@@ -290,21 +259,11 @@ export const NotificationProvider = ({ children }) => {
         notification.close();
       };
 
-      notification.onclose = () => {
-        if (import.meta.env.DEV) {
-          console.log('🔔 Notification closed');
-        }
-      };
-
       notification.onerror = (error) => {
         console.error('🔔 Notification error:', error);
       };
 
-      if (import.meta.env.DEV) {
-        console.log('🔔 Notification shown:', title);
-      }
       return notification;
-
     } catch (error) {
       console.error('🔔 Error showing notification:', error);
       return null;
@@ -312,7 +271,24 @@ export const NotificationProvider = ({ children }) => {
   }, []);
 
   // ============================================================
-  // ✅ ৬. 🔥 Create Firestore Notification
+  // ✅ Build a stable persistent id, mirroring notificationHelper.js's
+  // approach, so Firestore writes here are idempotent too.
+  // 🔧 FIX #4
+  // ============================================================
+  const buildPersistentId = (userId, event, metadata = {}) => {
+    const entityId =
+      metadata.idempotencyKey ||
+      metadata.transactionId ||
+      metadata.transferId ||
+      metadata.dealId ||
+      metadata.relatedId ||
+      metadata.milestoneId;
+    if (!entityId) return null;
+    return `${userId}_${event || 'system'}_${entityId}`.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 140);
+  };
+
+  // ============================================================
+  // ✅ Create Firestore Notification (now idempotent when possible)
   // ============================================================
   const createFirestoreNotification = useCallback(async ({
     userId,
@@ -337,7 +313,7 @@ export const NotificationProvider = ({ children }) => {
 
     try {
       const collectionName = isAdmin ? 'admin_notifications' : 'notifications';
-      
+
       const notificationData = {
         userId,
         event,
@@ -355,11 +331,25 @@ export const NotificationProvider = ({ children }) => {
         createdAt: serverTimestamp(),
       };
 
-      const docRef = await addDoc(collection(db, collectionName), notificationData);
-      
-      if (import.meta.env.DEV) {
-        console.log(`✅ Firestore notification created: ${event} for user ${userId}`, docRef.id);
+      // 🔧 FIX #4: idempotent write when we have a stable id (dealId/
+      // relatedId/transactionId/transferId/milestoneId). Falls back to
+      // addDoc only when truly no stable id is available.
+      const persistentId = buildPersistentId(userId, event, { dealId, milestoneId, ...metadata });
+
+      if (persistentId) {
+        const docRef = doc(db, collectionName, persistentId);
+        const existing = await getDoc(docRef);
+        if (existing.exists()) {
+          if (import.meta.env.DEV) {
+            console.log('⏭️ Persistent duplicate notification skipped:', persistentId);
+          }
+          return docRef.id;
+        }
+        await setDoc(docRef, { ...notificationData, idempotencyKey: persistentId });
+        return docRef.id;
       }
+
+      const docRef = await addDoc(collection(db, collectionName), notificationData);
       return docRef.id;
     } catch (error) {
       console.error('❌ Error creating Firestore notification:', error);
@@ -368,7 +358,7 @@ export const NotificationProvider = ({ children }) => {
   }, []);
 
   // ============================================================
-  // ✅ ৭. 🔥 Send to Multiple Users
+  // ✅ Send to Multiple Users
   // ============================================================
   const sendToMultipleUsers = useCallback(async ({
     userIds,
@@ -377,25 +367,12 @@ export const NotificationProvider = ({ children }) => {
     overrides = {},
     isAdmin = false,
   }) => {
-    if (!userIds || userIds.length === 0) {
-      if (import.meta.env.DEV) {
-        console.warn('⚠️ No userIds provided for notification');
-      }
-      return [];
-    }
+    if (!userIds || userIds.length === 0) return [];
 
     const template = NotificationTemplates[event];
-    if (!template) {
-      if (import.meta.env.DEV) {
-        console.warn(`🔔 Unknown notification event: ${event}`);
-      }
-      return [];
-    }
+    if (!template) return [];
 
-    const config = {
-      ...template(data),
-      ...overrides
-    };
+    const config = { ...template(data), ...overrides };
 
     const results = [];
     for (const userId of userIds) {
@@ -412,15 +389,13 @@ export const NotificationProvider = ({ children }) => {
         actionType: config.actionType || null,
         isAdmin,
       });
-      if (result) {
-        results.push(result);
-      }
+      if (result) results.push(result);
     }
     return results;
   }, [createFirestoreNotification]);
 
   // ============================================================
-  // ✅ ৮. 🔥 Unified Notify Function - SETTINGS CHECK যোগ করুন
+  // ✅ Unified Notify Function
   // ============================================================
   const notify = useCallback(({
     event,
@@ -429,21 +404,15 @@ export const NotificationProvider = ({ children }) => {
     skipFirestore = false,
     isAdmin = false,
   }) => {
-    // ============================================================
-    // 🔥 STEP 1: Check if push notifications are globally enabled
-    // ============================================================
-    if (settings?.pushNotifications === false) {
+    // STEP 1: category + master toggle check (shared util — FIX #3)
+    if (!isCategoryEnabled(event, settings)) {
       if (import.meta.env.DEV) {
-        console.log(`🔔 Push notifications disabled by settings. Event: ${event}`);
+        console.log(`🔔 Event "${event}" skipped — category/master disabled by settings.`);
       }
       return;
     }
 
-    // ============================================================
-    // 🔥 STEP 2: Get template and check category
-    // ============================================================
     const template = NotificationTemplates[event];
-
     if (!template) {
       if (import.meta.env.DEV) {
         console.warn(`🔔 Unknown notification event: ${event}`);
@@ -451,52 +420,31 @@ export const NotificationProvider = ({ children }) => {
       return;
     }
 
-    const config = {
-      ...template(data),
-      ...overrides
-    };
-
-    // ============================================================
-    // 🔥 STEP 3: Check category-specific settings
-    // ============================================================
-    const category = config.category || 'system';
-    
-    if (!isCategoryEnabled(category, settings)) {
-      if (import.meta.env.DEV) {
-        console.log(`🔔 Category "${category}" is disabled by settings. Event: ${event}`);
-      }
-      return;
-    }
+    const config = { ...template(data), ...overrides };
 
     if (import.meta.env.DEV) {
-      console.log(`🔔 [${event}] Category: ${category}`, config);
+      console.log(`🔔 [${event}] Category: ${getCategoryForEvent(event)}`, config);
     }
 
     // ============================================================
-    // 🔥 STEP 4: Play Sound (if enabled)
+    // 🔧 FIX #2: STEP — Play Sound, now ALSO gated by the per-category
+    // sound toggle (workhub_sound_settings), not just config.soundEnabled.
     // ============================================================
     const now = Date.now();
-    if (config.soundEnabled !== false && config.soundEvent) {
+    const soundAllowed = config.soundEnabled !== false && isSoundCategoryEnabled(event, soundSettings);
+
+    if (soundAllowed && config.soundEvent) {
       if (now - soundDebounceRef.current > 500) {
-        if (import.meta.env.DEV) {
-          console.log(`🔊 Playing sound: ${config.soundEvent}`);
-        }
         sound?.playEvent(config.soundEvent);
         soundDebounceRef.current = now;
-      } else {
-        if (import.meta.env.DEV) {
-          console.log(`🔊 Sound debounced: ${config.soundEvent}`);
-        }
+      } else if (import.meta.env.DEV) {
+        console.log(`🔊 Sound debounced: ${config.soundEvent}`);
       }
+    } else if (import.meta.env.DEV && config.soundEvent) {
+      console.log(`🔊 Sound skipped (category muted): ${config.soundEvent}`);
     }
 
-    if (import.meta.env.DEV) {
-      console.log("📢 Browser permission:", Notification.permission);
-    }
-
-    // ============================================================
-    // 🔥 STEP 5: Show Browser Notification (if enabled)
-    // ============================================================
+    // STEP: Show Browser Notification
     if (config.browser !== false && hasPermission()) {
       showNotification({
         title: config.title,
@@ -517,9 +465,7 @@ export const NotificationProvider = ({ children }) => {
       });
     }
 
-    // ============================================================
-    // 🔥 STEP 6: Show In-App Alert (if enabled)
-    // ============================================================
+    // STEP: Show In-App Alert
     if (config.inApp && config.alertType) {
       const alertMessages = {
         success: () => feedback.showSuccess(config.title || '✅ সফল', config.body),
@@ -527,16 +473,11 @@ export const NotificationProvider = ({ children }) => {
         warning: () => feedback.showWarning(config.title || '⚠️ সতর্কতা', config.body),
         info: () => feedback.showInfo(config.title || 'ℹ️ তথ্য', config.body),
       };
-      
       const alertMethod = alertMessages[config.alertType];
-      if (alertMethod) {
-        alertMethod();
-      }
+      if (alertMethod) alertMethod();
     }
 
-    // ============================================================
-    // 🔥 STEP 7: Save to Firestore (if not skipped)
-    // ============================================================
+    // STEP: Save to Firestore (if not skipped)
     if (!skipFirestore) {
       if (data.userId) {
         createFirestoreNotification({
@@ -555,35 +496,20 @@ export const NotificationProvider = ({ children }) => {
       }
 
       if (data.userIds && data.userIds.length > 0) {
-        sendToMultipleUsers({
-          userIds: data.userIds,
-          event,
-          data,
-          overrides,
-          isAdmin,
-        });
+        sendToMultipleUsers({ userIds: data.userIds, event, data, overrides, isAdmin });
       }
     }
-  }, [sound, feedback, settings, hasPermission, showNotification, createFirestoreNotification, sendToMultipleUsers]);
+  }, [sound, feedback, settings, soundSettings, hasPermission, showNotification, createFirestoreNotification, sendToMultipleUsers]);
 
-  // ✅ Store notify in ref
   useEffect(() => {
     notifyRef.current = notify;
   }, [notify]);
 
   // ============================================================
-  // ✅ ৯. 🔥 USER NOTIFICATION LISTENER (Settings Check যোগ করুন)
+  // ✅ USER NOTIFICATION LISTENER
   // ============================================================
   useEffect(() => {
-    if (import.meta.env.DEV) {
-      console.log("🔔 [DEBUG] User Notification Effect Started");
-      console.log("🔔 [DEBUG] Current User from AuthContext:", currentUser?.uid || 'No user');
-    }
-
     if (unsubscribeRef.current) {
-      if (import.meta.env.DEV) {
-        console.log("🔔 [DEBUG] Cleaning up previous user listener...");
-      }
       unsubscribeRef.current();
       unsubscribeRef.current = null;
     }
@@ -594,15 +520,8 @@ export const NotificationProvider = ({ children }) => {
     const user = currentUser;
 
     if (!user) {
-      if (import.meta.env.DEV) {
-        console.log("🔔 [DEBUG] No user, clearing unread count");
-      }
       setUnreadCount(0);
       return;
-    }
-
-    if (import.meta.env.DEV) {
-      console.log(`🔔 [DEBUG] Setting up user notification listener for: ${user.uid}`);
     }
 
     const q = query(
@@ -611,36 +530,27 @@ export const NotificationProvider = ({ children }) => {
       orderBy('createdAt', 'desc')
     );
 
-    const unsubscribe = onSnapshot(q, 
+    const unsubscribe = onSnapshot(q,
       (snapshot) => {
-        if (import.meta.env.DEV) {
-          console.log("🔥 User onSnapshot callback fired");
-        }
-        
         if (!isMountedRef.current) return;
 
-        // ✅ Check if notifications are globally disabled
         if (settings?.pushNotifications === false) {
           setUnreadCount(0);
           return;
         }
 
+        // 🔧 Standardized "unread" definition: isUnread !== false
+        // (treats a missing field as unread, matches document creation
+        // above which always sets isUnread:true explicitly).
         const unread = snapshot.docs.filter(doc => {
           const data = doc.data();
-          // ✅ Check category-specific settings
-          const category = getEventCategory(data.event);
-          return data.isUnread !== false && isCategoryEnabled(category, settings);
+          return data.isUnread !== false && isCategoryEnabled(data.event, settings);
         }).length;
-        
+
         setUnreadCount(unread);
 
         if (isInitialSnapshot.current) {
-          if (import.meta.env.DEV) {
-            console.log(`📥 Initial user notifications snapshot: ${snapshot.docs.length} items`);
-          }
-          snapshot.docs.forEach(doc => {
-            processedIds.current.add(doc.id);
-          });
+          snapshot.docs.forEach(doc => processedIds.current.add(doc.id));
           isInitialSnapshot.current = false;
           return;
         }
@@ -655,27 +565,17 @@ export const NotificationProvider = ({ children }) => {
           const data = change.doc.data();
           if (data.isUnread === false) return;
 
-          // ✅ Check category before notifying
-          const category = getEventCategory(data.event);
-          if (!isCategoryEnabled(category, settings)) {
+          if (!isCategoryEnabled(data.event, settings)) {
             if (import.meta.env.DEV) {
               console.log(`🔔 Notification skipped (category disabled): ${data.event}`);
             }
             return;
           }
 
-          if (import.meta.env.DEV) {
-            console.log("🔔 [DEBUG] User Notification Received:", data.event || 'unknown');
-          }
-
           if (data.event && NotificationTemplates[data.event]) {
             notifyRef.current({
               event: data.event,
-              data: {
-                ...data,
-                userId: data.userId,
-                userIds: data.userIds,
-              },
+              data: { ...data, userId: data.userId, userIds: data.userIds },
               skipFirestore: true,
             });
           } else {
@@ -694,11 +594,7 @@ export const NotificationProvider = ({ children }) => {
 
         if (processedIds.current.size > 500) {
           const ids = Array.from(processedIds.current);
-          const keepIds = ids.slice(-500);
-          processedIds.current = new Set(keepIds);
-          if (import.meta.env.DEV) {
-            console.log('🧹 Cleaned user processed notification IDs');
-          }
+          processedIds.current = new Set(ids.slice(-500));
         }
       },
       (error) => {
@@ -710,27 +606,17 @@ export const NotificationProvider = ({ children }) => {
 
     return () => {
       if (unsubscribeRef.current) {
-        if (import.meta.env.DEV) {
-          console.log("🔔 [DEBUG] Unsubscribing user notification listener...");
-        }
         unsubscribeRef.current();
         unsubscribeRef.current = null;
       }
     };
-  }, [currentUser, settings]); // ✅ settings dependency added
+  }, [currentUser, settings]);
 
   // ============================================================
-  // ✅ ১০. 🔥 ADMIN NOTIFICATION LISTENER
+  // ✅ ADMIN NOTIFICATION LISTENER
   // ============================================================
   useEffect(() => {
-    if (import.meta.env.DEV) {
-      console.log("🔔 [DEBUG] Admin Notification Effect Started");
-    }
-
     if (adminUnsubscribeRef.current) {
-      if (import.meta.env.DEV) {
-        console.log("🔔 [DEBUG] Cleaning up previous admin listener...");
-      }
       adminUnsubscribeRef.current();
       adminUnsubscribeRef.current = null;
     }
@@ -741,49 +627,30 @@ export const NotificationProvider = ({ children }) => {
     const user = currentUser;
 
     if (!user) {
-      if (import.meta.env.DEV) {
-        console.log("🔔 [DEBUG] No admin user, clearing admin unread count");
-      }
       setAdminUnreadCount(0);
       return;
     }
 
-    // ✅ Check if user is admin
     const checkAdminAndListen = async () => {
       try {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         const userData = userDoc.data();
-        
-        const isAdmin = userData?.role === 'admin' || 
+
+        const isAdmin = userData?.role === 'admin' ||
                         userData?.isAdmin === true ||
                         ['hammanmusa362@gmail.com', 'hasanmahmudmd362@gmail.com'].includes(user.email);
 
         if (!isAdmin) {
-          if (import.meta.env.DEV) {
-            console.log("🔔 [DEBUG] User is not admin, skipping admin notifications");
-          }
           setAdminUnreadCount(0);
           return;
         }
 
-        if (import.meta.env.DEV) {
-          console.log(`🔔 [DEBUG] Setting up admin notification listener for: ${user.uid}`);
-        }
+        const q = query(collection(db, 'admin_notifications'), orderBy('createdAt', 'desc'));
 
-        const q = query(
-          collection(db, 'admin_notifications'),
-          orderBy('createdAt', 'desc')
-        );
-
-        const unsubscribe = onSnapshot(q, 
+        const unsubscribe = onSnapshot(q,
           (snapshot) => {
-            if (import.meta.env.DEV) {
-              console.log("🔥 Admin onSnapshot callback fired");
-            }
-            
             if (!isMountedRef.current) return;
 
-            // ✅ Check if admin notifications are globally disabled
             if (settings?.pushNotifications === false || settings?.adminNotifications === false) {
               setAdminUnreadCount(0);
               return;
@@ -791,18 +658,13 @@ export const NotificationProvider = ({ children }) => {
 
             const unread = snapshot.docs.filter(doc => {
               const data = doc.data();
-              return data.isRead !== true && settings?.adminNotifications !== false;
+              return data.isRead !== true;
             }).length;
-            
+
             setAdminUnreadCount(unread);
 
             if (isAdminInitialSnapshot.current) {
-              if (import.meta.env.DEV) {
-                console.log(`📥 Initial admin notifications snapshot: ${snapshot.docs.length} items`);
-              }
-              snapshot.docs.forEach(doc => {
-                adminProcessedIds.current.add(doc.id);
-              });
+              snapshot.docs.forEach(doc => adminProcessedIds.current.add(doc.id));
               isAdminInitialSnapshot.current = false;
               return;
             }
@@ -816,28 +678,12 @@ export const NotificationProvider = ({ children }) => {
 
               const data = change.doc.data();
               if (data.isRead === true) return;
+              if (settings?.adminNotifications === false) return;
 
-              // ✅ Check admin notification settings
-              if (settings?.adminNotifications === false) {
-                if (import.meta.env.DEV) {
-                  console.log('🔔 Admin notification skipped (disabled)');
-                }
-                return;
-              }
-
-              if (import.meta.env.DEV) {
-                console.log("🔔 [DEBUG] Admin Notification Received:", data.event || 'unknown');
-              }
-
-              // ✅ Play sound for admin notifications
               if (data.event && NotificationTemplates[data.event]) {
                 notifyRef.current({
                   event: data.event,
-                  data: {
-                    ...data,
-                    userId: data.userId || user.uid,
-                    userIds: data.userIds,
-                  },
+                  data: { ...data, userId: data.userId || user.uid, userIds: data.userIds },
                   skipFirestore: true,
                   isAdmin: true,
                 });
@@ -855,7 +701,6 @@ export const NotificationProvider = ({ children }) => {
                 });
               }
 
-              // ✅ Mark as read automatically
               if (data.id) {
                 try {
                   updateDoc(doc(db, 'admin_notifications', docId), {
@@ -870,11 +715,7 @@ export const NotificationProvider = ({ children }) => {
 
             if (adminProcessedIds.current.size > 500) {
               const ids = Array.from(adminProcessedIds.current);
-              const keepIds = ids.slice(-500);
-              adminProcessedIds.current = new Set(keepIds);
-              if (import.meta.env.DEV) {
-                console.log('🧹 Cleaned admin processed notification IDs');
-              }
+              adminProcessedIds.current = new Set(ids.slice(-500));
             }
           },
           (error) => {
@@ -883,7 +724,6 @@ export const NotificationProvider = ({ children }) => {
         );
 
         adminUnsubscribeRef.current = unsubscribe;
-
       } catch (error) {
         console.error('❌ Error checking admin status:', error);
       }
@@ -893,37 +733,18 @@ export const NotificationProvider = ({ children }) => {
 
     return () => {
       if (adminUnsubscribeRef.current) {
-        if (import.meta.env.DEV) {
-          console.log("🔔 [DEBUG] Unsubscribing admin notification listener...");
-        }
         adminUnsubscribeRef.current();
         adminUnsubscribeRef.current = null;
       }
     };
-  }, [currentUser, settings]); // ✅ settings dependency added
+  }, [currentUser, settings]);
 
-  // ============================================================
-  // ✅ Helper: Check if a specific notification is enabled
-  // ============================================================
   const isNotificationEnabled = useCallback((event) => {
-    if (!settings) return true;
-    
-    if (settings.pushNotifications === false) return false;
-    
-    const category = getEventCategory(event);
-    return isCategoryEnabled(category, settings);
+    return isCategoryEnabled(event, settings);
   }, [settings]);
 
-  // ============================================================
-  // ✅ Helper: Get settings
-  // ============================================================
-  const getSettings = useCallback(() => {
-    return settings;
-  }, [settings]);
+  const getSettings = useCallback(() => settings, [settings]);
 
-  // ============================================================
-  // ✅ Context Value
-  // ============================================================
   const value = useMemo(() => ({
     requestPermission,
     hasPermission,
@@ -936,23 +757,24 @@ export const NotificationProvider = ({ children }) => {
     adminUnreadCount,
     createFirestoreNotification,
     sendToMultipleUsers,
-    // ✅ NEW: Settings-related exports
     settings,
+    soundSettings,
     isNotificationEnabled,
     getSettings,
-    isCategoryEnabled: (category) => isCategoryEnabled(category, settings),
+    isCategoryEnabled: (event) => isCategoryEnabled(event, settings),
   }), [
-    permissionStatus, 
-    isSupported, 
-    unreadCount, 
-    adminUnreadCount, 
+    permissionStatus,
+    isSupported,
+    unreadCount,
+    adminUnreadCount,
     settings,
-    requestPermission, 
-    hasPermission, 
-    getPermissionStatus, 
-    showNotification, 
-    notify, 
-    createFirestoreNotification, 
+    soundSettings,
+    requestPermission,
+    hasPermission,
+    getPermissionStatus,
+    showNotification,
+    notify,
+    createFirestoreNotification,
     sendToMultipleUsers,
     isNotificationEnabled,
     getSettings,
@@ -965,18 +787,11 @@ export const NotificationProvider = ({ children }) => {
   );
 };
 
-// ============================================================
-// 🔔 Hook
-// ============================================================
 export const useNotification = () => {
   const context = useContext(NotificationContext);
-  
   if (!context) {
-    throw new Error(
-      'useNotification must be used inside NotificationProvider'
-    );
+    throw new Error('useNotification must be used inside NotificationProvider');
   }
-  
   return context;
 };
 

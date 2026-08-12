@@ -1,7 +1,16 @@
 // ============================================================
 // 📁 src/pages/Settings/tabs/NotificationsTab.jsx
 // ============================================================
-// FIXED: Loading Issue + Enterprise Ready
+// 🔧 FIX: every place that writes workhub_notification_settings or
+// workhub_sound_settings to localStorage now ALSO dispatches a
+// matching CustomEvent (`workhub:notification-settings` /
+// `workhub:sound-settings`). This is the missing piece:
+// `window.addEventListener('storage', ...)` NEVER fires in the same
+// tab that made the change — only in other tabs — so without this,
+// NotificationProvider (and App.js / Notifications.jsx) had no way to
+// find out a setting changed until the page was refreshed. Toggling a
+// category "off" would look successful in the UI but the sound/badge
+// logic elsewhere kept using the stale settings until reload.
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
@@ -14,7 +23,21 @@ import './SoundTab.css';
 
 // ✅ Constants
 const NOTIFICATION_SETTINGS_KEY = 'workhub_notification_settings';
+const SOUND_SETTINGS_KEY = 'workhub_sound_settings';
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || '';
+
+// ============================================================
+// 🔧 NEW: small helpers so every write site dispatches consistently
+// ============================================================
+const persistNotificationSettings = (settings) => {
+  localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(settings));
+  window.dispatchEvent(new CustomEvent('workhub:notification-settings', { detail: settings }));
+};
+
+const persistSoundSettings = (settings) => {
+  localStorage.setItem(SOUND_SETTINGS_KEY, JSON.stringify(settings));
+  window.dispatchEvent(new CustomEvent('workhub:sound-settings', { detail: settings }));
+};
 
 // ============================================================
 // 🔐 VAPID Key Helpers
@@ -272,8 +295,8 @@ const NotificationsTab = ({
       const registration = await getServiceWorkerRegistration(5000);
       if (!registration) {
         feedback.alert.error({ 
-          message: '❌ Service Worker রেডি নয়', 
-          description: 'Service Worker সচল হতে বেশি সময় নিচ্ছে। পেজ রিফ্রেশ করুন।' 
+          message: '❌ Service Worker রেডি নয়', 
+          description: 'Service Worker সচল হতে বেশি সময় নিচ্ছে। পেজ রিফ্রেশ করুন।' 
         });
         setIsSubscribing(false);
         return;
@@ -286,7 +309,6 @@ const NotificationsTab = ({
         setIsSubscribed(true);
         setPushPermission('granted');
         
-        // ✅ Save to Firestore if not saved
         const currentUser = auth.currentUser;
         const userIdToUse = currentUser?.uid || userId;
         await savePushSubscription(userIdToUse, existingSubscription);
@@ -310,18 +332,18 @@ const NotificationsTab = ({
       setIsSubscribed(true);
       setPushPermission('granted');
       
-      // ✅ Save to Firestore
       const currentUser = auth.currentUser;
       const userIdToUse = currentUser?.uid || userId;
       await savePushSubscription(userIdToUse, newSubscription);
       
-      // ✅ Update settings
+      // ✅ Update settings — 🔧 FIX: use the helper so the same-tab
+      // event fires (was a raw localStorage.setItem before).
       const newSettings = {
         ...notificationSettings,
         pushNotifications: true
       };
       setNotificationSettings(newSettings);
-      localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(newSettings));
+      persistNotificationSettings(newSettings);
       
       if (onSettingsChange) {
         onSettingsChange(newSettings);
@@ -375,18 +397,17 @@ const NotificationsTab = ({
       setSubscription(null);
       setIsSubscribed(false);
       
-      // ✅ Remove from Firestore
       const currentUser = auth.currentUser;
       const userIdToUse = currentUser?.uid || userId;
       await removePushSubscription(userIdToUse);
       
-      // ✅ Update settings
+      // 🔧 FIX: use helper so the same-tab event fires
       const newSettings = {
         ...notificationSettings,
         pushNotifications: false
       };
       setNotificationSettings(newSettings);
-      localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(newSettings));
+      persistNotificationSettings(newSettings);
       
       if (onSettingsChange) {
         onSettingsChange(newSettings);
@@ -419,7 +440,6 @@ const NotificationsTab = ({
       isLoadingRef.current = true;
       
       try {
-        // ── Load settings from localStorage ──
         const saved = localStorage.getItem(NOTIFICATION_SETTINGS_KEY);
         if (saved) {
           try {
@@ -432,7 +452,6 @@ const NotificationsTab = ({
           }
         }
 
-        // ── Check push subscription ──
         if (isPushSupported()) {
           const permission = Notification.permission;
           if (isMounted.current) {
@@ -499,7 +518,6 @@ const NotificationsTab = ({
       if (document.visibilityState === 'visible') {
         handlePermissionChange();
         
-        // ✅ Re-check subscription on visibility change
         if (isPushSupported()) {
           getSubscription().then(sub => {
             if (isMounted.current) {
@@ -531,11 +549,12 @@ const NotificationsTab = ({
   }, [isPushSupported, isSubscribed]);
 
   // ============================================================
-  // ✅ Save Settings
+  // ✅ Save Settings — 🔧 FIX: uses persistNotificationSettings() so
+  // the same-tab CustomEvent always fires alongside localStorage.
   // ============================================================
 
   const saveSettings = useCallback((newSettings) => {
-    localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(newSettings));
+    persistNotificationSettings(newSettings);
     setNotificationSettings(newSettings);
     
     if (onSettingsChange) {
@@ -556,7 +575,6 @@ const NotificationsTab = ({
       [key]: newValue
     };
 
-    // ✅ Push Notification Toggle হলে
     if (key === 'pushNotifications') {
       if (!newValue && isSubscribed) {
         await unsubscribeFromPush();
@@ -605,18 +623,16 @@ const NotificationsTab = ({
   }, [feedback, saveSettings]);
 
   // ============================================================
-  // ✅ Sound Helper Functions
+  // ✅ Sound Helper Functions — 🔧 FIX: uses persistSoundSettings()
   // ============================================================
 
-  // ── Save sound settings to localStorage and apply ──
   const saveSoundSettings = useCallback((newSettings) => {
-    localStorage.setItem('workhub_sound_settings', JSON.stringify(newSettings));
+    persistSoundSettings(newSettings);
     setSoundSettings(newSettings);
   }, []);
 
-  // ── Load sound settings from localStorage ──
   useEffect(() => {
-    const saved = localStorage.getItem('workhub_sound_settings');
+    const saved = localStorage.getItem(SOUND_SETTINGS_KEY);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -629,7 +645,6 @@ const NotificationsTab = ({
     }
   }, [sound]);
 
-  // ── Update a single sound setting ──
   const handleSoundUpdate = useCallback((key, value) => {
     setSoundSettings(prev => {
       const newSettings = { ...prev, [key]: value };
@@ -654,7 +669,6 @@ const NotificationsTab = ({
     });
   }, [sound, saveSoundSettings]);
 
-  // ── Update volume ──
   const handleVolumeUpdate = useCallback((value) => {
     setSoundSettings(prev => {
       const newSettings = { ...prev, volume: value };
@@ -664,7 +678,6 @@ const NotificationsTab = ({
     });
   }, [sound, saveSoundSettings]);
 
-  // ── Reset sound settings to default ──
   const handleResetSound = useCallback(async () => {
     const confirmed = await feedback.confirm({
       title: 'Reset Sound Settings',
@@ -704,7 +717,6 @@ const NotificationsTab = ({
     feedback.showSuccess('✅ সাউন্ড রিসেট', 'সব সাউন্ড সেটিংস ডিফল্টে রিসেট করা হয়েছে!');
   }, [feedback, sound, saveSoundSettings]);
 
-  // ── Test Sound ──
   const handleTestSound = useCallback((type = 'notification') => {
     if (isTesting) return;
     
@@ -851,7 +863,6 @@ const NotificationsTab = ({
 
   return (
     <div className="noti-tab">
-      {/* ── Header ── */}
       <div className="noti-tab-header">
         <h2>
           <i className="fa-solid fa-bell"></i>
@@ -862,7 +873,6 @@ const NotificationsTab = ({
         </p>
       </div>
 
-      {/* ✅ PUSH NOTIFICATION SECTION */}
       <div className="noti-push-section">
         <div className="push-card">
           <div className="push-card-header">
@@ -931,7 +941,6 @@ const NotificationsTab = ({
         </div>
       </div>
 
-      {/* ── Master Controls ── */}
       <div className="noti-master-controls">
         <div className="noti-master-toggle">
           <div className="noti-master-info">
@@ -951,7 +960,6 @@ const NotificationsTab = ({
         </div>
       </div>
 
-      {/* ── Notification Categories ── */}
       <div className="noti-categories">
         <h3 className="categories-title">
           <i className="fa-solid fa-list"></i>
@@ -999,7 +1007,6 @@ const NotificationsTab = ({
         </div>
       </div>
 
-      {/* ── Email Settings ── */}
       <div className="noti-email-section">
         <h3 className="section-title">
           <i className="fa-solid fa-envelope"></i>
@@ -1021,14 +1028,12 @@ const NotificationsTab = ({
         </div>
       </div>
 
-      {/* ── Sound Settings Section ── */}
       <div className="noti-email-section" style={{ marginTop: '32px', borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
         <h3 className="section-title">
           <i className="fa-solid fa-volume-high"></i>
           নোটিফিকেশন সাউন্ড (Sound Settings)
         </h3>
 
-        {/* Master Switches */}
         <div className="sound-master-controls" style={{ marginTop: '16px' }}>
           <div className="master-toggle">
             <div className="master-info">
@@ -1063,7 +1068,6 @@ const NotificationsTab = ({
           </div>
         </div>
 
-        {/* Volume Slider */}
         <div className="volume-control" style={{ marginTop: '20px' }}>
           <div className="volume-header">
             <span className="volume-label">
@@ -1093,7 +1097,6 @@ const NotificationsTab = ({
           </div>
         </div>
 
-        {/* Sound Categories */}
         <div className="noti-categories" style={{ marginTop: '24px', borderTop: 'none', padding: 0 }}>
           <h4 className="categories-title" style={{ fontSize: '15px' }}>
             <i className="fa-solid fa-list"></i>
@@ -1163,7 +1166,6 @@ const NotificationsTab = ({
           </div>
         </div>
 
-        {/* Test Buttons */}
         <div style={{ marginTop: '24px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <button className="push-btn primary" onClick={() => handleTestSound('chat')} disabled={isTesting}>
             💬 চ্যাট টেস্ট
@@ -1180,7 +1182,6 @@ const NotificationsTab = ({
         </div>
       </div>
 
-      {/* ── Reset Button ── */}
       <div className="noti-reset" style={{ marginTop: '32px', borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
         <button className="reset-btn" onClick={handleReset}>
           <i className="fa-solid fa-rotate"></i>

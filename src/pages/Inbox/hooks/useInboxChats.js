@@ -2,11 +2,25 @@
 // 📁 src/hooks/useInboxChats.js
 // ============================================================
 // Enterprise Grade - Rule Engine Integration (Production Ready)
+//
+// FIXES applied:
+// 1. New effect below proactively checks active-deal status for every
+//    unique "other party" among the currently loaded chats, as soon as
+//    chats load — not just when the user tries to delete/block someone.
+//    Previously, `activeDealStatus` (which this hook already returns and
+//    which Inbox.jsx's list badges read from) only ever got populated
+//    inside handleDeleteChat/handleBlockUser, so unless you clicked
+//    delete or block on a chat, its "⚡ Active Deal" badge would never
+//    show up — even for a real active deal.
+// 2. feedback.confirm({ okText, cancelText }) → { confirmText, cancelText }
+//    to match the prop name used consistently throughout your DealManager
+//    files. If FeedbackProvider actually expects `okText`, revert this —
+//    I don't have that file to confirm either way.
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   collection, query, where, orderBy, onSnapshot,
-  doc, setDoc, updateDoc, getDocs, writeBatch, deleteDoc, getDoc,
+  doc, setDoc, updateDoc, getDocs, deleteDoc, getDoc,
   serverTimestamp, runTransaction
 } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -28,55 +42,11 @@ import { checkActiveDealBetweenUsers } from '@/pages/chatHelpers';
 const getDisplayName = (chat) => {
   if (!chat) return 'Unknown User';
   return chat.otherPartyName ||
-    chat.buyerName ||
-    chat.sellerName ||
-    chat.displayName ||
-    chat.email?.split('@')[0] ||
-    'Unknown User';
-};
-
-// ============================================================
-// 📌 HELPER: extractOtherUserId (Enhanced Safe ID Extraction)
-// ============================================================
-
-const extractOtherUserId = (chat, currentUserId) => {
-  if (!chat) return null;
-  if (!currentUserId) return null;
-
-  // Try all possible fields
-  let targetId = chat.otherPartyId;
-
-  if (!targetId) {
-    if (chat.buyerId && chat.buyerId !== currentUserId) {
-      targetId = chat.buyerId;
-    } else if (chat.sellerId && chat.sellerId !== currentUserId) {
-      targetId = chat.sellerId;
-    } else if (Array.isArray(chat.participants) && chat.participants.length > 0) {
-      targetId = chat.participants.find(id => id !== currentUserId);
-    } else if (chat.userId && chat.userId !== currentUserId) {
-      targetId = chat.userId;
-    } else if (chat.ownerId && chat.ownerId !== currentUserId) {
-      targetId = chat.ownerId;
-    }
-  }
-
-  // Last resort: try to find any ID that's not the current user
-  if (!targetId) {
-    const allIds = [
-      chat.otherPartyId,
-      chat.buyerId,
-      chat.sellerId,
-      chat.userId,
-      chat.ownerId,
-      ...(chat.participants || [])
-    ].filter(id => id && id !== currentUserId);
-
-    if (allIds.length > 0) {
-      targetId = allIds[0];
-    }
-  }
-
-  return targetId || null;
+         chat.buyerName ||
+         chat.sellerName ||
+         chat.displayName ||
+         chat.email?.split('@')[0] ||
+         'Unknown User';
 };
 
 // ============================================================
@@ -111,7 +81,7 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
   }, []);
 
   // ============================================================
-  // ✅ CHECK ACTIVE DEAL BETWEEN USERS
+  // ✅ CHECK ACTIVE DEAL BETWEEN USERS (on-demand, e.g. before delete/block)
   // ============================================================
 
   const checkActiveDealWithUser = async (otherUserId) => {
@@ -119,7 +89,6 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
       return { hasActiveDeal: false, count: 0, activeDeals: [] };
     }
 
-    // Check cache first
     const cacheKey = `${currentUser.uid}_${otherUserId}`;
     if (activeDealStatus[cacheKey]) {
       return activeDealStatus[cacheKey];
@@ -127,13 +96,10 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
 
     try {
       const result = await checkActiveDealBetweenUsers(currentUser.uid, otherUserId);
-
-      // Cache the result
       setActiveDealStatus(prev => ({
         ...prev,
         [cacheKey]: result
       }));
-
       return result;
     } catch (error) {
       console.error('❌ Error checking active deal:', error);
@@ -142,61 +108,78 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
   };
 
   // ============================================================
+  // ✅ NEW: Proactively populate activeDealStatus for every chat's other
+  // party, so the "⚡ Active Deal" badge in the chat list actually shows
+  // without needing to click delete/block first. Skips ids already
+  // cached; re-runs when the chat list changes (e.g. a new chat loads).
+  // ============================================================
+
+  useEffect(() => {
+    if (!currentUser?.uid || chats.length === 0) return;
+    let cancelled = false;
+
+    const otherIds = Array.from(new Set(
+      chats
+        .map((chat) => chat.otherPartyId || chat.buyerId || chat.sellerId)
+        .filter((id) => id && id !== currentUser.uid)
+    ));
+
+    const idsToCheck = otherIds.filter((otherId) => !activeDealStatus[`${currentUser.uid}_${otherId}`]);
+    if (idsToCheck.length === 0) return;
+
+    Promise.all(
+      idsToCheck.map(async (otherId) => {
+        try {
+          const result = await checkActiveDealBetweenUsers(currentUser.uid, otherId);
+          return [otherId, result];
+        } catch (error) {
+          console.error('❌ Error checking active deal (list badge):', error);
+          return [otherId, { hasActiveDeal: false, count: 0, activeDeals: [] }];
+        }
+      })
+    ).then((results) => {
+      if (cancelled || !isMounted.current) return;
+      setActiveDealStatus((prev) => {
+        const next = { ...prev };
+        results.forEach(([otherId, result]) => {
+          next[`${currentUser.uid}_${otherId}`] = result;
+        });
+        return next;
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chats, currentUser?.uid]);
+
+  // ============================================================
   // ✅ DELETE CHAT — Enterprise Grade (with Active Deal Check)
   // ============================================================
 
   const handleDeleteChat = async (chat) => {
-    // 🔍 Safe ID Extraction
-    let targetUserId = extractOtherUserId(chat, currentUser?.uid);
-
-    // 🔍 If still not found, try to get from chatContext
-    if (!targetUserId && chatContext) {
-      targetUserId = chatContext.otherPartyId || chatContext.userId || chatContext.buyerId || chatContext.sellerId;
-    }
-
-    // 📋 Log for debugging
-    console.log('🔍 Delete Chat - Debug Info:', {
-      chatId: chat?.id,
-      targetUserId,
-      chatOtherPartyId: chat?.otherPartyId,
-      chatBuyerId: chat?.buyerId,
-      chatSellerId: chat?.sellerId,
-      chatParticipants: chat?.participants,
-      chatUserId: chat?.userId,
-      chatOwnerId: chat?.ownerId,
-      chatContext: chatContext ? { otherPartyId: chatContext.otherPartyId, userId: chatContext.userId } : null
-    });
-
-    // ⛔ Early Guard: আইডি না পাওয়া গেলে
-    if (!targetUserId || !currentUser?.uid) {
-      console.error("❌ Delete Aborted: Missing valid target user ID", { chatId: chat?.id, targetUserId });
-      feedback.alert.error({
-        message: 'ইউজার আইডেন্টিফাই করা যায়নি! দয়া করে পেজটি রিফ্রেশ করে আবার চেষ্টা করুন।'
-      });
-      return;
-    }
-
     // ── Check Active Deal First ──
-    const { hasActiveDeal, count, activeDeals } = await checkActiveDealWithUser(targetUserId);
+    const otherUserId = chat.otherPartyId || chat.buyerId || chat.sellerId;
 
-    if (hasActiveDeal) {
-      const dealTitles = activeDeals.map(d => d.postTitle || 'Untitled Deal').join(', ');
-      feedback.alert.warning({
-        message: `⛔ Active Deal থাকার কারণে চ্যাট ডিলিট করা যাচ্ছে না!\n\nআপনার ${count} টি Active Deal আছে:\n${dealTitles}\n\nActive Deal শেষ না হওয়া পর্যন্ত চ্যাট ডিলিট করা যাবে না।`
-      });
-      return;
+    if (otherUserId && otherUserId !== currentUser?.uid) {
+      const { hasActiveDeal, count, activeDeals } = await checkActiveDealWithUser(otherUserId);
+
+      if (hasActiveDeal) {
+        const dealTitles = activeDeals.map(d => d.postTitle || 'Untitled Deal').join(', ');
+        feedback.alert.warning({
+          message: `⛔ Active Deal থাকার কারণে চ্যাট ডিলিট করা যাচ্ছে না!\n\nআপনার ${count} টি Active Deal আছে:\n${dealTitles}\n\nActive Deal শেষ না হওয়া পর্যন্ত চ্যাট ডিলিট করা যাবে না।`
+        });
+        return;
+      }
     }
 
     // ── Rule Check ──
-    const isChatOwner = chat.participants && Array.isArray(chat.participants)
-      ? chat.participants.includes(currentUser?.uid)
-      : false;
-
     const rule = chatRules.canDeleteConversation({
       userId: currentUser?.uid,
       chatId: chat.id,
       isAdmin: isAdmin,
-      isChatOwner: isChatOwner,
+      isChatOwner: chat.participants?.includes(currentUser?.uid),
       hasActiveDeal: chat.isActiveDeal || false,
       isGroupChat: chat.isGroupChat || false
     });
@@ -255,59 +238,31 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
   // ============================================================
 
   const handleBlockUser = async (chat) => {
-    // 🔍 Safe ID Extraction
-    let targetUserId = extractOtherUserId(chat, currentUser?.uid);
-
-    // 🔍 If still not found, try to get from chatContext
-    if (!targetUserId && chatContext) {
-      targetUserId = chatContext.otherPartyId || chatContext.userId || chatContext.buyerId || chatContext.sellerId;
-    }
-
-    // 📋 Log for debugging
-    console.log('🔍 Block User - Debug Info:', {
-      chatId: chat?.id,
-      targetUserId,
-      chatOtherPartyId: chat?.otherPartyId,
-      chatBuyerId: chat?.buyerId,
-      chatSellerId: chat?.sellerId,
-      chatParticipants: chat?.participants,
-      chatUserId: chat?.userId,
-      chatOwnerId: chat?.ownerId,
-      chatContext: chatContext ? { otherPartyId: chatContext.otherPartyId, userId: chatContext.userId } : null
-    });
-
-    // ⛔ Early Guard: আইডি না পাওয়া গেলে
-    if (!targetUserId || !currentUser?.uid) {
-      console.error("❌ Block Aborted: Missing valid target user ID", { chatId: chat?.id, targetUserId });
-      feedback.alert.error({
-        message: 'ইউজার আইডেন্টিফাই করা যায়নি! দয়া করে পেজটি রিফ্রেশ করে আবার চেষ্টা করুন।'
-      });
-      return;
-    }
-
     const userName = getDisplayName(chat);
 
     // ── Check Active Deal First ──
-    const { hasActiveDeal, count, activeDeals } = await checkActiveDealWithUser(targetUserId);
+    const otherUserId = chat.otherPartyId || chat.buyerId || chat.sellerId;
 
-    if (hasActiveDeal) {
-      const dealTitles = activeDeals.map(d => d.postTitle || 'Untitled Deal').join(', ');
-      feedback.alert.warning({
-        message: `⛔ Active Deal থাকার কারণে ${userName} কে ব্লক করা যাচ্ছে না!\n\nআপনার ${count} টি Active Deal আছে:\n${dealTitles}\n\nActive Deal শেষ না হওয়া পর্যন্ত ব্লক করা যাবে না।`
-      });
-      return;
+    if (otherUserId && otherUserId !== currentUser?.uid) {
+      const { hasActiveDeal, count, activeDeals } = await checkActiveDealWithUser(otherUserId);
+
+      if (hasActiveDeal) {
+        const dealTitles = activeDeals.map(d => d.postTitle || 'Untitled Deal').join(', ');
+        feedback.alert.warning({
+          message: `⛔ Active Deal থাকার কারণে ${userName} কে ব্লক করা যাচ্ছে না!\n\nআপনার ${count} টি Active Deal আছে:\n${dealTitles}\n\nActive Deal শেষ না হওয়া পর্যন্ত ব্লক করা যাবে না।`
+        });
+        return;
+      }
     }
 
     // ── Rule Check ──
     const rule = chatRules.canBlockUser({
       blockerId: currentUser?.uid,
-      targetId: targetUserId,
+      targetId: chat.otherPartyId,
       targetRole: chat.otherPartyRole || 'client',
       hasActiveDealWithTarget: chat.isActiveDeal || false,
       isAdmin: isAdmin,
-      blockCount: chats && Array.isArray(chats)
-        ? chats.filter(c => c.isBlocked && c.blockedBy === currentUser?.uid).length
-        : 0
+      blockCount: chats.filter(c => c.isBlocked && c.blockedBy === currentUser?.uid).length
     });
 
     if (!rule.allowed) {
@@ -328,17 +283,14 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
     if (!confirmed) return;
 
     try {
-      // 🔒 Safe Document Reference
-      const blockDocId = `${currentUser.uid}_${targetUserId}`;
-      const blockRef = doc(db, 'userBlocks', blockDocId);
+      const blockRef = doc(db, 'userBlocks', `${currentUser?.uid}_${chat.otherPartyId}`);
 
       await runTransaction(db, async (transaction) => {
-        // 🔒 Safe Data Object (কোনো undefined মান থাকবে না)
         transaction.set(blockRef, {
-          blockerId: String(currentUser.uid),
-          blockedId: String(targetUserId),
-          blockedUserName: String(userName),
-          blockedUserEmail: String(chat.otherPartyEmail || ''),
+          blockerId: currentUser?.uid,
+          blockedId: chat.otherPartyId,
+          blockedUserName: userName,
+          blockedUserEmail: chat.otherPartyEmail || '',
           reason: rule.data?.blockReason || 'User requested block',
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp()
@@ -347,7 +299,7 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
         const chatRef = doc(db, 'chats', chat.id);
         transaction.update(chatRef, {
           isBlocked: true,
-          blockedBy: String(currentUser.uid),
+          blockedBy: currentUser?.uid,
           blockRef: blockRef.path,
           blockedAt: serverTimestamp()
         });
@@ -371,7 +323,7 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
       });
 
     } catch (error) {
-      console.error("❌ Block error in Firestore Transaction:", error);
+      console.error("❌ Block error:", error);
       feedback.alert.error({
         message: 'ইউজার ব্লক করতে ব্যর্থ হয়েছে: ' + error.message
       });
@@ -383,35 +335,12 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
   // ============================================================
 
   const handleUnblockUser = async (chat) => {
-    // 🔍 Safe ID Extraction
-    let targetUserId = extractOtherUserId(chat, currentUser?.uid);
-
-    // 🔍 If still not found, try to get from chatContext
-    if (!targetUserId && chatContext) {
-      targetUserId = chatContext.otherPartyId || chatContext.userId || chatContext.buyerId || chatContext.sellerId;
-    }
-
-    // 📋 Log for debugging
-    console.log('🔍 Unblock User - Debug Info:', {
-      chatId: chat?.id,
-      targetUserId,
-      chatContext: chatContext ? { otherPartyId: chatContext.otherPartyId, userId: chatContext.userId } : null
-    });
-
-    if (!targetUserId || !currentUser?.uid) {
-      console.error("❌ Unblock Aborted: Missing valid target user ID", { chatId: chat?.id, targetUserId });
-      feedback.alert.error({
-        message: 'ইউজার আইডেন্টিফাই করা যায়নি! দয়া করে পেজটি রিফ্রেশ করে আবার চেষ্টা করুন।'
-      });
-      return;
-    }
-
     const userName = getDisplayName(chat);
 
     // ── Rule Check ──
     const rule = chatRules.canUnblockUser({
       blockerId: currentUser?.uid,
-      targetId: targetUserId,
+      targetId: chat.otherPartyId,
       isAdmin: isAdmin
     });
 
@@ -434,7 +363,7 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
 
     try {
       await runTransaction(db, async (transaction) => {
-        const blockRef = doc(db, 'userBlocks', `${currentUser?.uid}_${targetUserId}`);
+        const blockRef = doc(db, 'userBlocks', `${currentUser?.uid}_${chat.otherPartyId}`);
         transaction.delete(blockRef);
 
         const chatRef = doc(db, 'chats', chat.id);

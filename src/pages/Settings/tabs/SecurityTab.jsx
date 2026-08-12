@@ -1,4 +1,21 @@
 // src/pages/Settings/tabs/SecurityTab.jsx
+// ============================================================
+// 🔧 FIX APPLIED — Recovery Codes double-regenerate bug:
+// Both "Generate New Codes" AND "Download Codes" (and the modal's
+// "Download All Codes") independently called
+// recovery.regenerateRecoveryCodes(10). Regenerating creates a BRAND
+// NEW set and invalidates the previous one. So the old flow was:
+//   1. User clicks "Generate" → sees codes A on screen.
+//   2. User clicks "Download" → regenerates AGAIN → downloads codes B.
+//   3. Codes A (still shown on screen, and the modal's own "Download
+//      All Codes" button) are now dead — the user has no way to know
+//      the codes in front of them no longer work.
+// Fixed so downloading uses the codes ALREADY in memory
+// (recoveryCodesList) whenever they exist — regeneration only happens
+// when there is genuinely nothing generated yet, and even then only
+// after an explicit confirmation (since it invalidates any codes
+// issued earlier, e.g. from a previous session).
+// ============================================================
 
 import React, { useState, useEffect, useCallback } from 'react';
 import ToggleSwitch from '../components/ToggleSwitch';
@@ -18,9 +35,36 @@ import './SecurityTab.css';
 import { device } from '@/security/device';
 import { recovery } from '@/security/recovery';
 
-// ✅ নতুন Security Hooks
 import { useAppLock } from '@/hooks/useAppLock';
 import { useBiometric } from '@/hooks/useBiometric';
+
+// ============================================================
+// 🔧 NEW: shared file-download helper so both download entry points
+// use the exact same codes, instead of each fetching its own fresh set.
+// ============================================================
+const downloadCodesAsFile = (codes) => {
+  const timestamp = new Date().toLocaleString('bn-BD', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  const header = `WorkTrustbd Recovery Codes\nGenerated: ${timestamp}\n${'='.repeat(50)}\n\n`;
+  const codesText = codes.join('\n');
+  const fullText = header + codesText + '\n\n' + '='.repeat(50) + '\n⚠️ Keep these codes safe. Each code can be used only once.';
+
+  const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `recovery_codes_${new Date().toISOString().slice(0, 10)}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
 
 const SecurityTab = ({ 
   securityData, 
@@ -28,7 +72,6 @@ const SecurityTab = ({
   onChangePassword, 
   onTwoFactorToggle,
   saving,
-  // ✅ Security Features Props (Settings থেকে আসবে)
   biometricStatus = false,
   biometricType = '',
   isBiometricSupported = false,
@@ -36,16 +79,12 @@ const SecurityTab = ({
   appLockStatus = false,
   onBiometricToggle = null,
   onAppLockToggle = null,
-  onChangePin = null, // ✅ NEW: PIN change handler
+  onChangePin = null,
   onSecurityCheckup = null,
 }) => {
   const feedback = useFeedback();
   const sound = useSound();
   const user = auth.currentUser;
-
-  // ============================================================
-  // ✅ Security Hooks (Parent থেকে আসা props ব্যবহার করি)
-  // ============================================================
 
   // ── App Lock States ──
   const [isAppLockEnabled, setIsAppLockEnabled] = useState(appLockStatus);
@@ -133,14 +172,13 @@ const SecurityTab = ({
   };
 
   // ============================================================
-  // ✅ App Lock Handlers (useAppLock hook ব্যবহার)
+  // ✅ App Lock Handlers
   // ============================================================
 
   const handleAppLockToggle = async () => {
     const newState = !isAppLockEnabled;
     
     if (newState) {
-      // ✅ Enable - PIN setup modal দেখাও
       setShowPinInput(true);
       setIsSettingPin(true);
       setIsChangingPin(false);
@@ -148,7 +186,6 @@ const SecurityTab = ({
       setAppLockPin('');
       setAppLockConfirmPin('');
     } else {
-      // ✅ Disable - Parent handler call
       if (onAppLockToggle) {
         const result = await onAppLockToggle(null);
         if (result?.success) {
@@ -164,7 +201,6 @@ const SecurityTab = ({
     }
   };
 
-  // ✅ Handle Change PIN
   const handleChangePin = () => {
     setIsChangingPin(true);
     setIsSettingPin(true);
@@ -174,9 +210,7 @@ const SecurityTab = ({
     setAppLockConfirmPin('');
   };
 
-  // ✅ Handle Set/Change PIN - UPDATED
   const handleSetPin = async () => {
-    // ── Validation ──
     if (appLockPin.length < 4) {
       feedback?.showWarning('⚠️ পিন দিন', 'কমপক্ষে ৪ ডিজিটের পিন দিন।');
       return;
@@ -194,15 +228,12 @@ const SecurityTab = ({
 
     let result;
 
-    // ── Determine which action to take ──
     if (isChangingPin) {
-      // ✅ PIN Change - verify old PIN first
       if (!oldPin || oldPin.length < 4) {
         feedback?.showWarning('⚠️ পুরনো পিন দিন', 'বর্তমান পিন দিন।');
         return;
       }
 
-      // Check if onChangePin prop is provided
       if (!onChangePin) {
         feedback?.showError('❌ ত্রুটি', 'পিন পরিবর্তন ফিচার সক্রিয় নেই।');
         return;
@@ -210,7 +241,6 @@ const SecurityTab = ({
 
       result = await onChangePin(oldPin, appLockPin);
     } else {
-      // ✅ PIN Setup - enable app lock with new PIN
       if (!onAppLockToggle) {
         feedback?.showError('❌ ত্রুটি', 'অ্যাপ লক ফিচার সক্রিয় নেই।');
         return;
@@ -219,7 +249,6 @@ const SecurityTab = ({
       result = await onAppLockToggle(appLockPin);
     }
 
-    // ── Handle Result ──
     if (result?.success) {
       setIsAppLockEnabled(true);
       setIsLockedOut(false);
@@ -240,9 +269,7 @@ const SecurityTab = ({
       const errorMsg = result?.error || (isChangingPin ? 'পিন পরিবর্তন করতে সমস্যা হয়েছে' : 'পিন সেট করতে সমস্যা হয়েছে');
       feedback?.showError('❌ ব্যর্থ', errorMsg);
       
-      // If PIN change failed with wrong old PIN, shake or highlight old PIN field
       if (isChangingPin && result?.error?.toLowerCase().includes('current')) {
-        // Highlight old PIN field
         const oldPinInput = document.querySelector('input[placeholder="বর্তমান PIN দিন"]');
         if (oldPinInput) {
           oldPinInput.classList.add('shake');
@@ -252,7 +279,6 @@ const SecurityTab = ({
     }
   };
 
-  // ✅ Cancel PIN Setup
   const handleCancelPin = () => {
     setShowPinInput(false);
     setIsSettingPin(false);
@@ -274,7 +300,6 @@ const SecurityTab = ({
         setRecoveryCodesList(result.codes);
         setShowRecoveryCodes(true);
         
-        // Update stats
         const stats = recovery.getRecoveryCodeStats();
         setRecoveryStats(stats);
         
@@ -289,38 +314,35 @@ const SecurityTab = ({
     }
   }, [feedback, sound]);
 
+  // 🔧 FIX: downloads the codes ALREADY on screen (recoveryCodesList)
+  // instead of blindly calling regenerateRecoveryCodes() again.
   const handleDownloadRecoveryCodes = useCallback(async () => {
+    if (recoveryCodesList.length > 0) {
+      downloadCodesAsFile(recoveryCodesList);
+      feedback?.showSuccess('✅ Downloaded', 'Recovery codes downloaded successfully.');
+      sound?.playEvent(SOUND_EVENTS.SUCCESS);
+      return;
+    }
+
+    const confirmed = await feedback.confirm({
+      title: 'নতুন Recovery Codes তৈরি করবেন?',
+      message: 'এখনো কোনো codes জেনারেট করা হয়নি। ডাউনলোড করতে নতুন codes তৈরি করতে হবে — এতে আগের যেকোনো codes অকার্যকর হয়ে যাবে।',
+      variant: 'confirm',
+      confirmText: 'নতুন Codes তৈরি করে ডাউনলোড করুন',
+      cancelText: 'বাতিল',
+    });
+    if (!confirmed) return;
+
     try {
       const result = await recovery.regenerateRecoveryCodes(10);
-      
+
       if (result.success) {
-        // Create download with timestamp and header
-        const timestamp = new Date().toLocaleString('bn-BD', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        
-        const header = `WorkTrustbd Recovery Codes\nGenerated: ${timestamp}\n${'='.repeat(50)}\n\n`;
-        const codesText = result.codes.join('\n');
-        const fullText = header + codesText + '\n\n' + '='.repeat(50) + '\n⚠️ Keep these codes safe. Each code can be used only once.';
-        
-        const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `recovery_codes_${new Date().toISOString().slice(0,10)}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        // Update stats
+        setRecoveryCodesList(result.codes);
+        downloadCodesAsFile(result.codes);
+
         const stats = recovery.getRecoveryCodeStats();
         setRecoveryStats(stats);
-        
+
         feedback?.showSuccess('✅ Downloaded', 'Recovery codes downloaded successfully.');
         sound?.playEvent(SOUND_EVENTS.SUCCESS);
       } else {
@@ -330,7 +352,7 @@ const SecurityTab = ({
       console.error('❌ Download error:', error);
       feedback?.showError('❌ Failed', 'Could not download recovery codes.');
     }
-  }, [feedback, sound]);
+  }, [feedback, sound, recoveryCodesList]);
 
   const handleCloseRecoveryCodes = useCallback(() => {
     setShowRecoveryCodes(false);
@@ -349,28 +371,24 @@ const SecurityTab = ({
 
     const checks = [];
 
-    // ✅ Password Check
     if (securityData?.newPassword?.length >= 8) {
       checks.push({ name: 'পাসওয়ার্ড', status: '✅ শক্তিশালী' });
     } else {
       checks.push({ name: 'পাসওয়ার্ড', status: '⚠️ দুর্বল' });
     }
 
-    // ✅ 2FA Check
     if (securityData?.twoFactorEnabled) {
       checks.push({ name: '2FA', status: '✅ সক্রিয়' });
     } else {
       checks.push({ name: '2FA', status: '⚠️ নিষ্ক্রিয়' });
     }
 
-    // ✅ Biometric Check
     if (isBiometricEnabled) {
       checks.push({ name: 'বায়োমেট্রিক', status: '✅ সক্রিয়' });
     } else {
       checks.push({ name: 'বায়োমেট্রিক', status: '⚠️ নিষ্ক্রিয়' });
     }
 
-    // ✅ App Lock Check
     if (isAppLockEnabled) {
       checks.push({ name: 'অ্যাপ লক', status: '✅ সক্রিয়' });
     } else {
@@ -436,7 +454,6 @@ const SecurityTab = ({
       (error) => {
         console.error('Error fetching login history:', error);
         setHistoryLoading(false);
-        // Fallback data
         setLoginHistory([
           { device: 'Chrome - Windows', ip: '192.168.1.1', time: new Date(), status: 'success' },
           { device: 'Safari - iPhone', ip: '192.168.1.2', time: new Date(Date.now() - 86400000), status: 'success' },
@@ -691,7 +708,6 @@ const SecurityTab = ({
           </div>
         )}
 
-        {/* ✅ Change PIN Button */}
         {isAppLockEnabled && !showPinInput && (
           <button className="change-pin-btn" onClick={handleChangePin}>
             <i className="fa-solid fa-pen-to-square"></i>
@@ -699,7 +715,6 @@ const SecurityTab = ({
           </button>
         )}
 
-        {/* ── PIN Setup/Change Modal ── */}
         {showPinInput && (
           <div className="pin-modal">
             <div className="pin-modal-content">
@@ -709,7 +724,6 @@ const SecurityTab = ({
               </h4>
               <p>{isChangingPin ? 'পুরনো PIN দিয়ে নতুন PIN সেট করুন' : 'অ্যাপ লক করার জন্য ৪-৬ ডিজিটের PIN দিন'}</p>
               
-              {/* ✅ Old PIN Input (for PIN Change) */}
               {isChangingPin && (
                 <div className="form-group">
                   <label>বর্তমান PIN</label>
@@ -790,7 +804,6 @@ const SecurityTab = ({
           <h3>লগইন ইতিহাস</h3>
         </div>
 
-        {/* ✅ Last Login */}
         {lastLogin && (
           <div className="last-login">
             <i className="fa-solid fa-clock"></i>
@@ -914,9 +927,15 @@ const SecurityTab = ({
                   </div>
                 ))}
               </div>
+              {/* 🔧 FIX: downloads the exact codes shown above — no
+                  regenerate call here, so these codes stay valid. */}
               <button 
                 className="btn-primary download-all-btn"
-                onClick={handleDownloadRecoveryCodes}
+                onClick={() => {
+                  downloadCodesAsFile(recoveryCodesList);
+                  feedback?.showSuccess('✅ Downloaded', 'Recovery codes downloaded successfully.');
+                  sound?.playEvent(SOUND_EVENTS.SUCCESS);
+                }}
               >
                 <i className="fa-solid fa-download"></i> Download All Codes
               </button>

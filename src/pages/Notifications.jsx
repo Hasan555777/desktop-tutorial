@@ -1,7 +1,21 @@
 // ============================================================
 // 📁 src/pages/Notifications.jsx
 // ============================================================
-// CHAT NOTIFICATIONS REMOVED — Only Deal, Wallet, Admin, System
+// 🔧 FIXES APPLIED:
+// 1. Removed onUnreadCountChange entirely. App.js already has its own
+//    live onSnapshot listener on the `notifications` collection, so
+//    it updates the badge automatically whenever this page writes to
+//    Firestore (mark read / delete / clear all). Having THIS page
+//    also compute and push its own count up caused two competing
+//    numbers -> flicker / wrong badge count, especially with settings
+//    toggled off (this page's count ignored settings entirely before).
+// 2. Now imports the same category/settings map App.js uses, so a
+//    muted category behaves identically in both places for the
+//    unread COUNT shown in the header. (History list itself still
+//    shows all non-chat notifications — muting a category stops new
+//    alerts/badge counting, it doesn't erase your notification log.
+//    Say the word if you'd rather muted categories be hidden from the
+//    list too.)
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -13,24 +27,47 @@ import {
 import NotificationModal from '../components/NotificationModal';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
 import { NOTIFICATION_EVENTS } from '@/UI/Notification/NotificationEvents';
+import { isCategoryEnabled } from '@/utils/notificationCategory';
 import './Notifications.css';
 
-const Notifications = ({ currentUser, onUnreadCountChange }) => {
-  console.log("📌 Notifications component mounted");
+const NOTIFICATION_SETTINGS_KEY = 'workhub_notification_settings';
 
+const getNotificationSettings = () => {
+  try {
+    const saved = localStorage.getItem(NOTIFICATION_SETTINGS_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.error('Error loading notification settings:', e);
+  }
+  return null;
+};
+
+// 🔧 FIX: no longer takes/uses onUnreadCountChange
+const Notifications = ({ currentUser }) => {
   const navigate = useNavigate();
   const feedback = useFeedback();
 
-  // ============================================================
-  // ✅ State
-  // ============================================================
   const [selectedNoti, setSelectedNoti] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notificationSettings, setNotificationSettings] = useState(() => getNotificationSettings());
 
-  // ============================================================
-  // ✅ Time Format
-  // ============================================================
+  // Keep settings in sync if changed from the Settings page while this page is open
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === NOTIFICATION_SETTINGS_KEY) {
+        setNotificationSettings(getNotificationSettings());
+      }
+    };
+    const handleSettingsChange = (e) => setNotificationSettings(e.detail || getNotificationSettings());
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('workhub:notification-settings', handleSettingsChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('workhub:notification-settings', handleSettingsChange);
+    };
+  }, []);
+
   const formatNotificationTime = (timestamp) => {
     if (!timestamp) return 'Just now';
     try {
@@ -58,12 +95,8 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
     return 'Just now';
   };
 
-  // ============================================================
-  // ✅ Notification Style — CHAT EVENTS REMOVED
-  // ============================================================
   const getNotificationStyle = (event) => {
     const styles = {
-      // ── Deal Events ──
       [NOTIFICATION_EVENTS.DEAL_CREATED]: { icon: 'fa-solid fa-file-invoice', colorClass: 'noti-project' },
       [NOTIFICATION_EVENTS.DEAL_CONFIRMED]: { icon: 'fa-solid fa-handshake', colorClass: 'noti-success' },
       [NOTIFICATION_EVENTS.DEAL_APPROVED]: { icon: 'fa-solid fa-check-circle', colorClass: 'noti-success' },
@@ -75,17 +108,14 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
       [NOTIFICATION_EVENTS.DEAL_DEADLINE_PASSED]: { icon: 'fa-solid fa-hourglass-end', colorClass: 'noti-warning' },
       [NOTIFICATION_EVENTS.DEADLINE_PASSED]: { icon: 'fa-solid fa-hourglass-end', colorClass: 'noti-warning' },
 
-      // ── Milestone Events ──
       [NOTIFICATION_EVENTS.MILESTONE_FUNDED]: { icon: 'fa-solid fa-circle-dollar', colorClass: 'noti-payment' },
       [NOTIFICATION_EVENTS.MILESTONE_REVIEW]: { icon: 'fa-solid fa-star', colorClass: 'noti-message' },
       [NOTIFICATION_EVENTS.MILESTONE_RELEASED]: { icon: 'fa-solid fa-circle-check', colorClass: 'noti-success' },
 
-      // ── Cancellation Events ──
       [NOTIFICATION_EVENTS.CANCELLATION_REQUEST]: { icon: 'fa-solid fa-clock', colorClass: 'noti-warning' },
       [NOTIFICATION_EVENTS.CANCELLATION_APPROVED]: { icon: 'fa-solid fa-ban', colorClass: 'noti-danger' },
       [NOTIFICATION_EVENTS.CANCELLATION_REJECTED]: { icon: 'fa-solid fa-times', colorClass: 'noti-system' },
 
-      // ── Wallet Events ──
       [NOTIFICATION_EVENTS.PAYMENT_RECEIVED]: { icon: 'fa-solid fa-money-bill-wave', colorClass: 'noti-payment' },
       [NOTIFICATION_EVENTS.PAYMENT_RELEASED]: { icon: 'fa-solid fa-circle-check', colorClass: 'noti-success' },
       [NOTIFICATION_EVENTS.WALLET_CREDITED]: { icon: 'fa-solid fa-wallet', colorClass: 'noti-payment' },
@@ -95,27 +125,21 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
       [NOTIFICATION_EVENTS.WITHDRAW_APPROVED]: { icon: 'fa-solid fa-arrow-up-right-from-square', colorClass: 'noti-payment' },
       [NOTIFICATION_EVENTS.WITHDRAW_REJECTED]: { icon: 'fa-solid fa-times-circle', colorClass: 'noti-danger' },
 
-      // ── Admin Events ──
       [NOTIFICATION_EVENTS.ADMIN_ANNOUNCEMENT]: { icon: 'fa-solid fa-bullhorn', colorClass: 'noti-system' },
       [NOTIFICATION_EVENTS.ADMIN_NOTIFICATION]: { icon: 'fa-solid fa-bell', colorClass: 'noti-system' },
 
-      // ── Review Events ──
       [NOTIFICATION_EVENTS.REVIEW_RECEIVED]: { icon: 'fa-solid fa-star', colorClass: 'noti-success' },
       [NOTIFICATION_EVENTS.REVIEW_REQUESTED]: { icon: 'fa-solid fa-pen', colorClass: 'noti-message' },
 
-      // ── Verification Events ──
       [NOTIFICATION_EVENTS.VERIFY_APPROVED]: { icon: 'fa-solid fa-check-circle', colorClass: 'noti-success' },
       [NOTIFICATION_EVENTS.VERIFY_REJECTED]: { icon: 'fa-solid fa-times-circle', colorClass: 'noti-danger' },
 
-      // ── Post Events ──
       [NOTIFICATION_EVENTS.POST_APPROVED]: { icon: 'fa-solid fa-check-circle', colorClass: 'noti-success' },
       [NOTIFICATION_EVENTS.POST_REJECTED]: { icon: 'fa-solid fa-times-circle', colorClass: 'noti-danger' },
 
-      // ── Report Events ──
       [NOTIFICATION_EVENTS.REPORT_RESOLVED]: { icon: 'fa-solid fa-circle-check', colorClass: 'noti-success' },
       [NOTIFICATION_EVENTS.REPORT_CANCELLED]: { icon: 'fa-solid fa-ban', colorClass: 'noti-danger' },
 
-      // ── System Events ──
       [NOTIFICATION_EVENTS.SYSTEM]: { icon: 'fa-solid fa-bell', colorClass: 'noti-system' },
       [NOTIFICATION_EVENTS.SYSTEM_UPDATE]: { icon: 'fa-solid fa-rotate', colorClass: 'noti-info' },
       [NOTIFICATION_EVENTS.SYSTEM_ERROR]: { icon: 'fa-solid fa-triangle-exclamation', colorClass: 'noti-danger' },
@@ -125,64 +149,51 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
     return styles[event] || { icon: 'fa-solid fa-bell', colorClass: 'noti-system' };
   };
 
-  // ============================================================
-  // ✅ Notification Title — CHAT EVENTS REMOVED
-  // ============================================================
   const getNotificationTitle = (event, data) => {
     const titles = {
-      // ── Deal Events ──
       [NOTIFICATION_EVENTS.DEAL_CREATED]: '📄 New Deal Created',
-      [NOTIFICATION_EVENTS.DEAL_CONFIRMED]: '🎉 ডিল কনফার্ম হয়েছে!',
+      [NOTIFICATION_EVENTS.DEAL_CONFIRMED]: '🎉 ডিল কনফার্ম হয়েছে!',
       [NOTIFICATION_EVENTS.DEAL_APPROVED]: '✅ Deal Approved',
       [NOTIFICATION_EVENTS.DEAL_REJECTED]: '❌ Deal Rejected',
       [NOTIFICATION_EVENTS.DEAL_REOPENED]: '🔄 Deal Reopened',
-      [NOTIFICATION_EVENTS.DEAL_COMPLETED]: '🏆 ডিল সম্পূর্ণ হয়েছে!',
-      [NOTIFICATION_EVENTS.DEAL_CANCELLED]: '❌ ডিল ক্যানসেল হয়েছে',
-      [NOTIFICATION_EVENTS.DEAL_EXTENDED]: '⏰ ডেডলাইন বাড়ানো হয়েছে',
-      [NOTIFICATION_EVENTS.DEAL_DEADLINE_PASSED]: '⏰ ডেডলাইন শেষ হয়েছে',
-      [NOTIFICATION_EVENTS.DEADLINE_PASSED]: '⏰ ডেডলাইন শেষ হয়েছে',
+      [NOTIFICATION_EVENTS.DEAL_COMPLETED]: '🏆 ডিল সম্পূর্ণ হয়েছে!',
+      [NOTIFICATION_EVENTS.DEAL_CANCELLED]: '❌ ডিল ক্যানসেল হয়েছে',
+      [NOTIFICATION_EVENTS.DEAL_EXTENDED]: '⏰ ডেডলাইন বাড়ানো হয়েছে',
+      [NOTIFICATION_EVENTS.DEAL_DEADLINE_PASSED]: '⏰ ডেডলাইন শেষ হয়েছে',
+      [NOTIFICATION_EVENTS.DEADLINE_PASSED]: '⏰ ডেডলাইন শেষ হয়েছে',
 
-      // ── Milestone Events ──
-      [NOTIFICATION_EVENTS.MILESTONE_FUNDED]: '💰 মাইলস্টোন ফান্ড হয়েছে',
-      [NOTIFICATION_EVENTS.MILESTONE_REVIEW]: '📝 রিভিউ রিকোয়েস্ট',
-      [NOTIFICATION_EVENTS.MILESTONE_RELEASED]: '✅ পেমেন্ট রিলিজ হয়েছে',
+      [NOTIFICATION_EVENTS.MILESTONE_FUNDED]: '💰 মাইলস্টোন ফান্ড হয়েছে',
+      [NOTIFICATION_EVENTS.MILESTONE_REVIEW]: '📝 রিভিউ রিকোয়েস্ট',
+      [NOTIFICATION_EVENTS.MILESTONE_RELEASED]: '✅ পেমেন্ট রিলিজ হয়েছে',
 
-      // ── Cancellation Events ──
-      [NOTIFICATION_EVENTS.CANCELLATION_REQUEST]: '⚠️ ক্যানসেল রিকোয়েস্ট',
-      [NOTIFICATION_EVENTS.CANCELLATION_APPROVED]: '✅ ডিল ক্যানসেল হয়েছে',
+      [NOTIFICATION_EVENTS.CANCELLATION_REQUEST]: '⚠️ ক্যানসেল রিকোয়েস্ট',
+      [NOTIFICATION_EVENTS.CANCELLATION_APPROVED]: '✅ ডিল ক্যানসেল হয়েছে',
       [NOTIFICATION_EVENTS.CANCELLATION_REJECTED]: '❌ ক্যানসেল রিজেক্ট',
 
-      // ── Wallet Events ──
-      [NOTIFICATION_EVENTS.PAYMENT_RECEIVED]: '💰 পেমেন্ট পেয়েছেন',
-      [NOTIFICATION_EVENTS.PAYMENT_RELEASED]: '✅ পেমেন্ট রিলিজ হয়েছে',
-      [NOTIFICATION_EVENTS.WALLET_CREDITED]: '💰 টাকা যোগ হয়েছে',
-      [NOTIFICATION_EVENTS.WALLET_DEBITED]: '💸 টাকা কাটা হয়েছে',
-      [NOTIFICATION_EVENTS.DEPOSIT_APPROVED]: '💰 ডিপোজিট অ্যাপ্রুভ হয়েছে',
+      [NOTIFICATION_EVENTS.PAYMENT_RECEIVED]: '💰 পেমেন্ট পেয়েছেন',
+      [NOTIFICATION_EVENTS.PAYMENT_RELEASED]: '✅ পেমেন্ট রিলিজ হয়েছে',
+      [NOTIFICATION_EVENTS.WALLET_CREDITED]: '💰 টাকা যোগ হয়েছে',
+      [NOTIFICATION_EVENTS.WALLET_DEBITED]: '💸 টাকা কাটা হয়েছে',
+      [NOTIFICATION_EVENTS.DEPOSIT_APPROVED]: '💰 ডিপোজিট অ্যাপ্রুভ হয়েছে',
       [NOTIFICATION_EVENTS.DEPOSIT_REJECTED]: '❌ ডিপোজিট রিজেক্ট',
-      [NOTIFICATION_EVENTS.WITHDRAW_APPROVED]: '💳 উইথড্র অ্যাপ্রুভ হয়েছে',
+      [NOTIFICATION_EVENTS.WITHDRAW_APPROVED]: '💳 উইথড্র অ্যাপ্রুভ হয়েছে',
       [NOTIFICATION_EVENTS.WITHDRAW_REJECTED]: '❌ উইথড্র রিজেক্ট',
 
-      // ── Admin Events ──
       [NOTIFICATION_EVENTS.ADMIN_ANNOUNCEMENT]: '📢 অ্যাডমিন ঘোষণা',
       [NOTIFICATION_EVENTS.ADMIN_NOTIFICATION]: '📢 অ্যাডমিন নোটিফিকেশন',
 
-      // ── Review Events ──
       [NOTIFICATION_EVENTS.REVIEW_RECEIVED]: '⭐ নতুন রিভিউ',
-      [NOTIFICATION_EVENTS.REVIEW_REQUESTED]: '📝 রিভিউ রিকোয়েস্ট',
+      [NOTIFICATION_EVENTS.REVIEW_REQUESTED]: '📝 রিভিউ রিকোয়েস্ট',
 
-      // ── Verification Events ──
-      [NOTIFICATION_EVENTS.VERIFY_APPROVED]: '✅ ভেরিফিকেশন অ্যাপ্রুভ হয়েছে',
+      [NOTIFICATION_EVENTS.VERIFY_APPROVED]: '✅ ভেরিফিকেশন অ্যাপ্রুভ হয়েছে',
       [NOTIFICATION_EVENTS.VERIFY_REJECTED]: '❌ ভেরিফিকেশন রিজেক্ট',
 
-      // ── Post Events ──
-      [NOTIFICATION_EVENTS.POST_APPROVED]: '✅ পোস্ট অ্যাপ্রুভ হয়েছে',
+      [NOTIFICATION_EVENTS.POST_APPROVED]: '✅ পোস্ট অ্যাপ্রুভ হয়েছে',
       [NOTIFICATION_EVENTS.POST_REJECTED]: '❌ পোস্ট রিজেক্ট',
 
-      // ── Report Events ──
-      [NOTIFICATION_EVENTS.REPORT_RESOLVED]: '✅ রিপোর্ট রিজল্ভ হয়েছে',
+      [NOTIFICATION_EVENTS.REPORT_RESOLVED]: '✅ রিপোর্ট রিজল্ভ হয়েছে',
       [NOTIFICATION_EVENTS.REPORT_CANCELLED]: '❌ রিপোর্ট ক্যানসেল',
 
-      // ── System Events ──
       [NOTIFICATION_EVENTS.SYSTEM]: '📢 সিস্টেম',
       [NOTIFICATION_EVENTS.SYSTEM_UPDATE]: '🔄 সিস্টেম আপডেট',
       [NOTIFICATION_EVENTS.SYSTEM_ERROR]: '⚠️ সিস্টেম এরর',
@@ -192,9 +203,6 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
     return titles[event] || data?.title || '🔔 নোটিফিকেশন';
   };
 
-  // ============================================================
-  // ✅ Filter — Skip Chat Notifications
-  // ============================================================
   const isChatEvent = (event) => {
     const chatEvents = [
       NOTIFICATION_EVENTS.CHAT_MESSAGE,
@@ -233,17 +241,11 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
       (snapshot) => {
         if (!isMounted) return;
         
-        if (import.meta.env.DEV) {
-          console.log("📊 Total docs found:", snapshot.docs.length);
-        }
-        
-        // ✅ Filter out chat notifications
         const notificationsData = snapshot.docs
           .map(doc => {
             const data = doc.data();
             const event = data.event || data.type || 'system';
             
-            // ✅ Skip chat events
             if (isChatEvent(event)) {
               return null;
             }
@@ -260,16 +262,17 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
               icon: data.icon || style.icon || 'fa-solid fa-bell',
               colorClass: data.colorClass || style.colorClass || 'noti-system',
               isUnread: data.isUnread === true && data.isRead !== true,
+              // 🔧 used only for the header's unread count below, so a
+              // muted category doesn't inflate/duplicate the count —
+              // the item itself still shows in the history list.
+              countsTowardBadge: isCategoryEnabled(event, notificationSettings),
             };
           })
-          .filter(Boolean); // Remove null entries
+          .filter(Boolean);
         
         setNotifications(notificationsData);
-        
-        const unreadCount = notificationsData.filter(n => n.isUnread).length;
-        if (typeof onUnreadCountChange === 'function') {
-          onUnreadCountChange(unreadCount);
-        }
+        // 🔧 FIX: no more onUnreadCountChange(...) call here — App.js's
+        // own listener is now the single source of truth for the badge.
         
         setLoading(false);
       },
@@ -283,11 +286,8 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
       isMounted = false;
       unsubscribe();
     };
-  }, [currentUser?.uid]);
+  }, [currentUser?.uid, notificationSettings]);
 
-  // ============================================================
-  // ✅ Delete Single Notification
-  // ============================================================
   const handleDeleteNotification = async (id, event) => {
     event.stopPropagation();
     
@@ -305,18 +305,9 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
       const notiRef = doc(db, 'notifications', id);
       await deleteDoc(notiRef);
       
-      if (import.meta.env.DEV) {
-        console.log("🗑️ Deleted notification:", id);
-      }
-      
-      setNotifications(prev => {
-        const updated = prev.filter(n => n.id !== id);
-        const newUnreadCount = updated.filter(n => n.isUnread === true).length;
-        if (typeof onUnreadCountChange === 'function') {
-          onUnreadCountChange(newUnreadCount);
-        }
-        return updated;
-      });
+      // Local state update only — the onSnapshot listener above will
+      // also reconcile automatically, this just avoids a visual flash.
+      setNotifications(prev => prev.filter(n => n.id !== id));
       
       await feedback.showSuccess('✅ ডিলিট', 'নোটিফিকেশন ডিলিট করা হয়েছে!');
       
@@ -326,9 +317,6 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
     }
   };
 
-  // ============================================================
-  // ✅ Clear All Notifications
-  // ============================================================
   const handleClearAllNotifications = async () => {
     if (notifications.length === 0) return;
     
@@ -350,11 +338,7 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
       });
       
       await batch.commit();
-      
       setNotifications([]);
-      if (typeof onUnreadCountChange === 'function') {
-        onUnreadCountChange(0);
-      }
       
       await feedback.showSuccess('✅ ক্লিয়ার', 'সব নোটিফিকেশন ক্লিয়ার করা হয়েছে!');
       
@@ -364,9 +348,6 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
     }
   };
 
-  // ============================================================
-  // ✅ Mark All as Read
-  // ============================================================
   const markAllAsRead = async () => {
     if (notifications.length === 0) return;
     
@@ -390,20 +371,9 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
       
       await batch.commit();
       
-      if (import.meta.env.DEV) {
-        console.log(`✅ Marked ${unreadNotifications.length} as read`);
-      }
-      
       setNotifications(prev => 
-        prev.map(n => ({
-          ...n,
-          isUnread: false
-        }))
+        prev.map(n => ({ ...n, isUnread: false }))
       );
-      
-      if (typeof onUnreadCountChange === 'function') {
-        onUnreadCountChange(0);
-      }
       
       await feedback.showSuccess('✅ রিড', `${unreadNotifications.length} টি নোটিফিকেশন রিড করা হয়েছে!`);
       
@@ -413,9 +383,6 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
     }
   };
 
-  // ============================================================
-  // ✅ Toggle Read Status
-  // ============================================================
   const toggleReadStatus = async (id) => {
     try {
       const notiRef = doc(db, 'notifications', id);
@@ -425,50 +392,30 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
         readAt: serverTimestamp()
       });
       
-      if (import.meta.env.DEV) {
-        console.log("✅ Marked as read:", id);
-      }
-      
       setNotifications(prev => 
         prev.map(n => 
           n.id === id ? { ...n, isUnread: false } : n
         )
       );
-      
-      const newUnreadCount = notifications.filter(n => n.isUnread === true && n.id !== id).length;
-      if (typeof onUnreadCountChange === 'function') {
-        onUnreadCountChange(newUnreadCount);
-      }
+      // 🔧 FIX: no manual count push — App.js's listener will pick up
+      // this Firestore write on its own.
       
     } catch (error) {
       console.error("Error toggling read status:", error);
     }
   };
 
-  // ============================================================
-  // ✅ নোটিফিকেশন ক্লিক হ্যান্ডলার
-  // ============================================================
   const handleNotificationClick = async (noti) => {
-    if (import.meta.env.DEV) {
-      console.log("🖱️ Notification clicked:", noti);
-    }
-    
     setSelectedNoti(noti);
     
     if (noti.isUnread) {
       await toggleReadStatus(noti.id);
     }
-    
-    if (import.meta.env.DEV) {
-      console.log("📌 Modal opened for notification ID:", noti.id);
-    }
   };
 
-  const unreadCount = notifications.filter(n => n.isUnread === true).length;
+  // Header count now respects settings, matching the Navbar badge
+  const unreadCount = notifications.filter(n => n.isUnread === true && n.countsTowardBadge !== false).length;
 
-  // ============================================================
-  // ✅ Loading State
-  // ============================================================
   if (loading) {
     return (
       <div style={{ 
@@ -495,14 +442,10 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
     );
   }
 
-  // ============================================================
-  // ✅ Render
-  // ============================================================
   return (
     <div className="notifications-container-wrapper">
       <div className="notifications-panel">
         
-        {/* ✅ হেডার */}
         <div className="noti-header">
           <div className="noti-header-left">
             <div className="noti-header-icon">
@@ -530,7 +473,6 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
           </div>
         </div>
 
-        {/* ✅ নোটিফিকেশন লিস্ট */}
         <div className="noti-list-body">
           {notifications.length > 0 ? (
             notifications.map((noti) => (
@@ -556,7 +498,6 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
                   )}
                 </div>
 
-                {/* Delete Button */}
                 <button 
                   className="noti-delete-btn"
                   onClick={(e) => handleDeleteNotification(noti.id, e)}
@@ -578,7 +519,6 @@ const Notifications = ({ currentUser, onUnreadCountChange }) => {
         </div>
       </div>
 
-      {/* ✅ মোডাল */}
       {selectedNoti && (
         <NotificationModal 
           notification={selectedNoti} 

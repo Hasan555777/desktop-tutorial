@@ -1,4 +1,15 @@
 // src/UI/Notification/NotificationTemplates.js
+// ============================================================
+// 🔧 FIX APPLIED: added templates for events that NOTIFICATION_EVENTS
+// declares but that had NO template here — NotificationProvider.notify()
+// looks up NotificationTemplates[event] and silently does nothing
+// (no sound, no Firestore write) when the template is missing. The
+// file's own top comment already warned about this for four of them:
+//   OFFER_EXPIRED, MILESTONE_SUBMITTED, MILESTONE_REJECTED, MILESTONE_REFUNDED
+// Also found missing: DEAL_DEADLINE_PASSED (a separate constant from
+// DEADLINE_PASSED — only DEADLINE_PASSED had a template) and
+// REVIEW_REQUESTED. All six are added below, each marked "🔧 NEW".
+// ============================================================
 
 import { NOTIFICATION_EVENTS } from "./NotificationEvents";
 import { SOUND_EVENTS } from "@/UI/Sound/SoundEvents";
@@ -118,6 +129,40 @@ export const NotificationTemplates = {
       dealId: data.dealId,
       projectTitle: data.projectTitle,
     }
+  }),
+
+  // 🔧 NEW: CHAT_USER_BLOCKED / CHAT_USER_UNBLOCKED had no template
+  // (safe no-op event constants otherwise — chat is deprecated per the
+  // Notifications.jsx cleanup, so these are here only so notify()
+  // never silently no-ops if some legacy code still calls them).
+  [NOTIFICATION_EVENTS.CHAT_USER_BLOCKED]: (data) => ({
+    title: "🚫 ব্যবহারকারী ব্লক করা হয়েছে",
+    body: `${data.userName || 'একজন ব্যবহারকারী'} কে ব্লক করা হয়েছে।`,
+    soundEvent: SOUND_EVENTS.WARNING,
+    browser: false,
+    soundEnabled: true,
+    inApp: true,
+    alertType: 'info',
+    icon: '/logo192.png',
+    badge: '/logo192.png',
+    requireInteraction: false,
+    category: 'message',
+    data: { userId: data.userId, chatId: data.chatId },
+  }),
+
+  [NOTIFICATION_EVENTS.CHAT_USER_UNBLOCKED]: (data) => ({
+    title: "✅ ব্যবহারকারী আনব্লক করা হয়েছে",
+    body: `${data.userName || 'একজন ব্যবহারকারী'} কে আনব্লক করা হয়েছে।`,
+    soundEvent: SOUND_EVENTS.SUCCESS,
+    browser: false,
+    soundEnabled: true,
+    inApp: true,
+    alertType: 'info',
+    icon: '/logo192.png',
+    badge: '/logo192.png',
+    requireInteraction: false,
+    category: 'message',
+    data: { userId: data.userId, chatId: data.chatId },
   }),
 
   // ── 🤝 Deal Events ──
@@ -296,7 +341,31 @@ export const NotificationTemplates = {
     }
   }),
 
-  // ✅ নতুন — Deadline + Grace Period (24h) দুটোই পার হলে
+  // 🔧 NEW: DEAL_DEADLINE_PASSED is a SEPARATE constant from
+  // DEADLINE_PASSED (both exist in NOTIFICATION_EVENTS) — only the
+  // latter had a template, so any code calling notify() with
+  // DEAL_DEADLINE_PASSED silently did nothing. Reuses the same
+  // content as DEADLINE_PASSED for consistency.
+  [NOTIFICATION_EVENTS.DEAL_DEADLINE_PASSED]: (data) => ({
+    title: "⏰ ডেডলাইন শেষ হয়েছে",
+    body: `"${data.postTitle || 'Untitled Deal'}" ডিলের ডেডলাইন শেষ হয়েছে। অনুগ্রহ করে দ্রুত ব্যবস্থা নিন।`,
+    soundEvent: SOUND_EVENTS.WARNING,
+    browser: true,
+    soundEnabled: true,
+    inApp: true,
+    alertType: 'warning',
+    icon: '/logo192.png',
+    badge: '/logo192.png',
+    requireInteraction: true,
+    category: 'deal',
+    data: {
+      dealId: data.dealId,
+      postTitle: data.postTitle,
+      buyerId: data.buyerId,
+      sellerId: data.sellerId,
+    }
+  }),
+
   [NOTIFICATION_EVENTS.DEAL_OVERDUE]: (data) => ({
     title: "🔴 ডিল ওভারডিউ!",
     body: `"${data.postTitle || 'Untitled Deal'}" ডিলের ডেডলাইন এবং ২৪ ঘণ্টার গ্রেস পিরিয়ড দুটোই পার হয়ে গেছে। এখনই Extend, Cancel অথবা Dispute করুন।`,
@@ -319,7 +388,6 @@ export const NotificationTemplates = {
     }
   }),
 
-  // ✅ নতুন — কোনো পক্ষ Dispute ওপেন করলে
   [NOTIFICATION_EVENTS.DISPUTE_OPENED]: (data) => ({
     title: "⚖️ Dispute ওপেন হয়েছে",
     body: `${data.raisedBy || 'Someone'} "${data.postTitle || 'Untitled Deal'}" ডিলে একটি Dispute ওপেন করেছেন। Admin শীঘ্রই রিভিউ করবে — এই ডিলে Extend/Cancel সাময়িক বন্ধ থাকবে।`,
@@ -339,6 +407,28 @@ export const NotificationTemplates = {
       postTitle: data.postTitle,
       raisedBy: data.raisedBy,
       reason: data.reason,
+    }
+  }),
+
+  // 🔧 NEW: OFFER_EXPIRED — was declared in NOTIFICATION_EVENTS with a
+  // comment explicitly warning a template was needed; it had none.
+  [NOTIFICATION_EVENTS.OFFER_EXPIRED]: (data) => ({
+    title: "⌛ অফার মেয়াদোত্তীর্ণ হয়েছে",
+    body: `"${data.postTitle || 'Untitled Deal'}" ডিলের পেন্ডিং অফারটি ৪৮ ঘণ্টায় কোনো সাড়া না পাওয়ায় স্বয়ংক্রিয়ভাবে বাতিল হয়ে গেছে।`,
+    soundEvent: SOUND_EVENTS.WARNING,
+    browser: true,
+    soundEnabled: true,
+    inApp: true,
+    alertType: 'warning',
+    icon: '/logo192.png',
+    badge: '/logo192.png',
+    requireInteraction: true,
+    category: 'deal',
+    data: {
+      dealId: data.dealId,
+      postTitle: data.postTitle,
+      buyerId: data.buyerId,
+      sellerId: data.sellerId,
     }
   }),
 
@@ -397,6 +487,79 @@ export const NotificationTemplates = {
     soundEnabled: true,
     inApp: true,
     alertType: 'success',
+    icon: '/logo192.png',
+    badge: '/logo192.png',
+    requireInteraction: true,
+    category: 'wallet',
+    data: {
+      dealId: data.dealId,
+      postTitle: data.postTitle,
+      milestoneTitle: data.milestoneTitle,
+      amount: data.amount,
+      buyerId: data.buyerId,
+      sellerId: data.sellerId,
+    }
+  }),
+
+  // 🔧 NEW: MILESTONE_SUBMITTED — seller submits proof for a funded milestone.
+  [NOTIFICATION_EVENTS.MILESTONE_SUBMITTED]: (data) => ({
+    title: "📤 মাইলস্টোন জমা হয়েছে",
+    body: `${data.sellerName || 'সেলার'} "${data.milestoneTitle || 'Milestone'}" মাইলস্টোনের কাজ প্রুফসহ জমা দিয়েছেন। রিভিউ করে অ্যাপ্রুভ/রিজেক্ট করুন।`,
+    soundEvent: SOUND_EVENTS.NOTIFICATION,
+    browser: true,
+    soundEnabled: true,
+    inApp: true,
+    alertType: 'info',
+    icon: '/logo192.png',
+    badge: '/logo192.png',
+    requireInteraction: true,
+    actionRequired: true,
+    actionType: 'review_milestone_submission',
+    category: 'deal',
+    data: {
+      dealId: data.dealId,
+      postTitle: data.postTitle,
+      milestoneTitle: data.milestoneTitle,
+      sellerName: data.sellerName,
+      buyerId: data.buyerId,
+      sellerId: data.sellerId,
+    }
+  }),
+
+  // 🔧 NEW: MILESTONE_REJECTED — buyer rejects the seller's submission.
+  [NOTIFICATION_EVENTS.MILESTONE_REJECTED]: (data) => ({
+    title: "❌ মাইলস্টোন রিজেক্ট হয়েছে",
+    body: `${data.buyerName || 'বায়ার'} "${data.milestoneTitle || 'Milestone'}" মাইলস্টোনের জমা দেওয়া কাজ প্রত্যাখ্যান করেছেন। কারণ: ${data.reason || 'উল্লেখ করা হয়নি'}`,
+    soundEvent: SOUND_EVENTS.WARNING,
+    browser: true,
+    soundEnabled: true,
+    inApp: true,
+    alertType: 'warning',
+    icon: '/logo192.png',
+    badge: '/logo192.png',
+    requireInteraction: true,
+    actionRequired: true,
+    actionType: 'resubmit_milestone',
+    category: 'deal',
+    data: {
+      dealId: data.dealId,
+      postTitle: data.postTitle,
+      milestoneTitle: data.milestoneTitle,
+      reason: data.reason,
+      buyerId: data.buyerId,
+      sellerId: data.sellerId,
+    }
+  }),
+
+  // 🔧 NEW: MILESTONE_REFUNDED — auto-refund when seller doesn't submit in time.
+  [NOTIFICATION_EVENTS.MILESTONE_REFUNDED]: (data) => ({
+    title: "↩️ মাইলস্টোন রিফান্ড হয়েছে",
+    body: `সময়মতো জমা না দেওয়ায় "${data.milestoneTitle || 'Milestone'}" মাইলস্টোনের ${data.amount?.toLocaleString() || 0} BDT স্বয়ংক্রিয়ভাবে রিফান্ড করা হয়েছে।`,
+    soundEvent: SOUND_EVENTS.WALLET,
+    browser: true,
+    soundEnabled: true,
+    inApp: true,
+    alertType: 'warning',
     icon: '/logo192.png',
     badge: '/logo192.png',
     requireInteraction: true,
@@ -549,14 +712,6 @@ export const NotificationTemplates = {
       transactionId: data.transactionId,
     }
   }),
-
-  // ⚠️ REMOVED: WALLET_DEPOSIT_APPROVED / WALLET_WITHDRAW_APPROVED templates
-  // were dead code — NOTIFICATION_EVENTS has no such keys (only DEPOSIT_APPROVED /
-  // WITHDRAW_APPROVED exist), so `NOTIFICATION_EVENTS.WALLET_DEPOSIT_APPROVED`
-  // evaluated to `undefined`, both entries collided on the literal key "undefined",
-  // and neither was ever reachable via notify(). The real, correctly-keyed
-  // DEPOSIT_APPROVED / WITHDRAW_APPROVED templates are below under
-  // "💳 Deposit Events" / "💳 Withdraw Events".
 
   // ── 👑 Admin Events ──
   [NOTIFICATION_EVENTS.ADMIN_ANNOUNCEMENT]: (data) => ({
@@ -846,6 +1001,28 @@ export const NotificationTemplates = {
     }
   }),
 
+  // 🔧 NEW: REVIEW_REQUESTED — was declared but had no template.
+  [NOTIFICATION_EVENTS.REVIEW_REQUESTED]: (data) => ({
+    title: "📝 রিভিউ রিকোয়েস্ট",
+    body: `"${data.postTitle || 'Deal'}" সম্পূর্ণ হয়েছে — ${data.requesterName || 'অপরপক্ষ'} কে একটি রিভিউ দিন।`,
+    soundEvent: SOUND_EVENTS.NOTIFICATION,
+    browser: true,
+    soundEnabled: true,
+    inApp: true,
+    alertType: 'info',
+    icon: '/logo192.png',
+    badge: '/logo192.png',
+    requireInteraction: true,
+    actionRequired: true,
+    actionType: 'give_review',
+    category: 'review',
+    data: {
+      dealId: data.dealId,
+      postTitle: data.postTitle,
+      requesterName: data.requesterName,
+    }
+  }),
+
   // ── ✅ Verification Events ──
   [NOTIFICATION_EVENTS.VERIFY_APPROVED]: (data) => ({
     title: "✅ ভেরিফিকেশন অ্যাপ্রুভ হয়েছে",
@@ -960,9 +1137,6 @@ export const NotificationTemplates = {
 // 🎯 Helper Functions
 // ============================================================
 
-/**
- * Get template for an event
- */
 export const getNotificationTemplate = (event, data = {}) => {
   const template = NotificationTemplates[event];
   if (!template) {
@@ -974,23 +1148,14 @@ export const getNotificationTemplate = (event, data = {}) => {
   return template(data);
 };
 
-/**
- * Check if an event has a template
- */
 export const hasNotificationTemplate = (event) => {
   return !!NotificationTemplates[event];
 };
 
-/**
- * Get all event names that have templates
- */
 export const getEventsWithTemplates = () => {
   return Object.keys(NotificationTemplates);
 };
 
-/**
- * ✅ Get category from event
- */
 export const getNotificationCategory = (event) => {
   const template = NotificationTemplates[event];
   if (!template) return 'system';
@@ -998,9 +1163,6 @@ export const getNotificationCategory = (event) => {
   return result.category || 'system';
 };
 
-/**
- * ✅ Check if notification is enabled for category
- */
 export const isNotificationEnabled = (event, settings) => {
   if (!settings) return true;
 

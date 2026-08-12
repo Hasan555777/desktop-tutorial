@@ -26,6 +26,7 @@ import { device } from '@/security/device';
 import { NavigationProvider } from '@/components/Navigation';
 
 // ===== UI System =====
+
 import './components/LockScreen.css';
 import { 
   FeedbackProvider,
@@ -33,7 +34,7 @@ import {
 } from './UI/Feedback/FeedbackProvider';
 import { useAuth } from '@/context/AuthContext';
 import { SoundProvider } from '@/UI/Sound';
-import { NotificationProvider } from '@/UI/Notification/NotificationProvider';
+import { NotificationProvider, useNotification  } from '@/UI/Notification/NotificationProvider';
 import NotificationBanner from '@/components/NotificationBanner/NotificationBanner';
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
 import DevSoundTest from './pages/DevSoundTest';
@@ -57,7 +58,7 @@ import Home from './pages/Home';
 import Navbar from "./pages/Navbar";
 import Inbox from './pages/Inbox';
 import Notifications from './pages/Notifications';
-import DealManager from './pages/DealManager';
+import DealManager from './pages/DealManager/DealManager';
 import Profile from './pages/profile/Profile';
 import Withdraw from './pages/Withdraw';
 import Transactions from './pages/Transactions';
@@ -107,7 +108,7 @@ const AppContent = () => {
   
   // ── Auth ──
   const { currentUser, loading: authLoading } = useAuth();
-  
+  const { unreadCount } = useNotification();
   // ── Security Hooks (একবারই) ──
   const biometric = useBiometric();
   const appLock = useAppLock();
@@ -351,8 +352,13 @@ const AppContent = () => {
         setNotificationPrefs(newSettings);
       }
     };
+    const handleSettingsChange = (e) => setNotificationPrefs(e.detail || getNotificationSettings());
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('workhub:notification-settings', handleSettingsChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('workhub:notification-settings', handleSettingsChange);
+    };
   }, []);
 
   // ============================================================
@@ -729,95 +735,90 @@ const AppContent = () => {
   // ✅ Notifications Unread Count
   // ============================================================
 
-  useEffect(() => {
-    if (!arePushNotificationsEnabled()) {
-      setUnreadNotificationsCount(0);
-      return;
-    }
+  // useEffect(() => {
+  //   if (!currentUser?.uid) {
+  //     setUnreadNotificationsCount(0);
+  //     return;
+  //   }
 
-    if (!currentUser?.uid) {
-      setUnreadNotificationsCount(0);
-      return;
-    }
+  //   if (unsubscribeRefs.current.notifications) {
+  //     unsubscribeRefs.current.notifications();
+  //     unsubscribeRefs.current.notifications = null;
+  //   }
 
-    if (unsubscribeRefs.current.notifications) {
-      unsubscribeRefs.current.notifications();
-      unsubscribeRefs.current.notifications = null;
-    }
+  //   const q = query(
+  //     collection(db, 'notifications'),
+  //     where('userId', '==', currentUser.uid),
+  //     where('isUnread', '==', true)
+  //   );
 
-    const q = query(
-      collection(db, 'notifications'),
-      where('userId', '==', currentUser.uid),
-      where('isUnread', '==', true)
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      if (!isMountedRef.current) return;
+  //   const unsubscribe = onSnapshot(q, (snapshot) => {
+  //     if (!isMountedRef.current) return;
       
-      const unreadCount = snapshot.docs.filter(doc => {
-        const data = doc.data();
-        const event = data.event || 'NOTIFICATION';
+  //     const unreadCount = snapshot.docs.filter(doc => {
+  //       const data = doc.data();
+  //       const event = data.event || 'NOTIFICATION';
         
-        const categoryMap = {
-          'CHAT_MESSAGE': 'message',
-          'CHAT_IMAGE': 'message',
-          'CHAT_PROPOSAL': 'message',
-          'CHAT_PROPOSAL_ACCEPTED': 'message',
-          'CHAT_PROPOSAL_REJECTED': 'message',
-          'CHAT_DEAL_STARTED': 'deal',
-          'DEAL_CREATED': 'deal',
-          'DEAL_CONFIRMED': 'deal',
-          'DEAL_APPROVED': 'deal',
-          'DEAL_REJECTED': 'deal',
-          'DEAL_COMPLETED': 'deal',
-          'DEAL_CANCELLED': 'deal',
-          'DEAL_EXTENDED': 'deal',
-          'DEADLINE_PASSED': 'deal',
-          'PAYMENT_RECEIVED': 'wallet',
-          'PAYMENT_RELEASED': 'wallet',
-          'WALLET_CREDITED': 'wallet',
-          'WALLET_DEBITED': 'wallet',
-          'WALLET_DEPOSIT_APPROVED': 'wallet',
-          'WALLET_WITHDRAW_APPROVED': 'wallet',
-          'ADMIN_ANNOUNCEMENT': 'admin',
-          'ADMIN_NOTIFICATION': 'admin',
-          'USER_VERIFIED': 'admin',
-          'USER_BLOCKED': 'admin',
-          'USER_UNBLOCKED': 'admin',
-          'POST_APPROVED': 'admin',
-          'POST_REJECTED': 'admin',
-          'DEPOSIT_APPROVED': 'admin',
-          'DEPOSIT_REJECTED': 'admin',
-          'WITHDRAW_APPROVED': 'admin',
-          'WITHDRAW_REJECTED': 'admin',
-          'REPORT_RESOLVED': 'admin',
-          'REPORT_CANCELLED': 'admin',
-          'REVIEW_RECEIVED': 'review',
-          'VERIFY_APPROVED': 'verification',
-          'VERIFY_REJECTED': 'verification',
-          'SYSTEM': 'system',
-          'SYSTEM_UPDATE': 'system',
-          'SYSTEM_ERROR': 'system',
-        };
+  //       const categoryMap = {
+  //         'CHAT_MESSAGE': 'message',
+  //         'CHAT_IMAGE': 'message',
+  //         'CHAT_PROPOSAL': 'message',
+  //         'CHAT_PROPOSAL_ACCEPTED': 'message',
+  //         'CHAT_PROPOSAL_REJECTED': 'message',
+  //         'CHAT_DEAL_STARTED': 'deal',
+  //         'DEAL_CREATED': 'deal',
+  //         'DEAL_CONFIRMED': 'deal',
+  //         'DEAL_APPROVED': 'deal',
+  //         'DEAL_REJECTED': 'deal',
+  //         'DEAL_COMPLETED': 'deal',
+  //         'DEAL_CANCELLED': 'deal',
+  //         'DEAL_EXTENDED': 'deal',
+  //         'DEADLINE_PASSED': 'deal',
+  //         'PAYMENT_RECEIVED': 'wallet',
+  //         'PAYMENT_RELEASED': 'wallet',
+  //         'WALLET_CREDITED': 'wallet',
+  //         'WALLET_DEBITED': 'wallet',
+  //         'WALLET_DEPOSIT_APPROVED': 'wallet',
+  //         'WALLET_WITHDRAW_APPROVED': 'wallet',
+  //         'ADMIN_ANNOUNCEMENT': 'admin',
+  //         'ADMIN_NOTIFICATION': 'admin',
+  //         'USER_VERIFIED': 'admin',
+  //         'USER_BLOCKED': 'admin',
+  //         'USER_UNBLOCKED': 'admin',
+  //         'POST_APPROVED': 'admin',
+  //         'POST_REJECTED': 'admin',
+  //         'DEPOSIT_APPROVED': 'admin',
+  //         'DEPOSIT_REJECTED': 'admin',
+  //         'WITHDRAW_APPROVED': 'admin',
+  //         'WITHDRAW_REJECTED': 'admin',
+  //         'REPORT_RESOLVED': 'admin',
+  //         'REPORT_CANCELLED': 'admin',
+  //         'REVIEW_RECEIVED': 'review',
+  //         'VERIFY_APPROVED': 'verification',
+  //         'VERIFY_REJECTED': 'verification',
+  //         'SYSTEM': 'system',
+  //         'SYSTEM_UPDATE': 'system',
+  //         'SYSTEM_ERROR': 'system',
+  //       };
         
-        const category = categoryMap[event] || 'system';
-        return isNotificationTypeEnabled(category);
-      }).length;
+  //       const category = categoryMap[event] || 'system';
+  //       return isNotificationTypeEnabled(category);
+  //     }).length;
       
-      setUnreadNotificationsCount(unreadCount);
-    }, (error) => {
-      console.error("Error fetching unread count:", error);
-    });
+  //     setUnreadNotificationsCount(unreadCount);
+  //   }, (error) => {
+  //     console.error("Error fetching unread count:", error);
+  //   });
 
-    unsubscribeRefs.current.notifications = unsubscribe;
+  //   unsubscribeRefs.current.notifications = unsubscribe;
 
-    return () => {
-      if (unsubscribeRefs.current.notifications) {
-        unsubscribeRefs.current.notifications();
-        unsubscribeRefs.current.notifications = null;
-      }
-    };
-  }, [currentUser?.uid, arePushNotificationsEnabled, isNotificationTypeEnabled]);
+  //   return () => {
+  //     if (unsubscribeRefs.current.notifications) {
+  //       unsubscribeRefs.current.notifications();
+  //       unsubscribeRefs.current.notifications = null;
+  //     }
+  //   };
+  // }, [currentUser?.uid, arePushNotificationsEnabled, isNotificationTypeEnabled]);
 
   // ============================================================
   // ✅ Chats Fetching
@@ -1157,7 +1158,7 @@ const AppContent = () => {
       {currentUser ? (
         <Navbar 
           totalUnread={chats.reduce((sum, chat) => sum + (chat.userUnreadCount || 0), 0)}
-          unreadNotifications={unreadNotificationsCount}
+          unreadNotifications={unreadCount}
           totalDeals={pendingDealsCount}
           currentMode={currentMode} 
           setCurrentMode={handleModeChange}
@@ -1257,7 +1258,7 @@ const AppContent = () => {
               <Notifications 
                 currentUser={currentUser}
                 currentMode={currentMode}
-                onUnreadCountChange={handleUnreadCountChange}
+                // onUnreadCountChange={handleUnreadCountChange}
               />
             } />
 

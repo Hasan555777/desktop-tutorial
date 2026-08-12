@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { auth, db } from '@/firebase';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
 import useHideBottomNav from "@/hooks/useHideBottomNav";
-import DealGuideModal from '@/components/DealGuideModal';
+import DealGuideModal from './DealManager/components/DealGuideModal';
 
 import './ChatInterface.css';
 

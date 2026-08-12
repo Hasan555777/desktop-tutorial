@@ -1,4 +1,16 @@
 // src/pages/notificationHelper.js
+// ============================================================
+// 🔧 FIXES APPLIED (search "FIX" to jump to each spot):
+// 1. sendNotification(): push-notification failure no longer retries
+//    the whole function -> was creating duplicate Firestore docs for
+//    any notification type without a stable id (addDoc path).
+// 2. isDuplicate(): removed the Date.now() fallback that silently made
+//    the guard useless whenever no transferId/transactionId/dealId/
+//    relatedId/postTitle was supplied.
+// 3. sendWalletBalanceNotification(): now accepts + forwards a
+//    transactionId so it gets a persistent id too (was previously
+//    only deduped by a flimsy string check on dealTitle).
+// ============================================================
 
 import { db, auth } from '@/firebase';
 import { 
@@ -174,17 +186,19 @@ const getUserData = async (userId) => {
 };
 
 // ============================================================
-// ✅ Duplicate Prevention
+// ✅ Duplicate Prevention (fast, short-window, in-memory guard —
+// only helps within the SAME tab/session. Real de-dup is the
+// persistent Firestore id below via getPersistentNotificationId)
 // ============================================================
 const sentNotifications = new Map();
 
 const isDuplicate = (userId, type, data) => {
-  let uniqueKey = data.transferId || data.transactionId || data.dealId || data.relatedId || data.postTitle || '';
-  
-  if (!uniqueKey) {
-    uniqueKey = `${type}-${Date.now()}`;
-  }
-  
+  // 🔧 FIX: previously fell back to `${type}-${Date.now()}` when no
+  // unique key existed, which is always unique -> the guard did
+  // nothing for those calls. Now falls back to just `type`, which at
+  // least blocks two identical-type calls fired back-to-back
+  // (e.g. an effect re-running) within the 10s window.
+  const uniqueKey = data.transferId || data.transactionId || data.dealId || data.relatedId || data.postTitle || type || 'generic';
   const key = `${userId}-${type}-${uniqueKey}`;
   
   if (sentNotifications.has(key)) {
@@ -197,6 +211,25 @@ const isDuplicate = (userId, type, data) => {
   }, 10000);
   
   return false;
+};
+
+const getPersistentNotificationId = (userId, type, options) => {
+  if (type === NOTIFICATION_TYPES.MESSAGE_RECEIVED && !options.messageId && !options.idempotencyKey) {
+    return null;
+  }
+
+  const entityId = options.idempotencyKey || options.messageId || options.transactionId ||
+    options.transferId || options.dealId || options.relatedId;
+  if (!entityId) {
+    // 🔧 Visible in dev so it's easy to spot which senders still need
+    // a stable id passed in (dealId/transactionId/relatedId/transferId).
+    if (import.meta.env.DEV) {
+      console.warn(`⚠️ No stable id for notification type "${type}" — this send is NOT idempotent (can duplicate on retry).`);
+    }
+    return null;
+  }
+
+  return `${userId}_${type || 'system'}_${entityId}`.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 140);
 };
 
 // ============================================================
@@ -213,6 +246,7 @@ export const sendNotification = async (userId, title, message, mode, options = {
     return null;
   }
 
+  const notificationId = getPersistentNotificationId(userId, options.type, options);
   let attempts = 0;
   const maxAttempts = 3;
   let lastError = null;
@@ -245,11 +279,36 @@ export const sendNotification = async (userId, title, message, mode, options = {
         notificationData.actionType = options.actionType || 'respond';
       }
       
-      const docRef = await addDoc(collection(db, 'notifications'), notificationData);
+      let docRef;
+      if (notificationId) {
+        docRef = doc(db, 'notifications', notificationId);
+        const existing = await getDoc(docRef);
+        if (existing.exists()) {
+          console.log('Persistent duplicate notification skipped:', notificationId);
+          return docRef.id;
+        }
+        await setDoc(docRef, { ...notificationData, idempotencyKey: notificationId });
+      } else {
+        docRef = await addDoc(collection(db, 'notifications'), notificationData);
+      }
       console.log("✅ Notification sent to:", userId, "Doc ID:", docRef.id);
       
-      // ✅ Send Push Notification if enabled
-      await sendPushNotification(userId, title, message, options);
+      // ============================================================
+      // 🔧 FIX (the main duplicate-notification bug):
+      // Push-notification sending must NEVER be able to cause the
+      // Firestore write above to be retried. Previously, if this threw,
+      // the outer catch caught it and looped back to the top — and for
+      // any notification type without a stable id (notificationId ===
+      // null, i.e. addDoc path) that meant a SECOND Firestore document
+      // got created for the exact same event. Isolating it here means
+      // a push failure is just logged, never retried, never duplicates
+      // the notification doc.
+      // ============================================================
+      try {
+        await sendPushNotification(userId, title, message, options);
+      } catch (pushError) {
+        console.error("⚠️ Push notification failed (notification doc already saved, not retrying):", pushError);
+      }
       
       return docRef.id;
       
@@ -274,9 +333,6 @@ export const sendNotification = async (userId, title, message, mode, options = {
 // ============================================================
 // ============================================================
 
-// ============================================================
-// ✅ Save FCM Token to Firestore
-// ============================================================
 export const saveFCMToken = async (userId, token) => {
   if (!userId) {
     console.error("❌ saveFCMToken: userId missing");
@@ -286,7 +342,6 @@ export const saveFCMToken = async (userId, token) => {
   try {
     const userRef = doc(db, 'users', userId);
     
-    // ✅ Save token in notification sub-object for future scalability
     await updateDoc(userRef, {
       'notification.token': token,
       'notification.platform': 'web',
@@ -299,7 +354,6 @@ export const saveFCMToken = async (userId, token) => {
   } catch (error) {
     console.error("❌ Error saving FCM token:", error);
     
-    // ✅ If update fails, try setDoc with merge
     try {
       const userRef = doc(db, 'users', userId);
       await setDoc(userRef, {
@@ -320,9 +374,6 @@ export const saveFCMToken = async (userId, token) => {
   }
 };
 
-// ============================================================
-// ✅ Get FCM Token from Firestore
-// ============================================================
 export const getFCMToken = async (userId) => {
   if (!userId) {
     console.error("❌ getFCMToken: userId missing");
@@ -344,9 +395,6 @@ export const getFCMToken = async (userId) => {
   }
 };
 
-// ============================================================
-// ✅ Delete FCM Token from Firestore
-// ============================================================
 export const deleteFCMToken = async (userId) => {
   if (!userId) {
     console.error("❌ deleteFCMToken: userId missing");
@@ -369,9 +417,6 @@ export const deleteFCMToken = async (userId) => {
   }
 };
 
-// ============================================================
-// ✅ Initialize FCM (Request Permission & Get Token)
-// ============================================================
 export const initializeFCM = async (userId) => {
   if (!userId) {
     console.error("❌ initializeFCM: userId missing");
@@ -379,13 +424,11 @@ export const initializeFCM = async (userId) => {
   }
 
   try {
-    // ✅ Check if browser supports notifications
     if (!('Notification' in window)) {
       console.warn("⚠️ This browser doesn't support notifications");
       return null;
     }
 
-    // ✅ Check permission
     let permission = Notification.permission;
     
     if (permission === 'denied') {
@@ -401,7 +444,6 @@ export const initializeFCM = async (userId) => {
       }
     }
 
-    // ✅ Get messaging instance
     const messagingInstance = await messaging;
     
     if (!messagingInstance) {
@@ -409,14 +451,12 @@ export const initializeFCM = async (userId) => {
       return null;
     }
 
-    // ✅ Get VAPID key
     const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
     if (!vapidKey) {
       console.error("❌ VAPID key missing");
       return null;
     }
 
-    // ✅ Get token
     const token = await getToken(messagingInstance, {
       vapidKey: vapidKey,
     });
@@ -428,10 +468,7 @@ export const initializeFCM = async (userId) => {
 
     console.log("✅ FCM Token received:", token);
 
-    // ✅ Save to Firestore
     await saveFCMToken(userId, token);
-
-    // ✅ Setup foreground message listener
     setupForegroundMessageListener();
 
     return token;
@@ -441,12 +478,8 @@ export const initializeFCM = async (userId) => {
   }
 };
 
-// ============================================================
-// ✅ Send Push Notification via FCM
-// ============================================================
 export const sendPushNotification = async (userId, title, message, options = {}) => {
   try {
-    // ✅ Get FCM token from Firestore
     const token = await getFCMToken(userId);
     
     if (!token) {
@@ -454,8 +487,6 @@ export const sendPushNotification = async (userId, title, message, options = {})
       return false;
     }
 
-    // ✅ If we have a backend API endpoint to send FCM messages
-    // This would typically be a Firebase Cloud Function or backend API
     try {
       const response = await fetch('/api/send-push-notification', {
         method: 'POST',
@@ -492,7 +523,6 @@ export const sendPushNotification = async (userId, title, message, options = {})
         return false;
       }
     } catch (fetchError) {
-      // ✅ If API not available, just log (for local development)
       if (import.meta.env.DEV) {
         console.log("📱 [DEV] Push notification would be sent:", {
           userId,
@@ -511,9 +541,6 @@ export const sendPushNotification = async (userId, title, message, options = {})
   }
 };
 
-// ============================================================
-// ✅ Setup Foreground Message Listener
-// ============================================================
 let isListenerSetup = false;
 
 export const setupForegroundMessageListener = (callback) => {
@@ -534,7 +561,6 @@ export const setupForegroundMessageListener = (callback) => {
       const title = payload.notification?.title || payload.data?.title || 'WorkTrustbd';
       const body = payload.notification?.body || payload.data?.body || 'You have a new notification';
 
-      // ✅ Show in-app notification
       if (callback) {
         callback({
           title,
@@ -544,7 +570,6 @@ export const setupForegroundMessageListener = (callback) => {
         });
       }
 
-      // ✅ Show toast notification
       if (window.showToast) {
         window.showToast({
           title: title,
@@ -554,7 +579,6 @@ export const setupForegroundMessageListener = (callback) => {
         });
       }
 
-      // ✅ Play sound
       try {
         const audio = new Audio('/sounds/notification.mp3');
         audio.play().catch(() => {});
@@ -569,9 +593,6 @@ export const setupForegroundMessageListener = (callback) => {
   isListenerSetup = true;
 };
 
-// ============================================================
-// ✅ Check Notification Permission Status
-// ============================================================
 export const getNotificationPermissionStatus = () => {
   if (!('Notification' in window)) {
     return 'not-supported';
@@ -579,9 +600,6 @@ export const getNotificationPermissionStatus = () => {
   return Notification.permission;
 };
 
-// ============================================================
-// ✅ Check if Push Notifications are Supported
-// ============================================================
 export const isPushSupported = () => {
   return (
     'Notification' in window &&
@@ -590,9 +608,6 @@ export const isPushSupported = () => {
   );
 };
 
-// ============================================================
-// ✅ Request Notification Permission
-// ============================================================
 export const requestNotificationPermission = async () => {
   if (!('Notification' in window)) {
     throw new Error("This browser doesn't support notifications.");
@@ -607,9 +622,6 @@ export const requestNotificationPermission = async () => {
   return permission;
 };
 
-// ============================================================
-// ✅ Get FCM Token (Wrapper)
-// ============================================================
 export const getFCMTokenFromDevice = async () => {
   try {
     const messagingInstance = await messaging;
@@ -634,9 +646,6 @@ export const getFCMTokenFromDevice = async () => {
   }
 };
 
-// ============================================================
-// ✅ Delete FCM Token from Device and Firestore
-// ============================================================
 export const deleteFCMTokenFromDevice = async () => {
   try {
     const messagingInstance = await messaging;
@@ -653,10 +662,6 @@ export const deleteFCMTokenFromDevice = async () => {
     return false;
   }
 };
-
-// ============================================================
-// ✅ END OF FCM SECTION
-// ============================================================
 
 // ============================================================
 // ✅ Money Transfer Notification (Combined)
@@ -705,8 +710,14 @@ export const sendMoneyTransferNotification = async ({
 
 // ============================================================
 // ✅ Wallet Balance Notification
+// 🔧 FIX: added `transactionId` param and forward it in options so
+// this gets a persistent id too. Previously the only "id" attempt was
+// `dealTitle.includes('transfer') ? dealTitle : undefined`, which is
+// almost always undefined -> addDoc path -> not idempotent -> could
+// duplicate on retry. Callers should now pass the actual Firestore
+// transaction/ledger doc id they already created for this change.
 // ============================================================
-export const sendWalletBalanceNotification = async (userId, amount, type, dealTitle = '', customTitle = '', customType = '') => {
+export const sendWalletBalanceNotification = async (userId, amount, type, dealTitle = '', customTitle = '', customType = '', transactionId = null) => {
   if (!userId) {
     console.error("❌ sendWalletBalanceNotification: userId missing");
     return;
@@ -734,7 +745,8 @@ export const sendWalletBalanceNotification = async (userId, amount, type, dealTi
       icon: isCredit ? 'fa-solid fa-plus-circle' : 'fa-solid fa-minus-circle',
       colorClass: isCredit ? 'noti-success' : 'noti-danger',
       type: notificationType,
-      transferId: dealTitle.includes('transfer') ? dealTitle : undefined,
+      transactionId: transactionId || undefined,
+      relatedId: transactionId || undefined,
     }
   );
 };
@@ -804,8 +816,8 @@ export const sendBidNotification = async (sellerId, buyerId, projectTitle, proje
   
   await sendNotification(
     sellerId,
-    '✅ বিড সফল হয়েছে',
-    `আপনার বিড "${projectTitle}" প্রজেক্টে সফলভাবে জমা হয়েছে`,
+    '✅ বিড সফল হয়েছে',
+    `আপনার বিড "${projectTitle}" প্রজেক্টে সফলভাবে জমা হয়েছে`,
     USER_ROLES.SELLER,
     { 
       icon: 'fa-solid fa-paper-plane', 
@@ -827,8 +839,8 @@ export const sendDealNotification = async (buyerId, sellerId, dealTitle, dealId)
   
   await sendNotification(
     buyerId,
-    '🎉 ডিল কনফার্ম হয়েছে',
-    `আপনার "${dealTitle}" ডিলটি কনফার্ম হয়েছে। এখন কাজ শুরু করতে পারেন।`,
+    '🎉 ডিল কনফার্ম হয়েছে',
+    `আপনার "${dealTitle}" ডিলটি কনফার্ম হয়েছে। এখন কাজ শুরু করতে পারেন।`,
     buyer.mode,
     { 
       icon: 'fa-solid fa-handshake', 
@@ -841,8 +853,8 @@ export const sendDealNotification = async (buyerId, sellerId, dealTitle, dealId)
   
   await sendNotification(
     sellerId,
-    '🚀 ডিল স্টার্ট হয়েছে',
-    `ক্লায়েন্ট "${dealTitle}" ডিলটি কনফার্ম করেছেন। আপনি কাজ শুরু করতে পারেন!`,
+    '🚀 ডিল স্টার্ট হয়েছে',
+    `ক্লায়েন্ট "${dealTitle}" ডিলটি কনফার্ম করেছেন। আপনি কাজ শুরু করতে পারেন!`,
     seller.mode,
     { 
       icon: 'fa-solid fa-rocket', 
@@ -862,8 +874,8 @@ export const sendPaymentNotification = async (userId, amount, mode, dealTitle, d
   
   await sendNotification(
     userId,
-    '💰 পেমেন্ট সফল হয়েছে',
-    `আপনার ওয়ালেটে ${amount} BDT জমা হয়েছে "${dealTitle}" এর জন্য`,
+    '💰 পেমেন্ট সফল হয়েছে',
+    `আপনার ওয়ালেটে ${amount} BDT জমা হয়েছে "${dealTitle}" এর জন্য`,
     user.mode,
     { 
       icon: 'fa-solid fa-wallet', 
@@ -885,7 +897,7 @@ export const sendMilestoneNotification = async (buyerId, sellerId, milestoneTitl
   
   await sendNotification(
     buyerId,
-    '📝 মাইলস্টোন রিভিউ রিকোয়েস্ট',
+    '📝 মাইলস্টোন রিভিউ রিকোয়েস্ট',
     `${displayName} "${milestoneTitle}" মাইলস্টোনটি সম্পন্ন করেছেন। রিভিউ করে পেমেন্ট রিলিজ করুন।`,
     buyer.mode,
     { 
@@ -901,8 +913,8 @@ export const sendMilestoneNotification = async (buyerId, sellerId, milestoneTitl
   
   await sendNotification(
     sellerId,
-    '✅ মাইলস্টোন জমা হয়েছে',
-    `আপনার "${milestoneTitle}" মাইলস্টোনটি রিভিউয়ের জন্য জমা হয়েছে।`,
+    '✅ মাইলস্টোন জমা হয়েছে',
+    `আপনার "${milestoneTitle}" মাইলস্টোনটি রিভিউয়ের জন্য জমা হয়েছে।`,
     seller.mode,
     { 
       icon: 'fa-solid fa-clock', 
@@ -921,7 +933,7 @@ export const sendMessageNotification = async (receiverId, receiverMode, senderNa
   await sendNotification(
     receiverId,
     '💬 নতুন মেসেজ',
-    `${senderName} আপনাকে একটি নতুন মেসেজ পাঠিয়েছেন`,
+    `${senderName} আপনাকে একটি নতুন মেসেজ পাঠিয়েছেন`,
     receiverMode || USER_ROLES.BUYER,
     { 
       icon: 'fa-solid fa-comment-dots', 
@@ -941,8 +953,8 @@ export const sendDealCompleteNotification = async (buyerId, sellerId, dealTitle,
   
   await sendNotification(
     buyerId,
-    '🏆 ডিল সম্পূর্ণ হয়েছে',
-    `"${dealTitle}" ডিলটি সফলভাবে সম্পূর্ণ হয়েছে। সেলারকে রেটিং দিন।`,
+    '🏆 ডিল সম্পূর্ণ হয়েছে',
+    `"${dealTitle}" ডিলটি সফলভাবে সম্পূর্ণ হয়েছে। সেলারকে রেটিং দিন।`,
     buyer.mode,
     { 
       icon: 'fa-solid fa-trophy', 
@@ -955,8 +967,8 @@ export const sendDealCompleteNotification = async (buyerId, sellerId, dealTitle,
   
   await sendNotification(
     sellerId,
-    '🏆 ডিল সম্পূর্ণ হয়েছে',
-    `"${dealTitle}" ডিলটি সফলভাবে সম্পূর্ণ হয়েছে। ক্লায়েন্টকে রেটিং দিন।`,
+    '🏆 ডিল সম্পূর্ণ হয়েছে',
+    `"${dealTitle}" ডিলটি সফলভাবে সম্পূর্ণ হয়েছে। ক্লায়েন্টকে রেটিং দিন।`,
     seller.mode,
     { 
       icon: 'fa-solid fa-trophy', 
@@ -979,7 +991,7 @@ export const sendCancellationRequestNotification = async (userId, postTitle, dea
   
   await sendNotification(
     userId,
-    '⚠️ ডিল ক্যানসেল রিকোয়েস্ট',
+    '⚠️ ডিল ক্যানসেল রিকোয়েস্ট',
     `${safeRequesterName} "${safePostTitle}" (Budget: ${budget || 0} BDT) ডিলটি ক্যানসেল করতে চান। কারণ: ${safeReason}`,
     user.mode,
     {
@@ -1001,8 +1013,8 @@ export const sendCancellationApprovedNotification = async (buyerId, sellerId, po
   
   await sendNotification(
     buyerId,
-    '❌ ডিল ক্যানসেল হয়েছে',
-    `"${safePostTitle}" ডিলটি উভয় পক্ষের সম্মতিতে ক্যানসেল করা হয়েছে।`,
+    '❌ ডিল ক্যানসেল হয়েছে',
+    `"${safePostTitle}" ডিলটি উভয় পক্ষের সম্মতিতে ক্যানসেল করা হয়েছে।`,
     buyer.mode,
     {
       icon: 'fa-solid fa-ban',
@@ -1015,8 +1027,8 @@ export const sendCancellationApprovedNotification = async (buyerId, sellerId, po
   
   await sendNotification(
     sellerId,
-    '❌ ডিল ক্যানসেল হয়েছে',
-    `"${safePostTitle}" ডিলটি উভয় পক্ষের সম্মতিতে ক্যানসেল করা হয়েছে।`,
+    '❌ ডিল ক্যানসেল হয়েছে',
+    `"${safePostTitle}" ডিলটি উভয় পক্ষের সম্মতিতে ক্যানসেল করা হয়েছে।`,
     seller.mode,
     {
       icon: 'fa-solid fa-ban',
@@ -1034,8 +1046,8 @@ export const sendCancellationRejectedNotification = async (userId, postTitle, de
   
   await sendNotification(
     userId,
-    '✅ ক্যানসেল রিকোয়েস্ট রিজেক্ট',
-    `"${safePostTitle}" ডিলের ক্যানসেল রিকোয়েস্টটি রিজেক্ট করা হয়েছে। ডিল অ্যাক্টিভ আছে।`,
+    '✅ ক্যানসেল রিকোয়েস্ট রিজেক্ট',
+    `"${safePostTitle}" ডিলের ক্যানসেল রিকোয়েস্টটি রিজেক্ট করা হয়েছে। ডিল অ্যাক্টিভ আছে।`,
     user.mode,
     {
       icon: 'fa-solid fa-check-circle',
@@ -1059,8 +1071,8 @@ export const sendDeadlinePassedNotification = async (sellerId, buyerId, postTitl
   
   await sendNotification(
     sellerId,
-    '⏰ ডেডলাইন শেষ হয়েছে',
-    `"${safePostTitle}" ডিলের ডেডলাইন শেষ হয়েছে। অনুগ্রহ করে ক্লায়েন্টকে আপডেট দিন।`,
+    '⏰ ডেডলাইন শেষ হয়েছে',
+    `"${safePostTitle}" ডিলের ডেডলাইন শেষ হয়েছে। অনুগ্রহ করে ক্লায়েন্টকে আপডেট দিন।`,
     seller.mode,
     {
       icon: 'fa-solid fa-clock',
@@ -1075,8 +1087,8 @@ export const sendDeadlinePassedNotification = async (sellerId, buyerId, postTitl
   
   await sendNotification(
     buyerId,
-    '⏰ ডেডলাইন শেষ হয়েছে',
-    `"${safePostTitle}" ডিলের ডেডলাইন শেষ হয়েছে। সেলারের সাথে যোগাযোগ করতে পারেন।`,
+    '⏰ ডেডলাইন শেষ হয়েছে',
+    `"${safePostTitle}" ডিলের ডেডলাইন শেষ হয়েছে। সেলারের সাথে যোগাযোগ করতে পারেন।`,
     buyer.mode,
     {
       icon: 'fa-solid fa-clock',
@@ -1098,7 +1110,7 @@ export const sendDealCancelledNotification = async (userId, postTitle, dealId, c
   
   await sendNotification(
     userId,
-    '❌ ডিল ক্যানসেল হয়েছে',
+    '❌ ডিল ক্যানসেল হয়েছে',
     `${safeCancelledBy} "${safePostTitle}" ডিলটি ক্যানসেল করেছেন। কারণ: ${safeReason}`,
     user.mode,
     {
@@ -1127,6 +1139,12 @@ export const sendWalletDepositNotification = async (
     return;
   }
 
+  // 🔧 FIX: transactionId is now required for a stable id. If the
+  // caller genuinely doesn't have a Firestore doc id yet at the
+  // PENDING stage, fall back to the deposit's trxId (still stable
+  // and unique per real-world request) instead of leaving it empty.
+  const stableId = transactionId || trxId || null;
+
   const user = await getUserData(userId);
   
   const baseOptions = {
@@ -1135,9 +1153,10 @@ export const sendWalletDepositNotification = async (
     type: NOTIFICATION_TYPES.WALLET_DEPOSIT,
   };
 
-  if (transactionId) {
-    baseOptions.relatedId = transactionId;
-    baseOptions.dealId = transactionId;
+  if (stableId) {
+    baseOptions.relatedId = stableId;
+    baseOptions.dealId = stableId;
+    baseOptions.transactionId = stableId;
   }
   
   if (status === DEPOSIT_STATUS.PENDING) {
@@ -1290,7 +1309,6 @@ export const sendDealPaymentNotification = async (userId, amount, dealTitle, dea
 // ✅ Export all functions
 // ============================================================
 export default {
-  // FCM Functions
   saveFCMToken,
   getFCMToken,
   deleteFCMToken,
@@ -1303,7 +1321,6 @@ export default {
   getFCMTokenFromDevice,
   deleteFCMTokenFromDevice,
   
-  // Notification Functions
   sendNotification,
   sendBidNotification,
   sendDealNotification,
