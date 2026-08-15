@@ -7,7 +7,6 @@ import {
   GoogleAuthProvider,
   updateProfile,
   sendEmailVerification,
-  getAuth,
 } from "firebase/auth";
 import {
   doc, getDoc, setDoc, updateDoc, increment,
@@ -45,21 +44,21 @@ const uploadToCloudinary = async (file, folder = 'user_documents') => {
     fd.append('file', file);
     fd.append('upload_preset', UPLOAD_PRESET);
     fd.append('folder', folder);
-    
+
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
       { method: 'POST', body: fd }
     );
-    
+
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error?.message || 'Upload failed');
     }
-    
+
     const data = await res.json();
     console.log(`✅ Cloudinary upload success: ${data.secure_url}`);
     return { url: data.secure_url, publicId: data.public_id };
-    
+
   } catch (error) {
     console.error('❌ Cloudinary upload error:', error);
     throw error;
@@ -72,8 +71,14 @@ const initLiveness = () => LIVENESS_STEPS.map(s => ({ ...s, done: false }));
 // ─── মেইন কম্পোনেন্ট ──────────────────────────────────────────────────────────
 const Register = ({ onSwitchToLogin }) => {
   const navigate = useNavigate();
-  
+
   const [error, setError] = useState('');
+
+  // BUG FIX #6: file-size validation errors used to share ONE `error`
+  // state across NID front / NID back / birth cert. That meant an error
+  // on one field showed up under a different field too, and never
+  // cleared once you picked a valid file. Now each field has its own key.
+  const [fileErrors, setFileErrors] = useState({ nidFront: '', nidBack: '', birth: '' });
 
   // ── স্টেপ ও ইউআই ──
   const [currentStep, setCurrentStep] = useState(1);
@@ -134,16 +139,16 @@ const Register = ({ onSwitchToLogin }) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      
+
       reader.onload = (event) => {
         const img = new Image();
         img.src = event.target.result;
-        
+
         img.onload = () => {
           const canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
-          
+
           if (width > height) {
             if (width > maxWidth) {
               height = Math.round((height * maxWidth) / width);
@@ -155,42 +160,42 @@ const Register = ({ onSwitchToLogin }) => {
               height = maxHeight;
             }
           }
-          
+
           canvas.width = width;
           canvas.height = height;
-          
+
           const ctx = canvas.getContext('2d');
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = 'high';
           ctx.drawImage(img, 0, 0, width, height);
-          
+
           canvas.toBlob(
             (blob) => {
               if (!blob) {
                 reject(new Error('Canvas to Blob failed'));
                 return;
               }
-              
+
               const originalSize = file.size / 1024;
               const compressedSize = blob.size / 1024;
               console.log(`📊 Image: ${originalSize.toFixed(1)}KB → ${compressedSize.toFixed(1)}KB`);
-              
+
               const compressedFile = new File(
                 [blob],
                 file.name.replace(/\.[^.]+$/, '.jpg'),
                 { type: 'image/jpeg', lastModified: Date.now() }
               );
-              
+
               resolve(compressedFile);
             },
             'image/jpeg',
             quality
           );
         };
-        
+
         img.onerror = () => reject(new Error('Failed to load image'));
       };
-      
+
       reader.onerror = () => reject(new Error('Failed to read file'));
     });
   };
@@ -198,24 +203,24 @@ const Register = ({ onSwitchToLogin }) => {
   const compressAndPreview = async (file, areaId, previewId, removeBtnId, fileType) => {
     try {
       const compressedFile = await compressImage(file, 600, 400, 0.3);
-      
+
       const reader = new FileReader();
       reader.onload = (e) => {
         const preview = document.getElementById(previewId);
         if (preview) preview.src = e.target.result;
-        
+
         const area = document.getElementById(areaId);
         area?.classList.add('has-file');
-        
+
         const removeBtn = document.getElementById(removeBtnId);
         if (removeBtn) removeBtn.style.display = 'block';
       };
       reader.readAsDataURL(compressedFile);
-      
+
       setSelectedFiles(prev => ({ ...prev, [fileType]: compressedFile }));
-      
+
       console.log(`✅ ${fileType} compressed and preview ready`);
-      
+
     } catch (error) {
       console.error('Compression error:', error);
       previewFile(file, areaId, previewId, removeBtnId, fileType);
@@ -298,37 +303,37 @@ const Register = ({ onSwitchToLogin }) => {
     const { firstName, email, password, confirmPassword, dob } = formData;
     const name = firstName.trim();
 
-    if (!name) { 
-      showToast('❌ নাম লিখুন', 'error'); 
-      return; 
+    if (!name) {
+      showToast('❌ নাম লিখুন', 'error');
+      return;
     }
     if (name.length < 3) {
       showToast('❌ নাম কমপক্ষে ৩ অক্ষর হতে হবে', 'error');
       return;
     }
- 
-    if (!dob) { 
-      showToast('❌ জন্ম তারিখ নির্বাচন করুন', 'error'); 
-      return; 
+
+    if (!dob) {
+      showToast('❌ জন্ম তারিখ নির্বাচন করুন', 'error');
+      return;
     }
-    
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       document.getElementById('emailErr')?.classList.add('show');
       return;
     }
     document.getElementById('emailErr')?.classList.remove('show');
-    
-    if (password.length < 6) { 
-      showToast('❌ পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error'); 
-      return; 
+
+    if (password.length < 6) {
+      showToast('❌ পাসওয়ার্ড কমপক্ষে ৬ অক্ষর', 'error');
+      return;
     }
-    
+
     if (password !== confirmPassword) {
       document.getElementById('pass2Err')?.classList.add('show');
       return;
     }
     document.getElementById('pass2Err')?.classList.remove('show');
-    
+
     showToast('✅ ধাপ ১ সম্পন্ন!', 'success');
     goToStep(2);
   };
@@ -425,10 +430,15 @@ const Register = ({ onSwitchToLogin }) => {
     if (fileType) {
       setSelectedFiles(prev => ({ ...prev, [fileType]: file }));
     }
-    
+
     console.log(`✅ File selected: ${file.name} (${file.size} bytes)`);
   };
 
+  // BUG FIX #7: was calling `feedback.toast({...})` — `feedback` is not
+  // imported/defined anywhere in this file, so clicking the remove ("✕")
+  // button on ANY uploaded file preview threw a ReferenceError and crashed
+  // the app. Replaced with the `toast` already imported from
+  // react-hot-toast. Also now clears that field's error message.
   const removeFile = (inputRef, areaId, previewId, removeBtnId, fileType) => {
     if (inputRef.current) inputRef.current.value = '';
     const preview = document.getElementById(previewId);
@@ -436,17 +446,13 @@ const Register = ({ onSwitchToLogin }) => {
     document.getElementById(areaId)?.classList.remove('has-file');
     const rb = document.getElementById(removeBtnId);
     if (rb) rb.style.display = 'none';
-    
+
     if (fileType) {
       setSelectedFiles(prev => ({ ...prev, [fileType]: null }));
+      setFileErrors(prev => ({ ...prev, [fileType]: '' }));
     }
-    
-    feedback.toast({
-      variant: 'info',
-      title: '🗑️ ফাইল সরানো হয়েছে',
-      message: 'আপনার ফাইল সফলভাবে রিমুভ করা হয়েছে।',
-      duration: 2500
-    });
+
+    toast('🗑️ ফাইল সরানো হয়েছে');
   };
 
   const goStep4 = () => {
@@ -505,51 +511,51 @@ const Register = ({ onSwitchToLogin }) => {
     showToast('📷 ক্যামেরা বন্ধ', 'info');
   }, [resetLiveness, showToast]);
 
-// Register.jsx - capturePhoto ফাংশন আপডেট
+  // Register.jsx - capturePhoto ফাংশন আপডেট
 
-const capturePhoto = useCallback(async () => {
-  const video = videoRef.current;
-  const canvas = canvasRef.current;
-  if (!video || !canvas) return;
+  const capturePhoto = useCallback(async () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
 
-  canvas.width = video.videoWidth || 640;
-  canvas.height = video.videoHeight || 480;
-  canvas.getContext('2d').drawImage(video, 0, 0);
-  const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.92));
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.92));
 
-  if (livenessTimerRef.current) {
-    clearInterval(livenessTimerRef.current);
-    livenessTimerRef.current = null;
-  }
-  camStreamRef.current?.getTracks().forEach(t => t.stop());
-  setCamStream(null);
-  setCameraActive(false);
-  isLivenessRunningRef.current = false;
-  setIsLivenessRunning(false);
+    if (livenessTimerRef.current) {
+      clearInterval(livenessTimerRef.current);
+      livenessTimerRef.current = null;
+    }
+    camStreamRef.current?.getTracks().forEach(t => t.stop());
+    setCamStream(null);
+    setCameraActive(false);
+    isLivenessRunningRef.current = false;
+    setIsLivenessRunning(false);
 
-  setFaceVerified(true);
-  setFaceStatusMsg('captured');
-  setLivenessMessage('✅ মুখমণ্ডলের ছবি ক্যাপচার সম্পন্ন!');
-  showToast('✅ মুখমণ্ডলের ছবি সফলভাবে ক্যাপচার হয়েছে', 'success');
+    setFaceVerified(true);
+    setFaceStatusMsg('captured');
+    setLivenessMessage('✅ মুখমণ্ডলের ছবি ক্যাপচার সম্পন্ন!');
+    showToast('✅ মুখমণ্ডলের ছবি সফলভাবে ক্যাপচার হয়েছে', 'success');
 
-  try {
-    const file = new File([blob], 'face_photo.jpg', { type: 'image/jpeg' });
-    const result = await uploadToCloudinary(file, 'face_photos');
-    setFacePhotoUrl(result.url);
-    
-    // ✅ আপডেটেড: faceVerified = false, status = pending (Admin approve করবে)
-    // 🔥 নোট: এখানে user ডকুমেন্টে সেভ করবেন না, কারণ user এখনও তৈরি হয়নি
-    // user তৈরি হওয়ার পর handleFinalRegistration-এ facePhotoUrl সংরক্ষণ হবে
-    
-    console.log("✅ Face photo uploaded:", result.url);
-    
-  } catch (err) {
-    console.error('Face photo upload error:', err);
-    showToast('⚠️ ছবি আপলোড হয়নি, পরে আবার চেষ্টা করুন', 'warning');
-  }
+    try {
+      const file = new File([blob], 'face_photo.jpg', { type: 'image/jpeg' });
+      const result = await uploadToCloudinary(file, 'face_photos');
+      setFacePhotoUrl(result.url);
 
-  setTimeout(() => goToStep(6), 800);
-}, [showToast, goToStep]);
+      // ✅ আপডেটেড: faceVerified = false, status = pending (Admin approve করবে)
+      // 🔥 নোট: এখানে user ডকুমেন্টে সেভ করবেন না, কারণ user এখনও তৈরি হয়নি
+      // user তৈরি হওয়ার পর handleFinalRegistration-এ facePhotoUrl সংরক্ষণ হবে
+
+      console.log("✅ Face photo uploaded:", result.url);
+
+    } catch (err) {
+      console.error('Face photo upload error:', err);
+      showToast('⚠️ ছবি আপলোড হয়নি, পরে আবার চেষ্টা করুন', 'warning');
+    }
+
+    setTimeout(() => goToStep(6), 800);
+  }, [showToast, goToStep]);
 
   const startLivenessFlow = useCallback(() => {
     if (isLivenessRunningRef.current || livenessComplete) return;
@@ -677,89 +683,89 @@ const capturePhoto = useCallback(async () => {
     }
   };
 
-// Register.jsx - uploadDocuments ফাংশন আপডেট
+  // Register.jsx - uploadDocuments ফাংশন আপডেট
 
-const uploadDocuments = useCallback(async (userId) => {
-  console.log("📤 [START] Uploading documents. State files:", selectedFiles);
+  const uploadDocuments = useCallback(async (userId) => {
+    console.log("📤 [START] Uploading documents. State files:", selectedFiles);
 
-  const uploadTasks = [];
-  if (selectedFiles.nidFront) uploadTasks.push({ file: selectedFiles.nidFront, type: 'nidFront', folder: 'nid_documents' });
-  if (selectedFiles.nidBack) uploadTasks.push({ file: selectedFiles.nidBack, type: 'nidBack', folder: 'nid_documents' });
-  if (selectedFiles.birth) uploadTasks.push({ file: selectedFiles.birth, type: 'birthCert', folder: 'birth_documents' });
+    const uploadTasks = [];
+    if (selectedFiles.nidFront) uploadTasks.push({ file: selectedFiles.nidFront, type: 'nidFront', folder: 'nid_documents' });
+    if (selectedFiles.nidBack) uploadTasks.push({ file: selectedFiles.nidBack, type: 'nidBack', folder: 'nid_documents' });
+    if (selectedFiles.birth) uploadTasks.push({ file: selectedFiles.birth, type: 'birthCert', folder: 'birth_documents' });
 
-  if (uploadTasks.length === 0) {
-    console.warn("⚠️ No files in state to upload");
-    return [];
-  }
-
-  const uploadResults = [];
-  for (const task of uploadTasks) {
-    try {
-      console.log(`📤 Uploading ${task.type}: ${task.file.name}`);
-      const result = await uploadToCloudinary(task.file, task.folder);
-      uploadResults.push({
-        type: task.type,
-        url: result.url,
-        publicId: result.publicId,
-        uploadedAt: new Date().toISOString()
-      });
-      console.log(`✅ ${task.type} uploaded successfully`);
-    } catch (error) {
-      console.error(`❌ Failed to upload ${task.type}:`, error);
-    }
-  }
-
-  if (uploadResults.length === 0) {
-    console.error("❌ No files were uploaded successfully!");
-    return [];
-  }
-
-  // ✅ আপডেটেড: প্রতিটি ডকুমেন্টের জন্য status এবং rejectReason যোগ করা হয়েছে
-  const documents = {};
-  for (const result of uploadResults) {
-    documents[result.type] = {
-      url: result.url,
-      publicId: result.publicId,
-      uploadedAt: result.uploadedAt,
-      status: 'pending',        // ✅ নতুন: pending | approved | rejected
-      rejectReason: ''          // ✅ নতুন: reject হলে reason থাকবে
-    };
-  }
-
-  console.log("📄 Documents object to save:", JSON.stringify(documents, null, 2));
-
-  try {
-    const userRef = doc(db, 'users', userId);
-    
-    const userSnap = await getDoc(userRef);
-    if (!userSnap.exists()) {
-      console.error("❌ User document doesn't exist!");
+    if (uploadTasks.length === 0) {
+      console.warn("⚠️ No files in state to upload");
       return [];
     }
 
-    await updateDoc(userRef, {
-      documents: documents,
-      documentsUploaded: true,
-      documentVerified: false,
-      documentType: selectedVerify || 'nid',
-      documentSubmittedAt: new Date().toISOString(),
-      verificationStatus: 'pending'
-    });
+    const uploadResults = [];
+    for (const task of uploadTasks) {
+      try {
+        console.log(`📤 Uploading ${task.type}: ${task.file.name}`);
+        const result = await uploadToCloudinary(task.file, task.folder);
+        uploadResults.push({
+          type: task.type,
+          url: result.url,
+          publicId: result.publicId,
+          uploadedAt: new Date().toISOString()
+        });
+        console.log(`✅ ${task.type} uploaded successfully`);
+      } catch (error) {
+        console.error(`❌ Failed to upload ${task.type}:`, error);
+      }
+    }
 
-    console.log("✅ Documents saved to Firestore successfully!");
-    
-    const verifySnap = await getDoc(userRef);
-    const verifyData = verifySnap.data();
-    console.log("📄 Verification - documents:", verifyData.documents);
-    console.log("📄 Verification - documentsUploaded:", verifyData.documentsUploaded);
-    
-    return uploadResults;
-    
-  } catch (error) {
-    console.error("❌ Failed to save documents to Firestore:", error);
-    throw error;
-  }
-}, [selectedFiles, selectedVerify]);
+    if (uploadResults.length === 0) {
+      console.error("❌ No files were uploaded successfully!");
+      return [];
+    }
+
+    // ✅ আপডেটেড: প্রতিটি ডকুমেন্টের জন্য status এবং rejectReason যোগ করা হয়েছে
+    const documents = {};
+    for (const result of uploadResults) {
+      documents[result.type] = {
+        url: result.url,
+        publicId: result.publicId,
+        uploadedAt: result.uploadedAt,
+        status: 'pending',        // ✅ নতুন: pending | approved | rejected
+        rejectReason: ''          // ✅ নতুন: reject হলে reason থাকবে
+      };
+    }
+
+    console.log("📄 Documents object to save:", JSON.stringify(documents, null, 2));
+
+    try {
+      const userRef = doc(db, 'users', userId);
+
+      const userSnap = await getDoc(userRef);
+      if (!userSnap.exists()) {
+        console.error("❌ User document doesn't exist!");
+        return [];
+      }
+
+      await updateDoc(userRef, {
+        documents: documents,
+        documentsUploaded: true,
+        documentVerified: false,
+        documentType: selectedVerify || 'nid',
+        documentSubmittedAt: new Date().toISOString(),
+        verificationStatus: 'pending'
+      });
+
+      console.log("✅ Documents saved to Firestore successfully!");
+
+      const verifySnap = await getDoc(userRef);
+      const verifyData = verifySnap.data();
+      console.log("📄 Verification - documents:", verifyData.documents);
+      console.log("📄 Verification - documentsUploaded:", verifyData.documentsUploaded);
+
+      return uploadResults;
+
+    } catch (error) {
+      console.error("❌ Failed to save documents to Firestore:", error);
+      throw error;
+    }
+  }, [selectedFiles, selectedVerify]);
 
   // ════════════════════════════════════════════════════════════════════════════
   // ✅ ফাইনাল রেজিস্ট্রেশন
@@ -777,12 +783,12 @@ const uploadDocuments = useCallback(async (userId) => {
       const nidFrontInput = document.getElementById('nidFront');
       const nidBackInput = document.getElementById('nidBack');
       const birthInput = document.getElementById('birthCert');
-      
+
       const hasNidFront = !!nidFrontInput?.files?.[0];
       const hasNidBack = !!nidBackInput?.files?.[0];
       const hasBirthCert = !!birthInput?.files?.[0];
       const hasAnyDoc = hasNidFront || hasNidBack || hasBirthCert;
-      
+
       const wantsToUpload = !verifySkipped.doc && selectedVerify && selectedVerify !== 'google';
       const isDocUploaded = wantsToUpload && hasAnyDoc;
       const isFaceVerified = faceVerified;
@@ -801,49 +807,49 @@ const uploadDocuments = useCallback(async (userId) => {
       const referralCode = generateReferralCode();
 
 
-await setDoc(doc(db, 'users', user.uid), {
-  uid: user.uid,
-  email,
-  displayName: fullName,
-  firstName,
-  lastName,
-  uniqueId: userUniqueId,
-  walletId: userWalletId,
-  referralCode: referralCode,
-  role: role || 'client',
-  authProvider: 'email',
-  createdAt: serverTimestamp(),
-  isOnline: true,
-  isVerified: false,
-  emailVerified: false,
-  phone: phone || '',
-  countryCode: countryCode || '+880',
-  dob: dob || '',
-  
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        email,
+        displayName: fullName,
+        firstName,
+        lastName,
+        uniqueId: userUniqueId,
+        walletId: userWalletId,
+        referralCode: referralCode,
+        role: role || 'client',
+        authProvider: 'email',
+        createdAt: serverTimestamp(),
+        isOnline: true,
+        isVerified: false,
+        emailVerified: false,
+        phone: phone || '',
+        countryCode: countryCode || '+880',
+        dob: dob || '',
 
-  photoURL: facePhotoUrl || null,
-  facePhotoUrl: facePhotoUrl || null,
-  faceVerified: false,             
-  faceStatus: facePhotoUrl ? 'pending' : 'none',  
-  faceRejectReason: '',             
-  
 
-  isComplete,
-  completionScore,
-  verificationStatus,
-  isBanned: false,
-  isBlocked: false,
-  documentsUploaded: false,         // ✅ পরে uploadDocuments-এ true হবে
-  documentVerified: false,
-  verificationMethod: selectedVerify || 'none',
-  
+        photoURL: facePhotoUrl || null,
+        facePhotoUrl: facePhotoUrl || null,
+        faceVerified: false,
+        faceStatus: facePhotoUrl ? 'pending' : 'none',
+        faceRejectReason: '',
 
-  savedPosts: [],
-  totalReviews: 0,
-  totalRating: 0,
-  averageRating: 0,
-  lastSeen: new Date().toISOString(),
-});
+
+        isComplete,
+        completionScore,
+        verificationStatus,
+        isBanned: false,
+        isBlocked: false,
+        documentsUploaded: false,         // ✅ পরে uploadDocuments-এ true হবে
+        documentVerified: false,
+        verificationMethod: selectedVerify || 'none',
+
+
+        savedPosts: [],
+        totalReviews: 0,
+        totalRating: 0,
+        averageRating: 0,
+        lastSeen: new Date().toISOString(),
+      });
 
       console.log("✅ User document created with UID:", user.uid);
       await createWallet(user.uid, userWalletId);
@@ -891,118 +897,123 @@ await setDoc(doc(db, 'users', user.uid), {
   // ════════════════════════════════════════════════════════════════════════════
   // ✅ গুগল সাইন-আপ - FIXED ✅
   // ════════════════════════════════════════════════════════════════════════════
-// src/pages/Register.jsx - শুধু handleGoogleSignUp ফাংশন আপডেট করুন
+  // src/pages/Register.jsx - শুধু handleGoogleSignUp ফাংশন আপডেট করুন
 
-const handleGoogleSignUp = async () => {
-  setLoading(true);
-  setError('');
-  
-  try {
-    // ✅ Check network first
-    if (!navigator.onLine) {
-      toast.error('📡 ইন্টারনেট সংযোগ নেই! দয়া করে চেক করুন।');
+  const handleGoogleSignUp = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      // ✅ Check network first
+      if (!navigator.onLine) {
+        toast.error('📡 ইন্টারনেট সংযোগ নেই! দয়া করে চেক করুন।');
+        setLoading(false);
+        return;
+      }
+
+      console.log('🔑 Starting Google Sign Up...');
+
+      // ✅ Create GoogleAuthProvider
+      const provider = new GoogleAuthProvider();
+      provider.addScope('profile');
+      provider.addScope('email');
+      provider.setCustomParameters({
+        prompt: 'select_account'
+      });
+
+      // ✅ Sign in with popup
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      console.log('✅ Google Sign Up Success:', user.email);
+
+      // ✅ Check if user already exists
+      const userRef = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        // BUG FIX #8: was `toast.info(...)` — react-hot-toast has no
+        // `.info` method by default (only `.success`/`.error`/`.loading`
+        // + the plain call), so this would throw
+        // "toast.info is not a function" every time an already-registered
+        // user tried Google sign-up.
+        toast('ℹ️ এই অ্যাকাউন্ট ইতিমধ্যে রেজিস্টার করা আছে!');
+        navigate('/');
+        setLoading(false);
+        return;
+      }
+
+      // ✅ Generate IDs
+      const userUniqueId = await generateUserId();
+      const userWalletId = await generateWalletId();
+      const referralCode = generateReferralCode();
+
+      // ✅ Create user document
+      await setDoc(userRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || user.email?.split('@')[0] || 'Google User',
+        uniqueId: userUniqueId,
+        walletId: userWalletId,
+        referralCode: referralCode,
+        role: formData.role || 'client',
+        authProvider: 'google',
+        createdAt: serverTimestamp(),
+        isOnline: true,
+        photoURL: user.photoURL || null,
+        emailVerified: user.emailVerified || false,
+        isVerified: false,
+        isComplete: false,
+        completionScore: 20,
+        verificationStatus: 'incomplete',
+        isBanned: false,
+        isBlocked: false,
+        documentsUploaded: false,
+        faceVerified: false,
+        phone: formData.phone || '',
+        countryCode: formData.countryCode || '+880',
+        dob: formData.dob || '',
+        savedPosts: [],
+        totalReviews: 0,
+        totalRating: 0,
+        averageRating: 0,
+        lastSeen: new Date().toISOString(),
+      });
+
+      console.log('✅ User document created');
+
+      // ✅ Create wallet
+      await createWallet(user.uid, userWalletId);
+
+      toast.success(`🎉 ${userUniqueId} — Google সাইন-আপ সফল!`);
+
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
+
+    } catch (err) {
+      console.error('❌ Google Sign Up Error:', err);
+
+      // ✅ Handle specific errors
+      if (err.code === 'auth/popup-closed-by-user') {
+        toast('ℹ️ সাইন-আপ বাতিল করা হয়েছে। আবার চেষ্টা করুন।');
+      } else if (err.code === 'auth/popup-blocked') {
+        toast.error('❌ পপআপ ব্লক করা হয়েছে! দয়া করে পপআপ অনুমতি দিন।');
+      } else if (err.code === 'auth/network-request-failed') {
+        toast.error('❌ নেটওয়ার্ক সমস্যা! দয়া করে ইন্টারনেট সংযোগ চেক করুন।');
+      } else if (err.code === 'auth/account-exists-with-different-credential') {
+        toast.error('❌ এই ইমেইলে ইতিমধ্যে অন্য অ্যাকাউন্ট আছে।');
+      } else if (err.code === 'auth/cancelled-popup-request') {
+        toast('ℹ️ সাইন-আপ বাতিল করা হয়েছে।');
+      } else {
+        toast.error('❌ ' + (err.message || 'Google সাইন-আপ ব্যর্থ!'));
+      }
+
+      setError(err.message);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    console.log('🔑 Starting Google Sign Up...');
-    
-    // ✅ Create GoogleAuthProvider
-    const provider = new GoogleAuthProvider();
-    provider.addScope('profile');
-    provider.addScope('email');
-    provider.setCustomParameters({
-      prompt: 'select_account'
-    });
-
-    // ✅ Sign in with popup
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    
-    console.log('✅ Google Sign Up Success:', user.email);
-
-    // ✅ Check if user already exists
-    const userRef = doc(db, 'users', user.uid);
-    const userSnap = await getDoc(userRef);
-
-    if (userSnap.exists()) {
-      toast.info('ℹ️ এই অ্যাকাউন্ট ইতিমধ্যে রেজিস্টার করা আছে!');
-      navigate('/');
-      setLoading(false);
-      return;
-    }
-
-    // ✅ Generate IDs
-    const userUniqueId = await generateUserId();
-    const userWalletId = await generateWalletId();
-    const referralCode = generateReferralCode();
-
-    // ✅ Create user document
-    await setDoc(userRef, {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName || user.email?.split('@')[0] || 'Google User',
-      uniqueId: userUniqueId,
-      walletId: userWalletId,
-      referralCode: referralCode,
-      role: formData.role || 'client',
-      authProvider: 'google',
-      createdAt: serverTimestamp(),
-      isOnline: true,
-      photoURL: user.photoURL || null,
-      emailVerified: user.emailVerified || false,
-      isVerified: false,
-      isComplete: false,
-      completionScore: 20,
-      verificationStatus: 'incomplete',
-      isBanned: false,
-      isBlocked: false,
-      documentsUploaded: false,
-      faceVerified: false,
-      phone: formData.phone || '',
-      countryCode: formData.countryCode || '+880',
-      dob: formData.dob || '',
-      savedPosts: [],
-      totalReviews: 0,
-      totalRating: 0,
-      averageRating: 0,
-      lastSeen: new Date().toISOString(),
-    });
-
-    console.log('✅ User document created');
-
-    // ✅ Create wallet
-    await createWallet(user.uid, userWalletId);
-
-    toast.success(`🎉 ${userUniqueId} — Google সাইন-আপ সফল!`);
-    
-    setTimeout(() => {
-      navigate('/');
-    }, 1500);
-
-  } catch (err) {
-    console.error('❌ Google Sign Up Error:', err);
-    
-    // ✅ Handle specific errors - শুধু toast ব্যবহার করুন (feedback নয়)
-    if (err.code === 'auth/popup-closed-by-user') {
-      toast.info('ℹ️ সাইন-আপ বাতিল করা হয়েছে। আবার চেষ্টা করুন।');
-    } else if (err.code === 'auth/popup-blocked') {
-      toast.error('❌ পপআপ ব্লক করা হয়েছে! দয়া করে পপআপ অনুমতি দিন।');
-    } else if (err.code === 'auth/network-request-failed') {
-      toast.error('❌ নেটওয়ার্ক সমস্যা! দয়া করে ইন্টারনেট সংযোগ চেক করুন।');
-    } else if (err.code === 'auth/account-exists-with-different-credential') {
-      toast.error('❌ এই ইমেইলে ইতিমধ্যে অন্য অ্যাকাউন্ট আছে।');
-    } else if (err.code === 'auth/cancelled-popup-request') {
-      toast.info('ℹ️ সাইন-আপ বাতিল করা হয়েছে।');
-    } else {
-      toast.error('❌ ' + (err.message || 'Google সাইন-আপ ব্যর্থ!'));
-    }
-    
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   // ─────────────────────────────────────────
   // Password strength
@@ -1067,9 +1078,9 @@ const handleGoogleSignUp = async () => {
               { n: 6, lbl: 'সম্পন্ন' },
             ].map(({ n, lbl }, i, arr) => (
               <React.Fragment key={n}>
-                <div 
-                  className="step-dot-wrap" 
-                  onClick={() => {}} 
+                <div
+                  className="step-dot-wrap"
+                  onClick={() => {}}
                   style={{ cursor: 'default' }}
                 >
                   <div
@@ -1108,7 +1119,7 @@ const handleGoogleSignUp = async () => {
                     }}
                   />
                 </div>
-                
+
                 <div className="field">
                   <label>পদবি</label>
                   <input
@@ -1197,7 +1208,6 @@ const handleGoogleSignUp = async () => {
                 </div>
               </div>
 
-              
 
 
               <div className="btn-row" style={{ marginTop: '1.25rem' }}>
@@ -1219,7 +1229,7 @@ const handleGoogleSignUp = async () => {
                     value={formData.countryCode}
                     onChange={e => setFormData(p => ({ ...p, countryCode: e.target.value }))}
                   >
-                    <option value="+880">+880 বাংলাদেশ</option>  
+                    <option value="+880">+880 বাংলাদেশ</option>
                   </select>
                   <input
                     type="tel"
@@ -1349,14 +1359,13 @@ const handleGoogleSignUp = async () => {
                           const file = e.target.files[0];
                           if (file) {
                             if (file.size > 2 * 1024 * 1024) {
-                              setError('ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না!');
+                              const msg = 'ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না!';
+                              setFileErrors(prev => ({ ...prev, nidFront: msg }));
                               e.target.value = '';
-                              feedback.alert.warning({
-                                title: '⚠️ ফাইল সাইজ বড়',
-                                message: 'ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না! দয়া করে ছোট সাইজের ফাইল নির্বাচন করুন।'
-                              });
+                              toast.error('⚠️ ' + msg);
                               return;
                             }
+                            setFileErrors(prev => ({ ...prev, nidFront: '' }));
                             console.log("✅ NID Front selected:", file.name);
                             compressAndPreview(file, 'nidFrontArea', 'nidFrontPreview', 'nidFrontRemove', 'nidFront');
                           }
@@ -1380,7 +1389,7 @@ const handleGoogleSignUp = async () => {
                         ✕
                       </button>
                     </div>
-                    {error && <div className="field-error">{error}</div>}
+                    {fileErrors.nidFront && <div className="field-error">{fileErrors.nidFront}</div>}
                   </div>
 
                   <div className="field">
@@ -1395,14 +1404,13 @@ const handleGoogleSignUp = async () => {
                           const file = e.target.files[0];
                           if (file) {
                             if (file.size > 2 * 1024 * 1024) {
-                              setError('ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না!');
+                              const msg = 'ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না!';
+                              setFileErrors(prev => ({ ...prev, nidBack: msg }));
                               e.target.value = '';
-                              feedback.alert.warning({
-                                title: '⚠️ ফাইল সাইজ বড়',
-                                message: 'ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না! দয়া করে ছোট সাইজের ফাইল নির্বাচন করুন।'
-                              });
+                              toast.error('⚠️ ' + msg);
                               return;
                             }
+                            setFileErrors(prev => ({ ...prev, nidBack: '' }));
                             console.log("✅ NID Back selected:", file.name);
                             compressAndPreview(file, 'nidBackArea', 'nidBackPreview', 'nidBackRemove', 'nidBack');
                           }
@@ -1426,7 +1434,7 @@ const handleGoogleSignUp = async () => {
                         ✕
                       </button>
                     </div>
-                    {error && <div className="field-error">{error}</div>}
+                    {fileErrors.nidBack && <div className="field-error">{fileErrors.nidBack}</div>}
                   </div>
                 </div>
               )}
@@ -1444,25 +1452,22 @@ const handleGoogleSignUp = async () => {
                         const file = e.target.files[0];
                         if (file) {
                           if (file.type === 'application/pdf' && file.size > 5 * 1024 * 1024) {
-                            setError('PDF ফাইলের সাইজ ৫MB এর বেশি হতে পারবে না!');
+                            const msg = 'PDF ফাইলের সাইজ ৫MB এর বেশি হতে পারবে না!';
+                            setFileErrors(prev => ({ ...prev, birth: msg }));
                             e.target.value = '';
-                            feedback.alert.warning({
-                              title: '⚠️ ফাইল সাইজ বড়',
-                              message: 'PDF ফাইলের সাইজ ৫MB এর বেশি হতে পারবে না! দয়া করে ছোট সাইজের ফাইল নির্বাচন করুন।'
-                            });
+                            toast.error('⚠️ ' + msg);
                             return;
                           }
-                          
+
                           if (file.type.startsWith('image/') && file.size > 2 * 1024 * 1024) {
-                            setError('ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না!');
+                            const msg = 'ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না!';
+                            setFileErrors(prev => ({ ...prev, birth: msg }));
                             e.target.value = '';
-                            feedback.alert.warning({
-                              title: '⚠️ ফাইল সাইজ বড়',
-                              message: 'ইমেজ ফাইলের সাইজ ২MB এর বেশি হতে পারবে না! দয়া করে ছোট সাইজের ফাইল নির্বাচন করুন।'
-                            });
+                            toast.error('⚠️ ' + msg);
                             return;
                           }
-                          
+
+                          setFileErrors(prev => ({ ...prev, birth: '' }));
                           console.log("✅ Birth Certificate selected:", file.name, `(${(file.size / 1024 / 1024).toFixed(2)}MB)`);
                           compressAndPreview(file, 'birthArea', 'birthPreview', 'birthRemove', 'birth');
                         }
@@ -1486,7 +1491,7 @@ const handleGoogleSignUp = async () => {
                       ✕
                     </button>
                   </div>
-                  {error && <div className="field-error">{error}</div>}
+                  {fileErrors.birth && <div className="field-error">{fileErrors.birth}</div>}
                 </div>
               )}
 
@@ -1607,7 +1612,7 @@ const handleGoogleSignUp = async () => {
                   ২. প্রতি ২.২ সেকেন্ডে একটি নির্দেশনা দেখাবে। <br />
                   ৩. নির্দেশনা অনুসরণ করুন।<br />
                 </div>
-              </div> 
+              </div>
 
               <div className="skip-link">
                 <button onClick={skipFace}>⏭ এখন এড়িয়ে যান</button>
@@ -1651,21 +1656,21 @@ const handleGoogleSignUp = async () => {
               </div>
 
               <div className="btn-row" style={{ marginTop: '8px' }}>
-               
-<button
-  className="btn btn-success"
-  onClick={handleFinalRegistration}
-  disabled={loading || uploadingDocs}
-  style={{ flex: 1 }}
->
-  {loading || uploadingDocs ? (
-    <>
-      <i className="fa-solid fa-spinner fa-spin"></i> প্রক্রিয়াধীন...
-    </>
-  ) : (
-    '🚀 নিবন্ধন সম্পূর্ণ করুন'
-  )}
-</button>
+
+                <button
+                  className="btn btn-success"
+                  onClick={handleFinalRegistration}
+                  disabled={loading || uploadingDocs}
+                  style={{ flex: 1 }}
+                >
+                  {loading || uploadingDocs ? (
+                    <>
+                      <i className="fa-solid fa-spinner fa-spin"></i> প্রক্রিয়াধীন...
+                    </>
+                  ) : (
+                    '🚀 নিবন্ধন সম্পূর্ণ করুন'
+                  )}
+                </button>
               </div>
             </div>
           </div>

@@ -171,35 +171,41 @@ export const NotificationProvider = ({ children }) => {
   // ============================================================
   // ✅ Request Notification Permission
   // ============================================================
-  const requestPermission = async () => {
-    if (!('Notification' in window)) return false;
 
-    if (Notification.permission === 'granted') {
-      setPermissionStatus('granted');
+
+const requestPermission = async () => {
+  if (!('Notification' in window)) return false;
+
+  if (Notification.permission === 'granted') {
+    setPermissionStatus('granted');
+    return true;  // ✅ granted হলে true
+  }
+
+  if (Notification.permission === 'denied') {
+    setPermissionStatus('denied');
+    return false;  // ❌ denied হলে false
+  }
+
+  try {
+    const permission = await Notification.requestPermission();
+    setPermissionStatus(permission);
+
+    // ✅ নিশ্চিত করুন
+    const isGranted = permission === 'granted';
+    console.log('🔍 Permission result:', permission, 'isGranted:', isGranted);
+    
+    if (isGranted) {
+      sound?.playEvent(SOUND_EVENTS.SUCCESS);
       return true;
-    }
-
-    if (Notification.permission === 'denied') {
-      setPermissionStatus('denied');
+    } else {
+      sound?.playEvent(SOUND_EVENTS.WARNING);
       return false;
     }
-
-    try {
-      const permission = await Notification.requestPermission();
-      setPermissionStatus(permission);
-
-      if (permission === 'granted') {
-        sound?.playEvent(SOUND_EVENTS.SUCCESS);
-        return true;
-      } else {
-        sound?.playEvent(SOUND_EVENTS.WARNING);
-        return false;
-      }
-    } catch (error) {
-      console.error('🔔 Error requesting notification permission:', error);
-      return false;
-    }
-  };
+  } catch (error) {
+    console.error('🔔 Error requesting notification permission:', error);
+    return false;
+  }
+};
 
   const hasPermission = useCallback(() => {
     if (!('Notification' in window)) return false;

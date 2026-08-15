@@ -17,6 +17,7 @@ import useAdminData from './hooks/useAdminData';
 import NotificationBanner from '@/components/NotificationBanner/NotificationBanner';
 import SoundSettings from '@/UI/Sound/SoundSettings';
 import AdminAnnouncement from './AdminAnnouncement';
+import AdminContentSkeleton from './components/AdminContentSkeleton'; // ✅ NEW
 
 // ── Components ──
 import Loading from './components/Loading';
@@ -597,9 +598,7 @@ const AdminDashboard = () => {
   // 7️⃣ MAIN RENDER
   // ============================================================
 
-  if (loading) {
-    return <Loading />;
-  }
+
 
   return (
     <div className="admin-container">

@@ -11,10 +11,10 @@
   <!-- ============================================================
   ✅ Favicon
   ============================================================ -->
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
-
+  <link rel="icon" href="/favicon.ico.png" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  
   <!-- ============================================================
   ✅ Apple Touch Icon (iPhone, iPad)
   ============================================================ -->
@@ -157,19 +157,69 @@
   </script>
 
   <!-- ============================================================
-  ✅ Security Headers (CSP - UPDATED with blob: for image previews)
-  ✅ Fixed: Added blob: to img-src for URL.createObjectURL() support
+  ✅ Security Headers (CSP - UPDATED with Cloudflare Worker)
+  ✅ Fixed: Added Cloudflare Worker URL to connect-src
   ============================================================ -->
   <meta
     http-equiv="Content-Security-Policy"
     content="
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.firebase.com https://*.googleapis.com https://*.cloudinary.com https://apis.google.com https://*.firebaseio.com;
-      style-src 'self' 'unsafe-inline' https://*.googleapis.com https://cdnjs.cloudflare.com https://banglawebfonts.pages.dev;
-      font-src 'self' https://*.googleapis.com https://*.gstatic.com https://cdnjs.cloudflare.com https://banglawebfonts.pages.dev data:;
-      img-src 'self' data: https: http: blob: https://*.cloudinary.com https://*.googleapis.com https://www.google.com https://*.google.com https://ui-avatars.com https://via.placeholder.com https://images.unsplash.com https://*.githubusercontent.com;
-      connect-src 'self' https://*.firebase.com https://*.googleapis.com https://*.cloudinary.com https://*.firebaseio.com https://*.firebaseapp.com wss://*.firebaseio.com https://www.google.com;
-      frame-src 'self' https://*.firebase.com https://apis.google.com https://*.firebaseapp.com;
+      
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' 
+        https://*.firebase.com 
+        https://*.googleapis.com 
+        https://*.cloudinary.com 
+        https://apis.google.com 
+        https://*.firebaseio.com
+        https://www.google.com
+        https://www.gstatic.com
+        https://*.google.com
+        https://*.googletagmanager.com
+        https://*.google-analytics.com;
+      
+      style-src 'self' 'unsafe-inline' 
+        https://fonts.googleapis.com 
+        https://*.googleapis.com 
+        https://cdnjs.cloudflare.com 
+        https://banglawebfonts.pages.dev;
+      
+      font-src 'self' 
+        https://*.googleapis.com 
+        https://*.gstatic.com 
+        https://cdnjs.cloudflare.com 
+        https://banglawebfonts.pages.dev 
+        data:;
+      
+      img-src 'self' data: https: http: blob: 
+        https://*.cloudinary.com 
+        https://*.googleapis.com 
+        https://www.google.com 
+        https://*.google.com 
+        https://ui-avatars.com 
+        https://via.placeholder.com 
+        https://images.unsplash.com 
+        https://*.githubusercontent.com
+        https://*.gstatic.com;
+      
+      connect-src 'self' 
+        https://*.firebase.com 
+        https://*.googleapis.com 
+        https://*.cloudinary.com 
+        https://*.firebaseio.com 
+        https://*.firebaseapp.com 
+        wss://*.firebaseio.com 
+        https://www.google.com
+        https://*.google.com
+        https://*.workers.dev
+        https://worktrust-otp-production.hammanmusa362.workers.dev;
+      
+      frame-src 'self' 
+        https://*.firebase.com 
+        https://apis.google.com 
+        https://*.firebaseapp.com
+        https://www.google.com
+        https://*.google.com;
+      
       worker-src 'self' blob:;
       media-src 'self' blob: https://*.cloudinary.com;
     "
@@ -178,6 +228,11 @@
 </head>
 
 <body>
+  <!-- ============================================================
+  ✅ Recaptcha Container (Firebase Phone Auth)
+  ============================================================ -->
+  <div id="recaptcha-container"></div>
+
   <!-- ============================================================
   ✅ App Root
   ============================================================ -->

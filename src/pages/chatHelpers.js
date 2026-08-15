@@ -84,18 +84,6 @@ export const formatTime = (ts) => {
 // ✅ BUDGET & DEADLINE HELPERS
 // ============================================================
 
-/**
- * Extract budget value from object or number
- * Supports: number, string, {amount, isNegotiable}, {type:'range', min, max, isNegotiable}
- * 
- * @param {any} budget - The budget value (number, string, or object)
- * @returns {number} - Extracted number value
- * 
- * @example
- * extractBudgetValue(1000) // 1000
- * extractBudgetValue({ amount: 1000 }) // 1000
- * extractBudgetValue({ type: 'range', min: 500, max: 1000 }) // 1000
- */
 export const extractBudgetValue = (budget) => {
   if (budget === null || budget === undefined) return 0;
   if (typeof budget === 'number') return budget;
@@ -104,17 +92,14 @@ export const extractBudgetValue = (budget) => {
     return isNaN(parsed) ? 0 : parsed;
   }
   if (typeof budget === 'object') {
-    // Handle {amount, isNegotiable} format
     if (budget.amount !== undefined) {
       return typeof budget.amount === 'number' ? budget.amount : parseFloat(budget.amount) || 0;
     }
-    // Handle {type:'range', min, max} format
     if (budget.type === 'range') {
       const min = budget.min || 0;
       const max = budget.max || 0;
-      return Math.max(min, max); // Return max for display
+      return Math.max(min, max);
     }
-    // Handle {type:'range', min, max, isNegotiable} format
     if (budget.min !== undefined || budget.max !== undefined) {
       const min = budget.min || 0;
       const max = budget.max || 0;
@@ -124,17 +109,6 @@ export const extractBudgetValue = (budget) => {
   return 0;
 };
 
-/**
- * Extract deadline value from object or number
- * 
- * @param {any} deadline - The deadline value (number, string, or object)
- * @returns {number} - Extracted number value
- * 
- * @example
- * extractDeadlineValue(7) // 7
- * extractDeadlineValue({ days: 7 }) // 7
- * extractDeadlineValue({ type: 'range', min: 3, max: 7 }) // 7
- */
 export const extractDeadlineValue = (deadline) => {
   if (deadline === null || deadline === undefined) return 0;
   if (typeof deadline === 'number') return deadline;
@@ -143,11 +117,9 @@ export const extractDeadlineValue = (deadline) => {
     return isNaN(parsed) ? 0 : parsed;
   }
   if (typeof deadline === 'object') {
-    // Handle {days, type} format
     if (deadline.days !== undefined) {
       return typeof deadline.days === 'number' ? deadline.days : parseFloat(deadline.days) || 0;
     }
-    // Handle {type:'range', min, max} format
     if (deadline.type === 'range') {
       const min = deadline.min || 0;
       const max = deadline.max || 0;
@@ -162,17 +134,6 @@ export const extractDeadlineValue = (deadline) => {
   return 0;
 };
 
-/**
- * Format budget for display (returns string with Bangla negotiable text)
- * 
- * @param {any} budget - The budget value (number, string, or object)
- * @returns {string} - Formatted display string
- * 
- * @example
- * formatBudgetDisplay(1000) // "1000"
- * formatBudgetDisplay({ amount: 1000, isNegotiable: true }) // "1000 (আলোচনাসাপেক্ষ)"
- * formatBudgetDisplay({ type: 'range', min: 500, max: 1000 }) // "500-1000"
- */
 export const formatBudgetDisplay = (budget) => {
   if (budget === null || budget === undefined) return '0';
   if (typeof budget === 'number') return String(budget);
@@ -191,17 +152,6 @@ export const formatBudgetDisplay = (budget) => {
   return String(budget);
 };
 
-/**
- * Format deadline for display (returns string)
- * 
- * @param {any} deadline - The deadline value (number, string, or object)
- * @returns {string} - Formatted display string
- * 
- * @example
- * formatDeadlineDisplay(7) // "7"
- * formatDeadlineDisplay({ days: 7 }) // "7"
- * formatDeadlineDisplay({ type: 'range', min: 3, max: 7 }) // "3-7"
- */
 export const formatDeadlineDisplay = (deadline) => {
   if (deadline === null || deadline === undefined) return '0';
   if (typeof deadline === 'number') return String(deadline);
@@ -219,22 +169,7 @@ export const formatDeadlineDisplay = (deadline) => {
 };
 
 // ============================================================
-// ✅ sendProposal - FIXED (returns dealId + notifies BOTH parties)
-//
-// ⚠️ TWO BUGS FIXED HERE:
-// 1. `proposedBy` used to be hardcoded to `sellerId`. That's correct for
-//    'hire' posts (the sender IS the seller/bidder), but WRONG for
-//    'service' posts, where the sender is actually the buyer (the client
-//    requesting the service). Anything that reads `proposedBy` to know
-//    who sent the offer was getting the wrong answer for service posts.
-// 2. The "you got a new proposal" notification used to always target
-//    `userId: buyerId`. For 'hire' posts that's correct (buyer is the
-//    recipient). But for 'service' posts, buyer IS the sender — so the
-//    notification was going to the person who just sent the offer, and
-//    the actual recipient (the seller) never got notified at all.
-// Both are fixed below: the real recipient now gets the "new proposal"
-// notification, and the sender gets a separate confirmation — so both
-// parties are notified when an offer is sent, as intended.
+// ✅ sendProposal
 // ============================================================
 export const sendProposal = async (
   proposalData,
@@ -256,12 +191,12 @@ export const sendProposal = async (
   }
 
   let buyerId, sellerId, buyerName, sellerName, buyerEmail, sellerEmail;
-  
+
   console.log("🔍 sendProposal - ChatContext:", chatContext);
   console.log("🔍 sendProposal - CurrentUser:", currentUser);
   console.log("🔍 sendProposal - postType:", postType);
   console.log("🔍 sendProposal - userRole:", userRole);
-  
+
   if (postType === 'service') {
     buyerId = currentUser?.uid;
     sellerId = chatContext?.userId || chatContext?.ownerId || chatContext?.uid || chatContext?.sellerId;
@@ -311,10 +246,6 @@ export const sendProposal = async (
   const chatId = chatContext?.id || chatContext?.postId || `deal_${Date.now()}`;
   const milestones = generateMilestones(proposalData.budget);
 
-  // ✅ FIXED: the actual sender is whoever is clicking "Send Proposal"
-  // right now — currentUser — not a hardcoded role. Since we already know
-  // buyerId/sellerId above, we can figure out who the "other party"
-  // (recipient) is regardless of postType.
   const senderId = currentUser?.uid;
   const senderDisplayName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Someone';
   const recipientId = senderId === buyerId ? sellerId : buyerId;
@@ -334,7 +265,7 @@ export const sendProposal = async (
       status: 'pending',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      proposedBy: senderId, // ✅ FIXED — was hardcoded to sellerId
+      proposedBy: senderId,
       proposedAt: serverTimestamp(),
       chatId: chatId
     };
@@ -342,8 +273,6 @@ export const sendProposal = async (
     const dealRef = await addDoc(collection(db, 'deals'), dealPayload);
     const dealId = dealRef.id;
 
-    // ✅ FIXED: notify the REAL recipient (the other party), not always
-    // buyerId.
     await addDoc(collection(db, 'notifications'), {
       userId: recipientId,
       event: NOTIFICATION_EVENTS.DEAL_CREATED,
@@ -359,9 +288,6 @@ export const sendProposal = async (
       createdAt: serverTimestamp(),
     });
 
-    // ✅ NEW: confirmation notification back to the sender, so both
-    // parties are notified when an offer is sent — including a heads-up
-    // that the offer auto-expires if there's no response in 48 hours.
     await addDoc(collection(db, 'notifications'), {
       userId: senderId,
       event: NOTIFICATION_EVENTS.DEAL_CREATED,
@@ -402,7 +328,7 @@ export const sendProposal = async (
     }
 
     sound?.playEventOnce?.(SOUND_EVENTS.DEAL_CREATED, { dedupeTime: 3000 }) || sound?.playEvent(SOUND_EVENTS.DEAL_CREATED);
-    
+
     return { success: true, dealId: dealId };
 
   } catch (error) {
@@ -417,7 +343,7 @@ export const sendProposal = async (
 };
 
 // ============================================================
-// ✅ approveDeal - FIXED (dealId validation)
+// ✅ approveDeal
 // ============================================================
 export const approveDeal = async (existingDeal, currentUser, safeChatId, feedback, sound) => {
   if (!existingDeal || existingDeal.status !== 'pending') {
@@ -430,7 +356,7 @@ export const approveDeal = async (existingDeal, currentUser, safeChatId, feedbac
   }
 
   const dealId = existingDeal.id || existingDeal.dealId;
-  
+
   if (!dealId) {
     console.error('❌ No dealId found! existingDeal:', existingDeal);
     if (feedback) {
@@ -440,7 +366,7 @@ export const approveDeal = async (existingDeal, currentUser, safeChatId, feedbac
   }
 
   const key = `approve_${dealId}`;
-  
+
   if (_dealActionMap.has(key)) {
     const lastTime = _dealActionMap.get(key);
     if (Date.now() - lastTime < 5000) {
@@ -546,7 +472,7 @@ export const approveDeal = async (existingDeal, currentUser, safeChatId, feedbac
 };
 
 // ============================================================
-// ✅ rejectDeal - FIXED (dealId validation)
+// ✅ rejectDeal
 // ============================================================
 export const rejectDeal = async (existingDeal, currentUser, safeChatId, feedback, sound) => {
   if (!existingDeal || existingDeal.status !== 'pending') {
@@ -559,7 +485,7 @@ export const rejectDeal = async (existingDeal, currentUser, safeChatId, feedback
   }
 
   const dealId = existingDeal.id || existingDeal.dealId;
-  
+
   if (!dealId) {
     console.error('❌ No dealId found! existingDeal:', existingDeal);
     if (feedback) {
@@ -587,7 +513,7 @@ export const rejectDeal = async (existingDeal, currentUser, safeChatId, feedback
   }
 
   const key = `reject_${dealId}`;
-  
+
   if (_dealActionMap.has(key)) {
     const lastTime = _dealActionMap.get(key);
     if (Date.now() - lastTime < 5000) {
@@ -673,11 +599,11 @@ export const rejectDeal = async (existingDeal, currentUser, safeChatId, feedback
 };
 
 // ============================================================
-// ✅ reopenDeal - FIXED (dealId validation)
+// ✅ reopenDeal
 // ============================================================
 export const reopenDeal = async (existingDeal, currentUser, safeChatId, feedback, sound) => {
   const dealId = existingDeal?.id || existingDeal?.dealId || safeChatId;
-  
+
   if (!dealId) {
     console.error('❌ No dealId found! existingDeal:', existingDeal);
     if (feedback) {
@@ -687,7 +613,7 @@ export const reopenDeal = async (existingDeal, currentUser, safeChatId, feedback
   }
 
   const key = `reopen_${dealId}`;
-  
+
   if (_dealActionMap.has(key)) {
     const lastTime = _dealActionMap.get(key);
     if (Date.now() - lastTime < 5000) {
@@ -734,7 +660,7 @@ export const reopenDeal = async (existingDeal, currentUser, safeChatId, feedback
   try {
     const dealRef = doc(db, 'deals', dealId);
     const dealSnap = await getDoc(dealRef);
-    
+
     if (!dealSnap.exists()) {
       if (feedback) {
         feedback.alert.error({ message: 'ডিল খুঁজে পাওয়া যায়নি!' });
@@ -743,7 +669,7 @@ export const reopenDeal = async (existingDeal, currentUser, safeChatId, feedback
     }
 
     const currentStatus = dealSnap.data()?.status;
-    
+
     if (currentStatus === 'pending') {
       if (feedback) {
         feedback.alert.info({ message: 'এই ডিল ইতিমধ্যে খোলা আছে!' });
@@ -812,7 +738,20 @@ export const reopenDeal = async (existingDeal, currentUser, safeChatId, feedback
 };
 
 // ============================================================
-// ✅ checkActiveDealBetweenUsers - Check if two users have active deals
+// ✅ checkActiveDealBetweenUsers — FIXED
+//
+// 🐛 BUG: This used to query `where('participants', 'array-contains',
+// userId1)` — but deal documents (see sendProposal's dealPayload above)
+// only ever store `buyerId` / `sellerId`. There is no `participants`
+// array on a deal doc anywhere in this codebase. That query therefore
+// matched ZERO documents, always, so this function always returned
+// `hasActiveDeal: false` regardless of whether an active deal actually
+// existed — silently disabling the "can't delete/block while an active
+// deal exists" protection everywhere it's used.
+//
+// FIX: query by buyerId and sellerId separately for userId1 (Firestore
+// can't OR across two different fields in one query), merge the results,
+// then check whether userId2 is the other party on each deal.
 // ============================================================
 export const checkActiveDealBetweenUsers = async (userId1, userId2) => {
   if (!userId1 || !userId2) {
@@ -821,31 +760,38 @@ export const checkActiveDealBetweenUsers = async (userId1, userId2) => {
 
   try {
     const dealsRef = collection(db, 'deals');
-    
-    const q1 = query(
+
+    const qAsBuyer = query(
       dealsRef,
-      where('participants', 'array-contains', userId1),
+      where('buyerId', '==', userId1),
       where('status', 'in', ['active', 'overdue'])
     );
-    
-    const snapshot1 = await getDocs(q1);
-    
-    const activeDeals = snapshot1.docs
-      .map(doc => ({ id: doc.id, ...doc.data() }))
-      .filter(deal => {
-        const participants = deal.participants || [];
-        const isParticipant = participants.includes(userId2) || 
-                             deal.buyerId === userId2 || 
-                             deal.sellerId === userId2;
-        return isParticipant;
-      });
-    
+    const qAsSeller = query(
+      dealsRef,
+      where('sellerId', '==', userId1),
+      where('status', 'in', ['active', 'overdue'])
+    );
+
+    const [buyerSnap, sellerSnap] = await Promise.all([getDocs(qAsBuyer), getDocs(qAsSeller)]);
+
+    const seen = new Set();
+    const merged = [];
+    [...buyerSnap.docs, ...sellerSnap.docs].forEach((docSnap) => {
+      if (seen.has(docSnap.id)) return;
+      seen.add(docSnap.id);
+      merged.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    const activeDeals = merged.filter(
+      (deal) => deal.buyerId === userId2 || deal.sellerId === userId2
+    );
+
     return {
       hasActiveDeal: activeDeals.length > 0,
       activeDeals: activeDeals,
       count: activeDeals.length
     };
-    
+
   } catch (error) {
     console.error('❌ Error checking active deals:', error);
     return { hasActiveDeal: false, error: error.message, count: 0, activeDeals: [] };
@@ -853,7 +799,7 @@ export const checkActiveDealBetweenUsers = async (userId1, userId2) => {
 };
 
 // ============================================================
-// ✅ checkActiveDealForUser - Check if a user has any active deals
+// ✅ checkActiveDealForUser — FIXED (same 'participants' bug as above)
 // ============================================================
 export const checkActiveDealForUser = async (userId) => {
   if (!userId) {
@@ -862,21 +808,34 @@ export const checkActiveDealForUser = async (userId) => {
 
   try {
     const dealsRef = collection(db, 'deals');
-    const q = query(
+
+    const qAsBuyer = query(
       dealsRef,
-      where('participants', 'array-contains', userId),
+      where('buyerId', '==', userId),
       where('status', 'in', ['active', 'overdue'])
     );
-    
-    const snapshot = await getDocs(q);
-    const activeDeals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    
+    const qAsSeller = query(
+      dealsRef,
+      where('sellerId', '==', userId),
+      where('status', 'in', ['active', 'overdue'])
+    );
+
+    const [buyerSnap, sellerSnap] = await Promise.all([getDocs(qAsBuyer), getDocs(qAsSeller)]);
+
+    const seen = new Set();
+    const activeDeals = [];
+    [...buyerSnap.docs, ...sellerSnap.docs].forEach((docSnap) => {
+      if (seen.has(docSnap.id)) return;
+      seen.add(docSnap.id);
+      activeDeals.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
     return {
       hasActiveDeal: activeDeals.length > 0,
       activeDeals: activeDeals,
       count: activeDeals.length
     };
-    
+
   } catch (error) {
     console.error('❌ Error checking active deals:', error);
     return { hasActiveDeal: false, error: error.message, count: 0, activeDeals: [] };

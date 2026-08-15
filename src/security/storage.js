@@ -1,12 +1,41 @@
 // src/security/storage.js
+// ============================================================
+// 🔧 FIX APPLIED: every key is now automatically namespaced by the
+// current Firebase uid.
+//
+// Before: fullKey was just `worktrustbd_${key}` — the SAME
+// localStorage entry regardless of which account was logged in. On a
+// shared/family device, if User A set an App Lock PIN and later
+// logged out WITHOUT disabling App Lock first, User B logging in on
+// the same browser would inherit User A's PIN hash, biometric
+// credential id, lockout state, and trusted-device flag — none of
+// which User B ever set. useAppLock.js / useBiometric.js / recovery.js
+// / device.js all call these methods with plain constant keys
+// (PIN_HASH_KEY, APP_LOCK_KEY, BIOMETRIC_CREDENTIAL_ID_KEY, DEVICE_KEY,
+// RECOVERY_CODES_KEY) and never scoped them by user themselves.
+//
+// Fix: storage.js now reads `auth.currentUser?.uid` itself and
+// appends it to the key before touching localStorage. This means
+// every existing caller becomes correctly per-account WITHOUT any
+// changes needed on their end. When there's no logged-in user (e.g.
+// device fingerprinting before login), it falls back to an
+// unscoped/"anon" key exactly as before, so pre-login flows are
+// unaffected.
+// ============================================================
 
-/**
- * 🗄️ Secure Storage Wrapper
- * Centralized access to localStorage with consistent API
- * Handles PIN hashing, security settings, and encrypted storage
- */
+import { auth } from '@/firebase';
 
 const STORAGE_PREFIX = 'worktrustbd_';
+
+/**
+ * Builds the final localStorage key, namespaced by the current user.
+ * Falls back to an unscoped "anon" bucket when nobody is logged in
+ * (matches the old behavior for pre-login flows like device fingerprinting).
+ */
+const buildKey = (key) => {
+  const uid = auth.currentUser?.uid || 'anon';
+  return `${STORAGE_PREFIX}${uid}_${key}`;
+};
 
 export const storage = {
   /**
@@ -16,8 +45,7 @@ export const storage = {
    */
   get(key) {
     try {
-      const fullKey = STORAGE_PREFIX + key;
-      const value = localStorage.getItem(fullKey);
+      const value = localStorage.getItem(buildKey(key));
       return value ? JSON.parse(value) : null;
     } catch (error) {
       console.error(`❌ Storage get error for key "${key}":`, error);
@@ -33,8 +61,7 @@ export const storage = {
    */
   set(key, value) {
     try {
-      const fullKey = STORAGE_PREFIX + key;
-      localStorage.setItem(fullKey, JSON.stringify(value));
+      localStorage.setItem(buildKey(key), JSON.stringify(value));
       return true;
     } catch (error) {
       console.error(`❌ Storage set error for key "${key}":`, error);
@@ -49,8 +76,7 @@ export const storage = {
    */
   remove(key) {
     try {
-      const fullKey = STORAGE_PREFIX + key;
-      localStorage.removeItem(fullKey);
+      localStorage.removeItem(buildKey(key));
       return true;
     } catch (error) {
       console.error(`❌ Storage remove error for key "${key}":`, error);
@@ -59,14 +85,18 @@ export const storage = {
   },
 
   /**
-   * Clear all storage (only worktrustbd keys)
+   * Clear all storage FOR THE CURRENT USER ONLY (only their
+   * worktrustbd_{uid}_ keys — does not touch other accounts'
+   * data that may exist in this browser's localStorage).
    * @returns {boolean} Success status
    */
   clear() {
     try {
+      const uid = auth.currentUser?.uid || 'anon';
+      const userPrefix = `${STORAGE_PREFIX}${uid}_`;
       const keys = Object.keys(localStorage);
       keys.forEach(key => {
-        if (key.startsWith(STORAGE_PREFIX)) {
+        if (key.startsWith(userPrefix)) {
           localStorage.removeItem(key);
         }
       });
@@ -78,32 +108,33 @@ export const storage = {
   },
 
   /**
-   * Check if a key exists
+   * Check if a key exists (for the current user)
    * @param {string} key - Storage key (without prefix)
    * @returns {boolean}
    */
   has(key) {
-    const fullKey = STORAGE_PREFIX + key;
-    return localStorage.getItem(fullKey) !== null;
+    return localStorage.getItem(buildKey(key)) !== null;
   },
 
   /**
-   * Get all storage keys (only worktrustbd keys)
-   * @returns {string[]} Array of keys
+   * Get all storage keys for the CURRENT user only
+   * @returns {string[]} Array of keys (without prefix/uid)
    */
   getAllKeys() {
+    const uid = auth.currentUser?.uid || 'anon';
+    const userPrefix = `${STORAGE_PREFIX}${uid}_`;
     const keys = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith(STORAGE_PREFIX)) {
-        keys.push(key.replace(STORAGE_PREFIX, ''));
+      if (key && key.startsWith(userPrefix)) {
+        keys.push(key.replace(userPrefix, ''));
       }
     }
     return keys;
   },
 
   /**
-   * Get all storage data (only worktrustbd keys)
+   * Get all storage data for the CURRENT user only
    * @returns {Object} All stored data
    */
   getAll() {

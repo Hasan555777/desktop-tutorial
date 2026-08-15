@@ -252,4 +252,120 @@ export default defineConfig({
       '@styles': resolve(__dirname, './src/styles'),
     },
   },
+  // ✅ CSP Headers যোগ করুন (Recaptcha + Fonts + Cloudflare Worker এর জন্য)
+  server: {
+    headers: {
+      'Content-Security-Policy': [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' " +
+          "https://*.firebase.com " +
+          "https://*.googleapis.com " +
+          "https://*.cloudinary.com " +
+          "https://apis.google.com " +
+          "https://*.firebaseio.com " +
+          "https://www.google.com " +
+          "https://www.gstatic.com " +
+          "https://*.google.com " +
+          "https://*.googletagmanager.com " +
+          "https://*.google-analytics.com",
+        "style-src 'self' 'unsafe-inline' " +
+          "https://fonts.googleapis.com " +
+          "https://*.googleapis.com " +
+          "https://cdnjs.cloudflare.com " +
+          "https://banglawebfonts.pages.dev",
+        "font-src 'self' " +
+          "https://*.googleapis.com " +
+          "https://*.gstatic.com " +
+          "https://cdnjs.cloudflare.com " +
+          "https://banglawebfonts.pages.dev " +
+          "data:",
+        "connect-src 'self' " +
+          "https://*.firebase.com " +
+          "https://*.googleapis.com " +
+          "https://*.cloudinary.com " +
+          "https://*.firebaseio.com " +
+          "https://*.firebaseapp.com " +
+          "wss://*.firebaseio.com " +
+          "https://www.google.com " +
+          "https://*.google.com " +
+          "https://*.workers.dev " +
+          "https://worktrust-otp-production.hammanmusa362.workers.dev",
+        "img-src 'self' data: https: http: blob: " +
+          "https://*.cloudinary.com " +
+          "https://*.googleapis.com " +
+          "https://www.google.com " +
+          "https://*.google.com " +
+          "https://ui-avatars.com " +
+          "https://via.placeholder.com " +
+          "https://images.unsplash.com " +
+          "https://*.githubusercontent.com " +
+          "https://*.gstatic.com",
+        "frame-src 'self' " +
+          "https://*.firebase.com " +
+          "https://apis.google.com " +
+          "https://*.firebaseapp.com " +
+          "https://www.google.com " +
+          "https://*.google.com",
+        "worker-src 'self' blob:",
+        "media-src 'self' blob: https://*.cloudinary.com",
+        "manifest-src 'self'",
+      ].join('; '),
+    },
+  },
+  // ✅ Preview-ও CSP যোগ করুন
+  preview: {
+    headers: {
+      'Content-Security-Policy': [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' " +
+          "https://*.firebase.com " +
+          "https://*.googleapis.com " +
+          "https://*.cloudinary.com " +
+          "https://apis.google.com " +
+          "https://*.firebaseio.com " +
+          "https://www.google.com " +
+          "https://www.gstatic.com " +
+          "https://*.google.com",
+        "style-src 'self' 'unsafe-inline' " +
+          "https://fonts.googleapis.com " +
+          "https://*.googleapis.com " +
+          "https://cdnjs.cloudflare.com " +
+          "https://banglawebfonts.pages.dev",
+        "font-src 'self' " +
+          "https://*.googleapis.com " +
+          "https://*.gstatic.com " +
+          "https://cdnjs.cloudflare.com " +
+          "https://banglawebfonts.pages.dev " +
+          "data:",
+        "connect-src 'self' " +
+          "https://*.firebase.com " +
+          "https://*.googleapis.com " +
+          "https://*.cloudinary.com " +
+          "https://*.firebaseio.com " +
+          "https://*.firebaseapp.com " +
+          "wss://*.firebaseio.com " +
+          "https://www.google.com " +
+          "https://*.google.com " +
+          "https://*.workers.dev " +
+          "https://worktrust-otp-production.hammanmusa362.workers.dev",
+        "img-src 'self' data: https: http: blob: " +
+          "https://*.cloudinary.com " +
+          "https://*.googleapis.com " +
+          "https://www.google.com " +
+          "https://*.google.com " +
+          "https://ui-avatars.com " +
+          "https://via.placeholder.com " +
+          "https://images.unsplash.com " +
+          "https://*.githubusercontent.com",
+        "frame-src 'self' " +
+          "https://*.firebase.com " +
+          "https://apis.google.com " +
+          "https://*.firebaseapp.com " +
+          "https://www.google.com",
+        "worker-src 'self' blob:",
+        "media-src 'self' blob: https://*.cloudinary.com",
+        "manifest-src 'self'",
+      ].join('; '),
+    },
+  },
 });

@@ -600,8 +600,8 @@ export const useInboxChats = (currentUser, currentMode, selectedChat, setSelecte
               }
             }
 
-            const isActiveDeal = ACTIVE_DEAL_STATUSES.includes(data.status);
-
+              const isActiveDeal = false;
+              
             return {
               id: doc.id,
               ...data,

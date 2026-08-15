@@ -47,9 +47,12 @@ const NotificationBanner = ({
   useEffect(() => {
     if (!autoShow) return;
     
+    // ✅ শুধুমাত্র 'default' status এ দেখান
     if (permissionStatus === 'default' && !isDismissed()) {
       const timer = setTimeout(() => setShowBanner(true), delay);
       return () => clearTimeout(timer);
+    } else {
+      setShowBanner(false);
     }
   }, [permissionStatus, autoShow, delay]);
 
@@ -78,11 +81,22 @@ const NotificationBanner = ({
     }
   }, [permissionStatus]);
 
+  // ============================================================
+  // ✅ FIXED: handleEnable with proper message logic
+  // ============================================================
   const handleEnable = async () => {
     setIsLoading(true);
     try {
+      // 🔍 Debug log
+      console.log('🔍 Before permission request - status:', permissionStatus);
+      
       const granted = await requestPermission();
-      if (granted) {
+      
+      // 🔍 Debug log
+      console.log('🔍 After permission request - granted:', granted, 'status:', permissionStatus);
+      
+      // ✅ Permission granted - সঠিক মেসেজ
+      if (granted === true) {
         setShowBanner(false);
         localStorage.setItem(storageKey, JSON.stringify({ timestamp: Date.now() }));
         
@@ -104,16 +118,29 @@ const NotificationBanner = ({
         }
         
         if (onEnable) onEnable(true);
-      } else {
+      } 
+      // ❌ Permission denied - সঠিক মেসেজ
+      else {
         setShowBanner(false);
-        alert.info({ 
-          title: 'ℹ️ নোটিফিকেশন বন্ধ', 
-          message: 'আপনি নোটিফিকেশন বন্ধ রেখেছেন।',
-          duration: 3000 
-        });
+        
+        if (variant === 'admin') {
+          alert.info({ 
+            title: 'ℹ️ অ্যাডমিন নোটিফিকেশন বন্ধ', 
+            message: 'আপনি অ্যাডমিন নোটিফিকেশন বন্ধ রেখেছেন।',
+            duration: 3000 
+          });
+        } else {
+          alert.info({ 
+            title: 'ℹ️ নোটিফিকেশন বন্ধ', 
+            message: 'আপনি নোটিফিকেশন বন্ধ রেখেছেন।',
+            duration: 3000 
+          });
+        }
+        
         if (onEnable) onEnable(false);
       }
     } catch (error) {
+      console.error('❌ Permission error:', error);
       alert.error({ 
         title: '❌ সমস্যা হয়েছে', 
         message: 'নোটিফিকেশন চালু করতে সমস্যা হয়েছে।',
@@ -175,25 +202,25 @@ const NotificationBanner = ({
               onClick={handleEnable} 
               disabled={isLoading}
             >
-{isLoading ? (
-  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-    <span className="spinner" style={{
-      display: 'inline-block',
-      width: '16px',
-      height: '16px',
-      border: '2px solid var(--border-color, #e2e8f0)',
-      borderTop: '2px solid var(--accent-primary, #14b8a6)',
-      borderRadius: '50%',
-      animation: 'spin 0.8s linear infinite'
-    }}></span>
-    চালু হচ্ছে...
-  </span>
-) : (
-  <>
-    <i className="fa-solid fa-bell"></i> 
-    চালু করুন
-  </>
-)}
+              {isLoading ? (
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span className="spinner" style={{
+                    display: 'inline-block',
+                    width: '16px',
+                    height: '16px',
+                    border: '2px solid var(--border-color, #e2e8f0)',
+                    borderTop: '2px solid var(--accent-primary, #14b8a6)',
+                    borderRadius: '50%',
+                    animation: 'spin 0.8s linear infinite'
+                  }}></span>
+                  চালু হচ্ছে...
+                </span>
+              ) : (
+                <>
+                  <i className="fa-solid fa-bell"></i> 
+                  চালু করুন
+                </>
+              )}
             </button>
             <button 
               className="banner-btn btn-not-now admin-not-now" 

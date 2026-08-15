@@ -497,6 +497,14 @@
   background: var(--bg-secondary);
 }
 
+
+@media (max-width: 768px){
+  .modal-footer {
+
+    margin-bottom: 40px;
+  }
+}
+
 .modal-footer .btn {
   padding: 10px 24px;
   border-radius: var(--radius-sm);

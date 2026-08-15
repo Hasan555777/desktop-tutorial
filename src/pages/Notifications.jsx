@@ -16,13 +16,25 @@
 //    alerts/badge counting, it doesn't erase your notification log.
 //    Say the word if you'd rather muted categories be hidden from the
 //    list too.)
+// 3. 🔧 NEW: standardized the "unread" definition to `isUnread !==
+//    false` (matches NotificationProvider.jsx) instead of requiring
+//    BOTH `isUnread === true` AND `isRead !== true`. The two-condition
+//    check meant that if a doc ever ended up with isUnread:true AND
+//    isRead:true at the same time (a race between multiple listeners/
+//    tabs, or any code path that touches isRead without isUnread —
+//    e.g. an admin action), this page would treat it as already read
+//    (not shown as unread, never included in "Mark all read"'s
+//    batch — so it could never be fixed from here), while the Navbar
+//    badge — which queries raw `isUnread == true` in Firestore — kept
+//    counting it forever. That's the "badge shows a count but nothing
+//    actually new/unread is visible" symptom. Now both places agree.
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, auth } from '@/firebase';
 import { 
   collection, query, where, onSnapshot, orderBy, 
-  updateDoc, doc, writeBatch, serverTimestamp, deleteDoc
+  updateDoc, doc, writeBatch, serverTimestamp, deleteDoc, getDocs
 } from 'firebase/firestore';
 import NotificationModal from '../components/NotificationModal';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
@@ -261,7 +273,7 @@ const Notifications = ({ currentUser }) => {
               time: formatNotificationTime(data.createdAt),
               icon: data.icon || style.icon || 'fa-solid fa-bell',
               colorClass: data.colorClass || style.colorClass || 'noti-system',
-              isUnread: data.isUnread === true && data.isRead !== true,
+              isUnread: data.isUnread !== false, // 🔧 FIX #3: was `=== true && data.isRead !== true`
               // 🔧 used only for the header's unread count below, so a
               // muted category doesn't inflate/duplicate the count —
               // the item itself still shows in the history list.
@@ -317,36 +329,58 @@ const Notifications = ({ currentUser }) => {
     }
   };
 
-  const handleClearAllNotifications = async () => {
-    if (notifications.length === 0) return;
-    
-    const confirmed = await feedback.confirm({
-      title: 'Clear All Notifications?',
-      message: 'Are you sure you want to delete ALL notifications? This cannot be undone!',
-      variant: 'delete',
-      confirmText: 'Yes, Clear All',
-      cancelText: 'Cancel'
-    });
-    
-    if (!confirmed) return;
-    
-    try {
-      const batch = writeBatch(db);
-      notifications.forEach(noti => {
-        const notiRef = doc(db, 'notifications', noti.id);
-        batch.delete(notiRef);
-      });
-      
-      await batch.commit();
+const handleClearAllNotifications = async () => {
+  if (notifications.length === 0) return;
+
+  const confirmed = await feedback.confirm({
+    title: 'Clear All Notifications?',
+    message: 'Are you sure you want to delete ALL notifications? This cannot be undone!',
+    variant: 'delete',
+    confirmText: 'Yes, Clear All',
+    cancelText: 'Cancel'
+  });
+
+  if (!confirmed) return;
+
+  try {
+    const userId = currentUser?.uid;
+    if (!userId) return;
+
+    // 🔧 FIX: local `notifications` state excludes chat-type events
+    // (isChatEvent filter above), so batch-deleting from state left
+    // unread chat notifications behind in Firestore — that's why the
+    // Navbar badge never hit zero after "Clear all". Fetch the FULL
+    // raw set for this user directly from Firestore instead, so
+    // "Clear All" really means all (chat included).
+    const notiRef = collection(db, 'notifications');
+    const q = query(notiRef, where('userId', '==', userId));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
       setNotifications([]);
-      
-      await feedback.showSuccess('✅ ক্লিয়ার', 'সব নোটিফিকেশন ক্লিয়ার করা হয়েছে!');
-      
-    } catch (error) {
-      console.error("Error clearing notifications:", error);
-      await feedback.showError('❌ ক্লিয়ার ব্যর্থ', 'নোটিফিকেশন ক্লিয়ার করতে সমস্যা হয়েছে');
+      return;
     }
-  };
+
+    // 🔧 Firestore batch write limit is 500 ops — chunk if the user
+    // has accumulated more notifications than that.
+    const docs = snapshot.docs;
+    const CHUNK_SIZE = 450; // leave headroom
+    for (let i = 0; i < docs.length; i += CHUNK_SIZE) {
+      const chunk = docs.slice(i, i + CHUNK_SIZE);
+      const batch = writeBatch(db);
+      chunk.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+    }
+
+    setNotifications([]);
+
+    await feedback.showSuccess('✅ ক্লিয়ার', 'সব নোটিফিকেশন ক্লিয়ার করা হয়েছে!');
+
+  } catch (error) {
+    console.error("Error clearing notifications:", error);
+    await feedback.showError('❌ ক্লিয়ার ব্যর্থ', 'নোটিফিকেশন ক্লিয়ার করতে সমস্যা হয়েছে');
+  }
+};
 
   const markAllAsRead = async () => {
     if (notifications.length === 0) return;
