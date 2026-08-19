@@ -1,0 +1,27 @@
+// src/components/LoadingBar/TopLoadingBar.jsx
+//
+// হেডারের ঠিক নিচে (আসলে ভিউপোর্টের একদম উপরে, fixed) পাতলা animated
+// লোডিং বার। App.js-এ একবারই মাউন্ট হবে — কোনো পেজে আলাদা করে বসাতে
+// হবে না। প্রতিটা পেজ শুধু usePageLoadingBar(loading) কল করলেই এটা
+// অটোমেটিক শো/হাইড হয়ে যাবে।
+
+import React from 'react';
+import { useLoadingBarContext } from './LoadingBarContext';
+import './TopLoadingBar.css';
+
+const TopLoadingBar = () => {
+  const { isLoading } = useLoadingBarContext();
+
+  return (
+    <div
+      className={`top-loading-bar ${isLoading ? 'active' : ''}`}
+      role="progressbar"
+      aria-hidden={!isLoading}
+      aria-label="Loading"
+    >
+      <div className="top-loading-bar-fill" />
+    </div>
+  );
+};
+
+export default TopLoadingBar;

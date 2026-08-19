@@ -1,0 +1,145 @@
+/* src/components/GuideModal.css */
+
+.guide-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 16px;
+  animation: guideModalFadeIn 0.2s ease;
+}
+
+@keyframes guideModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.guide-modal-content {
+  background: var(--bg-secondary, #101625);
+  border: 1px solid var(--border-color, #1e293b);
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px 24px 24px;
+  position: relative;
+  animation: guideModalPopIn 0.25s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes guideModalPopIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.guide-modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--bg-tertiary, #1a2030);
+  border: none;
+  color: var(--text-muted, #64748b);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 14px;
+}
+
+.guide-modal-close-btn:hover {
+  background: var(--bg-quaternary, #232a3d);
+  color: var(--text-primary, #f1f5f9);
+}
+
+.guide-modal-header {
+  margin-bottom: 20px;
+  padding-right: 24px;
+}
+
+.guide-modal-header h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary, #f1f5f9);
+}
+
+.guide-modal-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted, #64748b);
+  line-height: 1.5;
+}
+
+.guide-modal-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.guide-modal-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--bg-tertiary, #1a2030);
+  border: 1px solid var(--border-color, #1e293b);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.guide-modal-step-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-glow, rgba(20, 184, 166, 0.12));
+  border-radius: 10px;
+}
+
+.guide-modal-step-body h4 {
+  margin: 0 0 4px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-primary, #f1f5f9);
+}
+
+.guide-modal-step-body p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text-muted, #94a3b8);
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.guide-modal-primary-btn {
+  width: 100%;
+  background: var(--gradient-primary, linear-gradient(135deg, #14b8a6, #0d9488));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.guide-modal-primary-btn:hover {
+  opacity: 0.92;
+}
+
+.guide-modal-primary-btn:active {
+  transform: scale(0.98);
+}

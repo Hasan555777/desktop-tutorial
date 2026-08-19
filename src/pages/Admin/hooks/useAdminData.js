@@ -61,6 +61,10 @@ export const useAdminData = () => {
     pendingWithdrawals: 0,
     pendingPosts: 0
   });
+
+const [identityRecords, setIdentityRecords] = useState([]);
+const [identityRecordsLoading, setIdentityRecordsLoading] = useState(false);
+
   
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -380,6 +384,78 @@ export const useAdminData = () => {
     }
   }, [feedback, setSectionLoading]);
 
+
+
+// ── Load Identity Records Function ──
+const loadIdentityRecords = useCallback(async () => {
+  setIdentityRecordsLoading(true);
+  try {
+    const q = query(
+      collection(db, 'identityRecords'),
+      orderBy('createdAt', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    const records = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    setIdentityRecords(records);
+    
+    if (import.meta.env.DEV) {
+      console.log(`📊 Identity records loaded: ${records.length}`);
+    }
+  } catch (error) {
+    console.error('Load identity records error:', error);
+    await feedback.showError('❌ আইডেন্টিটি রেকর্ড লোড ব্যর্থ', 'আইডেন্টিটি রেকর্ড লোড করতে সমস্যা হয়েছে');
+  } finally {
+    setIdentityRecordsLoading(false);
+  }
+}, [feedback]);
+
+// ── Save Identity Record ──
+const saveIdentityRecord = useCallback(async (data) => {
+  try {
+    const docRef = await addDoc(collection(db, 'identityRecords'), {
+      ...data,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+    return { success: true, id: docRef.id };
+  } catch (error) {
+    console.error('Save identity record error:', error);
+    await feedback.showError('❌ সংরক্ষণ ব্যর্থ', 'আইডেন্টিটি রেকর্ড সংরক্ষণ করতে সমস্যা হয়েছে');
+    return { success: false, error: error.message };
+  }
+}, [feedback]);
+
+// ── Update Identity Record Status ──
+const updateIdentityRecordStatus = useCallback(async (recordId, status, data = {}) => {
+  try {
+    await updateDoc(doc(db, 'identityRecords', recordId), {
+      status: status,
+      ...data,
+      updatedAt: serverTimestamp()
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Update identity record error:', error);
+    await feedback.showError('❌ আপডেট ব্যর্থ', 'আইডেন্টিটি রেকর্ড আপডেট করতে সমস্যা হয়েছে');
+    return { success: false, error: error.message };
+  }
+}, [feedback]);
+
+// ── Delete Identity Record ──
+const deleteIdentityRecord = useCallback(async (recordId) => {
+  try {
+    await deleteDoc(doc(db, 'identityRecords', recordId));
+    return { success: true };
+  } catch (error) {
+    console.error('Delete identity record error:', error);
+    await feedback.showError('❌ ডিলিট ব্যর্থ', 'আইডেন্টিটি রেকর্ড ডিলিট করতে সমস্যা হয়েছে');
+    return { success: false, error: error.message };
+  }
+}, [feedback]);
+
   const loadNotifications = useCallback(async () => {
     setSectionLoading('notifications', true);
     try {
@@ -572,7 +648,10 @@ export const useAdminData = () => {
         { name: 'Pending Deposits', fn: loadPendingDeposits },
         { name: 'Reports', fn: loadReports },
         { name: 'Pending Edits', fn: loadPendingEdits },
-        { name: 'Disputes', fn: loadDisputes }
+        { name: 'Disputes', fn: loadDisputes },
+        { name: 'Identity Records', fn: loadIdentityRecords }
+
+
       ];
       
       await Promise.allSettled(
@@ -613,7 +692,8 @@ export const useAdminData = () => {
         loadPendingDeposits(),
         loadReports(),
         loadPendingEdits(),
-        loadDisputes()
+        loadDisputes(),
+        loadIdentityRecords()
       ]);
     } catch (error) {
       console.error("Reload error:", error);
@@ -1915,6 +1995,84 @@ export const useAdminData = () => {
   // 📌 SEARCH
   // ============================================================
 
+// src/pages/Admin/hooks/useAdminData.js
+
+// ============================================================
+// 📌 EDIT POST (Admin - Pending Posts)
+// ============================================================
+
+const handleEditPost = useCallback(async (postId, formData) => {
+  try {
+    const postRef = doc(db, 'posts', postId);
+    await updateDoc(postRef, {
+      title: formData.title,
+      description: formData.description,
+      budget: formData.budget,
+      deadline: formData.deadline,
+      updatedAt: serverTimestamp(),
+      updatedBy: auth.currentUser?.uid || 'admin',
+    });
+
+    // ✅ Pending Posts আপডেট করুন
+    setPendingPosts(prev => prev.map(post => 
+      post.id === postId ? { 
+        ...post, 
+        title: formData.title,
+        description: formData.description,
+        budget: formData.budget,
+        deadline: formData.deadline,
+      } : post
+    ));
+
+    await feedback.showSuccess('✅ পোস্ট আপডেট', 'পোস্ট সফলভাবে আপডেট করা হয়েছে!');
+    await reloadAllData();
+
+  } catch (error) {
+    console.error('Edit post error:', error);
+    await feedback.showError('❌ আপডেট ব্যর্থ', 'পোস্ট আপডেট করতে সমস্যা হয়েছে: ' + error.message);
+  }
+}, [feedback, reloadAllData]);
+
+// ============================================================
+// 📌 EDIT PENDING EDIT (Admin - Pending Edits)
+// ============================================================
+
+const handleEditPendingEdit = useCallback(async (editId, formData) => {
+  try {
+    const postRef = doc(db, 'posts', editId);
+    await updateDoc(postRef, {
+      'pendingChanges.title': formData.title,
+      'pendingChanges.description': formData.description,
+      'pendingChanges.budget': formData.budget,
+      'pendingChanges.deadline': formData.deadline,
+      updatedAt: serverTimestamp(),
+      updatedBy: auth.currentUser?.uid || 'admin',
+    });
+
+    // ✅ Pending Edits আপডেট করুন
+    setPendingEdits(prev => prev.map(edit => 
+      edit.id === editId ? { 
+        ...edit, 
+        pendingChanges: {
+          ...edit.pendingChanges,
+          title: formData.title,
+          description: formData.description,
+          budget: formData.budget,
+          deadline: formData.deadline,
+        }
+      } : edit
+    ));
+
+    await feedback.showSuccess('✅ পেন্ডিং এডিট আপডেট', 'পেন্ডিং এডিট সফলভাবে আপডেট করা হয়েছে!');
+    await reloadAllData();
+
+  } catch (error) {
+    console.error('Edit pending edit error:', error);
+    await feedback.showError('❌ আপডেট ব্যর্থ', 'পেন্ডিং এডিট আপডেট করতে সমস্যা হয়েছে: ' + error.message);
+  }
+}, [feedback, reloadAllData]);
+
+
   const handleGlobalSearch = useCallback((query) => {
     setSearchQuery(query);
     clearTimeout(searchTimeoutRef.current);
@@ -2076,6 +2234,14 @@ export const useAdminData = () => {
     searchTimeoutRef,
     pendingUsersCount,
 
+
+  identityRecords,
+  identityRecordsLoading,
+  loadIdentityRecords,
+  saveIdentityRecord,
+  updateIdentityRecordStatus,
+  deleteIdentityRecord,
+
     // Setters
     setUsers,
     setPosts,
@@ -2156,6 +2322,8 @@ export const useAdminData = () => {
     handleApprovePost,
     handleRejectEdit,
     handleRejectPost,
+      handleEditPost,          // ✅ NEW
+  handleEditPendingEdit,
 
     // Search
     handleGlobalSearch,

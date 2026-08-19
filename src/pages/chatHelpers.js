@@ -152,10 +152,43 @@ export const formatBudgetDisplay = (budget) => {
   return String(budget);
 };
 
+// src/pages/chatHelpers.js
+
 export const formatDeadlineDisplay = (deadline) => {
   if (deadline === null || deadline === undefined) return '0';
-  if (typeof deadline === 'number') return String(deadline);
+  
+  // ✅ যদি সংখ্যা হয়
+  if (typeof deadline === 'number') {
+    // ✅ যদি ১ দিনের কম হয় (মিনিটে)
+    if (deadline < 1440) { // 1440 = 24 * 60
+      if (deadline < 60) {
+        return `${deadline} মিনিট`;
+      }
+      const hours = Math.floor(deadline / 60);
+      const minutes = deadline % 60;
+      if (minutes === 0) {
+        return `${hours} ঘন্টা`;
+      }
+      return `${hours} ঘন্টা ${minutes} মিনিট`;
+    }
+    // ✅ ১ দিন বা তার বেশি
+    const days = Math.ceil(deadline / 1440);
+    const remainingMinutes = deadline % 1440;
+    if (remainingMinutes === 0) {
+      return `${days} দিন`;
+    }
+    const hours = Math.floor(remainingMinutes / 60);
+    const minutes = remainingMinutes % 60;
+    if (hours === 0) {
+      return `${days} দিন ${minutes} মিনিট`;
+    }
+    return `${days} দিন ${hours} ঘন্টা`;
+  }
+  
+  // ✅ যদি স্ট্রিং হয়
   if (typeof deadline === 'string') return deadline;
+  
+  // ✅ যদি অবজেক্ট হয়
   if (typeof deadline === 'object') {
     if (deadline.type === 'range') {
       const min = deadline.min || 0;
@@ -165,11 +198,15 @@ export const formatDeadlineDisplay = (deadline) => {
     const days = deadline.days || 0;
     return String(days);
   }
+  
   return String(deadline);
 };
 
 // ============================================================
 // ✅ sendProposal
+// ============================================================
+// ============================================================
+// ✅ sendProposal - FIXED (ডুপ্লিকেট deadline রিমুভ করা হয়েছে)
 // ============================================================
 export const sendProposal = async (
   proposalData,
@@ -242,6 +279,10 @@ export const sendProposal = async (
     return { success: false, error: 'Self proposal' };
   }
 
+  // ✅ ডেডলাইন কনভার্ট (মিনিট → দিন) - শুধু একবার
+  const deadlineInMinutes = Number(proposalData.deadline);
+  const deadlineInDays = Math.ceil(deadlineInMinutes / (24 * 60));
+
   const dealIdNumber = await generateDealId();
   const chatId = chatContext?.id || chatContext?.postId || `deal_${Date.now()}`;
   const milestones = generateMilestones(proposalData.budget);
@@ -259,7 +300,7 @@ export const sendProposal = async (
       sellerId, sellerName, sellerEmail,
       dealIdNumber,
       budget: Number(proposalData.budget),
-      deadline: Number(proposalData.deadline),
+      deadline: deadlineInDays, // ✅ শুধু একবার, দিনে
       details: proposalData.details,
       milestones,
       status: 'pending',
@@ -305,7 +346,7 @@ export const sendProposal = async (
 
     if (chatId) {
       await addDoc(collection(db, 'chats', chatId, 'messages'), {
-        text: `📄 **New Offer Sent!**\n\n💰 Budget: ${proposalData.budget} BDT\n⏱️ Deadline: ${proposalData.deadline} Days\n\n👤 From: ${senderDisplayName}\n\n📋 Details: ${proposalData.details}\n\n⌛ এই অফারটি ৪৮ ঘণ্টার মধ্যে গ্রহণ না করা হলে স্বয়ংক্রিয়ভাবে বাতিল হয়ে যাবে।`,
+        text: `📄 **New Offer Sent!**\n\n💰 Budget: ${proposalData.budget} BDT\n⏱️ Deadline: ${proposalData.deadline} Minutes (${deadlineInDays} Days)\n\n👤 From: ${senderDisplayName}\n\n📋 Details: ${proposalData.details}\n\n⌛ এই অফারটি ৪৮ ঘণ্টার মধ্যে গ্রহণ না করা হলে স্বয়ংক্রিয়ভাবে বাতিল হয়ে যাবে।`,
         sender: 'system',
         senderId: 'system',
         createdAt: serverTimestamp(),

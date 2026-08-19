@@ -72,18 +72,15 @@ const getTextDiff = (oldText, newText) => {
   if (!newText) return { type: 'removed', text: oldText };
   if (oldText === newText) return { type: 'same', text: oldText };
 
-  // Simple diff - find common parts
   const oldWords = oldText.split(' ');
   const newWords = newText.split(' ');
   
-  // Find longest common prefix
   let prefixEnd = 0;
   while (prefixEnd < Math.min(oldWords.length, newWords.length) && 
          oldWords[prefixEnd] === newWords[prefixEnd]) {
     prefixEnd++;
   }
   
-  // Find longest common suffix
   let suffixStartOld = oldWords.length - 1;
   let suffixStartNew = newWords.length - 1;
   while (suffixStartOld >= prefixEnd && suffixStartNew >= prefixEnd &&
@@ -109,7 +106,7 @@ const getTextDiff = (oldText, newText) => {
 };
 
 // ============================================================
-// 🎯 Change Highlight Component with Word-Level Diff
+// 🎯 Change Highlight Component
 // ============================================================
 const ChangeHighlight = ({ label, current, pending }) => {
   const isChanged = current !== pending && pending !== undefined && pending !== null;
@@ -150,7 +147,7 @@ const ChangeHighlight = ({ label, current, pending }) => {
 };
 
 // ============================================================
-// 🎯 Description Diff Component (Full View)
+// 🎯 Description Diff Component
 // ============================================================
 const DescriptionDiff = ({ current, pending }) => {
   if (!pending || pending === current) return null;
@@ -199,14 +196,118 @@ const DescriptionDiff = ({ current, pending }) => {
 };
 
 // ============================================================
+// 🎯 Edit Modal Component (NEW)
+// ============================================================
+const EditPendingEditModal = ({ edit, onClose, onSave }) => {
+  const pendingChanges = edit?.pendingChanges || {};
+  
+  const [formData, setFormData] = useState({
+    title: pendingChanges?.title || edit?.title || '',
+    description: pendingChanges?.description || edit?.description || '',
+    budget: pendingChanges?.budget || edit?.budget || '',
+    deadline: pendingChanges?.deadline || edit?.deadline || '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = () => {
+    if (!formData.title.trim()) {
+      alert('দয়া করে টাইটেল লিখুন!');
+      return;
+    }
+    if (!formData.description.trim()) {
+      alert('দয়া করে বিবরণ লিখুন!');
+      return;
+    }
+    onSave(edit.id, formData);
+    onClose();
+  };
+
+  return (
+    <div className="reject-modal-overlay" onClick={onClose}>
+      <div className="reject-modal edit-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="reject-modal-header">
+          <h3>
+            <i className="fa-solid fa-pen" style={{ color: '#3b82f6' }}></i>
+            Edit Pending Edit
+          </h3>
+          <button className="modal-close-btn" onClick={onClose}>
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="reject-modal-body">
+          <div className="edit-form-group">
+            <label>Title <span className="required">*</span></label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="পোস্টের টাইটেল লিখুন..."
+              className="edit-input"
+            />
+          </div>
+          <div className="edit-form-group">
+            <label>Description <span className="required">*</span></label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="পোস্টের বিবরণ লিখুন..."
+              rows="4"
+              className="edit-textarea"
+            />
+          </div>
+          <div className="edit-form-row">
+            <div className="edit-form-group">
+              <label>Budget (BDT)</label>
+              <input
+                type="number"
+                name="budget"
+                value={formData.budget}
+                onChange={handleChange}
+                placeholder="বাজেট লিখুন..."
+                className="edit-input"
+              />
+            </div>
+            <div className="edit-form-group">
+              <label>Deadline (Days)</label>
+              <input
+                type="number"
+                name="deadline"
+                value={formData.deadline}
+                onChange={handleChange}
+                placeholder="সময়সীমা লিখুন..."
+                className="edit-input"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="reject-modal-actions">
+          <button className="cancel-btn" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="edit-confirm-btn" onClick={handleSubmit}>
+            <i className="fa-solid fa-check"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================
 // 🎯 MAIN COMPONENT
 // ============================================================
-
 const PendingEdits = ({ 
   edits = [], 
   onApprove, 
   onReject, 
   onRefresh,
+  onEdit, // ✅ নতুন prop
   formatDateFn = formatDate
 }) => {
   const [zoomedImage, setZoomedImage] = useState(null);
@@ -214,6 +315,10 @@ const PendingEdits = ({
   const [rejectReason, setRejectReason] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedEditId, setSelectedEditId] = useState(null);
+  
+  // ✅ এডিট মোডাল স্টেট
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingEdit, setEditingEdit] = useState(null);
 
   const handleImageClick = useCallback((imageUrl) => {
     if (imageUrl) {
@@ -250,6 +355,18 @@ const PendingEdits = ({
     setRejectReason('');
   };
 
+  // ✅ এডিট হ্যান্ডলার
+  const handleEditClick = (edit) => {
+    setEditingEdit(edit);
+    setShowEditModal(true);
+  };
+
+  const handleEditSave = (editId, formData) => {
+    if (onEdit) {
+      onEdit(editId, formData);
+    }
+  };
+
   if (edits.length === 0) {
     return (
       <div className="data-table pending-edits-table">
@@ -277,15 +394,18 @@ const PendingEdits = ({
   return (
     <>
       <div className="data-table pending-edits-table">
-       <div className="table-header">
-  <h3>
-    <i className="fa-solid fa-pen-to-square"></i> 
-    Pending Post Edits
-    <span className="table-count">
-      {edits.length} টি {edits.length > 0 && 'পেন্ডিং'}
-    </span>
-  </h3>
-</div>
+        <div className="table-header">
+          <h3>
+            <i className="fa-solid fa-pen-to-square"></i> 
+            Pending Post Edits
+            <span className="table-count">
+              {edits.length} টি {edits.length > 0 && 'পেন্ডিং'}
+            </span>
+          </h3>
+          <button className="refresh-btn" onClick={onRefresh}>
+            <i className="fa-solid fa-sync"></i> রিফ্রেশ
+          </button>
+        </div>
 
         <div className="pending-edits-grid">
           {edits.map((post) => {
@@ -373,7 +493,7 @@ const PendingEdits = ({
                   </div>
                 )}
 
-                {/* ── Changes Comparison with Word-Level Diff ── */}
+                {/* ── Changes Comparison ── */}
                 <div className="version-compare">
                   <div className="compare-header">
                     <span className="compare-label current-label">📌 Current</span>
@@ -404,7 +524,7 @@ const PendingEdits = ({
                   </div>
                 </div>
 
-                {/* ── Full Description with Word-Level Diff ── */}
+                {/* ── Full Description ── */}
                 {post.pendingChanges?.description && 
                  post.pendingChanges.description !== post.description && (
                   <DescriptionDiff 
@@ -432,6 +552,14 @@ const PendingEdits = ({
                 
                 {/* ── Actions ── */}
                 <div className="edit-actions">
+                  {/* ✅ এডিট বাটন (NEW) */}
+                  <button 
+                    className="action-btn edit"
+                    onClick={() => handleEditClick(post)}
+                    title="এডিট করুন"
+                  >
+                    <i className="fa-solid fa-pen"></i> Edit
+                  </button>
                   <button 
                     className="action-btn approve"
                     onClick={() => onApprove(post.id)}
@@ -497,6 +625,18 @@ const PendingEdits = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* ✅ Edit Modal (NEW) */}
+      {showEditModal && editingEdit && (
+        <EditPendingEditModal
+          edit={editingEdit}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingEdit(null);
+          }}
+          onSave={handleEditSave}
+        />
       )}
     </>
   );

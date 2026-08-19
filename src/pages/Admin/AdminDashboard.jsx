@@ -18,6 +18,8 @@ import NotificationBanner from '@/components/NotificationBanner/NotificationBann
 import SoundSettings from '@/UI/Sound/SoundSettings';
 import AdminAnnouncement from './AdminAnnouncement';
 import AdminContentSkeleton from './components/AdminContentSkeleton'; // ✅ NEW
+import IdentityDatabase from './components/IdentityDatabase'; // ✅ NEW
+import GuideEditor from './components/GuideEditor'; // ✅ NEW
 
 // ── Components ──
 import Loading from './components/Loading';
@@ -459,6 +461,7 @@ const AdminDashboard = () => {
       onReject={handleRejectPost}
       onRefresh={loadPendingPosts}
       onOpenRejectModal={openRejectModal}
+      onEdit={handleEditPost} 
       formatDateFn={formatDate}
       formatMoneyFn={formatMoney}
     />
@@ -471,6 +474,7 @@ const AdminDashboard = () => {
       onApprove={handleApproveEdit}
       onReject={handleRejectEdit}
       onRefresh={loadPendingEdits}
+      onEdit={handleEditPendingEdit}
       formatDateFn={formatDate}
     />
   );
@@ -659,6 +663,17 @@ const AdminDashboard = () => {
             )}
           </button>
 
+
+            <button 
+    className={`tab-btn ${activeTab === 'identity-db' ? 'active' : ''}`}
+    onClick={() => {
+      setActiveTab('identity-db');
+    }}
+  >
+    <i className="fa-solid fa-database"></i> 
+    Identity DB
+  </button>
+
           <button 
             className={`tab-btn ${activeTab === 'needs-review' ? 'active' : ''}`}
             onClick={() => setActiveTab('needs-review')}
@@ -682,6 +697,13 @@ const AdminDashboard = () => {
               <span className="tab-badge danger">{pendingDeposits.length}</span>
             )}
           </button>
+
+          <button 
+  className={`tab-btn ${activeTab === 'guides' ? 'active' : ''}`}
+  onClick={() => setActiveTab('guides')}
+>
+  <i className="fa-solid fa-book-open"></i> গাইড
+</button>
 
           <button 
             className={`tab-btn ${activeTab === 'posts' ? 'active' : ''}`}
@@ -810,7 +832,9 @@ const AdminDashboard = () => {
           {activeTab === 'announcements' && <AdminAnnouncement />}
           {activeTab === 'reports' && renderReports()}
           {activeTab === 'admin-notifications' && renderAdminNotifications()}
-          
+          {activeTab === 'guides' && <GuideEditor />}
+
+
           {/* ✅ Needs Review Section */}
           {activeTab === 'needs-review' && (
             <div className="needs-review-section">
@@ -875,4 +899,9 @@ export default AdminDashboard;
 
 // match /transactions/{txId} {
 //   allow create: if isAdmin() || request.auth.uid == request.resource.data.userId;
+// }
+
+// match /guides/{guideId} {
+//   allow read: if true;      // সব ইউজার popup দেখতে পাবে
+//   allow write: if isAdmin(); // শুধু admin এডিট করতে পারবে
 // }

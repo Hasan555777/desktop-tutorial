@@ -1,124 +1,227 @@
 /* src/pages/SendMoney.css */
 
+/* ============================================================
+   📦 Container
+   ============================================================ */
 .sendmoney-container {
   min-height: 100vh;
+  background: var(--bg-primary, #090d16);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start;
   padding: 20px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-}
-
-.sendmoney-card {
-  max-width: 480px;
-  width: 100%;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color, var(--status-success-bg));
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 20px 60px var(--shadow-color);
+  padding-top: 40px;
 }
 
 /* ============================================================
-   📌 হেডার
+   🃏 Card
+   ============================================================ */
+.sendmoney-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-secondary, #0f1420);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  padding: 24px 20px;
+  box-shadow: 0 8px 40px var(--shadow-color, rgba(0, 0, 0, 0.4));
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   🔙 Back Button
+   ============================================================ */
+.back-btn-simple {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 6px 0;
+  margin-bottom: 16px;
+  transition: color var(--transition-fast, 0.15s ease);
+}
+
+.back-btn-simple:hover {
+  color: var(--accent-primary, #438e82);
+}
+
+.back-btn-simple i {
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+   📋 Header
    ============================================================ */
 .sendmoney-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.back-btn {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: color 0.3s;
-}
-
-.back-btn:hover {
-  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 24px;
 }
 
 .sendmoney-header h2 {
-  font-size: 22px;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin: 0;
+  color: var(--text-primary, #f8fafc);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  margin: 0;
 }
 
 .sendmoney-header h2 i {
-  color: var(--status-info);
+  font-size: 1.3rem;
 }
 
 /* ============================================================
-   📌 ব্যালেন্স ডিসপ্লে
+   💰 Balance Display
    ============================================================ */
 .balance-display {
-  background: var(--bg-tertiary);
-  border-radius: 12px;
-  padding: 16px 20px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background: var(--bg-tertiary, #1a2030);
+  border-radius: var(--radius-md, 12px);
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.15));
 }
 
 .balance-label {
-  font-size: 14px;
-  color: var(--text-secondary);
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .balance-amount {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--text-primary);
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-primary, #438e82);
+  letter-spacing: -0.5px;
+}
+
+.balance-amount.insufficient {
+  color: var(--status-danger, #ef4444);
+}
+
+.locked-hint {
+  font-size: 0.7rem;
+  color: var(--status-warning, #f59e0b);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.locked-hint i {
+  font-size: 0.6rem;
 }
 
 /* ============================================================
-   📌 Error
+   ❌ Error
    ============================================================ */
 .sendmoney-error {
-  background: var(--status-danger-bg);
-  border: 1px solid var(--status-danger-bg);
-  border-radius: 10px;
-  padding: 10px 14px;
-  color: var(--status-danger);
-  font-size: 14px;
+  background: var(--status-danger-bg, rgba(239, 68, 68, 0.12));
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-sm, 8px);
+  padding: 12px 16px;
+  color: var(--status-danger, #ef4444);
+  font-size: 0.875rem;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+  white-space: pre-line;
 }
 
 .sendmoney-error i {
-  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
 /* ============================================================
-   📌 ইনপুট গ্রুপ
+   📝 Input Groups
    ============================================================ */
 .input-group {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .input-group label {
   display: block;
-  font-size: 13px;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-secondary, #94a3b8);
   margin-bottom: 6px;
 }
 
-/* ===== রিসিভার ইনপুট ===== */
+.input-group label .req {
+  color: var(--status-danger, #ef4444);
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg, #1a2030);
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  border-radius: var(--radius-sm, 8px);
+  color: var(--text-primary, #f8fafc);
+  font-size: 0.95rem;
+  transition: all var(--transition-fast, 0.15s ease);
+  font-family: inherit;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary, #438e82);
+  box-shadow: 0 0 0 3px var(--accent-glow, rgba(67, 142, 130, 0.2));
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+  color: var(--text-muted, #64748b);
+}
+
+.input-group input:disabled,
+.input-group textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 0.7rem;
+  color: var(--text-muted, #64748b);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   🔍 Receiver Input Group
+   ============================================================ */
 .receiver-input-group {
   display: flex;
   gap: 10px;
@@ -126,38 +229,17 @@
 
 .receiver-input-group input {
   flex: 1;
-  padding: 12px 16px;
-  border: 1px solid var(--border-color, var(--status-success-bg));
-  border-radius: 10px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font-size: 14px;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.receiver-input-group input:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--accent-glow, var(--status-success-bg));
-}
-
-.receiver-input-group input::placeholder {
-  color: var(--text-muted);
-}
-
-.receiver-input-group input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .find-btn {
   padding: 12px 18px;
+  background: var(--accent-primary, #438e82);
+  color: #ffffff;
   border: none;
-  border-radius: 10px;
-  background: var(--accent-primary);
-  color: var(--text-inverse);
+  border-radius: var(--radius-sm, 8px);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast, 0.15s ease);
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,7 +247,8 @@
 }
 
 .find-btn:hover:not(:disabled) {
-  background: var(--accent-secondary);
+  background: var(--accent-secondary, #4fb3a3);
+  transform: translateY(-1px);
 }
 
 .find-btn:disabled {
@@ -173,28 +256,48 @@
   cursor: not-allowed;
 }
 
+.find-btn i {
+  font-size: 1rem;
+}
+
+/* ============================================================
+   ✅ Receiver Found
+   ============================================================ */
 .receiver-found {
-  margin-top: 8px;
-  padding: 8px 12px;
-  background: var(--status-success-bg);
-  border: 1px solid var(--status-success-bg);
-  border-radius: 8px;
-  font-size: 14px;
-  color: var(--text-secondary);
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: var(--status-success-bg, rgba(16, 185, 129, 0.1));
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--text-primary, #f8fafc);
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
 
 .receiver-found i {
-  color: var(--status-success);
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
 .receiver-found strong {
-  color: var(--text-primary);
+  color: var(--accent-primary, #438e82);
 }
 
-/* ===== অ্যামাউন্ট ইনপুট ===== */
+.receiver-wallet-id {
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+  background: var(--bg-tertiary, #1a2030);
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-family: monospace;
+}
+
+/* ============================================================
+   💰 Amount Input
+   ============================================================ */
 .amount-input-group {
   position: relative;
   display: flex;
@@ -204,74 +307,60 @@
 .currency-icon {
   position: absolute;
   left: 14px;
-  color: var(--text-muted);
+  font-size: 1.2rem;
   font-weight: 700;
-  font-size: 16px;
+  color: var(--text-muted, #64748b);
 }
 
 .amount-input-group input {
-  width: 100%;
-  padding: 12px 16px 12px 36px;
-  border: 1px solid var(--border-color, var(--status-success-bg));
-  border-radius: 10px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font-size: 15px;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.amount-input-group input:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--accent-glow, var(--status-success-bg));
-}
-
-.amount-input-group input::placeholder {
-  color: var(--text-muted);
-}
-
-.amount-input-group input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  padding-left: 36px;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .amount-hint {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
-  color: var(--text-muted);
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
   margin-top: 4px;
 }
 
-/* ===== প্রি-সেট অ্যামাউন্ট ===== */
+/* ============================================================
+   🔢 Preset Amounts
+   ============================================================ */
 .preset-amounts {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
 .preset-btn {
-  padding: 6px 14px;
-  border: 1px solid var(--border-color, var(--status-success-bg));
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 13px;
+  flex: 1;
+  min-width: 60px;
+  padding: 8px 12px;
+  background: var(--bg-tertiary, #1a2030);
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.15));
+  border-radius: var(--radius-sm, 8px);
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast, 0.15s ease);
+  text-align: center;
 }
 
 .preset-btn:hover:not(:disabled) {
-  border-color: var(--accent-primary);
-  color: var(--text-primary);
+  background: var(--bg-hover, rgba(67, 142, 130, 0.08));
+  border-color: var(--accent-primary, #438e82);
+  color: var(--text-primary, #f8fafc);
 }
 
 .preset-btn.active {
-  background: var(--accent-primary);
-  border-color: var(--accent-primary);
-  color: var(--text-inverse);
+  background: var(--accent-primary, #438e82);
+  border-color: var(--accent-primary, #438e82);
+  color: #ffffff;
 }
 
 .preset-btn:disabled {
@@ -279,91 +368,52 @@
   cursor: not-allowed;
 }
 
-/* ===== নোট ===== */
-.input-group textarea {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid var(--border-color, var(--status-success-bg));
-  border-radius: 10px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font-size: 14px;
-  resize: vertical;
-  outline: none;
-  transition: all 0.3s ease;
-  font-family: inherit;
-}
-
-.input-group textarea:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--accent-glow, var(--status-success-bg));
-}
-
-.input-group textarea::placeholder {
-  color: var(--text-muted);
-}
-
-.input-group textarea:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.char-count {
-  display: block;
-  text-align: right;
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
 /* ============================================================
-   📌 সামারি
+   📊 Summary
    ============================================================ */
 .send-summary {
-  background: var(--bg-tertiary);
-  border-radius: 12px;
-  padding: 14px 18px;
-  margin-bottom: 16px;
+  background: var(--bg-tertiary, #1a2030);
+  border-radius: var(--radius-sm, 8px);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.1));
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
   padding: 4px 0;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.summary-row strong {
-  color: var(--text-primary);
+  font-size: 0.9rem;
+  color: var(--text-secondary, #94a3b8);
 }
 
 .summary-row.total {
-  padding-top: 8px;
-  border-top: 1px solid var(--border-color, var(--status-success-bg));
-  margin-top: 4px;
-  font-size: 16px;
+  border-top: 1px solid var(--border-color, rgba(67, 142, 130, 0.15));
+  margin-top: 6px;
+  padding-top: 10px;
+  font-size: 1.05rem;
   font-weight: 700;
+  color: var(--text-primary, #f8fafc);
 }
 
 .summary-row.total strong {
-  color: var(--status-warning);
+  color: var(--accent-primary, #438e82);
 }
 
 /* ============================================================
-   📌 সেন্ড বাটন
+   🚀 Send Button
    ============================================================ */
 .send-btn {
   width: 100%;
   padding: 14px;
+  background: var(--gradient-primary, linear-gradient(135deg, #438e82, #2d6b5f));
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--status-info), var(--status-info));
-  color: var(--text-inverse);
-  font-size: 16px;
+  border-radius: var(--radius-md, 12px);
+  color: #ffffff;
+  font-size: 1.05rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal, 0.3s ease);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -372,31 +422,32 @@
 
 .send-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--status-info-bg);
+  box-shadow: 0 8px 30px var(--shadow-glow, rgba(67, 142, 130, 0.25));
 }
 
 .send-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
-.send-btn.loading {
-  opacity: 0.8;
+.send-btn i {
+  font-size: 1rem;
 }
 
 /* ============================================================
-   📌 ফুটার
+   📱 Footer
    ============================================================ */
 .sendmoney-footer {
   text-align: center;
-  margin-top: 16px;
+  margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid var(--border-color, var(--status-success-bg));
+  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.06));
 }
 
 .sendmoney-footer p {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -404,60 +455,63 @@
 }
 
 .sendmoney-footer i {
-  color: var(--status-success);
+  color: var(--accent-primary, #438e82);
 }
 
 /* ============================================================
-   📌 লোডিং স্টেট
+   🌙 Light Mode
    ============================================================ */
-.sendmoney-loading {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  background: var(--bg-primary);
-  color: var(--text-secondary);
+.light-mode .sendmoney-card {
+  background: var(--bg-secondary, #ffffff);
+  border-color: var(--border-color, #e2e8f0);
 }
 
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--border-color, var(--status-success-bg));
-  border-top-color: var(--accent-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.light-mode .balance-display {
+  background: var(--bg-tertiary, #f1f5f9);
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.light-mode .input-group input,
+.light-mode .input-group textarea {
+  background: var(--bg-tertiary, #f1f5f9);
+}
+
+.light-mode .preset-btn {
+  background: var(--bg-tertiary, #f1f5f9);
+}
+
+.light-mode .send-summary {
+  background: var(--bg-tertiary, #f1f5f9);
+}
+
+.light-mode .receiver-found {
+  background: rgba(16, 185, 129, 0.08);
 }
 
 /* ============================================================
-   📱 রেসপনসিভ
+   📱 Responsive
    ============================================================ */
-@media (max-width: 768px) {
+@media (max-width: 520px) {
+  .sendmoney-container {
+    padding: 12px;
+    padding-top: 24px;
+  }
+
   .sendmoney-card {
-    padding: 20px;
-    border-radius: 16px;
+    padding: 16px 14px;
   }
 
   .sendmoney-header h2 {
-    font-size: 18px;
+    font-size: 1.2rem;
   }
 
   .balance-amount {
-    font-size: 18px;
-  }
-
-  .preset-amounts {
-    gap: 6px;
+    font-size: 1.6rem;
   }
 
   .preset-btn {
-    padding: 4px 10px;
-    font-size: 12px;
+    min-width: 50px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
   }
 
   .receiver-input-group {
@@ -468,46 +522,24 @@
     width: 100%;
     padding: 10px;
   }
+
+  .amount-input-group input {
+    font-size: 1rem;
+  }
+
+  .send-btn {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 400px) {
   .sendmoney-card {
-    padding: 16px;
-    border-radius: 12px;
-  }
-
-  .sendmoney-header h2 {
-    font-size: 16px;
-  }
-
-  .sendmoney-header {
-    gap: 10px;
-  }
-
-  .balance-display {
-    padding: 12px 16px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    padding: 12px 10px;
   }
 
   .balance-amount {
-    font-size: 20px;
-  }
-
-  .receiver-input-group input,
-  .amount-input-group input {
-    font-size: 14px;
-    padding: 10px 12px;
-  }
-
-  .amount-input-group input {
-    padding-left: 32px;
-  }
-
-  .currency-icon {
-    left: 10px;
-    font-size: 14px;
+    font-size: 1.3rem;
   }
 
   .preset-amounts {
@@ -515,87 +547,63 @@
   }
 
   .preset-btn {
+    min-width: 40px;
     padding: 4px 8px;
-    font-size: 11px;
+    font-size: 0.7rem;
   }
 
-  .send-btn {
-    font-size: 14px;
-    padding: 12px;
-  }
-
-  .send-summary {
-    padding: 12px 14px;
-  }
-
-  .summary-row {
-    font-size: 13px;
-  }
-
-  .summary-row.total {
-    font-size: 15px;
-  }
-
-  .receiver-found {
-    font-size: 13px;
-    padding: 6px 10px;
+  .input-group input,
+  .input-group textarea {
+    padding: 10px 12px;
+    font-size: 0.85rem;
   }
 }
 
 /* ============================================================
-   📌 লাইট মোড
+   🔄 Loading State (Spin Animation)
    ============================================================ */
-.light-mode .sendmoney-card {
-  background: var(--bg-secondary, var(--text-inverse));
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.light-mode .receiver-input-group input,
-.light-mode .amount-input-group input,
-.light-mode .input-group textarea {
-  background: var(--bg-tertiary);
-  border-color: var(--border-color);
-  color: var(--text-primary, var(--bg-tertiary));
+.fa-spin {
+  animation: spin 1s linear infinite;
 }
 
-.light-mode .receiver-input-group input:focus,
-.light-mode .amount-input-group input:focus,
-.light-mode .input-group textarea:focus {
-  border-color: var(--accent-primary);
+/* ============================================================
+   ♿ Accessibility
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .sendmoney-card {
+    animation: none;
+  }
+
+  .send-btn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .fa-spin {
+    animation-duration: 2s;
+  }
 }
 
-.light-mode .balance-display {
-  background: var(--bg-tertiary);
+/* ============================================================
+   🎨 Custom Scrollbar
+   ============================================================ */
+.sendmoney-card ::-webkit-scrollbar {
+  width: 4px;
 }
 
-.light-mode .balance-amount {
-  color: var(--text-primary, var(--bg-tertiary));
+.sendmoney-card ::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.light-mode .send-summary {
-  background: var(--bg-tertiary);
+.sendmoney-card ::-webkit-scrollbar-thumb {
+  background: var(--border-color, rgba(67, 142, 130, 0.3));
+  border-radius: var(--radius-full, 9999px);
 }
 
-.light-mode .summary-row strong {
-  color: var(--text-primary, var(--bg-tertiary));
-}
-
-.light-mode .preset-btn {
-  color: var(--text-secondary, var(--text-muted));
-}
-
-.light-mode .preset-btn.active {
-  background: var(--accent-primary);
-  color: var(--text-inverse);
-}
-
-.light-mode .receiver-found {
-  background: var(--status-success-bg);
-}
-
-.light-mode .sendmoney-error {
-  background: var(--status-danger-bg);
-}
-
-.light-mode .sendmoney-footer {
-  border-color: var(--border-color);
+.sendmoney-card ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary, #438e82);
 }

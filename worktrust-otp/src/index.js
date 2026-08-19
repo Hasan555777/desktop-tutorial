@@ -3,25 +3,36 @@
 // + Phone-OTP password reset (Firebase Identity Toolkit REST API)
 // ============================================================
 //
-// ⚠️ NEW REQUIRED SECRETS (set with `wrangler secret put <NAME>`):
+// ⚠️ REQUIRED SECRETS (set with `wrangler secret put <NAME>`):
 //   FIREBASE_PROJECT_ID     — your Firebase project ID
 //   FIREBASE_CLIENT_EMAIL   — service account "client_email"
 //   FIREBASE_PRIVATE_KEY    — service account "private_key" (the full
 //                             PEM string, including the
 //                             -----BEGIN/END PRIVATE KEY----- lines)
 //
+// 🔧 THIS REVISION:
+// 1. importPrivateKey() now also handles PEM keys whose newlines got
+//    turned into literal "\n" (two characters: backslash + n) instead
+//    of real line breaks — extremely common when a multi-line PEM is
+//    pasted into a single-line secret value via `wrangler secret put`
+//    or a dashboard textbox. Without this, the base64 body is
+//    corrupted and importKey() silently fails, which was very likely
+//    THE reason "reset password" was always erroring out.
+// 2. resetPassword() now wraps each external call (token exchange,
+//    Firestore lookup, Identity Toolkit update) in its OWN try/catch
+//    with a distinct console.error prefix, so `wrangler tail` shows
+//    exactly which stage failed instead of one generic message for
+//    everything.
+//
 // The service account needs a role that can update Firebase Auth users
 // and read Firestore — "Firebase Authentication Admin" +
 // "Cloud Datastore User" covers it (or "Editor" for quick testing,
-// tightened later). Create it in Google Cloud Console → IAM → Service
-// Accounts → your Firebase project, then download its JSON key and
-// copy `client_email` / `private_key` into the two secrets above.
+// tightened later).
 //
 // WHY REST instead of firebase-admin: Cloudflare Workers don't run
-// Node.js, so the firebase-admin npm package (which needs Node APIs)
-// can't run here. This talks to Google's REST APIs directly instead,
-// authenticating with a JWT signed via the Workers-native Web Crypto
-// API — no Node-only dependencies.
+// Node.js, so the firebase-admin npm package can't run here. This talks
+// to Google's REST APIs directly, authenticating with a JWT signed via
+// the Workers-native Web Crypto API — no Node-only dependencies.
 // ============================================================
 
 // ============================================================
@@ -32,6 +43,7 @@ const ALLOWED_ORIGINS = [
   "https://www.worktrustbd.com",
   "http://localhost:5173",
   "http://localhost:5174",
+  "http://localhost:5175",
   "http://localhost:3000",
 ];
 
@@ -73,6 +85,15 @@ export default {
         status: "online",
         timestamp: new Date().toISOString(),
         environment: env.ENVIRONMENT || "development",
+        clientIP: request.headers.get("CF-Connecting-IP") || "unknown",
+        // ✅ NEW: quick sanity check without exposing secret values —
+        // lets you confirm the 3 Firebase secrets are actually set
+        // just by hitting the Worker URL in a browser.
+        firebaseSecretsConfigured: {
+          FIREBASE_PROJECT_ID: !!env.FIREBASE_PROJECT_ID,
+          FIREBASE_CLIENT_EMAIL: !!env.FIREBASE_CLIENT_EMAIL,
+          FIREBASE_PRIVATE_KEY: !!env.FIREBASE_PRIVATE_KEY,
+        },
       }, 200, headers);
     }
 
@@ -100,7 +121,6 @@ export default {
         return await verifyOtp(request, env, clientIP, headers);
       }
 
-      // ✅ NEW
       if (path === "/reset-password") {
         return await resetPassword(request, env, clientIP, headers);
       }
@@ -239,16 +259,7 @@ async function sendOtp(request, env, clientIP, headers) {
 }
 
 // ============================================================
-// VERIFY OTP — now issues a short-lived, single-use reset token
-//
-// 🔧 CHANGED: previously returned `{ success: true, verified: true }`
-// and nothing else — leaving it up to the FRONTEND to decide it was
-// allowed to proceed to a sensitive action (like changing a password).
-// That's not safe: a malicious client could just skip straight to
-// calling /reset-password claiming "verified: true" on its own.
-// Now the Worker itself issues a random, single-use, 10-minute token
-// tied to this exact phone number in KV. /reset-password requires that
-// exact token and won't work without it — the frontend can't forge one.
+// VERIFY OTP — issues a short-lived, single-use reset token
 // ============================================================
 async function verifyOtp(request, env, clientIP, headers) {
   try {
@@ -302,8 +313,6 @@ async function verifyOtp(request, env, clientIP, headers) {
     await env.OTP_STORE.delete(attemptsKey);
     // ⚠️ DO NOT delete cooldown - keeps 60s cooldown active
 
-    // ✅ NEW: issue a single-use reset token, valid 10 minutes, bound
-    // to this phone number only.
     const resetToken = generateResetToken();
     await env.OTP_STORE.put(`resettoken:${resetToken}`, phone, { expirationTtl: 600 });
 
@@ -325,13 +334,13 @@ async function verifyOtp(request, env, clientIP, headers) {
 }
 
 // ============================================================
-// ✅ NEW: RESET PASSWORD
+// RESET PASSWORD
 //
-// Flow: validate the resetToken (issued by /verify-otp, single-use,
-// 10 min TTL, bound to this exact phone) → consume it immediately →
-// look up which Firebase user this phone belongs to (Firestore REST
-// query on `users` where phone == <local-format number>) → update
-// that user's password directly via the Identity Toolkit REST API.
+// 🔧 CHANGED: each Google API call now has its own try/catch with a
+// distinct console.error prefix ("[reset-password] token exchange",
+// "[reset-password] Firestore lookup", "[reset-password] password
+// update") so a `wrangler tail` session actually tells you which
+// stage is broken, instead of one generic catch-all message.
 // ============================================================
 async function resetPassword(request, env, clientIP, headers) {
   try {
@@ -355,7 +364,6 @@ async function resetPassword(request, env, clientIP, headers) {
       );
     }
 
-    // Rate limit this endpoint separately from send-otp
     const ipKey = `ratelimit:reset:${clientIP}`;
     const ipAttempts = await env.OTP_STORE.get(ipKey);
     const ipCount = ipAttempts ? parseInt(ipAttempts) : 0;
@@ -368,7 +376,6 @@ async function resetPassword(request, env, clientIP, headers) {
     }
     await env.OTP_STORE.put(ipKey, String(ipCount + 1), { expirationTtl: 3600 });
 
-    // Validate the token
     const tokenKey = `resettoken:${token}`;
     const storedPhone = await env.OTP_STORE.get(tokenKey);
     if (!storedPhone || storedPhone !== phone) {
@@ -383,7 +390,7 @@ async function resetPassword(request, env, clientIP, headers) {
     await env.OTP_STORE.delete(tokenKey);
 
     if (!env.FIREBASE_PROJECT_ID || !env.FIREBASE_CLIENT_EMAIL || !env.FIREBASE_PRIVATE_KEY) {
-      console.error("Firebase Admin credentials not configured on this Worker");
+      console.error("❌ [reset-password] Firebase Admin secrets not configured on this Worker. Run `wrangler secret list` to check.");
       return jsonResponse(
         { success: false, message: "Server misconfigured. Please contact support." },
         500,
@@ -391,16 +398,40 @@ async function resetPassword(request, env, clientIP, headers) {
       );
     }
 
-    const accessToken = await getGoogleAccessToken(env, [
-      "https://www.googleapis.com/auth/identitytoolkit",
-      "https://www.googleapis.com/auth/datastore",
-    ]);
+    // ── Stage 1: Google OAuth2 token exchange ──
+    let accessToken;
+    try {
+      accessToken = await getGoogleAccessToken(env, [
+        "https://www.googleapis.com/auth/identitytoolkit",
+        "https://www.googleapis.com/auth/datastore",
+      ]);
+    } catch (err) {
+      console.error("❌ [reset-password] Google token exchange failed:", err.message);
+      console.error("   → This usually means FIREBASE_PRIVATE_KEY or FIREBASE_CLIENT_EMAIL is wrong/malformed, or the service account JSON key was revoked.");
+      return jsonResponse(
+        { success: false, message: "Server configuration error (auth). Please contact support." },
+        500,
+        headers
+      );
+    }
 
+    // ── Stage 2: Firestore lookup by phone ──
     // Firestore stores the user's phone in LOCAL format (e.g.
     // "01712345678"), while `phone` here is the international format
     // (e.g. "8801712345678") used for SMS — convert back before querying.
     const localPhone = "0" + phone.substring(3);
-    const uid = await findUserUidByPhone(env, accessToken, localPhone);
+    let uid;
+    try {
+      uid = await findUserUidByPhone(env, accessToken, localPhone);
+    } catch (err) {
+      console.error("❌ [reset-password] Firestore lookup failed:", err.message);
+      console.error("   → Check the service account has the 'Cloud Datastore User' IAM role on this Firebase project.");
+      return jsonResponse(
+        { success: false, message: "Server configuration error (lookup). Please contact support." },
+        500,
+        headers
+      );
+    }
 
     if (!uid) {
       return jsonResponse(
@@ -410,7 +441,18 @@ async function resetPassword(request, env, clientIP, headers) {
       );
     }
 
-    await updateFirebasePassword(env, accessToken, uid, newPassword);
+    // ── Stage 3: Identity Toolkit password update ──
+    try {
+      await updateFirebasePassword(env, accessToken, uid, newPassword);
+    } catch (err) {
+      console.error("❌ [reset-password] Password update failed:", err.message);
+      console.error("   → Check the service account has the 'Firebase Authentication Admin' IAM role on this Firebase project.");
+      return jsonResponse(
+        { success: false, message: "Failed to update password. Please contact support." },
+        500,
+        headers
+      );
+    }
 
     return jsonResponse(
       { success: true, message: "Password updated successfully." },
@@ -419,7 +461,7 @@ async function resetPassword(request, env, clientIP, headers) {
     );
 
   } catch (error) {
-    console.error("Reset Password Error:", error);
+    console.error("❌ [reset-password] Unexpected error:", error);
     return jsonResponse(
       { success: false, message: "Failed to reset password. Please try again." },
       500,
@@ -433,7 +475,9 @@ async function resetPassword(request, env, clientIP, headers) {
 // ============================================================
 async function sendSms(phone, otp, apiKey) {
   const apiUrl = "https://api.sms.net.bd/sendsms";
-  const message = `Your WorkTrustBD OTP is: ${otp}. Valid for 5 minutes.`;
+  const message = `WorkTrustBD verification code: ${otp}
+This code is valid for 5 minutes.
+Do not share this code with anyone.`;
 
   const formData = new URLSearchParams();
   formData.append("api_key", apiKey);
@@ -474,11 +518,17 @@ async function sendSms(phone, otp, apiKey) {
 }
 
 // ============================================================
-// ✅ NEW: Google service-account auth (Web Crypto, no Node deps)
+// ✅ Google service-account auth (Web Crypto, no Node deps)
+//
+// 🔧 FIXED: importPrivateKey() now normalizes escaped "\n" sequences
+// to real newlines before stripping whitespace. This is the single
+// most common reason a copy-pasted service-account PEM key stops
+// working once it's stored as a Cloudflare secret.
 // ============================================================
 
 async function importPrivateKey(pem) {
-  const pemContents = pem
+  const normalizedPem = pem.includes("\\n") ? pem.replace(/\\n/g, "\n") : pem;
+  const pemContents = normalizedPem
     .replace(/-----BEGIN PRIVATE KEY-----/, "")
     .replace(/-----END PRIVATE KEY-----/, "")
     .replace(/\s/g, "");
@@ -504,9 +554,6 @@ function base64url(input) {
   return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-// Exchanges the service-account private key for a short-lived Google
-// OAuth2 access token, signing the JWT ourselves via Web Crypto
-// (Cloudflare Workers can't run the Node-only firebase-admin package).
 async function getGoogleAccessToken(env, scopes) {
   const now = Math.floor(Date.now() / 1000);
   const header = { alg: "RS256", typ: "JWT" };
@@ -542,13 +589,11 @@ async function getGoogleAccessToken(env, scopes) {
   const data = await res.json();
   if (!res.ok) {
     console.error("Google token exchange failed:", data);
-    throw new Error(data.error_description || "Failed to get Google access token");
+    throw new Error(data.error_description || data.error || "Failed to get Google access token");
   }
   return data.access_token;
 }
 
-// Firestore REST: find the user document whose `phone` field matches
-// (Firestore stores it in local "01XXXXXXXXX" format).
 async function findUserUidByPhone(env, accessToken, localPhone) {
   const url = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents:runQuery`;
   const body = {
@@ -577,18 +622,15 @@ async function findUserUidByPhone(env, accessToken, localPhone) {
   const data = await res.json();
   if (!res.ok) {
     console.error("Firestore query failed:", data);
-    throw new Error("Failed to look up account.");
+    throw new Error(data.error?.message || "Failed to look up account.");
   }
 
   const match = Array.isArray(data) ? data.find((r) => r.document) : null;
   if (!match) return null;
 
-  // document.name looks like:
-  // projects/{p}/databases/(default)/documents/users/{uid}
   return match.document.name.split("/").pop();
 }
 
-// Identity Toolkit REST: set a new password for the given Firebase Auth uid.
 async function updateFirebasePassword(env, accessToken, uid, newPassword) {
   const url = `https://identitytoolkit.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/accounts:update`;
 
@@ -620,7 +662,7 @@ function generateOtp() {
 }
 
 // ============================================================
-// ✅ NEW: GENERATE RESET TOKEN (Web Crypto, 32 random bytes → hex)
+// GENERATE RESET TOKEN (Web Crypto, 32 random bytes → hex)
 // ============================================================
 function generateResetToken() {
   const bytes = new Uint8Array(32);

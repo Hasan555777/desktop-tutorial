@@ -32,27 +32,27 @@ const SOCIAL_LINKS = [
     url: 'https://t.me/yourchannel',
     color: '#0088cc',
   },
-  {
-    id: 'whatsapp',
-    name: 'WhatsApp',
-    icon: 'fa-brands fa-whatsapp',
-    url: 'https://wa.me/01891696262',
-    color: '#25d366',
-  },
-  {
-    id: 'instagram',
-    name: 'Instagram',
-    icon: 'fa-brands fa-instagram',
-    url: 'https://www.instagram.com/yourpage',
-    color: '#e4405f',
-  },
-  {
-    id: 'twitter',
-    name: 'Twitter',
-    icon: 'fa-brands fa-twitter',
-    url: 'https://twitter.com/yourpage',
-    color: '#1da1f2',
-  },
+  // {
+  //   id: 'whatsapp',
+  //   name: 'WhatsApp',
+  //   icon: 'fa-brands fa-whatsapp',
+  //   url: 'https://wa.me/01891696262',
+  //   color: '#25d366',
+  // },
+  // {
+  //   id: 'instagram',
+  //   name: 'Instagram',
+  //   icon: 'fa-brands fa-instagram',
+  //   url: 'https://www.instagram.com/yourpage',
+  //   color: '#e4405f',
+  // },
+  // {
+  //   id: 'twitter',
+  //   name: 'Twitter',
+  //   icon: 'fa-brands fa-twitter',
+  //   url: 'https://twitter.com/yourpage',
+  //   color: '#1da1f2',
+  // },
 ];
 
 const FloatingFeedbackButton = () => {

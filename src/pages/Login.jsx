@@ -12,7 +12,7 @@ import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from '@/firebase';
 import toast, { Toaster } from 'react-hot-toast';
 import './Login.css';
-import './Register.css';
+// import './Register.css';
 
 // ============================================================
 // 📱 OTP API URL — same Worker used by the registration flow

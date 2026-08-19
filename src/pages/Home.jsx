@@ -9,17 +9,78 @@
 //     instead of failing. This effect then re-runs once the parent flips
 //     `currentMode` and the new mode's listener delivers the post, so it
 //     scrolls + highlights normally.
-// This covers entry points Navbar's search click can't: shared/bookmarked
-// links, browser back/forward, or a page refresh while viewing a post that
-// belongs to the other mode.
+//
+// 🔧 LOADING SYSTEM UPDATE:
+// - Removed the full-screen "Loading Posts..." early-return.
+// - Added usePageLoadingBar(loading) for the thin top bar.
+// - Skeleton cards only show on a TRUE first load (posts.length === 0).
+//   On a mode-switch refetch or manual refresh where posts already exist,
+//   the old list stays visible (no flash) while the new snapshot loads —
+//   only the top bar + pull indicator signal activity.
+//
+// 🔄 NEW — PULL-TO-REFRESH (মোবাইল, কোনো বাটন ছাড়া):
+// - usePullToRefresh হুক দিয়ে posts listener re-subscribe করা হয়।
+// - শুধু মোবাইল viewport-এ touch handlers attach হয় (ডেস্কটপে না)।
+// - ডেস্কটপ থেকে Navbar-এর রিফ্রেশ বাটন 'workhub:refresh-request'
+//   কাস্টম ইভেন্ট পাঠায়, Home সেটা শুনে একই handleRefresh চালায়।
+//
+// 📍 NEW — SCROLL POSITION RESTORE:
+// - স্ক্রল করতে করতে অন্য পেজে (চ্যাট ইত্যাদি) চলে গেলে sessionStorage-এ
+//   window.scrollY সেভ থাকে (মোড অনুযায়ী আলাদা key)।
+// - আবার Home-এ ফিরলে (component নতুন করে mount হলে) সেই পজিশনে
+//   অটোমেটিক স্ক্রল করে দেয় — একদম শুরুতে চলে যায় না।
+// - নির্দিষ্ট পোস্টে হাইলাইট/স্ক্রল করার existing লজিকের সাথে কনফ্লিক্ট
+//   এড়াতে, highlightedPostId থাকলে scroll-restore স্কিপ করা হয়।
+// - ইচ্ছাকৃত মোড-সুইচে (ইউজার নিজে Buyer/Seller বদলালে) পুরনো মোডের
+//   পোস্ট সাথে সাথে সরিয়ে ও টপে স্ক্রল করে ফ্রেশ ভিউ দেওয়া হয়।
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { db } from '@/firebase';
 import { collection, query, where, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { useFeedback } from '@/UI/Feedback/FeedbackProvider';
+import { usePageLoadingBar } from '@/components/LoadingBar/usePageLoadingBar';
+import { usePullToRefresh } from '@/components/PullToRefresh/usePullToRefresh'; // ✅ NEW
+import PullToRefreshIndicator from '@/components/PullToRefresh/PullToRefreshIndicator'; // ✅ NEW
+import Skeleton from '@/components/Skeleton/Skeleton';
 import JobCard from './JobCard';
 import './Home.css';
+
+// ============================================================
+// JobCard-এর শেপ মিলিয়ে skeleton placeholder — শুধু প্রথম লোডে দেখাবে।
+// ============================================================
+const PostCardSkeleton = () => (
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '12px',
+      padding: '16px',
+      marginBottom: '16px',
+      borderRadius: '14px',
+      background: 'var(--bg-secondary, #131826)',
+      border: '1px solid var(--border-color, #232937)',
+    }}
+  >
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <Skeleton width={40} height={40} variant="circle" />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <Skeleton width="35%" height={12} />
+        <Skeleton width="20%" height={10} />
+      </div>
+    </div>
+    <Skeleton width="70%" height={16} />
+    <Skeleton width="95%" height={12} />
+    <Skeleton width="85%" height={12} />
+    <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+      <Skeleton width={70} height={26} radius={8} />
+      <Skeleton width={70} height={26} radius={8} />
+      <Skeleton width={90} height={26} radius={8} style={{ marginLeft: 'auto' }} />
+    </div>
+  </div>
+);
+
+const SCROLL_STORAGE_PREFIX = 'workhub_home_scroll_';
 
 function Home({ 
   currentMode = 'seller',
@@ -27,12 +88,14 @@ function Home({
   searchTerm = '', 
   highlightText: propHighlightText, 
   onBidAndChatClick,
-  onRequireModeSwitch, // ✅ NEW
+  onRequireModeSwitch,
 }) {
   console.count("🏠 Home Render");
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  usePageLoadingBar(loading);
   
   const feedback = useFeedback();
   const feedbackRef = useRef(feedback);
@@ -58,9 +121,10 @@ function Home({
   const isMountedRef = useRef(true);
   const listenerActiveRef = useRef(false);
   const currentModeRef = useRef(currentMode || 'seller');
+  // ✅ NEW: শুধু "মোড আসলেই বদলেছে কিনা" এটা বুঝতে (effect re-run-এর
+  // অন্য কারণগুলো থেকে আলাদা করার জন্য)
+  const prevModeForClearRef = useRef(currentMode || 'seller');
 
-  // ✅ Keep the ref in sync every render so async callbacks (verifyPost)
-  // always compare against the LATEST mode, not a stale closure value.
   useEffect(() => {
     currentModeRef.current = currentMode || 'seller';
   }, [currentMode]);
@@ -70,16 +134,12 @@ function Home({
   const targetPostId = postId || postIdFromQuery;
   const [highlightedPostId, setHighlightedPostId] = useState(targetPostId);
 
-  // ✅ Track which postId we've already run the "verify + maybe switch mode"
-  // fallback for, so we don't spam getDoc() calls if the effect re-runs for
-  // other reasons (e.g. posts array reference changing) while still on the
-  // same missing post.
   const verifiedForPostIdRef = useRef(null);
 
   useEffect(() => {
     console.log("🎯 URL Target Post ID:", targetPostId);
     setHighlightedPostId(targetPostId);
-    verifiedForPostIdRef.current = null; // reset guard for the new target
+    verifiedForPostIdRef.current = null;
   }, [targetPostId]);
 
   const highlightText = propHighlightText || ((text, searchTerm) => {
@@ -119,7 +179,6 @@ function Home({
     const postsRef = collection(db, 'posts');
     let q;
 
-    // ✅ type: 'service' -> Seller Mode, type: 'hire' -> Buyer Mode
     if (mode === 'seller') {
       q = query(
         postsRef,
@@ -203,6 +262,18 @@ function Home({
     isMountedRef.current = true;
     currentModeRef.current = currentMode || 'seller';
 
+    // ✅ NEW: ইউজার ইচ্ছাকৃতভাবে মোড বদলালে (আগের মোড থেকে ভিন্ন) —
+    // পুরনো মোডের পোস্ট সাথে সাথে সরিয়ে ফেলা হচ্ছে, যাতে নতুন মোডের
+    // ডেটা না আসা পর্যন্ত ভুল মোডের কন্টেন্ট এক মুহূর্তের জন্যও না দেখা
+    // যায়। আর পেজটাও টপে নিয়ে যাওয়া হচ্ছে, কারণ এটা একটা সচেতন
+    // "নতুন ভিউ"-তে যাওয়ার অ্যাকশন।
+    const modeActuallyChanged = prevModeForClearRef.current !== (currentMode || 'seller');
+    if (modeActuallyChanged) {
+      setPosts([]);
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+    prevModeForClearRef.current = currentMode || 'seller';
+
     cleanupListener();
     setupListener();
 
@@ -215,6 +286,7 @@ function Home({
 
   // ============================================================
   // ✅ Highlight/scroll effect + self-healing mode-mismatch fallback
+  // (অপরিবর্তিত)
   // ============================================================
   useEffect(() => {
     if (loading || !highlightedPostId) return;
@@ -238,10 +310,6 @@ function Home({
       return;
     }
 
-    // ── Post not in the current mode's list ──
-    // Avoid re-checking the same missing postId repeatedly (e.g. if this
-    // effect re-fires because `posts` got a new array reference for an
-    // unrelated snapshot update while we're still resolving the same post).
     if (verifiedForPostIdRef.current === highlightedPostId) return;
 
     let cancelled = false;
@@ -282,9 +350,6 @@ function Home({
           if (onRequireModeSwitch) {
             console.log(`🔀 Post belongs to ${requiredMode} mode — switching automatically`);
             onRequireModeSwitch(requiredMode);
-            // This effect will re-run once the `currentMode` prop updates
-            // and the new mode's onSnapshot listener delivers this post —
-            // at that point `postExists` above becomes true and it scrolls.
           } else {
             feedbackRef.current?.toast?.({
               variant: 'warning',
@@ -295,10 +360,6 @@ function Home({
           }
           return;
         }
-
-        // Same mode but still missing from `posts`? Extremely unlikely
-        // (would mean the snapshot listener hasn't caught up yet) — don't
-        // show an error, just let a future snapshot update resolve it.
       } catch (error) {
         console.error('Error verifying post existence:', error);
       }
@@ -308,6 +369,68 @@ function Home({
 
     return () => { cancelled = true; };
   }, [loading, highlightedPostId, posts, onRequireModeSwitch]);
+
+  // ============================================================
+  // ✅ NEW — SCROLL POSITION SAVE (throttled, স্ক্রল করার সময় চলতে থাকে)
+  // ============================================================
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        try {
+          const key = `${SCROLL_STORAGE_PREFIX}${currentModeRef.current}`;
+          sessionStorage.setItem(key, String(window.scrollY));
+        } catch (e) {
+          // sessionStorage না থাকলে (private browsing ইত্যাদি) চুপচাপ স্কিপ
+        }
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // ============================================================
+  // ✅ NEW — SCROLL POSITION RESTORE
+  // পোস্ট লোড হয়ে যাওয়ার পর (একবারই প্রতি মোডে) সেভ করা স্ক্রল
+  // পজিশনে ফিরিয়ে নেওয়া। নির্দিষ্ট পোস্টে হাইলাইট করার প্রয়োজন থাকলে
+  // (highlightedPostId) এটা স্কিপ করা হয়, যাতে ওই লজিকের সাথে সংঘর্ষ
+  // না হয়।
+  // ============================================================
+  const hasRestoredScrollRef = useRef(false);
+
+  useEffect(() => {
+    hasRestoredScrollRef.current = false;
+  }, [currentMode]);
+
+  useEffect(() => {
+    if (loading) return;
+    if (hasRestoredScrollRef.current) return;
+    if (highlightedPostId) return;
+    if (posts.length === 0) return;
+
+    const key = `${SCROLL_STORAGE_PREFIX}${currentModeRef.current}`;
+    let saved = null;
+    try {
+      saved = sessionStorage.getItem(key);
+    } catch (e) {
+      saved = null;
+    }
+
+    hasRestoredScrollRef.current = true;
+
+    if (saved) {
+      const y = parseInt(saved, 10);
+      if (!isNaN(y) && y > 0) {
+        // DOM-এ পোস্টগুলো render হয়ে উচ্চতা পাওয়ার জন্য এক frame অপেক্ষা
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: y, behavior: 'auto' });
+        });
+      }
+    }
+  }, [loading, posts.length, highlightedPostId]);
 
   // ✅ সার্চ ফিল্টার
   const filteredBySearch = useMemo(() => {
@@ -359,38 +482,49 @@ function Home({
     return Array.from(map.values());
   }, [filteredBySearch, currentMode]);
 
-  // ✅ লোডিং UI
-  if (loading) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: '#090d16',
-        color: '#14b8a6'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <i className="fa-solid fa-cube" style={{
-            fontSize: '48px',
-            animation: 'spin 2s linear infinite',
-            display: 'block',
-            marginBottom: '16px'
-          }} />
-          <h2>Loading Posts...</h2>
-          {!feedbackRef.current?.network?.online && (
-            <p style={{ color: '#ef4444', marginTop: '12px', fontSize: '14px' }}>
-              📡 Offline - Waiting for connection...
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  }
+  // ============================================================
+  // ✅ NEW — Pull-to-refresh (মোবাইল, বাটন ছাড়া) + ডেস্কটপ রিফ্রেশ
+  // ইভেন্ট, দুটোই একই handleRefresh ব্যবহার করে।
+  // ============================================================
+  const handleRefresh = useCallback(async () => {
+    console.log("🔄 Manual refresh triggered");
+    cleanupListener();
+    setupListener(); // নিজেই setLoading(true) কল করে — top bar-ও দেখাবে
+    await new Promise(resolve => setTimeout(resolve, 600));
+  }, [cleanupListener, setupListener]);
+
+  const { containerRef, pullDistance, isRefreshing, handlers } = usePullToRefresh(handleRefresh);
+
+  // মোবাইল viewport-এই শুধু touch handlers সক্রিয় থাকবে (ডেস্কটপে বাটন)
+  const [isMobileViewport, setIsMobileViewport] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth <= 768
+  );
+  useEffect(() => {
+    const onResize = () => setIsMobileViewport(window.innerWidth <= 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  // ডেস্কটপ Navbar-বাটন থেকে আসা 'workhub:refresh-request' ইভেন্ট শোনা
+  useEffect(() => {
+    const handleExternalRefresh = () => {
+      handleRefresh();
+    };
+    window.addEventListener('workhub:refresh-request', handleExternalRefresh);
+    return () => window.removeEventListener('workhub:refresh-request', handleExternalRefresh);
+  }, [handleRefresh]);
 
   // ✅ রেন্ডার
   return (
-    <div className="home-wrapper">
+    <div 
+      className="home-wrapper" 
+      ref={containerRef}
+      {...(isMobileViewport ? handlers : {})}
+    >
+      {isMobileViewport && (
+        <PullToRefreshIndicator pullDistance={pullDistance} isRefreshing={isRefreshing} />
+      )}
+
       {!feedbackRef.current?.network?.online && (
         <div style={{
           padding: '8px 16px',
@@ -408,7 +542,15 @@ function Home({
 
       <main className="home-content">
         <div className="home-feed-posts-list">
-          {uniquePosts.length === 0 ? (
+          {loading && posts.length === 0 ? (
+            // ✅ শুধু প্রকৃত প্রথম লোডে skeleton — mode-switch clear বা
+            // pull/manual refresh-এ posts.length > 0 হলে এই ব্লকে ঢুকবে না
+            <>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <PostCardSkeleton key={`post-skeleton-${i}`} />
+              ))}
+            </>
+          ) : uniquePosts.length === 0 ? (
             <div className="empty-feed-state">
               <i className="fa-solid fa-folder-open"></i>
               <p>

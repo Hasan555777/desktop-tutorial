@@ -33,6 +33,7 @@ import {
   sendWalletBalanceNotification,
   sendDealPaymentNotification
 } from './notificationHelper';
+import GuideModal from '@/components/GuideModal';
 
 // ============================================================
 // ✅ Constants - Shared with Transactions/PaymentHistory
@@ -576,6 +577,8 @@ const Wallet = () => {
 
   return (
     <div className="wallet-container-modern">
+
+      <GuideModal guideKey="wallet" />
       
       {/* ✅ Pending Banner */}
       {showPendingBanner && (

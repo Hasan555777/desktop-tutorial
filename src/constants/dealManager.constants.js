@@ -19,6 +19,66 @@ export const BACKGROUND_SWEEP_INTERVAL_MS = 60 * 1000; // 1 minute
 export const LOCAL_STORAGE_MODE_KEY = 'dealMode';
 
 // ============================================================
+// ✅ মিনিট কনভার্ট কনস্ট্যান্ট
+// ============================================================
+export const MINUTES_IN_DAY = 24 * 60; // 1440 মিনিট
+export const MINUTES_IN_HOUR = 60;
+
+// ============================================================
+// ✅ সময় কনভার্ট হেল্পার ফাংশন
+// ============================================================
+export const minutesToDays = (minutes) => {
+  return Math.ceil(minutes / MINUTES_IN_DAY);
+};
+
+export const daysToMinutes = (days) => {
+  return days * MINUTES_IN_DAY;
+};
+
+export const formatDeadlineDisplay = (deadline) => {
+  if (deadline === null || deadline === undefined) return '0';
+  
+  if (typeof deadline === 'number') {
+    // ✅ ১ দিনের কম (মিনিটে)
+    if (deadline < MINUTES_IN_DAY) {
+      if (deadline < MINUTES_IN_HOUR) {
+        return `${deadline} মিনিট`;
+      }
+      const hours = Math.floor(deadline / MINUTES_IN_HOUR);
+      const minutes = deadline % MINUTES_IN_HOUR;
+      if (minutes === 0) {
+        return `${hours} ঘন্টা`;
+      }
+      return `${hours} ঘন্টা ${minutes} মিনিট`;
+    }
+    // ✅ ১ দিন বা তার বেশি
+    const days = Math.ceil(deadline / MINUTES_IN_DAY);
+    const remainingMinutes = deadline % MINUTES_IN_DAY;
+    if (remainingMinutes === 0) {
+      return `${days} দিন`;
+    }
+    const hours = Math.floor(remainingMinutes / MINUTES_IN_HOUR);
+    const minutes = remainingMinutes % MINUTES_IN_HOUR;
+    if (hours === 0) {
+      return `${days} দিন ${minutes} মিনিট`;
+    }
+    return `${days} দিন ${hours} ঘন্টা`;
+  }
+  
+  if (typeof deadline === 'string') return deadline;
+  if (typeof deadline === 'object') {
+    if (deadline.type === 'range') {
+      const min = deadline.min || 0;
+      const max = deadline.max || 0;
+      return `${min}-${max}`;
+    }
+    const days = deadline.days || 0;
+    return String(days);
+  }
+  return String(deadline);
+};
+
+// ============================================================
 // ✅ Deal status vocabulary — single source of truth, shared with
 // rules/dealRules.js (which imports these instead of defining its own
 // copy). Merged from both files on request.

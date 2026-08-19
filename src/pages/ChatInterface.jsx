@@ -625,43 +625,90 @@ const ChatInterface = ({ chatContext, onBack, onConfirm, onCancel, currentUser: 
   // ============================================================
   // ✅ Manual Submit
   // ============================================================
-  const handleManualSend = async () => {
-    if (proposalSubmittedRef.current) return;
+  // const handleManualSend = async () => {
+  //   if (proposalSubmittedRef.current) return;
     
-    let buyerId, sellerId;
+  //   let buyerId, sellerId;
     
-    if (postType === 'service') {
-      buyerId = currentUser?.uid;
-      sellerId = chatContext?.userId || chatContext?.ownerId || chatContext?.uid || chatContext?.sellerId;
-    } else {
-      buyerId = chatContext?.userId || chatContext?.buyerId || chatContext?.uid || chatContext?.ownerId;
-      sellerId = currentUser?.uid;
-    }
+  //   if (postType === 'service') {
+  //     buyerId = currentUser?.uid;
+  //     sellerId = chatContext?.userId || chatContext?.ownerId || chatContext?.uid || chatContext?.sellerId;
+  //   } else {
+  //     buyerId = chatContext?.userId || chatContext?.buyerId || chatContext?.uid || chatContext?.ownerId;
+  //     sellerId = currentUser?.uid;
+  //   }
     
-    if (buyerId === sellerId) {
-      feedback.alert.error({ 
-        message: '❌ আপনি নিজেকে প্রপোজাল পাঠাতে পারবেন না!' 
-      });
-      return;
-    }
+  //   if (buyerId === sellerId) {
+  //     feedback.alert.error({ 
+  //       message: '❌ আপনি নিজেকে প্রপোজাল পাঠাতে পারবেন না!' 
+  //     });
+  //     return;
+  //   }
     
-    const { sendProposal } = await import('./chatHelpers');
+  //   const { sendProposal } = await import('./chatHelpers');
     
-    console.log("========== SEND PROPOSAL (MANUAL) ==========");
-    console.log("proposalData:", proposalData);
-    console.log("chatContext:", chatContext);
-    console.log("currentUser:", currentUser);
-    console.log("postType:", postType);
-    console.log("userRole:", userRole);
-    console.log("buyerId:", buyerId);
-    console.log("sellerId:", sellerId);
-    console.log("==============================================");
+  //   console.log("========== SEND PROPOSAL (MANUAL) ==========");
+  //   console.log("proposalData:", proposalData);
+  //   console.log("chatContext:", chatContext);
+  //   console.log("currentUser:", currentUser);
+  //   console.log("postType:", postType);
+  //   console.log("userRole:", userRole);
+  //   console.log("buyerId:", buyerId);
+  //   console.log("sellerId:", sellerId);
+  //   console.log("==============================================");
     
-    await sendProposal(proposalData, chatContext, currentUser, postType, userRole, safeChatId, feedback);
-    proposalSubmittedRef.current = true;
-    setShowProposalModal(false);
-    setExistingDeal({ status: 'pending' });
-  };
+  //   await sendProposal(proposalData, chatContext, currentUser, postType, userRole, safeChatId, feedback);
+  //   proposalSubmittedRef.current = true;
+  //   setShowProposalModal(false);
+  //   setExistingDeal({ status: 'pending' });
+  // };
+
+
+
+  // src/pages/ChatInterface.jsx
+
+// ✅ আপডেটেড handleManualSend
+const handleManualSend = async (finalData) => {
+  if (proposalSubmittedRef.current) return;
+  
+  // ✅ যদি finalData পাঠানো হয়, সেটা ব্যবহার করুন, নাহলে proposalData ব্যবহার করুন
+  const dataToSend = finalData || proposalData;
+  
+  let buyerId, sellerId;
+  
+  if (postType === 'service') {
+    buyerId = currentUser?.uid;
+    sellerId = chatContext?.userId || chatContext?.ownerId || chatContext?.uid || chatContext?.sellerId;
+  } else {
+    buyerId = chatContext?.userId || chatContext?.buyerId || chatContext?.uid || chatContext?.ownerId;
+    sellerId = currentUser?.uid;
+  }
+  
+  if (buyerId === sellerId) {
+    feedback.alert.error({ 
+      message: '❌ আপনি নিজেকে প্রপোজাল পাঠাতে পারবেন না!' 
+    });
+    return;
+  }
+  
+  const { sendProposal } = await import('./chatHelpers');
+  
+  console.log("========== SEND PROPOSAL (MANUAL) ==========");
+  console.log("proposalData:", dataToSend);
+  console.log("chatContext:", chatContext);
+  console.log("currentUser:", currentUser);
+  console.log("postType:", postType);
+  console.log("userRole:", userRole);
+  console.log("buyerId:", buyerId);
+  console.log("sellerId:", sellerId);
+  console.log("==============================================");
+  
+  // ✅ dataToSend পাঠান (যাতে deadline মিনিটে থাকে)
+  await sendProposal(dataToSend, chatContext, currentUser, postType, userRole, safeChatId, feedback);
+  proposalSubmittedRef.current = true;
+  setShowProposalModal(false);
+  setExistingDeal({ status: 'pending' });
+};
 
   // ========== Main Render ==========
   return (

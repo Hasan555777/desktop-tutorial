@@ -942,3 +942,91 @@
 .post-descriptionn-wrapper::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted, #64748b);
 }
+
+
+
+
+
+
+
+
+
+/* PendingPosts.css - এডিট বাটনের জন্য */
+
+.action-btn.edit {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.action-btn.edit:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* এডিট মোডাল স্টাইল */
+.edit-form-group {
+  margin-bottom: 14px;
+}
+
+.edit-form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+  margin-bottom: 4px;
+}
+
+.edit-form-group .required {
+  color: #ef4444;
+}
+
+.edit-input,
+.edit-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg, #1a2030);
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  border-radius: 8px;
+  color: var(--text-primary, #f8fafc);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.edit-input:focus,
+.edit-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.edit-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.edit-confirm-btn {
+  padding: 10px 24px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-confirm-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.edit-modal {
+  max-width: 540px;
+}
+
+@media (max-width: 480px) {
+  .edit-form-row {
+    grid-template-columns: 1fr;
+  }
+}

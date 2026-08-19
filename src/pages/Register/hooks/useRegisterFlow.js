@@ -3,30 +3,31 @@
 // hook. Register.jsx just calls this and renders.
 //
 // ============================================================
-// 🔧 FIXES APPLIED (search "FIX" to jump to each spot):
-// 1. uploadDocuments() now passes the correct Cloudinary folder
-//    (via getDocumentFolder) instead of a hardcoded 'documents'.
-//    Before this fix, uploadToCloudinary() always validated against
-//    ALLOWED_IMAGE_TYPES (no PDF) regardless of document type — so
-//    anyone who submitted a PDF birth certificate would pass step 4
-//    with no error, then have the ENTIRE registration fail at the
-//    very last step with "শুধু JPEG, PNG... গ্রহণযোগ্য".
-// 2. handleFinalRegistration now rolls back (deletes) the just-created
-//    Firebase Auth account if any step after account creation fails
-//    (Firestore write, wallet creation, document upload, etc).
-//    Before this fix, a failure partway through left an orphaned Auth
-//    account with no Firestore profile — the user could never
-//    register with that email again, and the app would break for
-//    them if they tried to log in.
-// 3. sendOTP()/resendOTP() now clear the OTP input boxes' visible
-//    values. The boxes are uncontrolled DOM inputs (not bound to
-//    formData.otp), so resetting formData.otp on resend didn't clear
-//    what was actually showing on screen — stale digits from a
-//    previous attempt stayed visible.
-// 4. showToast() now routes through react-hot-toast (already used
-//    elsewhere in this flow) instead of manipulating a raw
-//    #toast DOM element directly, so every message in this flow uses
-//    one consistent, definitely-styled toast system.
+// 🔧 THIS REVISION: fixes the "stuck at ছবি মাপা হচ্ছে forever" bug.
+// See useFaceLiveness.js's header comment for the root-cause
+// explanation (an unguarded enhancer.enhance() call could silently
+// kill the recursive detection loop with nothing catching it). Beyond
+// that fix, this file also adds:
+//
+// 1. runLivenessLoop's tick function is now wrapped in try/finally, so
+//    the next tick is GUARANTEED to be scheduled no matter what throws
+//    inside — the loop can no longer die silently from ANY unexpected
+//    exception, not just the one root cause we found.
+// 2. A generation counter (calibrationGenerationRef) invalidates any
+//    in-flight calibration the moment the camera is stopped or
+//    restarted, so a slow calibration that's still running in the
+//    background can't call setState with stale results afterward.
+// 3. startLivenessFlow now wraps calibrateBaseline() in a true outer
+//    Promise.race timeout, on top of calibrateBaseline's own internal
+//    watchdog — belt and suspenders against any hang.
+// 4. Replaced the stale `cameraActive` state-closure check (captured
+//    at the moment calibration STARTED, not its current value) with
+//    `camStreamRef.current` (a ref, always current) when deciding
+//    whether to proceed to the gesture-tracking loop after calibration
+//    finishes.
+//
+// OTP verification, per-folder document upload, rollback-on-failure
+// registration — unchanged from the previous revision.
 // ============================================================
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -40,7 +41,6 @@ import {
 import {
   doc, getDoc, setDoc, updateDoc, increment,
   serverTimestamp, collection, query, where, getDocs,
-  runTransaction, writeBatch
 } from "firebase/firestore";
 import { auth, db } from '../../../firebase';
 import { useNavigate } from 'react-router-dom';
@@ -48,12 +48,31 @@ import toast from 'react-hot-toast';
 
 import { generateUserId, generateWalletId, generateReferralCode } from '../../../utils/idGenerator';
 import { uploadToCloudinary, compressImage, initLiveness, LIVENESS_STEPS, PROGRESS_MAP, getDocumentFolder } from './registerHelpers';
+import {
+  useFaceApiModels,
+  detectFaceInImage,
+  detectFrame,
+  safeEnhance,
+  createFrameEnhancer,
+  createBrightnessSampler,
+  createAdaptiveDetector,
+  calibrateBaseline,
+  createStepTracker,
+} from './useFaceLiveness';
 
 // ============================================================
 // 📱 OTP API URL
 // ============================================================
-const OTP_API_URL = import.meta.env.VITE_OTP_API_URL || 
+const OTP_API_URL = import.meta.env.VITE_OTP_API_URL ||
   'https://worktrust-otp-production.hammanmusa362.workers.dev';
+
+const LOOP_TICK_MS = 70;
+const MAX_CALIBRATION_ATTEMPTS = 4;
+// ✅ NEW: hard outer timeout wrapped around calibrateBaseline() — its
+// own internal watchdog is 9000ms; this adds a safety margin on top,
+// as a second line of defense in case any single internal await
+// somehow outlives the inner watchdog.
+const CALIBRATION_HARD_TIMEOUT_MS = 11000;
 
 export const useRegisterFlow = () => {
   const navigate = useNavigate();
@@ -89,6 +108,28 @@ export const useRegisterFlow = () => {
   const [isLivenessRunning, setIsLivenessRunning] = useState(false);
   const [livenessProgress, setLivenessProgress] = useState(0);
 
+  const [calibrating, setCalibrating] = useState(false);
+  const [calibrationProgress, setCalibrationProgress] = useState(0);
+  const [calibrationFailed, setCalibrationFailed] = useState(false);
+  const [currentStepProgress, setCurrentStepProgress] = useState(0);
+  const [lowLightWarning, setLowLightWarning] = useState(false);
+  const [noFaceWarning, setNoFaceWarning] = useState(false);
+
+  const { modelsLoaded, modelsLoading, modelError, loadModels } = useFaceApiModels();
+
+  const enhancerRef = useRef(null);
+  const brightnessSamplerRef = useRef(null);
+  const detectorRef = useRef(null);
+  if (!enhancerRef.current) enhancerRef.current = createFrameEnhancer();
+  if (!brightnessSamplerRef.current) brightnessSamplerRef.current = createBrightnessSampler();
+  if (!detectorRef.current) detectorRef.current = createAdaptiveDetector();
+  const baselineRef = useRef(null);
+  const calibrationAttemptsRef = useRef(0);
+  // ✅ NEW: bumped every time the camera is (re)started or stopped —
+  // any in-flight calibration/loop checks this to know it's been
+  // superseded and should ignore its own result.
+  const calibrationGenerationRef = useRef(0);
+
   const [selectedFiles, setSelectedFiles] = useState({
     nidFront: null,
     nidBack: null,
@@ -115,9 +156,10 @@ export const useRegisterFlow = () => {
     role: 'client',
   });
 
-  // ============================================================
-  // ✅ ফোন নম্বর আপডেট
-  // ============================================================
+  useEffect(() => {
+    loadModels();
+  }, [loadModels]);
+
   const updatePhone = useCallback((phone) => {
     setFormData(prev => ({ ...prev, phone }));
     setPhoneVerified(false);
@@ -127,9 +169,6 @@ export const useRegisterFlow = () => {
     clearInterval(otpTimerRef.current);
   }, []);
 
-  // ============================================================
-  // ✅ কম্প্রেস অ্যান্ড প্রিভিউ
-  // ============================================================
   const compressAndPreview = async (file, areaId, previewId, removeBtnId, fileType) => {
     try {
       setFileErrors(prev => ({ ...prev, [fileType]: '' }));
@@ -160,7 +199,6 @@ export const useRegisterFlow = () => {
     camStreamRef.current = camStream;
   }, [camStream]);
 
-  // ── প্রগ্রেস বার ──
   useEffect(() => {
     const fill = document.getElementById('progressFill');
     if (fill) fill.style.width = PROGRESS_MAP[currentStep] + '%';
@@ -189,13 +227,12 @@ export const useRegisterFlow = () => {
     }
   }, [currentStep]);
 
-  // ── Cleanup ──
   useEffect(() => {
     return () => {
       camStreamRef.current?.getTracks().forEach(t => t.stop());
       clearInterval(otpTimerRef.current);
       if (livenessTimerRef.current) {
-        clearInterval(livenessTimerRef.current);
+        clearTimeout(livenessTimerRef.current);
         livenessTimerRef.current = null;
       }
       if (livenessStartTimeoutRef.current) {
@@ -205,11 +242,6 @@ export const useRegisterFlow = () => {
     };
   }, []);
 
-  // ── টোস্ট হেল্পার ──
-  // 🔧 FIX #4: routes through react-hot-toast (already imported and
-  // used elsewhere in this file) instead of manipulating a raw
-  // #toast DOM element, so every message in this flow is guaranteed
-  // to use one consistent, actually-styled toast system.
   const showToast = useCallback((msg, type = 'info') => {
     if (type === 'error') {
       toast.error(msg);
@@ -220,7 +252,6 @@ export const useRegisterFlow = () => {
     }
   }, []);
 
-  // ── স্টেপ নেভিগেশন ──
   const goToStep = useCallback((n) => {
     if (n < 1 || n > 6) return;
     setCurrentStep(n);
@@ -279,13 +310,7 @@ export const useRegisterFlow = () => {
     }, 1000);
   }, []);
 
-  // 🔧 FIX #3: clears the visible OTP boxes. They're uncontrolled
-  // inputs read via document.querySelectorAll, not bound to
-  // formData.otp, so resetting formData.otp alone never touched what
-  // was actually on screen.
   const clearOtpBoxesUI = () => {
-    // Boxes only exist in the DOM once otpSent is true; wait a tick
-    // for React to render them before querying.
     setTimeout(() => {
       const boxes = document.querySelectorAll('#step2 .otp-box');
       boxes.forEach(box => {
@@ -329,7 +354,7 @@ export const useRegisterFlow = () => {
       setPhoneVerified(false);
       setVerificationToken(null);
       setFormData(prev => ({ ...prev, otp: ['', '', '', '', '', ''] }));
-      clearOtpBoxesUI(); // 🔧 FIX #3
+      clearOtpBoxesUI();
       startOtpTimer();
       showToast('📨 আপনার মোবাইলে OTP পাঠানো হয়েছে', 'success');
 
@@ -346,7 +371,6 @@ export const useRegisterFlow = () => {
     await sendOTP();
   };
 
-  // ✅ OTP ইনপুট - টোকেন ভেরিফিকেশন সহ
   const otpInput = useCallback(async (el, idx) => {
     const val = el.value.replace(/[^0-9]/g, '');
     el.value = val;
@@ -386,9 +410,8 @@ export const useRegisterFlow = () => {
         throw new Error(data.message || 'ভুল OTP অথবা OTP-এর মেয়াদ শেষ।');
       }
 
-      // ✅ সিকিউর: টোকেন সংরক্ষণ করুন
       setPhoneVerified(true);
-      setVerificationToken(data.token || 'verified');
+      setVerificationToken(data.token || data.resetToken || 'verified');
       clearInterval(otpTimerRef.current);
       setOtpTimer(0);
 
@@ -470,7 +493,6 @@ export const useRegisterFlow = () => {
     toast('🗑️ ফাইল সরানো হয়েছে');
   };
 
-  // ✅ state থেকে চেক (DOM নয়)
   const goStep4 = () => {
     if (selectedVerify === 'nid') {
       if (!selectedFiles.nidFront || !selectedFiles.nidBack) {
@@ -496,6 +518,10 @@ export const useRegisterFlow = () => {
   // ✅ লাইভনেস রিসেট
   // ════════════════════════════════════════════════════════════════════════════
   const resetLiveness = useCallback(() => {
+    // ✅ NEW: invalidates any in-flight calibration/loop from a
+    // previous camera session — see startLivenessFlow/runLivenessLoop.
+    calibrationGenerationRef.current++;
+
     isLivenessRunningRef.current = false;
     setIsLivenessRunning(false);
     setLivenessState(initLiveness());
@@ -503,8 +529,15 @@ export const useRegisterFlow = () => {
     setLivenessComplete(false);
     setFaceStatusMsg('');
     setLivenessProgress(0);
+    setCurrentStepProgress(0);
+    setCalibrating(false);
+    setCalibrationProgress(0);
+    setCalibrationFailed(false);
+    setLowLightWarning(false);
+    setNoFaceWarning(false);
+    baselineRef.current = null;
     if (livenessTimerRef.current) {
-      clearInterval(livenessTimerRef.current);
+      clearTimeout(livenessTimerRef.current);
       livenessTimerRef.current = null;
     }
     if (livenessStartTimeoutRef.current) {
@@ -517,8 +550,9 @@ export const useRegisterFlow = () => {
   // ✅ স্টেপ ৫: ফেস ভেরিফিকেশন
   // ════════════════════════════════════════════════════════════════════════════
   const stopCamera = useCallback(() => {
+    calibrationGenerationRef.current++; // ✅ NEW: invalidate anything in-flight
     if (livenessTimerRef.current) {
-      clearInterval(livenessTimerRef.current);
+      clearTimeout(livenessTimerRef.current);
       livenessTimerRef.current = null;
     }
     if (livenessStartTimeoutRef.current) {
@@ -550,7 +584,7 @@ export const useRegisterFlow = () => {
     }
 
     if (livenessTimerRef.current) {
-      clearInterval(livenessTimerRef.current);
+      clearTimeout(livenessTimerRef.current);
       livenessTimerRef.current = null;
     }
     camStreamRef.current?.getTracks().forEach(t => t.stop());
@@ -559,6 +593,23 @@ export const useRegisterFlow = () => {
     isLivenessRunningRef.current = false;
     setIsLivenessRunning(false);
 
+    setLivenessMessage('🔍 ছবি যাচাই করা হচ্ছে...');
+    try {
+      const finalCheck = await detectFaceInImage(canvas);
+      if (!finalCheck) {
+        setLivenessMessage('⚠️ ছবিতে মুখ শনাক্ত হয়নি — আবার চেষ্টা করুন');
+        showToast('⚠️ ছবিতে মুখ শনাক্ত হয়নি, দয়া করে আবার চেষ্টা করুন', 'warning');
+        setFaceVerified(false);
+        setFaceStatusMsg('');
+        resetLiveness();
+        return;
+      }
+    } catch (err) {
+      console.error('Final face-check error:', err);
+    }
+
+    setFaceVerified(true);
+    setFaceStatusMsg('captured');
     setLivenessMessage('📤 ছবি আপলোড করা হচ্ছে...');
 
     try {
@@ -566,8 +617,6 @@ export const useRegisterFlow = () => {
       const result = await uploadToCloudinary(file, 'face_photos');
 
       setFacePhotoUrl(result.url);
-      setFaceVerified(true);
-      setFaceStatusMsg('captured');
       setLivenessMessage('✅ মুখমণ্ডলের ছবি সফলভাবে আপলোড হয়েছে!');
       showToast('✅ মুখমণ্ডলের ছবি সফলভাবে ক্যাপচার ও আপলোড হয়েছে', 'success');
       console.log("✅ Face photo uploaded:", result.url);
@@ -582,77 +631,233 @@ export const useRegisterFlow = () => {
       setLivenessMessage('⚠️ ছবি আপলোড হয়নি, আবার চেষ্টা করুন');
       showToast('⚠️ ছবি আপলোড হয়নি, আবার চেষ্টা করুন', 'warning');
     }
-  }, [showToast, goToStep]);
+  }, [showToast, goToStep, resetLiveness]);
 
-  const startLivenessFlow = useCallback(() => {
-    if (isLivenessRunningRef.current || livenessComplete) return;
+  // ✅ FIXED: entire tick body wrapped in try/finally — the next tick is
+  // now scheduled NO MATTER WHAT happens inside (unexpected exception,
+  // enhance() failure, detection failure, etc). This is what makes the
+  // loop unable to silently die anymore.
+  const runLivenessLoop = useCallback((baseline, generation) => {
+    const totalSteps = LIVENESS_STEPS.length;
+    let stepIdx = 0;
+    let tracker = createStepTracker(LIVENESS_STEPS[stepIdx].key, baseline);
+    let noFaceStreak = 0;
+    let stepStartedAt = Date.now();
 
-    isLivenessRunningRef.current = true;
-    setIsLivenessRunning(true);
-    setLivenessProgress(0);
     setLivenessState(initLiveness());
     setCurrentLivIdx(0);
     setLivenessComplete(false);
+    setCurrentStepProgress(0);
+    setLivenessProgress(0);
+    setNoFaceWarning(false);
 
-    // ✅ ডায়নামিক shuffling
-    const shuffledIndices = Array.from(
-      { length: LIVENESS_STEPS.length },
-      (_, i) => i
-    );
-    for (let i = shuffledIndices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledIndices[i], shuffledIndices[j]] = [shuffledIndices[j], shuffledIndices[i]];
-    }
+    isLivenessRunningRef.current = true;
+    setIsLivenessRunning(true);
 
-    setLivenessMessage('👤 নির্দেশনা অনুসরণ করুন...');
+    const isStale = () => calibrationGenerationRef.current !== generation;
 
-    let livStep = 0;
-    const totalSteps = LIVENESS_STEPS.length;
+    const loop = async () => {
+      if (!isLivenessRunningRef.current || isStale()) return;
 
-    if (livenessTimerRef.current) {
-      clearInterval(livenessTimerRef.current);
-    }
+      try {
+        const video = videoRef.current;
+        if (!video || video.readyState < 2) {
+          return; // still schedules next tick via finally below
+        }
 
-    livenessTimerRef.current = setInterval(() => {
-      if (livStep >= totalSteps) {
-        clearInterval(livenessTimerRef.current);
-        livenessTimerRef.current = null;
-        return;
+        const brightness = brightnessSamplerRef.current(video);
+        setLowLightWarning(brightness < 55);
+
+        // 🔧 FIX: safeEnhance() instead of a bare enhancer.enhance()
+        // call — see useFaceLiveness.js header comment for why this
+        // was the root cause of the loop dying silently.
+        const input = safeEnhance(enhancerRef.current, video, brightness);
+
+        let detection = null;
+        try {
+          detection = await detectFrame(input, detectorRef.current, brightness);
+        } catch (err) {
+          console.error('Liveness detection error:', err);
+        }
+
+        if (!isLivenessRunningRef.current || isStale()) return;
+
+        if (!detection) {
+          noFaceStreak++;
+          setNoFaceWarning(noFaceStreak > 6);
+          setLivenessMessage(
+            brightness < 55
+              ? '💡 আলো একটু বাড়ান, মুখ দেখা যাচ্ছে না'
+              : '🙂 ক্যামেরার সামনে সোজা মুখ রাখুন'
+          );
+        } else {
+          noFaceStreak = 0;
+          setNoFaceWarning(false);
+
+          const key = LIVENESS_STEPS[stepIdx].key;
+          const value =
+            key === 'blink' ? detection.ear :
+            key === 'mouth' ? detection.mar :
+            detection.yaw;
+
+          const result = tracker.update(value);
+          setCurrentStepProgress(result.progress);
+          setLivenessMessage(result.message || `${LIVENESS_STEPS[stepIdx].emoji} ${LIVENESS_STEPS[stepIdx].label}`);
+
+          const overall = ((stepIdx + result.progress / 100) / totalSteps) * 100;
+          setLivenessProgress(overall);
+
+          if (Date.now() - stepStartedAt > 12000 && (key === 'turnRight' || key === 'turnLeft')) {
+            setLivenessMessage('↩️ মাথা আরেকটু বেশি ঘোরান, ক্যামেরার কাছে আসুন');
+          }
+
+          if (result.done) {
+            setLivenessState(prev => prev.map((s, idx) => idx === stepIdx ? { ...s, done: true } : s));
+            stepIdx++;
+            stepStartedAt = Date.now();
+
+            if (stepIdx >= totalSteps) {
+              isLivenessRunningRef.current = false;
+              setIsLivenessRunning(false);
+              setLivenessComplete(true);
+              setFaceStatusMsg('complete');
+              setLivenessProgress(100);
+              setLivenessMessage('🎉 সব ধাপ সম্পন্ন! ছবি তোলা হচ্ছে...');
+              showToast('🎉 লাইভনেস যাচাই সম্পন্ন!', 'success');
+              setTimeout(() => capturePhoto(), 600);
+              return;
+            }
+            tracker = createStepTracker(LIVENESS_STEPS[stepIdx].key, baseline);
+            setCurrentLivIdx(stepIdx);
+            setCurrentStepProgress(0);
+          }
+        }
+      } catch (outerErr) {
+        // 🔧 FIX: catches ANYTHING unexpected that slips through the
+        // inner try/catches above, so it can never kill the loop.
+        console.error('Liveness loop tick error (recovered):', outerErr);
+      } finally {
+        // 🔧 FIX: this is the actual fix — the next tick is scheduled
+        // here, unconditionally (as long as we're still meant to be
+        // running), regardless of what happened above.
+        if (isLivenessRunningRef.current && !isStale()) {
+          livenessTimerRef.current = setTimeout(loop, LOOP_TICK_MS);
+        }
       }
+    };
 
-      const mappedIdx = shuffledIndices[livStep];
-      const livStepData = LIVENESS_STEPS[mappedIdx];
+    loop();
+  }, [showToast, capturePhoto]);
 
-      setCurrentLivIdx(livStep);
-      const progress = ((livStep + 1) / totalSteps) * 100;
-      setLivenessProgress(progress);
-      setLivenessMessage(`📌 ${livStepData.emoji} ${livStepData.label}`);
+  // ✅ FIXED: outer hard-timeout via Promise.race (on top of
+  // calibrateBaseline's own internal watchdog) + generation-based
+  // cancellation instead of a stale `cameraActive` closure check.
+  const startLivenessFlow = useCallback(async () => {
+    if (isLivenessRunningRef.current || livenessComplete) return;
 
-      setLivenessState(prev =>
-        prev.map((s, idx) => idx === mappedIdx ? { ...s, done: true } : s)
-      );
+    if (!modelsLoaded) {
+      showToast('⚠️ ফেস মডেল এখনও লোড হচ্ছে, একটু অপেক্ষা করুন...', 'warning');
+      return;
+    }
+    if (!videoRef.current) return;
 
-      livStep++;
+    const myGeneration = ++calibrationGenerationRef.current;
+    // ✅ NEW: checked both at the top and inside calibrateBaseline's
+    // loop — true whenever the camera has been stopped/restarted since
+    // THIS calibration attempt began.
+    const isStale = () => calibrationGenerationRef.current !== myGeneration || !camStreamRef.current;
 
-      if (livStep >= totalSteps) {
-        clearInterval(livenessTimerRef.current);
-        livenessTimerRef.current = null;
-        isLivenessRunningRef.current = false;
-        setIsLivenessRunning(false);
-        setLivenessComplete(true);
-        setFaceStatusMsg('complete');
-        setLivenessMessage('🎉 সব ধাপ সম্পন্ন! ছবি তোলা হচ্ছে...');
-        showToast('🎉 লাইভনেস যাচাই সম্পন্ন!', 'success');
-        setTimeout(() => capturePhoto(), 1000);
+    setCalibrating(true);
+    setCalibrationFailed(false);
+    setCalibrationProgress(0);
+    setLivenessMessage('📐 ক্যামেরা মাপা হচ্ছে... সোজা তাকান');
+
+    try {
+      const baseline = await Promise.race([
+        calibrateBaseline({
+          videoEl: videoRef.current,
+          enhancer: enhancerRef.current,
+          brightnessSampler: brightnessSamplerRef.current,
+          detector: detectorRef.current,
+          onSample: ({ progress }) => {
+            if (!isStale()) setCalibrationProgress(progress);
+          },
+          isCancelled: isStale,
+        }),
+        new Promise((_, reject) => setTimeout(() => {
+          const e = new Error('ক্যালিব্রেশন সময়সীমা শেষ');
+          e.reason = 'timeout';
+          reject(e);
+        }, CALIBRATION_HARD_TIMEOUT_MS)),
+      ]);
+
+      // Camera was stopped/restarted while we were waiting — this
+      // result is stale, ignore it entirely (don't touch state, don't
+      // start the gesture loop on a dead video stream).
+      if (isStale()) return;
+
+      baselineRef.current = baseline;
+      setLowLightWarning(baseline.brightness < 55);
+      setCalibrating(false);
+      calibrationAttemptsRef.current = 0;
+
+      if (!isLivenessRunningRef.current) {
+        runLivenessLoop(baseline, myGeneration);
       }
-    }, 2200);
-  }, [livenessComplete, capturePhoto, showToast]);
+    } catch (err) {
+      if (isStale()) return; // stopped in the meantime — don't show a stale retry/error
+
+      console.error('Calibration failed:', err);
+      setCalibrating(false);
+      calibrationAttemptsRef.current += 1;
+
+      const msg = err.reason === 'low-light'
+        ? '💡 আলো কম মনে হচ্ছে, আলোর দিকে মুখ করে আবার চেষ্টা করা হচ্ছে...'
+        : err.reason === 'timeout'
+          ? '⏱️ একটু সময় বেশি লাগছে, আবার চেষ্টা করা হচ্ছে...'
+          : '🙂 মুখ ঠিকমতো শনাক্ত হয়নি, আবার চেষ্টা করা হচ্ছে...';
+      setLivenessMessage(msg);
+
+      if (calibrationAttemptsRef.current < MAX_CALIBRATION_ATTEMPTS) {
+        livenessStartTimeoutRef.current = setTimeout(() => {
+          if (!isStale()) startLivenessFlow();
+        }, 1800);
+      } else {
+        setCalibrationFailed(true);
+        showToast(
+          err.reason === 'low-light'
+            ? '💡 আলো খুব কম — আলোর কাছে গিয়ে আবার চেষ্টা করুন'
+            : '🙂 মুখ শনাক্ত করা যাচ্ছে না — ক্যামেরার সামনে সোজা তাকান',
+          'warning'
+        );
+      }
+    }
+  }, [modelsLoaded, livenessComplete, showToast, runLivenessLoop]);
+
+  const retryCalibration = useCallback(() => {
+    calibrationAttemptsRef.current = 0;
+    setCalibrationFailed(false);
+    startLivenessFlow();
+  }, [startLivenessFlow]);
 
   const startCamera = async () => {
+    if (!modelsLoaded) {
+      if (!modelsLoading) loadModels();
+      showToast('⏳ ফেস মডেল লোড হচ্ছে, একটু পরে আবার চেষ্টা করুন...', 'info');
+      return;
+    }
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }
-      });
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }
+        });
+      } catch (innerErr) {
+        console.warn('facingMode "user" ব্যর্থ, সাধারণ ভিডিও দিয়ে চেষ্টা করা হচ্ছে:', innerErr);
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      }
+
       setCamStream(stream);
       camStreamRef.current = stream;
       setCameraActive(true);
@@ -662,7 +867,8 @@ export const useRegisterFlow = () => {
         await videoRef.current.play().catch(() => {});
       }
       resetLiveness();
-      setLivenessMessage('👤 নির্দেশনা অনুসরণ করুন...');
+      calibrationAttemptsRef.current = 0;
+      setLivenessMessage('👤 ক্যামেরার সামনে সোজা তাকান...');
       showToast('📷 ক্যামেরা চালু হয়েছে', 'success');
 
       if (livenessStartTimeoutRef.current) {
@@ -670,7 +876,7 @@ export const useRegisterFlow = () => {
       }
       livenessStartTimeoutRef.current = setTimeout(() => {
         startLivenessFlow();
-      }, 1000);
+      }, 900);
 
     } catch (e) {
       const msg = e.name === 'NotAllowedError' ? '⚠️ ক্যামেরা অনুমতি দিন।' :
@@ -683,8 +889,9 @@ export const useRegisterFlow = () => {
 
   const skipFace = useCallback(() => {
     setVerifySkipped(prev => ({ ...prev, face: true }));
+    calibrationGenerationRef.current++;
     if (livenessTimerRef.current) {
-      clearInterval(livenessTimerRef.current);
+      clearTimeout(livenessTimerRef.current);
       livenessTimerRef.current = null;
     }
     if (livenessStartTimeoutRef.current) {
@@ -725,14 +932,6 @@ export const useRegisterFlow = () => {
     }
   };
 
-  // ✅ Document Upload - Partial Failure Handling
-  // 🔧 FIX #1: each upload now goes to the correct Cloudinary folder
-  // (via getDocumentFolder) instead of a single hardcoded 'documents'
-  // folder for everything. This was the root cause of PDF birth
-  // certificates always failing upload: uploadToCloudinary() decides
-  // which file types/sizes are allowed based on the folder name, and
-  // 'documents' never matched 'nid_documents' / 'birth_documents', so
-  // it always validated against image-only rules (no PDF allowed).
   const uploadDocuments = useCallback(async (userId) => {
     console.log("📤 [START] Uploading documents. State files:", selectedFiles);
 
@@ -745,7 +944,6 @@ export const useRegisterFlow = () => {
       return [];
     }
 
-    // ✅ সব required file আছে কিনা চেক করুন
     for (const type of requiredTypes) {
       if (!selectedFiles[type]) {
         throw new Error(`${type} ফাইল পাওয়া যায়নি।`);
@@ -755,7 +953,7 @@ export const useRegisterFlow = () => {
     const uploadTasks = requiredTypes.map(type => ({
       file: selectedFiles[type],
       type: type,
-      folder: getDocumentFolder(type), // 🔧 FIX #1
+      folder: getDocumentFolder(type),
     }));
 
     const uploadResults = [];
@@ -771,7 +969,6 @@ export const useRegisterFlow = () => {
         });
         console.log(`✅ ${task.type} uploaded successfully`);
       } catch (error) {
-        // ✅ কোনো একটি fail হলে পুরো প্রক্রিয়া বন্ধ করুন
         throw new Error(`${task.type} আপলোড করতে ব্যর্থ হয়েছে: ${error.message}`);
       }
     }
@@ -820,15 +1017,10 @@ export const useRegisterFlow = () => {
 
   // ════════════════════════════════════════════════════════════════════════════
   // ✅ ফাইনাল রেজিস্ট্রেশন
-  // 🔧 FIX #2: rolls back (deletes) the just-created Firebase Auth
-  // account if ANY step after account creation fails, so the email
-  // stays free to retry instead of leaving an orphaned, profile-less
-  // account behind.
   // ════════════════════════════════════════════════════════════════════════════
   const handleFinalRegistration = async () => {
     if (loading) return;
 
-    // ✅ টোকেন ভেরিফিকেশন
     if (!phoneVerified || !verificationToken) {
       toast.error('❌ দয়া করে ফোন নম্বর OTP দিয়ে যাচাই করুন।');
       goToStep(2);
@@ -837,13 +1029,13 @@ export const useRegisterFlow = () => {
 
     setLoading(true);
 
-    let createdUser = null; // 🔧 FIX #2: tracked for rollback
+    let createdUser = null;
 
     try {
       const { firstName, lastName, email, password, dob, phone, countryCode, role } = formData;
       const credential = await createUserWithEmailAndPassword(auth, email, password);
       const user = credential.user;
-      createdUser = user; // 🔧 FIX #2
+      createdUser = user;
       const fullName = `${firstName} ${lastName}`.trim();
 
       const hasNidFront = !!selectedFiles.nidFront;
@@ -868,7 +1060,6 @@ export const useRegisterFlow = () => {
       const userWalletId = await generateWalletId();
       const referralCode = generateReferralCode();
 
-      // ✅ ব্যবহারকারী ডকুমেন্ট তৈরি
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         email,
@@ -887,7 +1078,7 @@ export const useRegisterFlow = () => {
         phone: phone || '',
         countryCode: countryCode || '+880',
         dob: dob || '',
-        phoneVerified: true, // ✅ ব্যাকএন্ড ভেরিফাইড
+        phoneVerified: true,
         phoneVerifiedToken: verificationToken,
 
         photoURL: facePhotoUrl || null,
@@ -943,10 +1134,6 @@ export const useRegisterFlow = () => {
     } catch (err) {
       console.error('Registration error:', err);
 
-      // 🔧 FIX #2: if the Auth account was created but something
-      // afterward failed (Firestore write, wallet, document upload),
-      // delete the orphaned Auth account so the email/phone can be
-      // used to try again instead of being permanently stuck.
       if (createdUser) {
         try {
           await createdUser.delete();
@@ -954,9 +1141,6 @@ export const useRegisterFlow = () => {
           toast.error('❌ রেজিস্ট্রেশন সম্পূর্ণ করা যায়নি। আবার চেষ্টা করুন।');
         } catch (rollbackErr) {
           console.error('❌ Rollback (account delete) failed:', rollbackErr);
-          // Account genuinely could not be cleaned up automatically —
-          // this is the one case where a generic message isn't enough,
-          // since the person may be stuck on this email going forward.
           toast.error('❌ রেজিস্ট্রেশন সম্পূর্ণ করা যায়নি। সমস্যা থাকলে সাপোর্টে যোগাযোগ করুন।');
         }
       } else {
@@ -976,12 +1160,6 @@ export const useRegisterFlow = () => {
 
   // ════════════════════════════════════════════════════════════════════════════
   // ✅ গুগল সাইন-আপ
-  // ⚠️ NOTE: this function exists but Register.jsx never renders a
-  // button for it, and step 3's verify-options list only offers
-  // 'nid'/'birth' — selectedVerify can never actually be 'google'
-  // through the UI as it stands today. Left as-is since wiring it up
-  // (or removing it) is a product decision, not a bug fix — flagging
-  // it here so it doesn't get "silently fixed" one way or the other.
   // ════════════════════════════════════════════════════════════════════════════
   const handleGoogleSignUp = async () => {
     setLoading(true);
@@ -1144,6 +1322,18 @@ export const useRegisterFlow = () => {
     doneCount,
     docUploaded,
     anyVerify,
+
+    calibrating,
+    calibrationProgress,
+    calibrationFailed,
+    currentStepProgress,
+    lowLightWarning,
+    noFaceWarning,
+    retryCalibration,
+
+    modelsLoaded,
+    modelsLoading,
+    modelError,
 
     videoRef,
     canvasRef,

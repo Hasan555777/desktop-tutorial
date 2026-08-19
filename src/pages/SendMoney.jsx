@@ -103,11 +103,15 @@ const SendMoney = () => {
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState('');
+  
+  // ✅ FIX: Available Balance tracking
   const [balance, setBalance] = useState(0);
+  const [lockedBalance, setLockedBalance] = useState(0);
+  const [availableBalance, setAvailableBalance] = useState(0);
   const [walletLoading, setWalletLoading] = useState(true);
 
   // ============================================================
-  // ✅ Load Balance
+  // ✅ Load Balance - FIXED: Now uses available balance
   // ============================================================
   useEffect(() => {
     if (!user) {
@@ -121,7 +125,16 @@ const SendMoney = () => {
         const walletSnap = await getDoc(walletRef);
         
         if (walletSnap.exists()) {
-          setBalance(walletSnap.data().balance || 0);
+          const data = walletSnap.data();
+          const rawBalance = data.balance || 0;
+          const locked = data.lockedBalance || 0;
+          const available = rawBalance - locked;
+          
+          setBalance(rawBalance);
+          setLockedBalance(locked);
+          setAvailableBalance(available);
+          
+          console.log(`💰 Balance: ${rawBalance}, Locked: ${locked}, Available: ${available}`);
         }
       } catch (error) {
         console.error("Error loading balance:", error);
@@ -245,7 +258,7 @@ const SendMoney = () => {
   };
 
   // ============================================================
-  // ✅ Send Money (Production Ready)
+  // ✅ Send Money (Production Ready - FIXED Available Balance)
   // ============================================================
   const handleSend = async () => {
     // Validation
@@ -274,8 +287,11 @@ const SendMoney = () => {
       return;
     }
 
-    if (Number(amount) > balance) {
-      setError(`Insufficient balance! Available: ৳${balance.toFixed(2)}`);
+    // ✅ FIX: Check available balance (balance - lockedBalance)
+    if (Number(amount) > availableBalance) {
+      setError(`Insufficient available balance! 
+Available: ৳${availableBalance.toFixed(2)} 
+(Total: ৳${balance.toFixed(2)}, Locked in deals: ৳${lockedBalance.toFixed(2)})`);
       return;
     }
 
@@ -313,9 +329,13 @@ const SendMoney = () => {
           throw new Error('Sender wallet not found!');
         }
 
-        const senderBalance = senderDoc.data().balance || 0;
-        if (senderBalance < amountNum) {
-          throw new Error('Insufficient balance!');
+        const senderData = senderDoc.data();
+        const senderBalance = senderData.balance || 0;
+        const senderLocked = senderData.lockedBalance || 0;
+        const senderAvailable = senderBalance - senderLocked;
+        
+        if (senderAvailable < amountNum) {
+          throw new Error(`Insufficient available balance! Available: ৳${senderAvailable.toFixed(2)}`);
         }
 
         // ২. Receiver Wallet Check
@@ -408,12 +428,12 @@ const SendMoney = () => {
         setReceiverWalletId(generatedWalletId);
       }
 
-      // ✅ Transaction Success
+      // ✅ Transaction Success - Update local state
       setBalance(prev => prev - amountNum);
+      setAvailableBalance(prev => prev - amountNum);
 
       // ✅ ✅ Send Notifications (Separate try-catch)
       try {
-        // ✅ NEW: Use sendMoneyTransferNotification
         await sendMoneyTransferNotification({
           senderId: user.uid,
           senderName: senderName,
@@ -426,16 +446,15 @@ const SendMoney = () => {
         });
 
         console.log('✅ Notifications sent successfully');
-} catch (notifError) {
-  console.error('⚠️ Notification failed but transaction succeeded:', notifError);
-  // ✅ Show subtle notification
-  feedback.toast({
-    title: 'Money Sent ✅',
-    message: 'Transaction completed successfully',
-    variant: 'success',
-    duration: 3000
-  });
-}
+      } catch (notifError) {
+        console.error('⚠️ Notification failed but transaction succeeded:', notifError);
+        feedback.toast({
+          title: 'Money Sent ✅',
+          message: 'Transaction completed successfully',
+          variant: 'success',
+          duration: 3000
+        });
+      }
 
       // ✅ Success Feedback
       feedback.alert.success({ 
@@ -450,7 +469,7 @@ const SendMoney = () => {
       setReceiverWalletId('');
       setNote('');
       
-      // ✅ Navigate after a short delay (not waiting for notification)
+      // ✅ Navigate after a short delay
       setTimeout(() => navigate('/wallet'), 1500);
 
     } catch (error) {
@@ -486,44 +505,45 @@ const SendMoney = () => {
   // ============================================================
   // ✅ Loading State
   // ============================================================
-if (walletLoading) {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      padding: '60px 20px',
-      minHeight: '300px',
-      background: 'var(--bg-primary, #090d16)', 
-      color: 'var(--accent-primary, #14b8a6)' 
-    }}>
-      <div style={{ textAlign: 'center' }}>
-        <i className="fa-solid fa-wallet" style={{ 
-          fontSize: '48px', 
-          animation: 'spin 2s linear infinite',
-          display: 'block',
-          marginBottom: '16px',
-          color: 'var(--accent-primary, #14b8a6)'
-        }} />
-        <h2 style={{ 
-          color: 'var(--text-primary, #f1f5f9)', 
-          fontSize: '20px', 
-          fontWeight: '600',
-          margin: '0 0 8px 0'
-        }}>
-          Loading Wallet...
-        </h2>
-        <p style={{ 
-          color: 'var(--text-muted, #64748b)', 
-          marginTop: '8px', 
-          fontSize: '14px' 
-        }}>
-          <i className="fa-solid fa-spinner fa-spin"></i> Preparing your wallet information...
-        </p>
+  if (walletLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        padding: '60px 20px',
+        minHeight: '300px',
+        background: 'var(--bg-primary, #090d16)', 
+        color: 'var(--accent-primary, #14b8a6)' 
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <i className="fa-solid fa-wallet" style={{ 
+            fontSize: '48px', 
+            animation: 'spin 2s linear infinite',
+            display: 'block',
+            marginBottom: '16px',
+            color: 'var(--accent-primary, #14b8a6)'
+          }} />
+          <h2 style={{ 
+            color: 'var(--text-primary, #f1f5f9)', 
+            fontSize: '20px', 
+            fontWeight: '600',
+            margin: '0 0 8px 0'
+          }}>
+            Loading Wallet...
+          </h2>
+          <p style={{ 
+            color: 'var(--text-muted, #64748b)', 
+            marginTop: '8px', 
+            fontSize: '14px' 
+          }}>
+            <i className="fa-solid fa-spinner fa-spin"></i> Preparing your wallet information...
+          </p>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+
   // ============================================================
   // ✅ Render
   // ============================================================
@@ -544,10 +564,27 @@ if (walletLoading) {
           </h2>
         </div>
 
-        {/* Balance Display */}
+        {/* ✅ FIX: Balance Display - Now shows Available Balance */}
         <div className="balance-display">
           <span className="balance-label">Available Balance</span>
-          <span className="balance-amount">{formatMoney(balance)}</span>
+          <span className="balance-amount">{formatMoney(availableBalance)}</span>
+          {lockedBalance > 0 && (
+            <div className="locked-hint" style={{ 
+              fontSize: '12px', 
+              color: '#f59e0b',
+              marginTop: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              justifyContent: 'center'
+            }}>
+              <i className="fa-solid fa-lock"></i> 
+              {formatMoney(lockedBalance)} locked in active deals
+              <span style={{ fontSize: '10px', color: '#94a3b8', marginLeft: '4px' }}>
+                (Total: {formatMoney(balance)})
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Error */}
@@ -603,24 +640,24 @@ if (walletLoading) {
               onChange={(e) => setAmount(e.target.value)}
               placeholder="Enter amount"
               min={MINIMUM_AMOUNT}
-              max={Math.min(balance, MAX_AMOUNT)}
+              max={Math.min(availableBalance, MAX_AMOUNT)}
               disabled={loading || !receiverName}
             />
           </div>
           <div className="amount-hint">
             <span>Min: ৳{MINIMUM_AMOUNT}</span>
-            <span>Max: {formatMoney(Math.min(balance, MAX_AMOUNT))}</span>
+            <span>Max: {formatMoney(Math.min(availableBalance, MAX_AMOUNT))}</span>
           </div>
         </div>
 
-        {/* Preset Amounts */}
+        {/* ✅ FIX: Preset Amounts - Now uses availableBalance */}
         <div className="preset-amounts">
           {[100, 500, 1000, 2000].map((preset) => (
             <button
               key={preset}
               className={`preset-btn ${Number(amount) === preset ? 'active' : ''}`}
               onClick={() => setAmount(String(preset))}
-              disabled={loading || !receiverName || preset > balance}
+              disabled={loading || !receiverName || preset > availableBalance}
             >
               ৳{preset}
             </button>
@@ -659,11 +696,17 @@ if (walletLoading) {
           </div>
         )}
 
-        {/* Send Button */}
+        {/* ✅ FIX: Send Button - Now uses availableBalance */}
         <button 
           className="send-btn" 
           onClick={handleSend}
-          disabled={loading || !receiverName || !amount || Number(amount) > balance || Number(amount) < MINIMUM_AMOUNT}
+          disabled={
+            loading || 
+            !receiverName || 
+            !amount || 
+            Number(amount) > availableBalance || 
+            Number(amount) < MINIMUM_AMOUNT
+          }
         >
           {loading ? (
             <>

@@ -30,6 +30,7 @@ import {
   BACKGROUND_SWEEP_INTERVAL_MS,
   OFFER_EXPIRY_MS,
   SUBMIT_DEADLINE_AFTER_FUND_MS,
+  formatDeadlineDisplay,
 } from '@/constants/dealManager.constants';
 import {
   activateDealWithEscrowLock,
@@ -322,7 +323,7 @@ export const useDealActions = ({
 
     const confirmed = await feedback.confirm({
       title: '📅 ডেডলাইন বাড়ানোর অনুরোধ',
-      message: `আপনি কি ডেডলাইন বাড়ানোর জন্য ${otherParty}-এর কাছে অনুরোধ করতে চান?\n\nবর্তমান ডেডলাইন: ${selectedDeal.deadline} দিন\nবাকি Extension সুযোগ: ${remaining}/${MAX_EXTENSIONS}`,
+      message: `আপনি কি ডেডলাইন বাড়ানোর জন্য ${otherParty}-এর কাছে অনুরোধ করতে চান?\n\nবর্তমান ডেডলাইন: ${formatDeadlineDisplay(selectedDeal.deadline)}বাকি Extension সুযোগ: ${remaining}/${MAX_EXTENSIONS}`,
       confirmText: 'হ্যাঁ, অনুরোধ করুন',
       cancelText: 'না',
       variant: 'info',
@@ -330,11 +331,11 @@ export const useDealActions = ({
     if (!confirmed) return;
 
     const extraDays = await feedback.prompt({
-      title: '📅 কত দিন বাড়াতে চান?',
-      message: `বর্তমান ডেডলাইন: ${selectedDeal.deadline} দিন\n\nকত দিন বাড়াতে চান? (১-৩০ দিন)`,
-      placeholder: 'দিনের সংখ্যা লিখুন...',
+      title: '📅 কত মিনিট/দিন বাড়াতে চান?', 
+      message: `বর্তমান ডেডলাইন: ${formatDeadlineDisplay(selectedDeal.deadline)} টাইম \n\nকত মিনিত/দিন বাড়াতে চান? (১-৩০ দিন/মিনিট )`,
+      placeholder: 'মিনিটের/দিনের সংখ্যা লিখুন...',   
       confirmText: 'অনুরোধ পাঠান',
-      cancelText: 'বাতিল',
+      cancelText: 'বাতিল', 
       inputType: 'number',
       defaultValue: '1',
     });
@@ -344,7 +345,7 @@ export const useDealActions = ({
     }
     const days = Number(extraDays);
     if (!extraDays || isNaN(days) || days <= 0 || days > 30) {
-      feedback.alert.warning({ message: 'দয়া করে ১-৩০ দিনের মধ্যে একটি সংখ্যা দিন!' });
+      feedback.alert.warning({ message: 'দয়া করে ১-৩০ মিনিতের/দিনের  মধ্যে একটি সংখ্যা দিন!' });
       return;
     }
 
@@ -700,11 +701,11 @@ export const useDealActions = ({
     if (response === 'approve') {
       const confirmed = await feedback.confirm({
         title: '✅ ডেডলাইন বাড়ানোর অনুমোদন',
-        message: `আপনি কি ডেডলাইন ${extraDays} দিন বাড়ানোর অনুমোদন দিতে চান?\n\n📌 নতুন ডেডলাইন: ${newDeadline} দিন`,
+        message: `আপনি কি ডেডলাইন ${extraDays} মিনিট/দিন বাড়ানোর অনুমোদন দিতে চান?\n\n📌 📌 নতুন ডেডলাইন: ${formatDeadlineDisplay(newDeadline)}`,
         confirmText: 'হ্যাঁ, অনুমোদন করুন',
         cancelText: 'না',
         variant: 'success',
-      });
+      }); 
       if (!confirmed) return;
 
       try {
@@ -760,20 +761,20 @@ export const useDealActions = ({
 
         await sendDealChatMessage(
           selectedDeal.chatId,
-          `✅ **Deadline Extended!**\n\n${currentUser?.displayName || 'Someone'} has approved the extension request.\n\n📅 New Deadline: **${newDeadline} days**\n📈 Extended by: ${extraDays} days\n🔢 Extensions used: ${newExtensionCount}/${MAX_EXTENSIONS}`
+          `✅ **Deadline Extended!**\n\n${currentUser?.displayName || 'Someone'} has approved the extension request.\n\n📅 New Deadline: **${formatDeadlineDisplay(newDeadline)}**\n📈 Extended by: ${formatDeadlineDisplay(extraDays)} মিনিট/দিন \n🔢 Extensions used: ${newExtensionCount}/${MAX_EXTENSIONS}`
         );
-
-        feedback.alert.success({ message: `✅ ডেডলাইন ${extraDays} দিন বাড়ানো হয়েছে! নতুন ডেডলাইন: ${newDeadline} দিন` });
+ 
+        feedback.alert.success({ message: `✅ ডেডলাইন ${extraDays} মিনিত/দিন  বাড়ানো হয়েছে! নতুন ডেডলাইন: ${newDeadline} মিনিট/দিন ` });
       } catch (error) {
-        console.error('Error approving extension:', error);
-        feedback.alert.error({ message: 'অনুমোদন দিতে ব্যর্থ হয়েছে।' });
+        console.error('Error approving extension:', error); 
+        feedback.alert.error({ message: 'অনুমোদন দিতে ব্যর্থ হয়েছে।' }); 
       }
     }
 
     if (response === 'reject') {
-      const confirmed = await feedback.confirm({
+      const confirmed = await feedback.confirm({ 
         title: '❌ ডেডলাইন বাড়ানোর প্রত্যাখ্যান',
-        message: `আপনি কি ডেডলাইন ${extraDays} দিন বাড়ানোর অনুরোধটি প্রত্যাখ্যান করতে চান?`,
+        message: `আপনি কি ডেডলাইন ${extraDays} মিনিট/দিন বাড়ানোর অনুরোধটি প্রত্যাখ্যান করতে চান?`,
         confirmText: 'হ্যাঁ, প্রত্যাখ্যান করুন',
         cancelText: 'না',
         variant: 'warning',
@@ -808,12 +809,12 @@ export const useDealActions = ({
               rejectedBy: currentUser?.displayName || 'Someone',
               isRejected: true,
             },
-          });
+          }); 
         }
 
         await sendDealChatMessage(
           selectedDeal.chatId,
-          `❌ **Deadline Extension Rejected**\n\n${currentUser?.displayName || 'Someone'} has rejected the extension request.\n\n📌 Current Deadline remains: ${selectedDeal.deadline} days`
+          `❌ **Deadline Extension Rejected**\n\n${currentUser?.displayName || 'Someone'} has rejected the extension request.\n\n📌 Current Deadline remains: ${formatDeadlineDisplay(selectedDeal.deadline)} মিনিত/দিন `
         );
 
         feedback.alert.success({ message: '❌ ডেডলাইন বাড়ানোর অনুরোধটি প্রত্যাখ্যান করা হয়েছে।' });

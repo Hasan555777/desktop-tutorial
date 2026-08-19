@@ -1,11 +1,11 @@
-// src/pages/Register.jsx
+// src/pages/Register/Register.jsx
 import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import './Register.css';
 import { useRegisterFlow } from './hooks/useRegisterFlow';
 
 const Register = ({ onSwitchToLogin }) => {
-  const {
+const {
     currentStep,
     loading,
     uploadingDocs,
@@ -28,6 +28,20 @@ const Register = ({ onSwitchToLogin }) => {
     doneCount,
     docUploaded,
     anyVerify,
+
+    // ✅ NEW
+    isLivenessRunning,
+    calibrating,
+    calibrationProgress,
+    calibrationFailed,
+    currentStepProgress,
+    lowLightWarning,
+    noFaceWarning,
+    retryCalibration,
+
+    modelsLoaded,
+    modelsLoading,
+    modelError,
 
     videoRef,
     canvasRef,
@@ -247,7 +261,6 @@ const Register = ({ onSwitchToLogin }) => {
                 <div className="field-error" id="phoneErr">সঠিক নম্বর দিন (যেমন: 01712345678)</div>
               </div>
 
-              {/* ✅ OTP ভেরিফিকেশন স্ট্যাটাস */}
               {otpVerifying && (
                 <div className="info-box info">
                   <span className="info-icon">🔐</span>
@@ -298,9 +311,9 @@ const Register = ({ onSwitchToLogin }) => {
                   </div>
                   <div className="resend-row">
                     কোড পাননি?{' '}
-                    <button 
-                      className="resend-btn" 
-                      onClick={resendOTP} 
+                    <button
+                      className="resend-btn"
+                      onClick={resendOTP}
                       disabled={otpTimer > 0 || phoneVerified}
                     >
                       পুনরায় পাঠান {otpTimer > 0 && <span>({otpTimer}s)</span>}
@@ -533,26 +546,84 @@ const Register = ({ onSwitchToLogin }) => {
             </div>
 
             {/* ── স্টেপ ৫ ── */}
+{/* ── স্টেপ ৫ (নতুন সিস্টেম) ── */}
             <div className={`step-panel ${currentStep === 5 ? 'active' : ''}`} id="step5">
               <div className="step-title">📸 মুখমণ্ডল যাচাই</div>
-              <div className="step-subtitle">নিচের নির্দেশনা অনুসরণ করুন।</div>
-
-              <div className="liveness-instructions">
-                {livenessState.map((step, idx) => (
-                  <div
-                    key={step.id}
-                    className={`instruction-step ${step.done ? 'done' : idx === currentLivIdx && cameraActive ? 'active' : ''}`}
-                  >
-                    <div className="inst-icon">{step.emoji || '📌'}</div>
-                    <div className="inst-text">{step.label}</div>
-                    <div className="inst-status">
-                      {step.done ? '✅' : idx === currentLivIdx && cameraActive ? '⏳' : '⬜'}
-                    </div>
-                  </div>
-                ))}
+              <div className="step-subtitle">
+                ক্যামেরা চালু করুন — নিচের অ্যাভাটার যা করবে, আপনিও ঠিক সেটাই করুন।
               </div>
 
-              <div className={`camera-box ${cameraActive ? 'camera-active' : ''}`} style={{ position: 'relative' }}>
+              {modelsLoading && !modelsLoaded && (
+                <div className="info-box info">
+                  <span className="info-icon">⏳</span>
+                  <span>ফেস যাচাই মডেল লোড হচ্ছে, একটু অপেক্ষা করুন...</span>
+                </div>
+              )}
+              {modelError && (
+                <div className="info-box warn">
+                  <span className="info-icon">⚠️</span>
+                  <span>{modelError}</span>
+                </div>
+              )}
+
+              {/* ── অ্যাভাটার গাইড ── */}
+              <div
+                className={
+                  `liveness-avatar-wrap ` +
+                  (calibrating ? 'ls-calibrating' :
+                   livenessComplete ? 'ls-done' :
+                   livenessState[currentLivIdx]?.key ? `ls-${livenessState[currentLivIdx].key}` : 'ls-idle')
+                }
+              >
+                <svg viewBox="0 0 160 160" className="avatar-svg" aria-hidden="true">
+                  <circle className="avatar-face" cx="80" cy="80" r="60" />
+                  <g className="avatar-turn-group">
+                    <ellipse className="avatar-eye avatar-eye-left" cx="58" cy="74" rx="8" ry="11" />
+                    <ellipse className="avatar-eye avatar-eye-right" cx="102" cy="74" rx="8" ry="11" />
+                    <path className={`avatar-mouth ${livenessComplete ? 'avatar-mouth-happy' : ''}`} d="M55 106 Q80 106 105 106" />
+                  </g>
+                </svg>
+                <div className="avatar-caption">
+                  {calibrating
+                    ? `📐 ক্যামেরা মাপা হচ্ছে... ${calibrationProgress}%`
+                    : livenessComplete
+                      ? '🎉 সব ঠিক আছে!'
+                      : livenessMessage}
+                </div>
+              </div>
+
+              {/* ── সতর্কবার্তা ── */}
+              {lowLightWarning && !calibrating && (
+                <div className="info-box warn liveness-hint">
+                  <span className="info-icon">💡</span>
+                  <span>আলো একটু কম মনে হচ্ছে — যতটা সম্ভব আলোর দিকে মুখ করুন</span>
+                </div>
+              )}
+              {noFaceWarning && !calibrating && (
+                <div className="info-box warn liveness-hint">
+                  <span className="info-icon">🙂</span>
+                  <span>মুখ শনাক্ত হচ্ছে না — ক্যামেরার আরেকটু কাছে আসুন</span>
+                </div>
+              )}
+
+              {/* ── ৪-ধাপের ডট + প্রতি-ধাপ % ── */}
+              <div className="step-dots-new">
+                {livenessState.map((step, idx) => {
+                  const isActive = idx === currentLivIdx && !livenessComplete;
+                  const pct = step.done ? 100 : isActive ? currentStepProgress : 0;
+                  return (
+                    <div key={step.id} className={`step-dot-new ${step.done ? 'done' : isActive ? 'active' : ''}`}>
+                      <div className="step-ring" style={{ '--p': pct }}>
+                        <span>{step.done ? '✓' : `${pct}%`}</span>
+                      </div>
+                      <div className="step-dot-label">{step.emoji} {step.label}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* ── ক্যামেরা বক্স + স্ক্যান অ্যানিমেশন ── */}
+              <div className={`camera-box ${cameraActive ? 'camera-active' : ''} ${isLivenessRunning ? 'scanning' : ''}`} style={{ position: 'relative' }}>
                 <video
                   ref={videoRef}
                   autoPlay
@@ -567,31 +638,25 @@ const Register = ({ onSwitchToLogin }) => {
                     <div>ক্যামেরা চালু করুন</div>
                   </div>
                 )}
-                {cameraActive && !livenessComplete && (
-                  <div style={{
-                    position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)',
-                    background: 'rgba(0,0,0,0.8)', color: '#fff',
-                    padding: '8px 18px', borderRadius: '20px', fontSize: '0.9rem',
-                    fontWeight: 600, whiteSpace: 'nowrap', maxWidth: '90%', textAlign: 'center'
-                  }}>
-                    {livenessMessage}
-                  </div>
+
+                {cameraActive && (
+                  <>
+                    <div className="face-guide-oval" />
+                    <div className="scan-overlay">
+                      <div className="scan-line" />
+                    </div>
+                  </>
                 )}
+
                 {livenessComplete && (
-                  <div style={{
-                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    background: 'rgba(0,0,0,0.8)', color: '#4ade80',
-                    padding: '20px 30px', borderRadius: '12px', fontSize: '1.2rem',
-                    fontWeight: 700, textAlign: 'center'
-                  }}>
-                    🎉 সব সম্পন্ন!
-                  </div>
+                  <div className="liveness-done-overlay">🎉 সব সম্পন্ন!</div>
                 )}
               </div>
 
+              {/* ── সামগ্রিক প্রগ্রেস ── */}
               <div className="liveness-progress">
                 <div className="progress-text">
-                  {doneCount}/{livenessState.length} সম্পন্ন
+                  {doneCount}/{livenessState.length} সম্পন্ন · {Math.round(livenessProgress)}%
                 </div>
                 <div className="progress-bar-small">
                   <div
@@ -601,11 +666,6 @@ const Register = ({ onSwitchToLogin }) => {
                 </div>
               </div>
 
-              {faceStatusMsg === 'complete' && (
-                <div className="liveness-complete">
-                  <h4>✅ সব ধাপ সম্পন্ন! ছবি তোলা হচ্ছে...</h4>
-                </div>
-              )}
               {faceStatusMsg === 'captured' && (
                 <div className="info-box success">
                   <span className="info-icon">✅</span>
@@ -613,10 +673,29 @@ const Register = ({ onSwitchToLogin }) => {
                 </div>
               )}
 
+              {/* ── ক্যালিব্রেশন বারবার ব্যর্থ হলে ম্যানুয়াল রিট্রাই ── */}
+              {calibrationFailed && (
+                <div className="info-box warn">
+                  <span className="info-icon">⚠️</span>
+                  <div>
+                    বারবার মুখ শনাক্ত করা যাচ্ছে না। আলো ঠিক করুন বা ক্যামেরার অবস্থান বদলে আবার চেষ্টা করুন।
+                    <div style={{ marginTop: '.5rem' }}>
+                      <button className="btn btn-ghost" onClick={retryCalibration}>🔄 আবার চেষ্টা করুন</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="btn-row">
                 {!cameraActive && !faceVerified && (
-                  <button className="btn btn-ghost" onClick={startCamera}>
-                    📷 ক্যামেরা চালু
+                  <button className="btn btn-ghost" onClick={startCamera} disabled={modelsLoading && !modelsLoaded}>
+                    {modelsLoading && !modelsLoaded ? (
+                      <>
+                        <i className="fa-solid fa-spinner fa-spin"></i> মডেল লোড হচ্ছে...
+                      </>
+                    ) : (
+                      '📷 ক্যামেরা চালু'
+                    )}
                   </button>
                 )}
                 {cameraActive && !livenessComplete && !faceVerified && (
@@ -636,9 +715,9 @@ const Register = ({ onSwitchToLogin }) => {
                 <span className="info-icon">ℹ️</span>
                 <div>
                   <strong>লাইভনেস চেক কীভাবে কাজ করে?</strong><br />
-                  ১. ক্যামেরা চালু করুন।<br />
-                  ২. প্রতি ২.২ সেকেন্ডে একটি নির্দেশনা দেখাবে। <br />
-                  ৩. নির্দেশনা অনুসরণ করুন।<br />
+                  ১. ক্যামেরা চালু করলে প্রথমে আপনার মুখ ~১-২ সেকেন্ড মাপা হয় (ক্যালিব্রেশন)।<br />
+                  ২. এরপর অ্যাভাটার যা দেখাবে (পলক, মুখ খোলা-বন্ধ, মাথা ঘোরানো), সেটাই বাস্তবে করুন — সরাসরি মাপা হয়।<br />
+                  ৩. রাতে বা কম আলোতেও কাজ করে — শুধু চেষ্টা করুন মুখটা যতটা সম্ভব আলোর দিকে রাখতে।
                 </div>
               </div>
 
@@ -683,7 +762,6 @@ const Register = ({ onSwitchToLogin }) => {
                 </div>
               </div>
 
-              {/* ✅ ফোন ভেরিফাই না হলে নিবন্ধন বন্ধ */}
               {!phoneVerified && (
                 <div className="info-box warn" style={{ marginTop: '0.75rem' }}>
                   <span className="info-icon">⚠️</span>

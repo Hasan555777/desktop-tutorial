@@ -24,7 +24,7 @@ import { device } from '@/security/device';
 
 // ===== Context =====
 import { NavigationProvider } from '@/components/Navigation';
-
+import Welcome from './pages/Welcome/Welcome'; 
 // ===== UI System =====
 
 import './components/LockScreen.css';
@@ -39,6 +39,10 @@ import NotificationBanner from '@/components/NotificationBanner/NotificationBann
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
 import DevSoundTest from './pages/DevSoundTest';
 
+
+// imports-এ যোগ করুন:
+import { LoadingBarProvider } from '@/components/LoadingBar/LoadingBarContext';
+import TopLoadingBar from '@/components/LoadingBar/TopLoadingBar';
 
 // ===== Pages =====
 import Settings from './pages/Settings/index';
@@ -1104,6 +1108,8 @@ const AppContent = () => {
 
   return (
     <div className="main-app">
+
+      <TopLoadingBar />
       {/* Network Status */}
       {!feedbackRef.current?.network?.online && (
         <div style={{
@@ -1279,6 +1285,9 @@ const AppContent = () => {
           background: '#090d16' 
         }}>
           <Routes>
+            <Route path="/" element={<Welcome />} />
+
+            
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register setIsCreatingUser={setIsCreatingUser} />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
@@ -1296,6 +1305,7 @@ const AppContent = () => {
 
 function App() {
   return (
+    <LoadingBarProvider>
     <SoundProvider>
       <FeedbackProvider>
         <NavigationProvider>
@@ -1310,6 +1320,7 @@ function App() {
         </NavigationProvider>
       </FeedbackProvider>
     </SoundProvider>
+    </LoadingBarProvider>
   );
 }
 

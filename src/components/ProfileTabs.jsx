@@ -3,6 +3,48 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+
+const formatDeadlineDisplay = (deadline) => {
+  if (deadline === null || deadline === undefined) return '0';
+  
+  if (typeof deadline === 'number') {
+    if (deadline < 1440) {
+      if (deadline < 60) {
+        return `${deadline} মিনিট`;
+      }
+      const hours = Math.floor(deadline / 60);
+      const minutes = deadline % 60;
+      if (minutes === 0) {
+        return `${hours} ঘন্টা`;
+      }
+      return `${hours} ঘন্টা ${minutes} মিনিট`;
+    }
+    const days = Math.ceil(deadline / 1440);
+    const remainingMinutes = deadline % 1440;
+    if (remainingMinutes === 0) {
+      return `${days} দিন`;
+    }
+    const hours = Math.floor(remainingMinutes / 60);
+    const minutes = remainingMinutes % 60;
+    if (hours === 0) {
+      return `${days} দিন ${minutes} মিনিট`;
+    }
+    return `${days} দিন ${hours} ঘন্টা`;
+  }
+  
+  if (typeof deadline === 'string') return deadline;
+  if (typeof deadline === 'object') {
+    if (deadline.type === 'range') {
+      const min = deadline.min || 0;
+      const max = deadline.max || 0;
+      return `${min}-${max}`;
+    }
+    const days = deadline.days || 0;
+    return String(days);
+  }
+  return String(deadline);
+};
 // ============================================================
 // ✅ Loading Component (Reusable)
 // ============================================================
@@ -23,6 +65,8 @@ const LoadingContent = ({ message = 'Loading...' }) => (
     <p>{message}</p>
   </div>
 );
+
+
 
 // ============================================================
 // ✅ পোস্ট গ্রিড কম্পোনেন্ট
@@ -71,7 +115,8 @@ export const PostGrid = ({ posts, isLoading, emptyMessage, activeTab, currentMod
             <p className="post-description">{post.description?.substring(0, 100)}...</p>
             <div className="post-meta">
               <span><i className="fa-solid fa-wallet"></i> {post.budget || post.price} BDT</span>
-              <span><i className="fa-regular fa-clock"></i> {post.deadline || post.deliveryDays} Days</span>
+              <span><i className="fa-regular fa-clock"></i> {formatDeadlineDisplay(post.deadline || post.deliveryDays)}</span>
+
               <span><i className="fa-solid fa-tag"></i> {post.type === 'hire' ? 'Job' : 'Service'}</span>
             </div>
             {activeTab === 'posts' && (

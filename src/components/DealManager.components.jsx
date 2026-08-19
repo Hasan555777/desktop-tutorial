@@ -10,6 +10,52 @@ import { MAX_EXTENSIONS } from '@/constants/dealManager.constants';
 import { getMilestoneStatusBadge, getSubmitDeadlineText, getDealStatusBadge } from '@/utils/dealManager.utils';
 
 // ============================================================
+// ✅ formatDeadlineDisplay - ডেডলাইন ফরম্যাট (মিনিট/দিন)
+// ============================================================
+const formatDeadlineDisplay = (deadline) => {
+  if (deadline === null || deadline === undefined) return '0';
+  
+  if (typeof deadline === 'number') {
+    // ✅ ১ দিনের কম (মিনিটে)
+    if (deadline < 1440) {
+      if (deadline < 60) {
+        return `${deadline} মিনিট`;
+      }
+      const hours = Math.floor(deadline / 60);
+      const minutes = deadline % 60;
+      if (minutes === 0) {
+        return `${hours} ঘন্টা`;
+      }
+      return `${hours} ঘন্টা ${minutes} মিনিট`;
+    }
+    // ✅ ১ দিন বা তার বেশি
+    const days = Math.ceil(deadline / 1440);
+    const remainingMinutes = deadline % 1440;
+    if (remainingMinutes === 0) {
+      return `${days} দিন`;
+    }
+    const hours = Math.floor(remainingMinutes / 60);
+    const minutes = remainingMinutes % 60;
+    if (hours === 0) {
+      return `${days} দিন ${minutes} মিনিট`;
+    }
+    return `${days} দিন ${hours} ঘন্টা`;
+  }
+  
+  if (typeof deadline === 'string') return deadline;
+  if (typeof deadline === 'object') {
+    if (deadline.type === 'range') {
+      const min = deadline.min || 0;
+      const max = deadline.max || 0;
+      return `${min}-${max}`;
+    }
+    const days = deadline.days || 0;
+    return String(days);
+  }
+  return String(deadline);
+};
+
+// ============================================================
 // MilestoneRow — one milestone line + its buyer/seller actions
 // ============================================================
 export const MilestoneRow = ({
@@ -371,8 +417,8 @@ export const DealBanners = ({
                 : `${selectedDeal.extensionRequestedByName || 'Someone'} has requested to extend the deadline by ${selectedDeal.extensionRequestDays || 0} days.`}
             </p>
             <p className="extension-details">
-              <strong>Current Deadline:</strong> {selectedDeal.deadline} days &nbsp;|&nbsp;
-              <strong>New Deadline:</strong> {(selectedDeal.deadline || 0) + (selectedDeal.extensionRequestDays || 0)} days
+              <strong>Current Deadline:</strong> {formatDeadlineDisplay(selectedDeal.deadline)} &nbsp;|&nbsp;
+              <strong>New Deadline:</strong> {formatDeadlineDisplay((selectedDeal.deadline || 0) + (selectedDeal.extensionRequestDays || 0))}
             </p>
           </div>
           {selectedDeal.extensionRequestedBy !== currentUser?.uid && (
@@ -401,7 +447,7 @@ export const DealBanners = ({
             <p>
               Deadline has been extended by {selectedDeal.extensionRequestDays || 0} days.
               <br />
-              <strong>New Deadline:</strong> {selectedDeal.deadline} days
+              <strong>New Deadline:</strong> {formatDeadlineDisplay(selectedDeal.deadline)}
               <br />
               <strong>Extensions used:</strong> {selectedDeal.extensionCount || 0}/{MAX_EXTENSIONS}
             </p>
@@ -417,7 +463,7 @@ export const DealBanners = ({
             <p>
               The extension request was rejected by the other party.
               <br />
-              <strong>Current Deadline:</strong> {selectedDeal.deadline} days
+              <strong>Current Deadline:</strong> {formatDeadlineDisplay(selectedDeal.deadline)}
             </p>
             <button
               className="btn-dismiss"
@@ -521,6 +567,9 @@ export const DealHeader = ({ selectedDeal, currentMode, timeRemaining, navigate,
   </div>
 );
 
+// ============================================================
+// ✅ DealInfoCard - আপডেটেড (formatDeadlineDisplay ব্যবহার)
+// ============================================================
 export const DealInfoCard = ({ selectedDeal, currentMode, timeRemaining }) => (
   <div className="deal-info-card">
     <div className="deal-info-row">
@@ -547,12 +596,15 @@ export const DealInfoCard = ({ selectedDeal, currentMode, timeRemaining }) => (
       </span>
       <strong>{selectedDeal.budget?.toLocaleString()} BDT</strong>
     </div>
+    
+    {/* ✅ আপডেটেড: Deadline এখন formatDeadlineDisplay ব্যবহার করে */}
     <div className="deal-info-row">
       <span>
         <i className="fa-regular fa-calendar"></i> Deadline:
       </span>
-      <strong>{selectedDeal.deadline} Days</strong>
+      <strong>{formatDeadlineDisplay(selectedDeal.deadline)}</strong>
     </div>
+    
     {(selectedDeal.status === 'active' || selectedDeal.status === 'overdue') && (
       <div className="deal-info-row">
         <span>

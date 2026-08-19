@@ -112,7 +112,7 @@ const getDeadlineDisplay = (post) => {
 };
 
 // ============================================================
-// 🎯 Description Component with Expand/Collapse (FIXED)
+// 🎯 Description Component with Expand/Collapse
 // ============================================================
 const PostDescription = ({ description }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -166,24 +166,128 @@ const PostDescription = ({ description }) => {
 };
 
 // ============================================================
+// 🎯 Edit Modal Component (NEW)
+// ============================================================
+const EditPostModal = ({ post, onClose, onSave }) => {
+  const [formData, setFormData] = useState({
+    title: post?.title || '',
+    description: post?.description || '',
+    budget: post?.budget || '',
+    deadline: post?.deadline || '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = () => {
+    if (!formData.title.trim()) {
+      alert('দয়া করে টাইটেল লিখুন!');
+      return;
+    }
+    if (!formData.description.trim()) {
+      alert('দয়া করে বিবরণ লিখুন!');
+      return;
+    }
+    onSave(post.id, formData);
+    onClose();
+  };
+
+  return (
+    <div className="reject-modal-overlay" onClick={onClose}>
+      <div className="reject-modal edit-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="reject-modal-header">
+          <h3>
+            <i className="fa-solid fa-pen" style={{ color: '#3b82f6' }}></i>
+            Edit Post
+          </h3>
+          <button className="modal-close-btn" onClick={onClose}>
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="reject-modal-body">
+          <div className="edit-form-group">
+            <label>Title <span className="required">*</span></label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="পোস্টের টাইটেল লিখুন..."
+              className="edit-input"
+            />
+          </div>
+          <div className="edit-form-group">
+            <label>Description <span className="required">*</span></label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="পোস্টের বিবরণ লিখুন..."
+              rows="4"
+              className="edit-textarea"
+            />
+          </div>
+          <div className="edit-form-row">
+            <div className="edit-form-group">
+              <label>Budget (BDT)</label>
+              <input
+                type="number"
+                name="budget"
+                value={formData.budget}
+                onChange={handleChange}
+                placeholder="বাজেট লিখুন..."
+                className="edit-input"
+              />
+            </div>
+            <div className="edit-form-group">
+              <label>Deadline (Days)</label>
+              <input
+                type="number"
+                name="deadline"
+                value={formData.deadline}
+                onChange={handleChange}
+                placeholder="সময়সীমা লিখুন..."
+                className="edit-input"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="reject-modal-actions">
+          <button className="cancel-btn" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="edit-confirm-btn" onClick={handleSubmit}>
+            <i className="fa-solid fa-check"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================
 // 🎯 MAIN COMPONENT
 // ============================================================
-
 const PendingPosts = ({ 
   posts = [], 
   onApprove, 
   onReject, 
   onRefresh,
-  onOpenRejectModal,
+  onEdit, // ✅ নতুন prop (এডিট করার জন্য)
   formatDateFn = formatDate,
   formatMoneyFn = formatMoney
 }) => {
-  // ✅ State for Image Zoom
   const [zoomedImage, setZoomedImage] = useState(null);
   const [isZoomModalOpen, setIsZoomModalOpen] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
+  
+  // ✅ এডিট মোডাল স্টেট
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingPost, setEditingPost] = useState(null);
 
   // ============================================================
   // ✅ Image Zoom Handlers
@@ -224,6 +328,20 @@ const PendingPosts = ({
     setShowRejectModal(false);
     setSelectedPostId(null);
     setRejectReason('');
+  };
+
+  // ============================================================
+  // ✅ Edit Modal Handlers (NEW)
+  // ============================================================
+  const handleEditClick = (post) => {
+    setEditingPost(post);
+    setShowEditModal(true);
+  };
+
+  const handleEditSave = (postId, formData) => {
+    if (onEdit) {
+      onEdit(postId, formData);
+    }
   };
 
   // ============================================================
@@ -328,21 +446,18 @@ const PendingPosts = ({
                   </div>
                 )}
 
-                {/* ── Post Content with Full Description ── */}
+                {/* ── Post Content ── */}
                 <div className="post-content">
-                  {/* Full Title */}
                   <div className="post-title-full">
                     <span className="title-label">📌 Title</span>
                     <h2 className="post-title-text">{post.title || 'Untitled'}</h2>
                   </div>
 
-                  {/* ✅ Fixed Description with Expand/Collapse */}
                   <div className="post-descriptionn-full">
                     <span className="description-label">📝 Description</span>
                     <PostDescription description={post.description} />
                   </div>
                   
-                  {/* Post Details */}
                   <div className="post-details">
                     <div className="detail-item">
                       <span className="detail-label">
@@ -391,6 +506,14 @@ const PendingPosts = ({
 
                 {/* ── Actions ── */}
                 <div className="post-actions">
+                  {/* ✅ এডিট বাটন (NEW) */}
+                  <button 
+                    className="action-btn edit"
+                    onClick={() => handleEditClick(post)}
+                    title="এডিট করুন"
+                  >
+                    <i className="fa-solid fa-pen"></i> Edit
+                  </button>
                   <button 
                     className="action-btn approve"
                     onClick={() => onApprove(post.id)}
@@ -458,6 +581,18 @@ const PendingPosts = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* ✅ Edit Modal (NEW) */}
+      {showEditModal && editingPost && (
+        <EditPostModal
+          post={editingPost}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingPost(null);
+          }}
+          onSave={handleEditSave}
+        />
       )}
     </>
   );

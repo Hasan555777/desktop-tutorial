@@ -632,7 +632,7 @@ const SecurityTab = ({
       </div>
 
       {/* ── Two-Factor Authentication ── */}
-      <div className="security-section">
+      {/* <div className="security-section">
         <div className="section-header">
           <i className="fa-solid fa-shield-halved"></i>
           <h3>দুই-স্তরের যাচাইকরণ (2FA)</h3>
@@ -652,10 +652,10 @@ const SecurityTab = ({
             <span>2FA সক্রিয় আছে। আপনার অ্যাকাউন্ট অতিরিক্ত সুরক্ষিত।</span>
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* ── Biometric Lock ── */}
-      {isBiometricSupported && (
+      {/* {isBiometricSupported && (
         <div className="security-section">
           <div className="section-header">
             <i className={getBiometricIcon()}></i>
@@ -684,10 +684,10 @@ const SecurityTab = ({
             </div>
           )}
         </div>
-      )}
+      )} */}
 
       {/* ── App Lock (PIN) ── */}
-      <div className="security-section">
+      {/* <div className="security-section">
         <div className="section-header">
           <i className="fa-solid fa-lock"></i>
           <h3>📱 অ্যাপ লক (PIN)</h3>
@@ -781,10 +781,10 @@ const SecurityTab = ({
             </div>
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* ── Security Checkup ── */}
-      <div className="security-section">
+      {/* <div className="security-section">
         <div className="section-header">
           <i className="fa-solid fa-check-double"></i>
           <h3>নিরাপত্তা যাচাই</h3>
@@ -795,10 +795,10 @@ const SecurityTab = ({
           নিরাপত্তা যাচাই করুন
         </button>
         <p className="checkup-note">আপনার অ্যাকাউন্টের নিরাপত্তা পরিস্থিতি পরীক্ষা করুন</p>
-      </div>
+      </div> */}
 
       {/* ── Login History ── */}
-      <div className="security-section">
+      {/* <div className="security-section">
         <div className="section-header">
           <i className="fa-solid fa-clock-rotate-left"></i>
           <h3>লগইন ইতিহাস</h3>
@@ -843,10 +843,10 @@ const SecurityTab = ({
             ))}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* ── Recovery Codes Section ── */}
-      <div className="security-section">
+      {/* <div className="security-section">
         <div className="section-header">
           <i className="fa-solid fa-key"></i>
           <h3>🔑 Recovery Codes</h3>
@@ -870,9 +870,9 @@ const SecurityTab = ({
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      {/* ── Security Tips ── */}
+      {/* ── Security Tips ──
       <div className="security-tips">
         <button className="tips-toggle" onClick={() => setShowTips(!showTips)}>
           <i className="fa-solid fa-lightbulb"></i>
@@ -890,7 +890,7 @@ const SecurityTab = ({
             </ul>
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* ── Recovery Codes Modal ── */}
       {showRecoveryCodes && recoveryCodesList.length > 0 && (

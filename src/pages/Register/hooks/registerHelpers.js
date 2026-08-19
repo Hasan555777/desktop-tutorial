@@ -17,12 +17,10 @@ export const UPLOAD_PRESET = "workhub_preset";
 
 // ✅ লাইভনেস স্টেপস - emoji ডুপ্লিকেট রিমুভ করা হয়েছে
 export const LIVENESS_STEPS = [
-  { id: 1, label: 'চোখ খোলা রাখুন', emoji: '👁️' },
-  { id: 2, label: 'চোখ বন্ধ করুন', emoji: '😌' },
-  { id: 3, label: 'মুখ খুলুন', emoji: '👄' },
-  { id: 4, label: 'মুখ বন্ধ করুন', emoji: '😐' },
-  { id: 5, label: 'মাথা ডানে হেলান', emoji: '👉' },
-  { id: 6, label: 'মাথা বামে হেলান', emoji: '👈' },
+  { id: 1, key: 'blink',     label: 'চোখে একবার পলক ফেলুন',        emoji: '😉' },
+  { id: 2, key: 'mouth',     label: 'মুখ খুলুন, তারপর বন্ধ করুন',   emoji: '👄' },
+  { id: 3, key: 'turnRight', label: 'মাথা আস্তে আস্তে ডানে ঘুরান',  emoji: '👉' },
+  { id: 4, key: 'turnLeft',  label: 'মাথা আস্তে আস্তে বামে ঘুরান',  emoji: '👈' },
 ];
 
 // ✅ Progress Map - ডায়নামিক করা হয়েছে

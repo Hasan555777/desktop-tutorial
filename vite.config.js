@@ -196,6 +196,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // ✅ 5MB limit
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/cdnjs\.cloudflare\.com\/.*/i,
@@ -251,6 +252,32 @@ export default defineConfig({
       '@assets': resolve(__dirname, './src/assets'),
       '@styles': resolve(__dirname, './src/styles'),
     },
+  },
+  // ✅ Build Configuration - Rolldown compatible
+  build: {
+    chunkSizeWarningLimit: 3000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // ✅ Face API - আলাদা chunk
+          if (id.includes('face-api.js')) {
+            return 'face-api';
+          }
+          // ✅ Firebase - আলাদা chunk
+          if (id.includes('firebase')) {
+            return 'firebase';
+          }
+          // ✅ React - আলাদা chunk
+          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+            return 'react-vendor';
+          }
+          // ✅ node_modules এর বাকি সব
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        }
+      }
+    }
   },
   // ✅ CSP Headers যোগ করুন (Recaptcha + Fonts + Cloudflare Worker এর জন্য)
   server: {

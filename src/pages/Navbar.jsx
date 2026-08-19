@@ -722,6 +722,38 @@ const Navbar = ({
                 </div>
               )}
             </div>
+{/* ✅ NEW — শুধু ডেস্কটপে দেখাবে (isDesktop already tracked উপরে)।
+    মোবাইলে pull-to-refresh থাকায় এখানে বাটন দেখানো হচ্ছে না। */}
+{/* {isDesktop && (
+  <button
+    type="button"
+    className="desktop-refresh-btn"
+    onClick={() => {
+      window.dispatchEvent(
+        new CustomEvent('workhub:refresh-request', { detail: { path: location.pathname } })
+      );
+    }}
+    title="Refresh"
+    style={{
+      background: 'transparent',
+      border: '1px solid var(--border-color, #232937)',
+      borderRadius: '10px',
+      width: '38px',
+      height: '38px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+      color: 'var(--text-muted, #64748b)',
+      marginLeft: '8px',
+      flexShrink: 0,
+    }}
+  >
+    <i className="fa-solid fa-rotate"></i>
+  </button>
+)} */}
+
+
           </header>
         )}
 
