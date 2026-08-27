@@ -1,0 +1,374 @@
+/* ============================================================
+   ❌ REJECT MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: modalFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.modalContent {
+  max-width: 500px;
+  width: 100%;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 MODAL HEADER
+   ============================================================ */
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modalHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modalHeader h3 i {
+  color: var(--status-danger);
+}
+
+.closeBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.closeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 MODAL BODY
+   ============================================================ */
+
+.modalBody {
+  padding: var(--space-lg);
+}
+
+.rejectHint {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-md);
+  line-height: 1.6;
+}
+
+.rejectTextarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  resize: vertical;
+  transition: all var(--transition-normal);
+  outline: none;
+  min-height: 100px;
+}
+
+.rejectTextarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.rejectTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+.rejectTextarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 MODAL FOOTER
+   ============================================================ */
+
+.modalFooter {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Secondary Button ── */
+.btnSecondary {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ── Danger Button ── */
+.btnDanger {
+  background: var(--gradient-danger);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.btnDanger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .modalContent {
+    max-width: 100%;
+    margin: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .modalHeader {
+    padding: var(--space-md);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-md);
+  }
+
+  .rejectHint {
+    font-size: var(--text-sm);
+  }
+
+  .rejectTextarea {
+    font-size: var(--text-sm);
+    padding: 10px 14px;
+    min-height: 80px;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    padding: var(--space-md);
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalContent {
+    border-radius: var(--radius-md);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .closeBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-sm);
+  }
+
+  .rejectHint {
+    font-size: var(--text-xs);
+  }
+
+  .rejectTextarea {
+    font-size: var(--text-xs);
+    padding: 8px 12px;
+    min-height: 60px;
+  }
+
+  .modalFooter {
+    padding: var(--space-sm);
+  }
+
+  .btn {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .modalOverlay {
+    animation: none;
+  }
+
+  .modalContent {
+    animation: none;
+  }
+
+  .closeBtn:hover {
+    transform: none;
+  }
+
+  .btnDanger:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .btnSecondary:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .modalContent {
+    border-width: 2px;
+  }
+
+  .btn {
+    border: 2px solid currentColor;
+  }
+
+  .btnSecondary {
+    border-color: var(--text-secondary);
+  }
+
+  .btnDanger {
+    border-color: var(--status-danger);
+  }
+
+  .closeBtn {
+    border: 1px solid currentColor;
+  }
+
+  .rejectTextarea {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btn:focus-visible,
+.closeBtn:focus-visible,
+.rejectTextarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.rejectModal ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

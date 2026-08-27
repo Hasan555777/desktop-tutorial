@@ -1,0 +1,406 @@
+/* src/pages/components/ProposalModal.css */
+
+/* ============================================================
+   📦 Modal Overlay
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--overlay-bg, rgba(0, 0, 0, 0.6));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.25s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   🃏 Modal Container
+   ============================================================ */
+.proposal-modal {
+  background: var(--bg-secondary, #0f1420);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px var(--shadow-color, rgba(0, 0, 0, 0.5));
+  animation: modalSlideUp 0.3s ease;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📋 Modal Header
+   ============================================================ */
+.proposal-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.06));
+}
+
+.proposal-modal .modal-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+
+.proposal-modal .modal-header h3 i {
+  color: var(--accent-primary, #438e82);
+  font-size: 1.2rem;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #64748b);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm, 8px);
+  transition: all var(--transition-fast, 0.15s ease);
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: var(--bg-hover, rgba(67, 142, 130, 0.08));
+  color: var(--text-primary, #f8fafc);
+}
+
+/* ============================================================
+   📝 Modal Body
+   ============================================================ */
+.proposal-modal .modal-body {
+  padding: 24px;
+}
+
+.proposal-modal .form-groups {
+  margin-bottom: 18px;
+}
+
+.proposal-modal .form-groups:last-child {
+  margin-bottom: 0;
+}
+
+.proposal-modal .form-groups label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+  margin-bottom: 6px;
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+
+.proposal-modal .form-groups label i {
+  margin-right: 6px;
+  color: var(--accent-primary, #438e82);
+}
+
+.proposal-modal .form-groups input,
+.proposal-modal .form-groups textarea,
+.proposal-modal .form-groups select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg, #1a2030);
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  border-radius: var(--radius-sm, 8px);
+  color: var(--text-primary, #f8fafc);
+  font-size: 0.95rem;
+  transition: all var(--transition-fast, 0.15s ease);
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+
+.proposal-modal .form-groups input:focus,
+.proposal-modal .form-groups textarea:focus,
+.proposal-modal .form-groups select:focus {
+  outline: none;
+  border-color: var(--accent-primary, #438e82);
+  box-shadow: 0 0 0 3px var(--accent-glow, rgba(67, 142, 130, 0.2));
+}
+
+.proposal-modal .form-groups input::placeholder,
+.proposal-modal .form-groups textarea::placeholder {
+  color: var(--text-muted, #64748b);
+}
+
+.proposal-modal .form-groups textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.proposal-modal .form-groups select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.proposal-modal .form-groups select option {
+  background: var(--bg-secondary, #0f1420);
+  color: var(--text-primary, #f8fafc);
+}
+
+/* ============================================================
+   🔘 Modal Footer
+   ============================================================ */
+.proposal-modal .modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px 24px;
+  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.06));
+}
+
+.btn-cancel-modal {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  border-radius: var(--radius-sm, 8px);
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+
+.btn-cancel-modal:hover {
+  background: var(--bg-hover, rgba(67, 142, 130, 0.08));
+  border-color: var(--border-color, rgba(67, 142, 130, 0.4));
+}
+
+.btn-send-proposal {
+  flex: 2;
+  padding: 12px;
+  background: var(--gradient-primary, linear-gradient(135deg, #438e82, #2d6b5f));
+  border: none;
+  border-radius: var(--radius-sm, 8px);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+
+.btn-send-proposal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow, rgba(67, 142, 130, 0.3));
+}
+
+.btn-send-proposal:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-send-proposal:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ============================================================
+   📱 Responsive
+   ============================================================ */
+@media (max-width: 520px) {
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .proposal-modal {
+    max-width: 100%;
+    border-radius: var(--radius-md, 12px);
+  }
+
+  .proposal-modal .modal-header {
+    padding: 16px 18px;
+  }
+
+  .proposal-modal .modal-header h3 {
+    font-size: 1rem;
+  }
+
+  .proposal-modal .modal-body {
+    padding: 18px;
+  }
+
+  .proposal-modal .form-groups input,
+  .proposal-modal .form-groups textarea,
+  .proposal-modal .form-groups select {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .proposal-modal .modal-footer {
+    padding: 12px 18px 18px;
+    flex-direction: column;
+  }
+
+  .btn-cancel-modal,
+  .btn-send-proposal {
+    width: 100%;
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  .proposal-modal .form-groups label {
+    font-size: 0.8rem;
+  }
+
+  /* সময়সীমা রো মোবাইলে */
+  .proposal-modal .form-groups > div[style*="display: flex"] {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+
+  .proposal-modal .form-groups > div[style*="display: flex"] select {
+    min-width: 100% !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .modal-overlay {
+    padding: 8px;
+  }
+
+  .proposal-modal .modal-header {
+    padding: 12px 14px;
+  }
+
+  .proposal-modal .modal-body {
+    padding: 14px;
+  }
+
+  .proposal-modal .form-groups {
+    margin-bottom: 14px;
+  }
+
+  .proposal-modal .form-groups input,
+  .proposal-modal .form-groups textarea,
+  .proposal-modal .form-groups select {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .btn-cancel-modal,
+  .btn-send-proposal {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ============================================================
+   🌙 Light Mode
+   ============================================================ */
+.light-mode .proposal-modal {
+  background: var(--bg-secondary, #ffffff);
+  border-color: var(--border-color, #e2e8f0);
+}
+
+.light-mode .proposal-modal .modal-header {
+  border-bottom-color: var(--border-color, #e2e8f0);
+}
+
+.light-mode .proposal-modal .form-groups input,
+.light-mode .proposal-modal .form-groups textarea,
+.light-mode .proposal-modal .form-groups select {
+  background: var(--bg-tertiary, #f1f5f9);
+  border-color: var(--border-color, #e2e8f0);
+}
+
+.light-mode .proposal-modal .form-groups input:focus,
+.light-mode .proposal-modal .form-groups textarea:focus,
+.light-mode .proposal-modal .form-groups select:focus {
+  border-color: var(--accent-primary, #0d9488);
+}
+
+.light-mode .proposal-modal .modal-footer {
+  border-top-color: var(--border-color, #e2e8f0);
+}
+
+.light-mode .btn-cancel-modal {
+  border-color: var(--border-color, #e2e8f0);
+  color: var(--text-secondary, #64748b);
+}
+
+.light-mode .btn-cancel-modal:hover {
+  background: var(--bg-hover, #f1f5f9);
+}
+
+/* ============================================================
+   ♿ Accessibility
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay {
+    animation: none;
+  }
+  .proposal-modal {
+    animation: none;
+  }
+  .btn-send-proposal:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   🎨 Scrollbar
+   ============================================================ */
+.proposal-modal::-webkit-scrollbar {
+  width: 4px;
+}
+
+.proposal-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.proposal-modal::-webkit-scrollbar-thumb {
+  background: var(--border-color, rgba(67, 142, 130, 0.3));
+  border-radius: var(--radius-full, 9999px);
+}
+
+.proposal-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary, #438e82);
+}
+
+.proposal-modal {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}

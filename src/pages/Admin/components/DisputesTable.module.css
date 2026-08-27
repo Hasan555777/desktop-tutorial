@@ -1,0 +1,435 @@
+/* ============================================================
+   ⚖️ DISPUTES TABLE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN TABLE CONTAINER
+   ============================================================ */
+
+.dataTable {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* ============================================================
+   📌 TABLE HEADER
+   ============================================================ */
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tableHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.tableHeader h3 i {
+  color: var(--status-danger);
+}
+
+.tableCount {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-sm);
+}
+
+.refreshBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 LOADING & EMPTY STATES
+   ============================================================ */
+
+.loadingText {
+  padding: var(--space-2xl);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+}
+
+.emptyText {
+  padding: var(--space-2xl);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 DISPUTES LIST
+   ============================================================ */
+
+.disputesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+/* ============================================================
+   📌 DISPUTE CARD
+   ============================================================ */
+
+.disputeCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: all var(--transition-normal);
+  border-left: 4px solid var(--status-danger);
+}
+
+.disputeCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 DISPUTE HEADER
+   ============================================================ */
+
+.disputeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.dealTitle {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dealMeta {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-xs);
+}
+
+.escrowAmount {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   📌 DISPUTE REASON
+   ============================================================ */
+
+.disputeReason {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: var(--space-sm) 0;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+}
+
+.disputeReason strong {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 PARTY IDs
+   ============================================================ */
+
+.partyIds {
+  display: flex;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+  padding: var(--space-xs) 0;
+}
+
+.partyIds code {
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   📌 ACTION BUTTONS
+   ============================================================ */
+
+.actionButtons {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.actionBtn i {
+  font-size: 14px;
+}
+
+/* ── Approve / Release ── */
+.actionBtn.approve {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.actionBtn.approve:hover {
+  background: var(--status-success);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+/* ── Reject / Refund ── */
+.actionBtn.reject {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.actionBtn.reject:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-md);
+  }
+
+  .disputeCard {
+    padding: var(--space-md);
+  }
+
+  .disputeHeader {
+    flex-direction: column;
+  }
+
+  .escrowAmount {
+    align-self: flex-start;
+    font-size: var(--text-xs);
+    padding: 2px 12px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .actionBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: var(--text-sm);
+  }
+
+  .partyIds {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .disputeReason {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .dealTitle {
+    font-size: var(--text-sm);
+  }
+
+  .dealMeta {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dataTable {
+    border-radius: var(--radius-md);
+  }
+
+  .tableHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .tableCount {
+    font-size: var(--text-xs);
+    padding: 1px 10px;
+  }
+
+  .refreshBtn {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .disputesList {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .disputeCard {
+    padding: var(--space-sm);
+    border-left-width: 3px;
+  }
+
+  .actionBtn {
+    padding: 8px 14px;
+    font-size: var(--text-xs);
+  }
+
+  .actionBtn i {
+    font-size: 12px;
+  }
+
+  .escrowAmount {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+
+  .loadingText,
+  .emptyText {
+    padding: var(--space-xl);
+    font-size: var(--text-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .refreshBtn:hover {
+    transform: none;
+  }
+
+  .actionBtn.approve:hover,
+  .actionBtn.reject:hover {
+    transform: none;
+  }
+
+  .disputeCard:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .dataTable {
+    border-width: 2px;
+  }
+
+  .disputeCard {
+    border-width: 2px;
+    border-left-width: 6px;
+  }
+
+  .actionBtn {
+    border: 2px solid currentColor;
+  }
+
+  .actionBtn.approve {
+    border-color: var(--status-success);
+  }
+
+  .actionBtn.reject {
+    border-color: var(--status-danger);
+  }
+
+  .refreshBtn {
+    border-width: 2px;
+  }
+
+  .escrowAmount {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.actionBtn:focus-visible,
+.refreshBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.dataTable ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

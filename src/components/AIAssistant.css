@@ -1,0 +1,330 @@
+/* src/components/AIAssistant.css */
+.ai-assistant-container {
+  max-width: 700px;
+  margin: 30px auto;
+  background: var(--bg-card);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-bg);
+  border-radius: 24px;
+  padding: 28px 24px;
+  color: var(--text-primary);
+  box-shadow: 0 20px 60px var(--shadow-color);
+}
+
+.ai-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ai-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.ai-subtitle {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.ai-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.ai-tabs button {
+  padding: 8px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-bg);
+  border-radius: 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.ai-tabs button.active {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border-color: var(--accent-primary);
+}
+
+.ai-tabs button:hover:not(.active) {
+  background: var(--glass-bg);
+}
+
+.ai-input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper textarea {
+  width: 100%;
+  padding: 14px 16px 30px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-bg);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 70px;
+}
+
+.input-wrapper textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.input-wrapper .char-count {
+  position: absolute;
+  bottom: 8px;
+  right: 14px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.quick-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quick-buttons button {
+  padding: 6px 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-bg);
+  border-radius: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.quick-buttons button:hover {
+  background: var(--glass-bg);
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+}
+
+.ai-clear-btn {
+  flex: 1;
+  padding: 10px;
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger-bg);
+  border-radius: 12px;
+  color: var(--status-danger);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.ai-clear-btn:hover:not(:disabled) {
+  background: var(--status-danger-bg);
+}
+
+.ai-clear-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.ai-send-btn {
+  flex: 2;
+  padding: 10px;
+  background: var(--accent-primary);
+  border: none;
+  border-radius: 12px;
+  color: var(--text-inverse);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.ai-send-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.ai-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ai-response-box {
+  margin-top: 20px;
+  background: var(--glass-bg);
+  border-radius: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--glass-bg);
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.response-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.copy-btn {
+  padding: 4px 12px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-bg);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.copy-btn:hover:not(:disabled) {
+  background: var(--glass-bg);
+}
+
+.copy-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.ai-response-text {
+  min-height: 40px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.response-content {
+  max-height: 200px;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.response-content.expanded {
+  max-height: 2000px;
+}
+
+.response-content strong {
+  color: var(--text-primary);
+}
+
+.response-content code {
+  background: var(--glass-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--status-warning);
+}
+
+.expand-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.expand-btn:hover {
+  color: var(--text-primary);
+}
+
+.loading-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ============================================================
+   📱 মোবাইল রেসপনসিভ
+   ============================================================ */
+@media (max-width: 640px) {
+  .ai-assistant-container {
+    padding: 20px 16px;
+    border-radius: 18px;
+    margin: 16px 10px;
+  }
+
+  .ai-header h2 {
+    font-size: 20px;
+  }
+
+  .ai-tabs button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .input-wrapper textarea {
+    min-height: 60px;
+    padding: 12px 14px 28px 14px;
+    font-size: 13px;
+  }
+
+  .ai-response-box {
+    padding: 12px 14px;
+  }
+
+  .ai-response-text {
+    font-size: 13px;
+  }
+
+  .ai-clear-btn,
+  .ai-send-btn {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .action-row {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-assistant-container {
+    padding: 16px 12px;
+    border-radius: 16px;
+  }
+
+  .ai-header h2 {
+    font-size: 18px;
+  }
+
+  .ai-tabs button {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+
+  .input-wrapper textarea {
+    min-height: 50px;
+    padding: 10px 12px 24px 12px;
+    font-size: 12px;
+  }
+
+  .ai-response-text {
+    font-size: 12px;
+  }
+}

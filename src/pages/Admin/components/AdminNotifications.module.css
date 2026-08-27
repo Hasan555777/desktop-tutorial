@@ -1,0 +1,671 @@
+/* ============================================================
+   🔔 ADMIN NOTIFICATIONS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.adminNotificationsTab {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* ============================================================
+   📌 TAB HEADER
+   ============================================================ */
+
+.tabHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tabHeader h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.tabHeader h2 i {
+  color: var(--accent-primary);
+}
+
+.unreadBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--status-danger);
+  color: #ffffff;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  margin-left: var(--space-sm);
+}
+
+.tabActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   📌 BUTTONS
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.btn i {
+  font-size: 14px;
+}
+
+.btnPrimary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnSecondary {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btnSecondary:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 NOTIFICATIONS LIST
+   ============================================================ */
+
+.notificationsList {
+  padding: var(--space-md);
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.notificationsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notificationsList::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.notificationsList::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+.notificationsList.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ============================================================
+   📌 NOTIFICATION CARD
+   ============================================================ */
+
+.adminNotificationCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  margin-bottom: var(--space-sm);
+}
+
+.adminNotificationCard:last-child {
+  margin-bottom: 0;
+}
+
+.adminNotificationCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.adminNotificationCard.unread {
+  border-left: 4px solid var(--accent-primary);
+  background: var(--bg-tertiary);
+}
+
+.adminNotificationCard.read {
+  border-left: 4px solid var(--border-color);
+  opacity: 0.8;
+}
+
+.adminNotificationCard.read:hover {
+  opacity: 1;
+}
+
+/* ============================================================
+   📌 NOTIFICATION ICON
+   ============================================================ */
+
+.notifIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--text-lg);
+}
+
+.notifIcon i {
+  font-size: 18px;
+}
+
+/* ============================================================
+   📌 NOTIFICATION CONTENT
+   ============================================================ */
+
+.notifContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.notifHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.notifHeader h4 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.unreadDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+.notifMessage {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--space-xs);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notifMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.notifMeta i {
+  margin-right: var(--space-xs);
+}
+
+.notifType {
+  display: inline-flex;
+  padding: 1px 10px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.notifTime {
+  display: inline-flex;
+  align-items: center;
+}
+
+.notifSender {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ============================================================
+   📌 NOTIFICATION ACTIONS
+   ============================================================ */
+
+.notifActions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.markReadBtn,
+.deleteBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+}
+
+.markReadBtn:hover {
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+  color: var(--status-success);
+}
+
+.deleteBtn:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 SKELETON LOADING
+   ============================================================ */
+
+.notificationSkeleton {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.skeletonIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  flex-shrink: 0;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.skeletonTitle {
+  width: 60%;
+  height: 16px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonMessage {
+  width: 90%;
+  height: 12px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.5s ease-in-out infinite 0.2s;
+}
+
+.skeletonMeta {
+  width: 40%;
+  height: 10px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.5s ease-in-out infinite 0.4s;
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.notificationsFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.totalCount {
+  font-weight: 500;
+}
+
+.unreadCount {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .tabHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-md);
+  }
+
+  .tabActions {
+    width: 100%;
+  }
+
+  .tabActions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .adminNotificationCard {
+    padding: var(--space-sm) var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .notifIcon {
+    width: 36px;
+    height: 36px;
+    font-size: var(--text-base);
+  }
+
+  .notifIcon i {
+    font-size: 14px;
+  }
+
+  .notifHeader h4 {
+    font-size: var(--text-xs);
+  }
+
+  .notifMessage {
+    font-size: var(--text-xs);
+  }
+
+  .notifMeta {
+    font-size: 10px;
+    gap: var(--space-sm);
+  }
+
+  .notifActions {
+    flex-direction: column;
+  }
+
+  .markReadBtn,
+  .deleteBtn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .notificationsList {
+    padding: var(--space-sm);
+    max-height: 400px;
+  }
+
+  .notificationsFooter {
+    flex-direction: column;
+    gap: var(--space-xs);
+    text-align: center;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .btn {
+    padding: 6px 14px;
+    font-size: var(--text-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .adminNotificationsTab {
+    border-radius: var(--radius-md);
+  }
+
+  .tabHeader h2 {
+    font-size: var(--text-base);
+  }
+
+  .unreadBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .adminNotificationCard {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .adminNotificationCard.unread {
+    border-left-width: 3px;
+  }
+
+  .notifIcon {
+    width: 30px;
+    height: 30px;
+    font-size: var(--text-sm);
+  }
+
+  .notifIcon i {
+    font-size: 12px;
+  }
+
+  .notifHeader h4 {
+    font-size: 10px;
+  }
+
+  .notifMessage {
+    font-size: 10px;
+  }
+
+  .notifMeta {
+    font-size: 9px;
+  }
+
+  .notifType {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .markReadBtn,
+  .deleteBtn {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .notificationsList {
+    padding: var(--space-xs);
+    max-height: 300px;
+  }
+
+  .notificationSkeleton {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .skeletonIcon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .skeletonTitle {
+    height: 12px;
+  }
+
+  .skeletonMessage {
+    height: 10px;
+  }
+
+  .skeletonMeta {
+    height: 8px;
+  }
+
+  .btn {
+    padding: 4px 12px;
+    font-size: 10px;
+  }
+
+  .btn i {
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .unreadDot {
+    animation: none;
+  }
+
+  .skeletonIcon,
+  .skeletonTitle,
+  .skeletonMessage,
+  .skeletonMeta {
+    animation: none;
+  }
+
+  .btnPrimary:hover {
+    transform: none;
+  }
+
+  .btnSecondary:hover {
+    transform: none;
+  }
+
+  .adminNotificationCard:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .adminNotificationsTab {
+    border-width: 2px;
+  }
+
+  .adminNotificationCard {
+    border-width: 2px;
+  }
+
+  .adminNotificationCard.unread {
+    border-left-width: 6px;
+  }
+
+  .adminNotificationCard.read {
+    border-left-width: 6px;
+  }
+
+  .btn {
+    border: 2px solid currentColor;
+  }
+
+  .btnPrimary {
+    border-color: var(--accent-primary);
+  }
+
+  .btnSecondary {
+    border-color: var(--text-secondary);
+  }
+
+  .markReadBtn,
+  .deleteBtn {
+    border-width: 2px;
+  }
+
+  .unreadBadge {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btn:focus-visible,
+.markReadBtn:focus-visible,
+.deleteBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.adminNotificationsTab ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

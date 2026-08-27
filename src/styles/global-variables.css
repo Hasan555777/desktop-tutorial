@@ -1,0 +1,493 @@
+/* ============================================================
+   🌐 GLOBAL COLOR VARIABLES ( সম্পূর্ণ আপডেটেড )
+   ============================================================
+   এই ফাইলটি আপনার পুরো অ্যাপ্লিকেশনের জন্য কালার কন্ট্রোল করবে।
+   যেকোনো কম্পোনেন্ট এই ভেরিয়েবল ব্যবহার করবে।
+   ============================================================ */
+
+/* ============================================================
+   🌙 DARK MODE (ডিফল্ট)
+   ============================================================ */
+
+:root {
+  /* ---- Fonts ---- */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-handwriting: 'Caveat', cursive;
+
+  /* ---- Background Colors ---- */
+  --bg-primary: #090d16;
+  --bg-secondary: #0f1420;
+  --bg-tertiary: #1a2030;
+  --bg-card: rgba(30, 41, 59, 0.6);
+  --bg-hover: rgba(67, 142, 130, 0.08);
+  --bg-dropdown: rgba(11, 17, 30, 0.98);
+  
+  /* ---- Overlay & Modal ---- */
+  --overlay-bg: rgba(0, 0, 0, 0.55);
+  --modal-bg: var(--bg-secondary);
+  
+  /* ---- Text Colors ---- */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #1e293b;
+  
+  /* ---- Accent Colors ---- */
+  --accent-primary: #438e82;
+  --accent-secondary: #4fb3a3;
+  --accent-light: #5fc7b7;
+  --accent-dark: #2d6b5f;
+  --accent-glow: rgba(67, 142, 130, 0.3);
+  
+  /* ---- Border Colors ---- */
+  --border-color: rgba(67, 142, 130, 0.2);
+  --border-light: rgba(255, 255, 255, 0.06);
+  --border-dark: rgba(0, 0, 0, 0.2);
+  
+  /* ---- Shadow Colors ---- */
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-light: rgba(0, 0, 0, 0.2);
+  --shadow-glow: rgba(67, 142, 130, 0.15);
+  
+  /* ---- Status Colors ---- */
+  --status-success: #10b981;
+  --status-success-bg: rgba(16, 185, 129, 0.15);
+  --status-warning: #f59e0b;
+  --status-warning-bg: rgba(245, 158, 11, 0.15);
+  --status-danger: #ef4444;
+  --status-danger-bg: rgba(239, 68, 68, 0.15);
+  --status-info: #3b82f6;
+  --status-info-bg: rgba(59, 130, 246, 0.15);
+  
+  /* ---- Gradient Colors ---- */
+  --gradient-primary: linear-gradient(135deg, #438e82, #2d6b5f);
+  --gradient-accent: linear-gradient(135deg, #438e82, #4fb3a3);
+  --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
+  --gradient-success: linear-gradient(135deg, #10b981, #059669);
+  --gradient-warning: linear-gradient(135deg, #f59e0b, #d97706);
+  
+  /* ---- Glass Effects ---- */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  /* ---- Scrollbar ---- */
+  --scrollbar-bg: var(--bg-secondary);
+  --scrollbar-thumb: var(--accent-primary);
+  
+  /* ---- Icon & Link ---- */
+  --icon-color: var(--text-secondary);
+  --link-color: var(--accent-secondary);
+  
+  /* ---- Focus ---- */
+  --focus-ring: 0 0 0 3px var(--accent-glow);
+  
+  /* ---- Layout ---- */
+  --navbar-height: 72px;
+  --sidebar-width: 280px;
+  
+  /* ---- Component Specific ---- */
+  --navbar-bg: var(--bg-secondary);
+  --sidebar-bg: var(--bg-secondary);
+  --card-bg: var(--bg-card);
+  --input-bg: var(--bg-tertiary);
+  --dropdown-bg: var(--bg-dropdown);
+  
+  /* ---- Animation ---- */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* ---- Border Radius ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+
+
+  
+
+
+
+/* ---- Spacing System যোগ করতে পারেন ---- */
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+
+/* ---- Typography Scale ---- */
+
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+  --text-3xl: 40px;
+}
+/* ============================================================
+   ☀️ LIGHT MODE
+   ============================================================ */
+
+.light-mode {
+  /* ---- Fonts ---- */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-handwriting: 'Caveat', cursive;
+
+  /* ---- Background Colors ---- */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-dropdown: #ffffff;
+  
+  /* ---- Overlay & Modal ---- */
+  --overlay-bg: rgba(0, 0, 0, 0.45);
+  --modal-bg: var(--bg-secondary);
+  
+  /* ---- Text Colors ---- */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --text-inverse: #f8fafc;
+  
+  /* ---- Accent Colors ---- */
+  --accent-primary: #0d9488;
+  --accent-secondary: #14b8a6;
+  --accent-light: #2dd4bf;
+  --accent-dark: #0f766e;
+  --accent-glow: rgba(13, 148, 136, 0.2);
+  
+  /* ---- Border Colors ---- */
+  --border-color: #e2e8f0;
+  --border-light: rgba(0, 0, 0, 0.06);
+  --border-dark: rgba(0, 0, 0, 0.1);
+  
+  /* ---- Shadow Colors ---- */
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --shadow-light: rgba(0, 0, 0, 0.04);
+  --shadow-glow: rgba(13, 148, 136, 0.1);
+  
+  /* ---- Status Colors ---- */
+  --status-success: #059669;
+  --status-success-bg: rgba(5, 150, 105, 0.1);
+  --status-warning: #d97706;
+  --status-warning-bg: rgba(217, 119, 6, 0.1);
+  --status-danger: #dc2626;
+  --status-danger-bg: rgba(220, 38, 38, 0.1);
+  --status-info: #2563eb;
+  --status-info-bg: rgba(37, 99, 235, 0.1);
+  
+  /* ---- Gradient Colors ---- */
+  --gradient-primary: linear-gradient(135deg, #0d9488, #0f766e);
+  --gradient-accent: linear-gradient(135deg, #0d9488, #14b8a6);
+  --gradient-danger: linear-gradient(135deg, #dc2626, #b91c1c);
+  --gradient-success: linear-gradient(135deg, #059669, #047857);
+  --gradient-warning: linear-gradient(135deg, #d97706, #b45309);
+  
+  /* ---- Glass Effects ---- */
+  --glass-bg: rgba(0, 0, 0, 0.03);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  
+  /* ---- Scrollbar ---- */
+  --scrollbar-bg: var(--bg-secondary);
+  --scrollbar-thumb: var(--accent-primary);
+  
+  /* ---- Icon & Link ---- */
+  --icon-color: var(--text-secondary);
+  --link-color: var(--accent-secondary);
+  
+  /* ---- Focus ---- */
+  --focus-ring: 0 0 0 3px var(--accent-glow);
+  
+  /* ---- Layout ---- */
+  --navbar-height: 72px;
+  --sidebar-width: 280px;
+  
+  /* ---- Component Specific ---- */
+  --navbar-bg: var(--bg-secondary);
+  --sidebar-bg: var(--bg-secondary);
+  --card-bg: var(--bg-card);
+  --input-bg: var(--bg-tertiary);
+  --dropdown-bg: var(--bg-dropdown);
+}
+
+/* ============================================================
+   🎨 UTILITY CLASSES (কালার ভেরিয়েবল ব্যবহার করে)
+   ============================================================ */
+
+/* ---- Font Utilities ---- */
+.font-primary {
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+.font-handwriting {
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+}
+
+/* ---- Background Utilities ---- */
+.bg-primary { background: var(--bg-primary); }
+.bg-secondary { background: var(--bg-secondary); }
+.bg-tertiary { background: var(--bg-tertiary); }
+.bg-card { background: var(--bg-card); }
+.bg-accent { background: var(--accent-primary); }
+.bg-accent-glow { background: var(--accent-glow); }
+.bg-glass { background: var(--glass-bg); }
+
+/* ---- Text Utilities ---- */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-accent { color: var(--accent-primary); }
+.text-success { color: var(--status-success); }
+.text-warning { color: var(--status-warning); }
+.text-danger { color: var(--status-danger); }
+.text-info { color: var(--status-info); }
+
+/* ---- Border Utilities ---- */
+.border-primary { border-color: var(--border-color); }
+.border-accent { border-color: var(--accent-primary); }
+.border-glass { border-color: var(--glass-border); }
+
+/* ---- Gradient Utilities ---- */
+.gradient-primary { background: var(--gradient-primary); }
+.gradient-accent { background: var(--gradient-accent); }
+.gradient-danger { background: var(--gradient-danger); }
+.gradient-success { background: var(--gradient-success); }
+
+/* ---- Shadow Utilities ---- */
+.shadow-default { box-shadow: 0 4px 20px var(--shadow-color); }
+.shadow-glow { box-shadow: 0 0 30px var(--shadow-glow); }
+
+/* ---- Glass Utilities ---- */
+.glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* ---- Scrollbar Utilities ---- */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+/* ---- Focus Ring ---- */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ---- Overlay ---- */
+.overlay {
+  background: var(--overlay-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ---- Modal ---- */
+.modal-content {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-color);
+}
+
+/* ---- Navbar & Sidebar ---- */
+.navbar {
+  height: var(--navbar-height);
+  background: var(--navbar-bg);
+}
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+}
+
+/* ---- Icon & Link ---- */
+.icon {
+  color: var(--icon-color);
+}
+.link {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color var(--transition-normal);
+}
+.link:hover {
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   🎯 COMPONENT-SPECIFIC STYLES (ভেরিয়েবল ব্যবহার করে)
+   ============================================================ */
+
+/* ---- Buttons ---- */
+.btn-primary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  transition: all var(--transition-normal);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+.btn-secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+.btn-danger {
+  background: var(--gradient-danger);
+  color: #ffffff;
+  border: none;
+  transition: all var(--transition-normal);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+.btn-danger:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* ---- Cards ---- */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  transition: all var(--transition-normal);
+  padding: var(--space-lg, 20px);
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+.card:hover {
+  box-shadow: 0 8px 40px var(--shadow-color);
+  transform: translateY(-2px);
+}
+
+/* ---- Inputs ---- */
+.input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+  padding: 10px 16px;
+  width: 100%;
+  font-size: 14px;
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+.input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ---- Dropdown ---- */
+.dropdown {
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px var(--shadow-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+
+/* ============================================================
+   📱 RESPONSIVE ADJUSTMENTS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 64px;
+    --sidebar-width: 240px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --navbar-height: 56px;
+    --sidebar-width: 200px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+  }
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --text-muted: #666666;
+    --border-color: #dddddd;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0.01ms;
+    --transition-normal: 0.01ms;
+    --transition-slow: 0.01ms;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #000000;
+    --text-secondary: #000000;
+    --text-muted: #333333;
+    --border-color: #000000;
+    --accent-primary: #005f5f;
+    --accent-secondary: #005f5f;
+  }
+}

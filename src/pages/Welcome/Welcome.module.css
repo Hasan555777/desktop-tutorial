@@ -1,0 +1,649 @@
+/* src/pages/Welcome/Welcome.css */
+
+/* ============================================================
+   Welcome Page - WorkTrustbd
+   ============================================================ */
+
+body {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Bensen Handwriting', sans-serif;
+    font-family: cursive, 'Bensen Handwriting';
+}
+
+
+.welcome-page {
+  background: #090d16;
+  color: #f8fafc;
+  min-height: 100vh;
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+.welcome-page::-webkit-scrollbar {
+  width: 8px;
+}
+.welcome-page::-webkit-scrollbar-track {
+  background: #0f1420;
+}
+.welcome-page::-webkit-scrollbar-thumb {
+  background: var(--accent-primary, #438e82);
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Navbar
+   ============================================================ */
+.welcome-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(9, 13, 22, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 16px 0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+.nav-logo i {
+  color: var(--accent-primary, #438e82);
+  font-size: 28px;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-btn {
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+
+.login-btn {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.register-btn {
+  background: var(--gradient-primary, linear-gradient(135deg, #438e82, #2d6b5f));
+  color: #fff;
+  box-shadow: 0 4px 20px var(--shadow-glow, rgba(67, 142, 130, 0.3));
+}
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--shadow-glow, rgba(67, 142, 130, 0.4));
+}
+
+/* ============================================================
+   Hero Section
+   ============================================================ */
+.hero-section {
+  padding: 140px 24px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, var(--accent-glow, rgba(67, 142, 130, 0.06)), transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 20px;
+  background: var(--accent-glow, rgba(67, 142, 130, 0.15));
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  /* color: var(--accent-primary, #438e82); */
+  font-size: 17px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  letter-spacing: 0.5px;
+  /* font-family: cursive, 'Bensen Handwriting' sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+
+.hero-title {
+  font-size: 66px;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #f8fafc 40%, var(--accent-primary, #438e82) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+
+.hero-title .highlight {
+  /* font-family: var(--font-handwriting, 'Caveat', cursive); */
+  -webkit-text-fill-color: var(--accent-primary, #438e82);
+  background: none;
+  font-family: cursive, 'Bensen Handwriting';
+}
+
+.hero-subtitle {
+  font-size: 25px;
+  color: #94a3b8;
+  max-width: 640px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-btn-primary {
+  padding: 16px 40px;
+  border-radius: 12px;
+  background: var(--gradient-primary, linear-gradient(135deg, #438e82, #2d6b5f));
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px var(--shadow-glow, rgba(67, 142, 130, 0.3));
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+.hero-btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 40px var(--shadow-glow, rgba(67, 142, 130, 0.4));
+}
+
+.hero-btn-secondary {
+  padding: 16px 40px;
+  border-radius: 12px;
+  background: transparent;
+  color: #cbd5e1;
+  font-size: 20px;
+  font-weight: 400;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+.hero-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================================
+   Features Section
+   ============================================================ */
+.features-section {
+  padding: 80px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.section-header h2 {
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+.section-header p {
+  color: #94a3b8;
+  font-size: 25px;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+
+  font-family: cursive, 'Bensen Handwriting';
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.feature-card {
+  background: var(--bg-secondary, #0f1420);
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  border-radius: 16px;
+  padding: 36px 28px;
+  transition: all 0.4s ease;
+  text-align: center;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-primary, #438e82);
+  box-shadow: 0 12px 40px var(--shadow-color, rgba(0, 0, 0, 0.4));
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--accent-glow, rgba(67, 142, 130, 0.12));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  font-size: 28px;
+  color: var(--accent-primary, #438e82);
+}
+
+.feature-card h3 {
+  font-size: 28px;
+  font-weight: 480;
+  margin-bottom: 10px;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+.feature-card p {
+  color: #94a3b8;
+  font-size: 20px;
+  line-height: 1.7;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+
+/* ============================================================
+   Stats Section
+   ============================================================ */
+.stats-section {
+  padding: 80px 24px;
+  background: var(--bg-secondary, #0f1420);
+  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.04));
+  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.04));
+}
+
+.stats-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 40px;
+  text-align: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+.stat-number {
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--accent-primary, #438e82);
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+.stat-label {
+  color: #94a3b8;
+  font-size: 20px;
+  margin-top: 4px;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+
+/* ============================================================
+   How It Works
+   ============================================================ */
+.how-it-works-section {
+  padding: 80px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.step-card {
+  text-align: center;
+  padding: 30px 20px;
+}
+.step-number {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-primary, linear-gradient(135deg, #438e82, #2d6b5f));
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+  font-family: cursive, 'Bensen Handwriting';
+}
+.step-card h4 {
+  font-size: 20px;
+  font-weight: 550;
+  margin-bottom: 8px;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+.step-card p {
+  color: #94a3b8;
+  font-size: 16px;
+  line-height: 1.6;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+
+/* ============================================================
+   Testimonials
+   ============================================================ */
+.testimonials-section {
+  padding: 80px 24px;
+  background: var(--bg-secondary, #0f1420);
+}
+
+.testimonials-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.testimonial-card {
+  background: var(--bg-primary, #090d16);
+  border: 1px solid var(--border-color, rgba(67, 142, 130, 0.2));
+  border-radius: 16px;
+  padding: 28px;
+}
+.testimonial-text {
+  color: #cbd5e1;
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gradient-primary, linear-gradient(135deg, #438e82, #2d6b5f));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+.testimonial-name {
+  font-weight: 500;
+  font-size: 15px;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+.testimonial-role {
+  color: #94a3b8;
+  font-size: 13px;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+
+/* ============================================================
+   CTA Section
+   ============================================================ */
+.cta-section {
+  padding: 100px 24px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-section h2 {
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+.cta-section p {
+  color: #94a3b8;
+  font-size: 18px;
+  margin-bottom: 32px;
+  line-height: 1.7;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+
+.cta-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.welcome-footer {
+  background: #0a0e18;
+  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.04));
+  padding: 48px 24px 24px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  align-items: start;
+}
+
+.footer-brand i {
+  color: var(--accent-primary, #438e82);
+  font-size: 24px;
+}
+.footer-brand span {
+  font-size: 20px;
+  font-weight: 700;
+  display: block;
+  margin: 4px 0 8px;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+.footer-brand p {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-links a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  font-family: cursive, 'Bensen Handwriting';
+  /* font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif; */
+}
+.footer-links a:hover {
+  color: var(--accent-primary, #438e82);
+}
+
+.footer-social {
+  display: flex;
+  gap: 16px;
+}
+.footer-social a {
+  color: #64748b;
+  font-size: 20px;
+  transition: color 0.3s ease;
+}
+.footer-social a:hover {
+  color: var(--accent-primary, #438e82);
+}
+
+.footer-copy {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #475569;
+  font-size: 13px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.04));
+  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 34px;
+  }
+  .hero-subtitle {
+    font-size: 17px;
+  }
+  .section-header h2 {
+    font-size: 28px;
+  }
+  .cta-section h2 {
+    font-size: 30px;
+  }
+  .nav-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .nav-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  .nav-btn {
+    padding: 8px 18px;
+    font-size: 13px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .stat-number {
+    font-size: 32px;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .footer-social {
+    justify-content: center;
+  }
+  .footer-links {
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 28px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    
+  }
+  .cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ============================================================
+   Utility - Handwriting Font
+   ============================================================ */
+.handwriting {
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+}
+
+/* ============================================================
+   Accessibility - Reduced Motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .welcome-page * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}     

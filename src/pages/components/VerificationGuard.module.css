@@ -1,0 +1,296 @@
+/* ============================================================
+   🛡️ VERIFICATION GUARD - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 VERIFICATION REQUIRED CONTAINER
+   ============================================================ */
+
+.verificationRequired {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  min-height: 300px;
+  gap: var(--space-md);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   📌 TITLE & MESSAGE
+   ============================================================ */
+
+.verificationRequired h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.verificationRequired h3::before {
+  content: '⚠️';
+  font-size: 28px;
+}
+
+.verificationRequired p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+/* ============================================================
+   📌 VERIFY BUTTON
+   ============================================================ */
+
+.verifyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 12px 32px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.verifyBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.verifyBtn:active {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   📌 VARIANT - WARNING (more prominent)
+   ============================================================ */
+
+.verificationRequired.warning {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+}
+
+.verificationRequired.warning h3 {
+  color: var(--status-warning);
+}
+
+/* ============================================================
+   📌 VARIANT - DANGER (blocked/restricted)
+   ============================================================ */
+
+.verificationRequired.danger {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+}
+
+.verificationRequired.danger h3 {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 VARIANT - SUCCESS (already verified)
+   ============================================================ */
+
+.verificationRequired.success {
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+}
+
+.verificationRequired.success h3 {
+  color: var(--status-success);
+}
+
+.verificationRequired.success h3::before {
+  content: '✅';
+}
+
+/* ============================================================
+   📌 WITH ICON (custom icon)
+   ============================================================ */
+
+.verificationRequired.withIcon .verificationIcon {
+  font-size: 48px;
+  margin-bottom: var(--space-xs);
+}
+
+/* ============================================================
+   📌 WITH SUBTLE ANIMATION
+   ============================================================ */
+
+.verificationRequired.animate {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--shadow-glow);
+  }
+  50% {
+    box-shadow: 0 0 30px 10px var(--shadow-glow);
+  }
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.verificationRequired.loading .verifyBtn {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.verificationRequired.loading .verifyBtn::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-left: var(--space-xs);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .verificationRequired {
+    padding: var(--space-xl) var(--space-md);
+    min-height: 240px;
+    border-radius: var(--radius-md);
+  }
+
+  .verificationRequired h3 {
+    font-size: var(--text-lg);
+  }
+
+  .verificationRequired p {
+    font-size: var(--text-sm);
+  }
+
+  .verifyBtn {
+    padding: 10px 24px;
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .verificationRequired {
+    padding: var(--space-lg) var(--space-sm);
+    min-height: 200px;
+    border-radius: var(--radius-sm);
+  }
+
+  .verificationRequired h3 {
+    font-size: var(--text-base);
+  }
+
+  .verificationRequired h3::before {
+    font-size: 24px;
+  }
+
+  .verificationRequired p {
+    font-size: var(--text-xs);
+    max-width: 100%;
+  }
+
+  .verifyBtn {
+    padding: 8px 20px;
+    font-size: var(--text-xs);
+    width: 100%;
+    justify-content: center;
+  }
+
+  .verificationRequired.withIcon .verificationIcon {
+    font-size: 36px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .verificationRequired.animate {
+    animation: none;
+  }
+
+  .verifyBtn:hover {
+    transform: none;
+  }
+
+  .verificationRequired.loading .verifyBtn::after {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .verificationRequired {
+    border-width: 2px;
+  }
+
+  .verificationRequired.warning {
+    border-color: var(--status-warning);
+  }
+
+  .verificationRequired.danger {
+    border-color: var(--status-danger);
+  }
+
+  .verificationRequired.success {
+    border-color: var(--status-success);
+  }
+
+  .verifyBtn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.verifyBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.verificationRequired ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

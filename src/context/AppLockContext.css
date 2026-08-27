@@ -1,0 +1,246 @@
+/* src/context/AppLockContext.css */
+
+/* ── Lock Screen ── */
+.app-lock-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lock-screen-overlay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.lock-screen-content {
+  text-align: center;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* ── Lock Icon ── */
+.lock-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: rgba(20, 184, 166, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(20, 184, 166, 0.3);
+  animation: lockPulse 2s ease-in-out infinite;
+}
+
+.lock-icon i {
+  font-size: 36px;
+  color: #14b8a6;
+}
+
+@keyframes lockPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 10px rgba(20, 184, 166, 0.1);
+  }
+}
+
+/* ── Titles ── */
+.lock-title {
+  color: #f1f5f9;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.lock-subtitle {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+/* ── PIN Input ── */
+.pin-input-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.pin-input {
+  width: 50px;
+  height: 60px;
+  border: 2px solid #334155;
+  border-radius: 12px;
+  background: #1e293b;
+  color: #f1f5f9;
+  font-size: 24px;
+  text-align: center;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.pin-input:focus {
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+}
+
+.pin-input.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* ── Error Message ── */
+.lock-error {
+  color: #ef4444;
+  font-size: 14px;
+  margin-bottom: 16px;
+  min-height: 24px;
+  font-weight: 500;
+}
+
+.lock-error.success {
+  color: #10b981;
+}
+
+/* ── Biometric Unlock Button ── */
+.biometric-unlock-btn {
+  width: 100%;
+  padding: 14px;
+  background: rgba(20, 184, 166, 0.1);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  border-radius: 12px;
+  color: #14b8a6;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.biometric-unlock-btn:hover:not(:disabled) {
+  background: rgba(20, 184, 166, 0.2);
+  border-color: #14b8a6;
+  transform: translateY(-2px);
+}
+
+.biometric-unlock-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.biometric-unlock-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Attempts Counter ── */
+.lock-attempts {
+  margin-top: 16px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.lock-attempts .attempts-warning {
+  color: #f59e0b;
+}
+
+.lock-attempts .attempts-danger {
+  color: #ef4444;
+}
+
+/* ── Loading State ── */
+.app-lock-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #14b8a6;
+  font-size: 18px;
+}
+
+.app-lock-loading i {
+  font-size: 32px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .lock-screen-content {
+    padding: 20px;
+  }
+  
+  .pin-input {
+    width: 44px;
+    height: 52px;
+    font-size: 20px;
+  }
+  
+  .lock-icon {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .lock-icon i {
+    font-size: 28px;
+  }
+  
+  .lock-title {
+    font-size: 20px;
+  }
+  
+  .biometric-unlock-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .pin-input {
+    width: 38px;
+    height: 46px;
+    font-size: 18px;
+  }
+  
+  .pin-input-group {
+    gap: 8px;
+  }
+}

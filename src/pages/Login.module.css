@@ -1,0 +1,797 @@
+/* ============================================================
+   🔐 LOGIN MODULE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.shopnestLogin {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-primary);
+  padding: var(--space-md);
+  font-family: var(--font-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================================
+   🎨 BACKGROUND DECORATIONS
+   ============================================================ */
+
+.shopnestLogin::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: var(--accent-glow);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.shopnestLogin::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -20%;
+  width: 500px;
+  height: 500px;
+  background: var(--status-info-bg);
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   📌 AUTH CARD
+   ============================================================ */
+
+.authCard {
+  max-width: 440px;
+  width: 100%;
+  max-height: 95vh;
+  overflow-y: auto;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition-normal);
+  animation: modalSlideUp 0.4s ease;
+}
+
+.authCard:hover {
+  box-shadow: 0 30px 100px var(--shadow-color);
+}
+
+/* Custom scrollbar */
+.authCard::-webkit-scrollbar {
+  width: 6px;
+}
+
+.authCard::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.authCard::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+.authCard::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 CARD BODY
+   ============================================================ */
+
+.cardBody {
+  padding: var(--space-xl);
+}
+
+/* ============================================================
+   📌 LOGIN PANELS
+   ============================================================ */
+
+.loginPanel {
+  display: none;
+  animation: panelFadeIn 0.3s ease;
+}
+
+.loginPanel.active {
+  display: block;
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📌 LOGO
+   ============================================================ */
+
+.logo {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.logo i {
+  font-size: 3rem;
+  color: var(--accent-primary);
+}
+
+.logo h2 {
+  margin: var(--space-sm) 0 0;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 STEP TITLE & SUBTITLE
+   ============================================================ */
+
+.stepTitle {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--space-xs);
+}
+
+.stepSubtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   📌 FORM FIELDS
+   ============================================================ */
+
+.field {
+  margin-bottom: var(--space-md);
+}
+
+.field label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.field input::placeholder {
+  color: var(--text-muted);
+}
+
+.field input:disabled,
+.field select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 PASSWORD WRAPPER
+   ============================================================ */
+
+.pwWrap {
+  position: relative;
+}
+
+.pwWrap input {
+  padding-right: 48px;
+}
+
+.pwToggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: var(--text-lg);
+  cursor: pointer;
+  padding: 4px;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.pwToggle:hover {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 PHONE ROW
+   ============================================================ */
+
+.phoneRow {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.phoneRow select {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.phoneRow input {
+  flex: 1;
+}
+
+/* ============================================================
+   📌 OPTIONS (Remember Me & Forgot Password)
+   ============================================================ */
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.rememberMe input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.forgotLink {
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-primary);
+}
+
+.forgotLink:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   📌 BUTTONS
+   ============================================================ */
+
+.btnPrimary {
+  width: 100%;
+  padding: 14px 24px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btnGhost {
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.btnGhost:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.btnGhost:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loadingSpinner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.loadingSpinner i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   📌 BUTTON ROW
+   ============================================================ */
+
+.btnRow {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.btnRow .btnGhost {
+  flex: 1;
+}
+
+.btnRow .btnPrimary {
+  flex: 2;
+}
+
+/* ============================================================
+   📌 OTP SECTION
+   ============================================================ */
+
+.otpContainer {
+  margin-top: var(--space-md);
+}
+
+.otpContainer label {
+  display: block;
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.otpRow {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+.otpBox {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+  outline: none;
+  font-family: var(--font-primary);
+}
+
+.otpBox:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.otpBox.filled {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+}
+
+.otpBox:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 INFO BOX
+   ============================================================ */
+
+.infoBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--status-info-bg);
+  border: 1px solid var(--status-info);
+  border-radius: var(--radius-md);
+  color: var(--status-info);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-md);
+}
+
+.infoIcon {
+  font-size: var(--text-lg);
+}
+
+/* ============================================================
+   📌 RESEND ROW
+   ============================================================ */
+
+.resendRow {
+  text-align: center;
+  margin-top: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.resendBtn {
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-fast);
+}
+
+.resendBtn:hover:not(:disabled) {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+.resendBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 CARD FOOTER
+   ============================================================ */
+
+.cardFooter {
+  padding: var(--space-md) var(--space-xl) var(--space-xl);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.link {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   📌 TOAST (react-hot-toast override)
+   ============================================================ */
+
+.toast {
+  /* react-hot-toast styling */
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .authCard {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .cardBody {
+    padding: var(--space-lg);
+  }
+
+  .cardFooter {
+    padding: var(--space-md) var(--space-lg) var(--space-lg);
+  }
+
+  .otpBox {
+    width: 42px;
+    height: 50px;
+    font-size: var(--text-lg);
+  }
+
+  .phoneRow select {
+    width: 80px;
+  }
+
+  .btnRow {
+    flex-direction: column;
+  }
+
+  .btnRow .btnGhost,
+  .btnRow .btnPrimary {
+    flex: 1;
+    width: 100%;
+  }
+
+  .logo i {
+    font-size: 2.5rem;
+  }
+
+  .logo h2 {
+    font-size: var(--text-lg);
+  }
+
+  .stepTitle {
+    font-size: var(--text-base);
+  }
+
+  .options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .shopnestLogin {
+    padding: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .cardBody {
+    padding: var(--space-md);
+  }
+
+  .cardFooter {
+    padding: var(--space-sm) var(--space-md) var(--space-md);
+  }
+
+  .otpBox {
+    width: 36px;
+    height: 44px;
+    font-size: var(--text-base);
+  }
+
+  .otpRow {
+    gap: var(--space-xs);
+  }
+
+  .field input,
+  .field select {
+    padding: 10px 14px;
+    font-size: var(--text-xs);
+  }
+
+  .btnPrimary {
+    padding: 12px 20px;
+    font-size: var(--text-sm);
+  }
+
+  .btnGhost {
+    padding: 10px 20px;
+    font-size: var(--text-xs);
+  }
+
+  .logo i {
+    font-size: 2rem;
+  }
+
+  .logo h2 {
+    font-size: var(--text-base);
+  }
+
+  .stepTitle {
+    font-size: var(--text-sm);
+  }
+
+  .stepSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .phoneRow {
+    flex-direction: column;
+  }
+
+  .phoneRow select {
+    width: 100%;
+  }
+
+  .phoneRow input {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .authCard {
+    animation: none;
+  }
+
+  .loginPanel {
+    animation: none;
+  }
+
+  .loadingSpinner i {
+    animation: none;
+  }
+
+  .authCard:hover {
+    transform: none;
+  }
+
+  .btnPrimary:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .authCard {
+    border-width: 2px;
+  }
+
+  .field input,
+  .field select {
+    border-width: 2px;
+  }
+
+  .field input:focus,
+  .field select:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+
+  .otpBox {
+    border-width: 2px;
+  }
+
+  .otpBox:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+
+  .btnPrimary {
+    border: 2px solid currentColor;
+  }
+
+  .link {
+    text-decoration: underline;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btnPrimary:focus-visible,
+.btnGhost:focus-visible,
+.forgotLink:focus-visible,
+.resendBtn:focus-visible,
+.link:focus-visible,
+.field input:focus-visible,
+.field select:focus-visible,
+.otpBox:focus-visible,
+.pwToggle:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.authCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   📌 ERROR STATE
+   ============================================================ */
+
+.field.error input,
+.field.error select {
+  border-color: var(--status-danger);
+}
+
+.field.error input:focus,
+.field.error select:focus {
+  box-shadow: 0 0 0 3px var(--status-danger-bg);
+}
+
+.field .errorMessage {
+  color: var(--status-danger);
+  font-size: var(--text-xs);
+  margin-top: var(--space-xs);
+}
+
+/* ============================================================
+   📌 SUCCESS STATE
+   ============================================================ */
+
+.field.success input {
+  border-color: var(--status-success);
+}
+
+.field.success input:focus {
+  box-shadow: 0 0 0 3px var(--status-success-bg);
+}

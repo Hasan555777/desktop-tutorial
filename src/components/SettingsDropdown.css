@@ -1,0 +1,169 @@
+/* src/components/SettingsDropdown.css */
+
+/* ============================================
+   ✅ SETTINGS DROPDOWN - THEME VARIABLES
+   ============================================ */
+
+.settings-dropdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 8px;
+  background: var(--dropdown-bg, var(--glass-bg));
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+}
+
+.drop-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 8px;
+  background: var(--bg-tertiary, var(--glass-bg));
+  border: 1px solid var(--border-color, var(--glass-bg));
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 80px;
+  text-align: center;
+  gap: 6px;
+  position: relative;
+}
+
+.drop-grid-item:hover {
+  background: var(--hover-bg, var(--glass-bg));
+  transform: translateY(-3px);
+  border-color: var(--border-color, var(--glass-bg));
+  box-shadow: 0 6px 15px var(--shadow-color);
+}
+
+.grid-icon {
+  font-size: 22px;
+  color: var(--text-secondary, var(--glass-bg));
+  transition: color 0.3s;
+}
+
+.drop-grid-item:hover .grid-icon {
+  color: var(--text-primary, var(--text-inverse));
+}
+
+.grid-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary, var(--glass-bg));
+}
+
+.drop-grid-item.wallet-highlight {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+}
+
+.drop-grid-item.wallet-highlight .badge-usdt {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.drop-grid-item.logout-action:hover .grid-icon,
+.drop-grid-item.logout-action:hover .grid-label {
+  color: var(--status-danger);
+}
+
+/* ============================================
+   ✅ LIGHT MODE SUPPORT
+   ============================================ */
+.light-mode .settings-dropdown-grid {
+  background: var(--glass-bg);
+}
+
+.light-mode .drop-grid-item {
+  background: var(--glass-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.light-mode .grid-icon {
+  color: var(--text-secondary);
+}
+
+.light-mode .drop-grid-item:hover {
+  background: var(--glass-bg);
+}
+
+.light-mode .drop-grid-item.wallet-highlight {
+  background: var(--status-success-bg);
+}
+
+/* ============================================
+   ✅ DARK MODE SUPPORT
+   ============================================ */
+.dark-mode .settings-dropdown-grid {
+  background: var(--status-info-bg);
+}
+
+.dark-mode .drop-grid-item {
+  background: var(--glass-bg);
+  border-color: var(--status-success-bg);
+  color: var(--text-primary);
+}
+
+.dark-mode .grid-icon {
+  color: var(--text-secondary);
+}
+
+.dark-mode .drop-grid-item:hover {
+  background: var(--glass-bg);
+}
+
+.dark-mode .drop-grid-item.wallet-highlight {
+  background: var(--status-success-bg);
+}
+
+/* ============================================
+   ✅ MOBILE RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .settings-dropdown-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    padding: 4px;
+  }
+  .drop-grid-item {
+    padding: 8px 4px;
+    min-height: 56px;
+    border-radius: 10px;
+  }
+  .grid-icon {
+    font-size: 16px;
+  }
+  .grid-label {
+    font-size: 10px;
+  }
+  .drop-grid-item.wallet-highlight .badge-usdt {
+    font-size: 7px;
+    padding: 1px 6px;
+    top: -4px;
+    right: -4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .drop-grid-item {
+    min-height: 48px;
+    padding: 6px 2px;
+  }
+  .grid-icon {
+    font-size: 14px;
+  }
+  .grid-label {
+    font-size: 9px;
+  }
+}

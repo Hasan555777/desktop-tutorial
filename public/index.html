@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkTrust - Task Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>⚡ WorkTrust App</h1>
+            <p>অফলাইন ডেটা সেভিং ও ক্লাউডফ্লেয়ার লাইভ প্রজেক্ট</p>
+        </header>
+
+        <main>
+            <form id="task-form">
+                <input type="text" id="task-input" placeholder="নতুন টাস্ক লিখুন..." required autocomplete="off">
+                <button type="submit" id="add-btn">যোগ করুন</button>
+            </form>
+
+            <section class="task-list-section">
+                <h2>📋 সংরক্ষিত টাস্কসমূহ</h2>
+                <ul id="task-list"></ul>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

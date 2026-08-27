@@ -1,0 +1,382 @@
+/* ============================================================
+   📋 INBOX LIST CONTROLS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 SEARCH BOX
+   ============================================================ */
+
+.searchBox {
+  position: relative;
+  width: 100%;
+  margin-bottom: var(--space-md);
+}
+
+.searchBox i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.searchBox input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.searchBox input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 MODE SWITCHER
+   ============================================================ */
+
+.inboxModeSwitcher {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.modeSwitchBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  position: relative;
+}
+
+.modeSwitchBtn:hover {
+  color: var(--text-primary);
+}
+
+.modeSwitchBtn.active {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.modeSwitchBtn i {
+  font-size: 14px;
+}
+
+.modeBadgeCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+/* ============================================================
+   📌 FILTER TABS
+   ============================================================ */
+
+.filterTabs {
+  display: flex;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.tabChip {
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  white-space: nowrap;
+}
+
+.tabChip:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.tabChip.active {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 EMPTY STATE
+   ============================================================ */
+
+.noChatsMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--text-muted);
+  text-align: center;
+  gap: var(--space-sm);
+}
+
+.noChatsMessage i {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.noChatsMessage p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl) var(--space-lg);
+  gap: var(--space-md);
+  color: var(--text-secondary);
+}
+
+.loadingSpinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--bg-tertiary);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingState p {
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .searchBox input {
+    padding: 8px 14px 8px 36px;
+    font-size: var(--text-xs);
+  }
+
+  .searchBox i {
+    left: 12px;
+    font-size: 12px;
+  }
+
+  .modeSwitchBtn {
+    padding: 6px 12px;
+    font-size: var(--text-xs);
+  }
+
+  .modeSwitchBtn i {
+    font-size: 12px;
+  }
+
+  .tabChip {
+    padding: 4px 12px;
+    font-size: var(--text-xs);
+  }
+
+  .noChatsMessage i {
+    font-size: 36px;
+  }
+
+  .noChatsMessage p {
+    font-size: var(--text-sm);
+  }
+
+  .loadingSpinner {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchBox input {
+    padding: 6px 12px 6px 32px;
+    font-size: 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .searchBox i {
+    left: 10px;
+    font-size: 10px;
+  }
+
+  .inboxModeSwitcher {
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .modeSwitchBtn {
+    padding: 4px 8px;
+    font-size: 9px;
+    border-radius: var(--radius-xs);
+  }
+
+  .modeSwitchBtn i {
+    font-size: 10px;
+  }
+
+  .modeBadgeCount {
+    min-width: 14px;
+    height: 14px;
+    font-size: 8px;
+    padding: 0 4px;
+  }
+
+  .filterTabs {
+    gap: 4px;
+  }
+
+  .tabChip {
+    padding: 3px 10px;
+    font-size: 9px;
+    border-radius: var(--radius-sm);
+  }
+
+  .noChatsMessage i {
+    font-size: 28px;
+  }
+
+  .noChatsMessage p {
+    font-size: var(--text-xs);
+  }
+
+  .loadingSpinner {
+    width: 24px;
+    height: 24px;
+    border-width: 2px;
+  }
+
+  .loadingState p {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingSpinner {
+    animation: none;
+    border-top-color: transparent;
+  }
+
+  .tabChip:hover {
+    transform: none;
+  }
+
+  .modeSwitchBtn:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .searchBox input {
+    border-width: 2px;
+  }
+
+  .searchBox input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .inboxModeSwitcher {
+    border-width: 2px;
+  }
+
+  .modeSwitchBtn.active {
+    border: 2px solid var(--accent-primary);
+  }
+
+  .tabChip {
+    border-width: 2px;
+  }
+
+  .tabChip.active {
+    border-color: var(--accent-primary);
+  }
+
+  .modeBadgeCount {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.searchBox input:focus-visible,
+.modeSwitchBtn:focus-visible,
+.tabChip:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.inboxListControls ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

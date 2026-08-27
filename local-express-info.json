@@ -1,0 +1,11 @@
+{
+  "name": "express",
+  "description": "Fast, unopinionated, minimalist web framework for node.",
+  "dist-tags": {
+    "latest": "4.19.2"
+  },
+  "author": "TJ Holowaychuk <tj@vision-media.ca>",
+  "license": "MIT",
+  "offlineGenerated": true,
+  "createdAt": "2026-08-26T13:05:49.909Z"
+}

@@ -1,0 +1,304 @@
+/* ============================================================
+   🔄 PWA UPDATE POPUP - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 OVERLAY
+   ============================================================ */
+
+.pwaUpdateOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: overlayFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
+   📌 POPUP CONTAINER
+   ============================================================ */
+
+.pwaUpdatePopup {
+  max-width: 400px;
+  width: 100%;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: popupSlideUp 0.4s ease;
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+@keyframes popupSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 ICON
+   ============================================================ */
+
+.pwaUpdateIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin: 0 auto var(--space-md);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 20px var(--shadow-glow);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px var(--shadow-glow);
+  }
+}
+
+/* ============================================================
+   📌 TITLE & MESSAGE
+   ============================================================ */
+
+.pwaUpdatePopup h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.pwaUpdatePopup p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--space-lg);
+}
+
+/* ============================================================
+   📌 ACTIONS
+   ============================================================ */
+
+.pwaUpdateActions {
+  display: flex;
+  gap: var(--space-md);
+}
+
+/* ── Update Button ── */
+.pwaUpdateBtn {
+  flex: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.pwaUpdateBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.pwaUpdateBtn:active {
+  transform: translateY(0);
+}
+
+.pwaUpdateBtn i {
+  font-size: var(--text-sm);
+}
+
+/* ── Later Button ── */
+.pwaUpdateLater {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.pwaUpdateLater:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .pwaUpdatePopup {
+    max-width: 100%;
+    margin: var(--space-sm);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+  }
+
+  .pwaUpdateIcon {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .pwaUpdatePopup h3 {
+    font-size: var(--text-lg);
+  }
+
+  .pwaUpdatePopup p {
+    font-size: var(--text-sm);
+  }
+
+  .pwaUpdateActions {
+    flex-direction: column;
+  }
+
+  .pwaUpdateBtn,
+  .pwaUpdateLater {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pwaUpdatePopup {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .pwaUpdateIcon {
+    width: 52px;
+    height: 52px;
+    font-size: 24px;
+  }
+
+  .pwaUpdatePopup h3 {
+    font-size: var(--text-base);
+  }
+
+  .pwaUpdatePopup p {
+    font-size: var(--text-xs);
+  }
+
+  .pwaUpdateBtn,
+  .pwaUpdateLater {
+    font-size: var(--text-xs);
+    padding: 10px 16px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pwaUpdateOverlay {
+    animation: none;
+  }
+
+  .pwaUpdatePopup {
+    animation: none;
+  }
+
+  .pwaUpdateIcon {
+    animation: none;
+  }
+
+  .pwaUpdateBtn:hover {
+    transform: none;
+  }
+
+  .pwaUpdateLater:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .pwaUpdatePopup {
+    border-width: 2px;
+  }
+
+  .pwaUpdateBtn {
+    border: 2px solid currentColor;
+  }
+
+  .pwaUpdateLater {
+    border-width: 2px;
+  }
+
+  .pwaUpdateIcon {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.pwaUpdateBtn:focus-visible,
+.pwaUpdateLater:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.pwaUpdatePopup ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

@@ -1,0 +1,152 @@
+/* components/CustomAlert.css */
+.custom-alert {
+  position: fixed;
+  z-index: 9999;
+  min-width: 320px;
+  max-width: 500px;
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px var(--shadow-color);
+  animation: slideIn 0.3s ease;
+  overflow: hidden;
+}
+
+/* Positions */
+.alert-top-center {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.alert-top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.alert-top-left {
+  top: 20px;
+  left: 20px;
+}
+
+.alert-bottom-center {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.alert-bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.alert-bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+/* Types */
+.alert-success {
+  background: var(--status-success);
+  color: var(--text-inverse);
+}
+
+.alert-error {
+  background: var(--status-danger);
+  color: var(--text-inverse);
+}
+
+.alert-warning {
+  background: var(--status-warning);
+  color: var(--text-inverse);
+}
+
+.alert-info {
+  background: var(--status-info);
+  color: var(--text-inverse);
+}
+
+/* Content */
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+}
+
+.alert-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.alert-message {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.alert-close {
+  background: transparent;
+  border: none;
+  color: var(--glass-bg);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.alert-close:hover {
+  background: var(--glass-bg);
+  color: var(--text-inverse);
+}
+
+/* Progress Bar */
+.alert-progress {
+  width: 100%;
+  height: 3px;
+  background: var(--glass-bg);
+}
+
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .custom-alert {
+    min-width: unset;
+    width: calc(100% - 40px);
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  .alert-top-left,
+  .alert-top-right,
+  .alert-top-center {
+    top: 10px;
+  }
+  
+  .alert-bottom-left,
+  .alert-bottom-right,
+  .alert-bottom-center {
+    bottom: 10px;
+  }
+}

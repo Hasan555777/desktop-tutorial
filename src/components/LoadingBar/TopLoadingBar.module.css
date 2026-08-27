@@ -1,0 +1,192 @@
+/* ============================================================
+   📊 TOP LOADING BAR - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 LOADING BAR CONTAINER
+   ============================================================ */
+
+.topLoadingBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  height: 3px;
+  background: transparent;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.topLoadingBar.active {
+  opacity: 1;
+}
+
+/* ============================================================
+   📌 LOADING BAR FILL
+   ============================================================ */
+
+.topLoadingBarFill {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-primary);
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+  animation: loadingProgress 1.5s ease-in-out infinite;
+  box-shadow: 0 0 20px var(--shadow-glow);
+}
+
+/* ============================================================
+   🎬 ANIMATION
+   ============================================================ */
+
+@keyframes loadingProgress {
+  0% {
+    width: 0%;
+    transform: translateX(0);
+  }
+  20% {
+    width: 20%;
+    transform: translateX(0);
+  }
+  40% {
+    width: 40%;
+    transform: translateX(10%);
+  }
+  60% {
+    width: 60%;
+    transform: translateX(20%);
+  }
+  80% {
+    width: 80%;
+    transform: translateX(30%);
+  }
+  90% {
+    width: 90%;
+    transform: translateX(40%);
+  }
+  95% {
+    width: 95%;
+    transform: translateX(50%);
+  }
+  100% {
+    width: 100%;
+    transform: translateX(60%);
+  }
+}
+
+/* ============================================================
+   🎨 VARIANT - DETERMINATE (if you want precise progress)
+   ============================================================ */
+
+.topLoadingBar.determinate .topLoadingBarFill {
+  animation: none;
+  transition: width 0.3s ease;
+}
+
+.topLoadingBar.determinate .topLoadingBarFill.progress-25 {
+  width: 25%;
+}
+
+.topLoadingBar.determinate .topLoadingBarFill.progress-50 {
+  width: 50%;
+}
+
+.topLoadingBar.determinate .topLoadingBarFill.progress-75 {
+  width: 75%;
+}
+
+.topLoadingBar.determinate .topLoadingBarFill.progress-100 {
+  width: 100%;
+}
+
+/* ============================================================
+   🎨 VARIANT - COLOR OVERRIDES
+   ============================================================ */
+
+.topLoadingBar.success .topLoadingBarFill {
+  background: var(--gradient-success);
+  box-shadow: 0 0 20px var(--shadow-glow);
+}
+
+.topLoadingBar.error .topLoadingBarFill {
+  background: var(--gradient-danger);
+  box-shadow: 0 0 20px var(--shadow-glow);
+}
+
+.topLoadingBar.warning .topLoadingBarFill {
+  background: var(--gradient-warning);
+  box-shadow: 0 0 20px var(--shadow-glow);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .topLoadingBar {
+    height: 2.5px;
+  }
+
+  .topLoadingBarFill {
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .topLoadingBar {
+    height: 2px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .topLoadingBarFill {
+    animation: none;
+    width: 100%;
+  }
+
+  .topLoadingBar.determinate .topLoadingBarFill {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .topLoadingBarFill {
+    background: var(--accent-primary);
+    box-shadow: none;
+    border-bottom: 2px solid var(--accent-primary);
+  }
+
+  .topLoadingBar.success .topLoadingBarFill {
+    background: var(--status-success);
+    border-bottom-color: var(--status-success);
+  }
+
+  .topLoadingBar.error .topLoadingBarFill {
+    background: var(--status-danger);
+    border-bottom-color: var(--status-danger);
+  }
+
+  .topLoadingBar.warning .topLoadingBarFill {
+    background: var(--status-warning);
+    border-bottom-color: var(--status-warning);
+  }
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.topLoadingBar ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

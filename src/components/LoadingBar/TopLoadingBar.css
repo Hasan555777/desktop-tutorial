@@ -1,0 +1,48 @@
+/* src/components/LoadingBar/TopLoadingBar.css */
+
+.top-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 10000;
+  overflow: hidden;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.top-loading-bar.active {
+  opacity: 1;
+}
+
+.top-loading-bar-fill {
+  height: 100%;
+  width: 40%;
+  background: var(--accent-primary, #14b8a6);
+  box-shadow: 0 0 8px var(--accent-primary, #14b8a6);
+  border-radius: 0 4px 4px 0;
+  animation: top-loading-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes top-loading-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+/* কেউ reduced-motion চাইলে animation বন্ধ, শুধু স্থির bar */
+@media (prefers-reduced-motion: reduce) {
+  .top-loading-bar-fill {
+    animation: none;
+    width: 100%;
+  }
+}

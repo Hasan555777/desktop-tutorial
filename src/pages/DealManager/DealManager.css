@@ -1,0 +1,2300 @@
+/* ==========================================================================
+   Deal Manager - Complete CSS
+   ========================================================================== */
+
+/* ==========================================================================
+   CSS Variables
+   ========================================================================== */
+:root {
+--accent-gradient: linear-gradient(135deg, var(--accent-light) 0%, var(--accent-secondary) 100%);
+--shadow-sm: var(--shadow-color);
+  --shadow-md: var(--shadow-color);
+  --shadow-lg: var(--shadow-color);
+--success-bg: var(--status-success-bg);
+  --success-text: var(--status-success);
+  --danger-bg: var(--status-danger-bg);
+  --danger-text: var(--status-danger);
+  --warning-bg: var(--status-warning-bg);
+  --warning-text: var(--status-warning);
+  --info-bg: var(--status-info-bg);
+  --info-text: var(--status-info);
+}
+
+:root.light-mode {
+--accent-gradient: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+--shadow-sm: var(--shadow-color);
+  --shadow-md: var(--shadow-color);
+  --shadow-lg: var(--shadow-color);
+--success-bg: var(--status-success-bg);
+  --success-text: var(--status-success);
+  --danger-bg: var(--status-danger-bg);
+  --danger-text: var(--status-danger);
+  --warning-bg: var(--status-warning-bg);
+  --warning-text: var(--status-warning);
+  --info-bg: var(--status-info-bg);
+  --info-text: var(--status-info);
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+/* ==========================================================================
+   Dashboard Container
+   ========================================================================== */
+.dashboard-container-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: 80px 24px 40px;
+}
+
+.dashboard-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Mode Switcher
+   ========================================================================== */
+.deal-mode-switcher {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  background: var(--card-bg);
+  padding: 8px;
+  border-radius: 60px;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+}
+
+.mode-switch-button {
+  flex: 1;
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.mode-switch-button i {
+  font-size: 16px;
+}
+
+.mode-switch-button.active {
+  background: var(--accent-gradient);
+  color: var(--bg-primary);
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.mode-switch-button:hover:not(.active) {
+  background: var(--bg-hover);
+  color: var(--accent-primary);
+}
+
+/* ==========================================================================
+   Back Button
+   ========================================================================== */
+.back-to-list {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  padding: 10px 20px;
+  border-radius: 40px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-to-list:hover {
+  background: var(--accent-light);
+  transform: translateX(-3px);
+}
+
+/* ==========================================================================
+   Deal List
+   ========================================================================== */
+.deals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.deal-list-item {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 20px 24px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--shadow-sm);
+}
+
+.deal-list-item:hover {
+  border-color: var(--accent-primary);
+  transform: translateX(5px);
+  box-shadow: 0 8px 25px var(--shadow-md);
+}
+
+.deal-list-info {
+  flex: 1;
+}
+
+.deal-list-info h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.deal-list-info p {
+  font-size: 14px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deal-list-info p i {
+  color: var(--accent-primary);
+}
+
+.deal-list-status .status-badge {
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.pending {
+  background: var(--warning-bg);
+  color: var(--warning-text);
+  border: 1px solid var(--status-warning-bg);
+}
+
+.status-badge.active {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  border: 1px solid var(--border-color);
+}
+
+.status-badge.completed {
+  background: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--status-success-bg);
+}
+
+/* ==========================================================================
+   No Deal Selected
+   ========================================================================== */
+.no-deal-selected {
+  text-align: center;
+  padding: 80px 20px;
+  background: var(--card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+}
+
+.no-deal-selected i {
+  font-size: 64px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.no-deal-selected h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+}
+
+.no-deal-selected p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Dashboard Header (Deal Detail)
+   ========================================================================== */
+.dash-header {
+  margin-bottom: 24px;
+}
+
+.project-meta h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.project-meta p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.mode-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mode-badge.pending {
+  background: var(--warning-bg);
+  color: var(--warning-text);
+}
+
+.mode-badge.active {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.mode-badge.completed {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+/* ==========================================================================
+   Deal Info Card
+   ========================================================================== */
+.deal-info-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+}
+
+.deal-info-row {
+  display: flex;
+  margin-bottom: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.deal-info-row span {
+  width: 140px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.deal-info-row strong,
+.deal-info-row p {
+  color: var(--text-primary);
+  font-size: 14px;
+  flex: 1;
+}
+
+.deal-info-row p {
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Milestone Container
+   ========================================================================== */
+.milestone-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.milestone-row {
+  background: var(--bg-tertiary);
+  border-radius: 20px;
+  padding: 20px 24px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.milestone-row:hover {
+  border-color: var(--accent-primary);
+  transform: translateX(4px);
+}
+
+.m-info-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.m-number {
+  width: 40px;
+  height: 40px;
+  background: var(--card-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  border: 1px solid var(--border-color);
+}
+
+.m-details h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.m-amount {
+  font-size: 13px;
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.m-status-side {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Status Badges
+   ========================================================================== */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pending {
+  background: var(--warning-bg);
+  color: var(--warning-text);
+}
+
+.status-funded {
+  background: var(--info-bg);
+  color: var(--info-text);
+}
+
+.status-review {
+  background: var(--accent-light);
+  color: var(--accent-primary);
+}
+
+.status-released {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-fund,
+.btn-request-review,
+.btn-release,
+.btn-confirm-deal {
+  padding: 10px 20px;
+  border-radius: 40px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-fund {
+  background: linear-gradient(135deg, var(--status-warning), var(--status-warning));
+  color: var(--text-inverse);
+  box-shadow: 0 2px 8px var(--status-warning-bg);
+}
+
+.btn-request-review {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary));
+  color: var(--text-inverse);
+  box-shadow: 0 2px 8px var(--status-info-bg);
+}
+
+.btn-release {
+  background: linear-gradient(135deg, var(--status-success), var(--status-success));
+  color: var(--text-inverse);
+  box-shadow: 0 2px 8px var(--status-success-bg);
+}
+
+.btn-confirm-deal {
+  background: var(--accent-gradient);
+  color: var(--bg-primary);
+  box-shadow: 0 4px 15px var(--accent-glow);
+  font-size: 14px;
+  padding: 12px 28px;
+}
+
+.btn-fund:hover,
+.btn-request-review:hover,
+.btn-release:hover,
+.btn-confirm-deal:hover {
+  transform: translateY(-2px);
+}
+
+.btn-fund:active,
+.btn-request-review:active,
+.btn-release:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Confirm Deal Banner
+   ========================================================================== */
+.confirm-deal-banner {
+  background: var(--accent-light);
+  border: 2px solid var(--accent-primary);
+  border-radius: 20px;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.confirm-deal-banner p {
+  color: var(--accent-primary);
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   Deal Completed Banner
+   ========================================================================== */
+.deal-completed-banner {
+  background: var(--success-bg);
+  border: 2px solid var(--success-text);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.deal-completed-banner i {
+  font-size: 48px;
+  color: var(--success-text);
+  margin-bottom: 12px;
+}
+
+.deal-completed-banner h4 {
+  font-size: 20px;
+  color: var(--success-text);
+  margin-bottom: 8px;
+}
+
+.deal-completed-banner p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.badge-completed {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--success-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Loading State
+   ========================================================================== */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 16px;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-state p {
+  color: var(--text-muted);
+}
+
+.dashboard-container-wrapper{
+  margin-left: 50px;
+}
+
+/* ==========================================================================
+   Responsive - Tablet
+   ========================================================================== */
+@media (max-width: 768px) {
+  .dashboard-container-wrapper {
+    margin-left: 0;
+    margin-bottom: 50px;
+  }
+  .milestone-container{
+    margin-bottom: 40px;
+  }
+
+  .deal-mode-switcher {
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .mode-switch-button {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .deal-list-item {
+    padding: 16px 20px;
+  }
+
+  .deal-list-info h4 {
+    font-size: 16px;
+  }
+
+  .milestone-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px;
+  }
+
+  .m-status-side {
+    width: 100%;
+    justify-content: flex-start;
+    border-top: 1px solid var(--border-color);
+    padding-top: 14px;
+  }
+
+  .project-meta h2 {
+    font-size: 22px;
+  }
+
+  .confirm-deal-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .deal-info-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .deal-info-row span {
+    width: auto;
+  }
+}
+
+/* ==========================================================================
+   Responsive - Mobile
+   ========================================================================== */
+@media (max-width: 480px) {
+  .dashboard-container-wrapper {
+    margin-left: 0;
+    margin-bottom: 50px;
+    
+  }
+  .milestone-container{
+    margin-bottom: 40px;
+  }
+
+  .deal-mode-switcher {
+    gap: 8px;
+  }
+
+  .mode-switch-button {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .mode-switch-button i {
+    font-size: 12px;
+  }
+
+  .deal-list-item {
+    padding: 14px 16px;
+  }
+
+  .deal-list-info h4 {
+    font-size: 15px;
+  }
+
+  .deal-list-info p {
+    font-size: 12px;
+  }
+
+  .back-to-list {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .project-meta h2 {
+    font-size: 20px;
+  }
+
+  .deal-info-card {
+    padding: 18px;
+  }
+
+  .milestone-row {
+    padding: 14px;
+  }
+
+  .m-number {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+  }
+
+  .m-details h4 {
+    font-size: 14px;
+  }
+
+  .btn-fund,
+  .btn-request-review,
+  .btn-release {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .status-badge {
+    padding: 4px 12px;
+    font-size: 11px;
+  }
+}
+
+/* ==========================================================================
+   Responsive - Desktop
+   ========================================================================== */
+
+
+/* ==========================================================================
+   Light Mode
+   ========================================================================== */
+.light-mode .deal-list-item,
+.light-mode .deal-info-card,
+.light-mode .no-deal-selected,
+.light-mode .milestone-row {
+  background: var(--card-bg);
+}
+
+.light-mode .mode-switch-button {
+  background:var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.light-mode .deal-list-item:hover {
+  background: var(--bg-hover);
+}
+
+
+/* ==========================================================================
+   Mobile Overflow Fix - Buyer Mode
+   ========================================================================== */
+
+/* মোবাইলের জন্য ফিক্স */
+@media (max-width: 768px) {
+  .dashboard-container-wrapper {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    margin: 0 !important;
+    
+  }
+
+  .dashboard-wrapper {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-top: -60px;
+  }
+
+  .deal-mode-switcher {
+    width: 100% !important;
+    overflow-x: hidden !important;
+    flex-wrap: wrap !important;
+  }
+
+  .mode-switch-button {
+    white-space: nowrap !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .deals-list {
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .deal-list-item {
+    width: 100% !important;
+    overflow-x: hidden !important;
+    padding: 14px 16px !important;
+  }
+
+  .deal-list-info {
+    overflow-x: hidden !important;
+  }
+
+  .deal-list-info h4 {
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .deal-list-info p {
+    flex-wrap: wrap !important;
+  }
+
+  /* ডিল ডিটেইল পেজের জন্য */
+  .dash-header {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  .project-meta {
+    overflow-x: hidden !important;
+    word-break: break-word !important;
+  }
+
+  .project-meta h2 {
+    font-size: 18px !important;
+    word-break: break-word !important;
+  }
+
+  .project-meta p {
+    word-break: break-word !important;
+  }
+
+  .deal-info-card {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    padding: 16px !important;
+  }
+
+  .deal-info-row {
+    flex-wrap: wrap !important;
+    word-break: break-word !important;
+  }
+
+  .milestone-container {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  .milestone-row {
+    width: 100% !important;
+    overflow-x: hidden !important;
+    padding: 14px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .m-info-block {
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .m-details {
+    overflow-x: hidden !important;
+  }
+
+  .m-details h4 {
+    word-break: break-word !important;
+    white-space: normal !important;
+  }
+
+  .m-status-side {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .btn-fund,
+  .btn-request-review,
+  .btn-release {
+    white-space: nowrap !important;
+    font-size: 11px !important;
+    padding: 8px 14px !important;
+  }
+
+  .status-badge {
+    white-space: nowrap !important;
+  }
+}
+
+/* ছোট মোবাইলের জন্য অতিরিক্ত */
+@media (max-width: 480px) {
+  .dashboard-container-wrapper {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+    
+  }
+
+  .mode-switch-button {
+    font-size: 11px !important;
+    padding: 8px 10px !important;
+  }
+
+  .mode-switch-button i {
+    font-size: 11px !important;
+  }
+
+  .deal-list-item {
+    padding: 12px !important;
+  }
+
+  .deal-list-info h4 {
+    font-size: 14px !important;
+  }
+
+  .btn-fund,
+  .btn-request-review,
+  .btn-release {
+    font-size: 10px !important;
+    padding: 6px 12px !important;
+  }
+
+  .status-badge {
+    font-size: 10px !important;
+    padding: 3px 10px !important;
+  }
+}
+
+/* গ্লোবাল ফিক্স */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+#root {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* ==========================================
+   🆕 Cancellation Request Banner
+   ========================================== */
+
+.cancel-request-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.cancel-request-banner.pending {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-bg);
+}
+
+.cancel-request-banner.rejected {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-bg);
+}
+
+.cancel-request-banner i {
+  font-size: 28px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.cancel-request-banner.pending i {
+  color: var(--status-warning);
+}
+
+.cancel-request-banner.rejected i {
+  color: var(--status-danger);
+}
+
+.cancel-request-banner h4 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.cancel-request-banner p {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.cancel-request-banner .cancel-reason {
+  background: var(--bg-tertiary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Cancel Response Buttons */
+.cancel-response-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-agree {
+  padding: 8px 20px;
+  background: var(--status-success);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-agree:hover {
+  background: var(--status-success);
+  transform: translateY(-2px);
+}
+
+.btn-reject {
+  padding: 8px 20px;
+  background: var(--status-danger);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-reject:hover {
+  background: var(--status-danger);
+  transform: translateY(-2px);
+}
+
+/* Cancel Deal Section */
+.cancel-deal-section {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-cancel-deal {
+  padding: 10px 24px;
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger-bg);
+  border-radius: 8px;
+  color: var(--status-danger);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-cancel-deal:hover {
+  background: var(--status-danger);
+  color: var(--text-inverse);
+  transform: translateY(-2px);
+}
+
+.cancel-warning {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.cancel-warning i {
+  margin-right: 6px;
+  color: var(--status-warning);
+}
+
+/* ============================================================
+   ক্যানসেল ডিল বাটন ও স্টাইল
+   ============================================================ */
+
+/* ক্যানসেল ডিল বাটন */
+.mode-switch-button.cancelled-btn {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.mode-switch-button.cancelled-btn:hover {
+  background: var(--status-danger-bg);
+}
+
+.mode-switch-button.cancelled-btn.active {
+  background: var(--status-danger);
+  color: var(--text-inverse);
+  border-color: var(--status-danger);
+}
+
+/* ক্যানসেল ডিল লিস্ট আইটেম */
+.deal-list-item.cancelled {
+  border-left: 3px solid var(--status-danger);
+  background: var(--status-danger-bg);
+  opacity: 0.7;
+}
+
+.deal-list-item.cancelled:hover {
+  opacity: 1;
+  background: var(--status-danger-bg);
+}
+
+.deal-list-item.cancelled .deal-list-info h4 {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.deal-cancelled-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* স্ট্যাটাস ব্যাজ - ক্যানসেল */
+.status-badge.cancelled {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger-bg);
+}
+
+
+/* ============================================================
+   🆕 ডিল স্ট্যাটাস কাউন্ট
+   ============================================================ */
+/* ============================================================
+   📊 ডিল স্ট্যাটাস ও টাইমার - প্রফেশনাল স্টাইল
+   ============================================================ */
+
+.deals-stats {
+  display: flex;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 12px var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.deals-stats:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-md);
+}
+
+.stat-items {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 6px 16px;
+  border-radius: 30px;
+  background: var(--bg-secondary);
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.stat-items:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-sm);
+}
+
+.stat-items i {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* স্ট্যাটাস অনুযায়ী কালার */
+.stat-items.total {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  font-weight: 700;
+}
+
+.stat-items.total i {
+  color: var(--accent-primary);
+  opacity: 1;
+}
+
+.stat-items.pending {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-bg);
+}
+
+.stat-items.pending i {
+  color: var(--status-warning);
+  opacity: 1;
+}
+
+.stat-items.pending:hover {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-bg);
+}
+
+.stat-items.active {
+  color: var(--accent-light);
+  background: var(--status-success-bg);
+  border-color: var(--status-success-bg);
+}
+
+.stat-items.active i {
+  color: var(--accent-light);
+  opacity: 1;
+}
+
+.stat-items.active:hover {
+  background: var(--status-success-bg);
+  border-color: var(--status-success-bg);
+}
+
+.stat-items.completed {
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  border-color: var(--status-success-bg);
+}
+
+.stat-items.completed i {
+  color: var(--status-success);
+  opacity: 1;
+}
+
+.stat-items.completed:hover {
+  background: var(--status-success-bg);
+  border-color: var(--status-success-bg);
+}
+
+.stat-items.cancelled {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-bg);
+}
+
+.stat-items.cancelled i {
+  color: var(--status-danger);
+  opacity: 1;
+}
+
+.stat-items.cancelled:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-bg);
+}
+
+.stat-items .stat-number {
+  font-weight: 800;
+  font-size: 15px;
+  margin-left: 2px;
+}
+
+/* ============================================================
+   ⏰ টাইমার স্টাইল - প্রফেশনাল
+   ============================================================ */
+
+.timer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning-bg);
+  margin-left: 12px;
+  animation: timerPulse 2s ease-in-out infinite;
+  box-shadow: 0 2px 8px var(--status-warning-bg);
+}
+
+@keyframes timerPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.timer-badge i {
+  font-size: 13px;
+  animation: timerRotate 4s linear infinite;
+}
+
+@keyframes timerRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.timer-badge.deadline-passed {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border-color: var(--status-danger-bg);
+  animation: none;
+}
+
+.timer-badge.deadline-passed i {
+  animation: none;
+}
+
+.timer-display {
+  color: var(--status-warning);
+  font-weight: 700;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+.timer-display.deadline-passed {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   🕐 ডিল লিস্টে টাইমার
+   ============================================================ */
+
+.deal-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--status-warning);
+  margin-top: 6px;
+  padding: 3px 12px;
+  background: var(--status-warning-bg);
+  border-radius: 20px;
+  border: 1px solid var(--status-warning-bg);
+}
+
+.deal-timer i {
+  font-size: 12px;
+  animation: timerRotate 4s linear infinite;
+}
+
+.deal-timer.deadline-passed {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-bg);
+}
+
+.deal-timer.deadline-passed i {
+  animation: none;
+}
+
+/* ============================================================
+   📱 রেসপন্সিভ
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .deals-stats {
+    padding: 12px 16px;
+    gap: 8px;
+    border-radius: 14px;
+  }
+
+  .stat-items {
+    font-size: 12px;
+    padding: 4px 12px;
+    gap: 6px;
+  }
+
+  .stat-items .stat-number {
+    font-size: 13px;
+  }
+
+  .timer-badge {
+    font-size: 11px;
+    padding: 4px 12px;
+    margin-left: 8px;
+  }
+
+  .timer-display {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .deals-stats {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  .stat-items {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .stat-items .stat-number {
+    font-size: 12px;
+  }
+
+  .timer-badge {
+    font-size: 12px;
+    padding: 3px 10px;
+    margin-left: 6px;
+  }
+
+  .timer-display {
+    font-size: 13px;
+  }
+
+  .deal-timer {
+    font-size: 11px;
+    padding: 2px 10px;
+  }
+}
+
+
+
+
+/* DealManager.css - Deadlin Passed স্টাইল */
+.deadline-passed {
+  color: var(--status-danger) !important;
+  background: var(--status-danger-bg) !important;
+  border: 1px solid var(--status-danger) !important;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+
+
+
+
+/* DealManager.css */
+
+/* ===== ডিল আইডি ব্যাজ ===== */
+.deal-id-badge {
+  display: inline-block;
+  background: var(--accent-light, var(--status-success-bg));
+  color: var(--accent-primary, var(--accent-light));
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-left: 8px;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+/* ===== ডিল আইডি ডিসপ্লে ===== */
+.deal-id-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.deal-id-label {
+  font-size: 13px;
+  color: var(--text-muted, var(--accent-primary));
+  font-weight: 500;
+}
+
+.deal-id-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent-primary, var(--accent-light));
+  font-family: monospace;
+  letter-spacing: 1px;
+  background: var(--bg-elevated, var(--accent-primary));
+  padding: 2px 12px;
+  border-radius: 6px;
+}
+
+/* ===== কপি বাটন ===== */
+.copy-id-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted, var(--accent-primary));
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.copy-id-btn:hover {
+  background: var(--accent-light, var(--status-success-bg));
+  color: var(--accent-primary, var(--accent-light));
+}
+
+.copy-id-btn-small {
+  background: none;
+  border: none;
+  color: var(--text-muted, var(--accent-primary));
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin-left: 4px;
+}
+
+.copy-id-btn-small:hover {
+  color: var(--accent-primary, var(--accent-light));
+}
+
+.deal-id-highlight {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent-primary, var(--accent-light));
+  font-family: monospace;
+}
+
+/* ============================================================
+   📱 রেসপনসিভ
+   ============================================================ */
+@media (max-width: 768px) {
+  .deal-id-number {
+    font-size: 14px;
+    padding: 2px 8px;
+  }
+
+  .deal-id-badge {
+    font-size: 10px;
+    padding: 1px 8px;
+    margin-left: 4px;
+  }
+
+  .deal-id-display {
+    flex-wrap: wrap;
+  }
+}
+
+
+
+/* ==========================================
+   🆕 Partner Info Styles
+   ========================================== */
+
+.deal-partner {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 4px 0;
+}
+
+.deal-partner i {
+  margin-right: 6px;
+  color: var(--accent-primary);
+}
+
+.deal-partner strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.deal-partner.cancelled strong {
+  color: var(--text-muted);
+}
+
+/* Partner Info in Header */
+.deal-partner-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.partner-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.partner-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.partner-email {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.partner-email-small {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 6px;
+  font-weight: 400;
+}
+
+.deal-info-row.partner-row {
+  background: var(--accent-light);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.deal-info-row.partner-row strong {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Mode Badge with Partner */
+.project-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.project-meta .mode-badge {
+  align-self: flex-start;
+}
+
+
+/* ডিল ক্যানসেলড ব্যানার স্টাইল */
+.deal-cancelled-banner {
+  background-color: var(--accent-primary); /* হালকা লাল ব্যাকগ্রাউন্ড */
+  border: 1px solid var(--accent-primary);
+  border-left: 5px solid var(--status-danger); /* বাম পাশে একটি লাল স্ট্রিপ */
+  padding: 16px;
+  border-radius: 8px;
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--status-danger);
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.deal-cancelled-banner i {
+  font-size: 24px;
+  color: var(--status-danger);
+  margin-bottom: 4px;
+}
+
+.deal-cancelled-banner h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--status-danger);
+}
+
+.deal-cancelled-banner p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.deal-cancelled-banner p strong {
+  color: var(--status-danger);
+}
+
+/* মোবাইল রেসপনসিভনেস */
+@media (max-width: 480px) {
+  .deal-cancelled-banner {
+    padding: 12px;
+  }
+  .deal-cancelled-banner h4 {
+    font-size: 16px;
+  }
+}
+
+
+
+/* এক্সটেন্ড ডেডলাইন বাটন সেকশন */
+.extend-deadline-section {
+  display: flex;
+  justify-content: center; /* সেন্টারে রাখার জন্য */
+  margin: 15px 0;
+}
+
+.btn-extend-deadline {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* আইকন এবং টেক্সটের মাঝে গ্যাপ */
+  padding: 10px 20px;
+  background-color: var(--text-inverse);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+/* হোভার ইফেক্ট */
+.btn-extend-deadline:hover {
+  background-color: var(--text-primary);
+  border-color: var(--border-color);
+  color: var(--bg-tertiary);
+  transform: translateY(-1px);
+}
+
+/* অ্যাক্টিভ বা ক্লিক করার সময় ইফেক্ট */
+.btn-extend-deadline:active {
+  transform: translateY(0);
+}
+
+/* আইকন স্টাইল */
+.btn-extend-deadline i {
+  font-size: 16px;
+  color: var(--accent-primary); /* আপনার থিমের সাথে সামঞ্জস্যপূর্ণ রঙ */
+}
+
+
+
+
+.deal-cancelled-banner p {
+  margin: 0;
+  font-size: 14px;
+  word-wrap: break-word; /* বড় কারণ থাকলে লাইন ব্রেক হবে */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   📅 DEADLINE EXTENSION - NEW CSS
+   ============================================================ */
+
+/* ---- Extend Deadline Section ---- */
+.extend-deadline-section {
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-extend-deadline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  width: fit-content;
+}
+
+.btn-extend-deadline:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--shadow-glow);
+}
+
+.btn-extend-deadline:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-extend-deadline i {
+  font-size: 16px;
+}
+
+.extension-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.extension-hint i {
+  margin-right: 6px;
+  color: var(--accent-primary);
+}
+
+/* ---- Extension Request Banner ---- */
+.extension-request-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  margin: 12px 0;
+  border-left: 4px solid;
+  background: var(--bg-tertiary);
+  flex-wrap: wrap;
+}
+
+.extension-request-banner.pending {
+  border-left-color: #f59e0b;
+  background: #f59e0b10;
+}
+
+.extension-request-banner.approved {
+  border-left-color: #10b981;
+  background: #10b98110;
+}
+
+.extension-request-banner.rejected {
+  border-left-color: #ef4444;
+  background: #ef444410;
+}
+
+.extension-request-banner > i {
+  font-size: 24px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.extension-request-banner.pending > i {
+  color: #f59e0b;
+}
+
+.extension-request-banner.approved > i {
+  color: #10b981;
+}
+
+.extension-request-banner.rejected > i {
+  color: #ef4444;
+}
+
+.extension-request-banner > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.extension-request-banner h4 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.extension-request-banner p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.extension-details {
+  margin-top: 6px !important;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.extension-details strong {
+  color: var(--text-primary);
+}
+
+/* ---- Extension Response Buttons ---- */
+.extension-response-btns {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.extension-response-btns .btn-agree,
+.extension-response-btns .btn-reject {
+  padding: 8px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.extension-response-btns .btn-agree {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.extension-response-btns .btn-agree:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px #10b98140;
+}
+
+.extension-response-btns .btn-reject {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.extension-response-btns .btn-reject:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px #ef444440;
+}
+
+/* ---- Pending Waiting ---- */
+.pending-waiting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-color);
+  flex-shrink: 0;
+}
+
+.pending-waiting i {
+  color: #f59e0b;
+  font-size: 16px;
+}
+
+/* ---- Dismiss Button ---- */
+.btn-dismiss {
+  padding: 6px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.btn-dismiss:hover {
+  background: var(--bg-hover);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .extension-request-banner {
+    flex-direction: column;
+    padding: 14px 16px;
+  }
+
+  .extension-response-btns {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .extension-response-btns .btn-agree,
+  .extension-response-btns .btn-reject {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .pending-waiting {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-extend-deadline {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .extension-request-banner {
+    padding: 12px 14px;
+  }
+
+  .extension-request-banner h4 {
+    font-size: 14px;
+  }
+
+  .extension-request-banner p {
+    font-size: 12px;
+  }
+
+  .extension-response-btns .btn-agree,
+  .extension-response-btns .btn-reject {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+}
+
+/* ============================================================
+   🎨 ANIMATIONS
+   ============================================================ */
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.extension-request-banner {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .extension-request-banner {
+    animation: none;
+  }
+
+  .btn-extend-deadline:hover:not(:disabled),
+  .extension-response-btns .btn-agree:hover,
+  .extension-response-btns .btn-reject:hover {
+    transform: none !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* DealManager.css - নতুন CSS */
+
+.btn-submit-work {
+  padding: 6px 14px;
+  background: #8b5cf6;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-submit-work:hover:not(:disabled) {
+  background: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px #8b5cf640;
+}
+
+.btn-submit-work:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-review-release {
+  padding: 6px 14px;
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-review-release:hover:not(:disabled) {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px #10b98140;
+}
+
+.btn-review-release:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   🆕 OVERDUE + DISPUTE — যোগ করার জন্য নতুন CSS
+   এই ব্লকটা তোমার বর্তমান DealManager.css ফাইলের একদম শেষে
+   পেস্ট করে দাও।
+   ============================================================ */
+
+/* ---- Deal Status Badge: Overdue ---- */
+.status-badge.overdue,
+.mode-badge.overdue {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger-bg);
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+/* ---- Stats bar: Overdue count ---- */
+.stat-items.overdue {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-bg);
+}
+
+.stat-items.overdue i {
+  color: var(--status-danger);
+  opacity: 1;
+}
+
+.stat-items.overdue:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-bg);
+}
+
+/* ---- Overdue Banner (Extend / Cancel / Dispute options) ---- */
+.overdue-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: var(--radius-md, 12px);
+  margin: 12px 0;
+  border-left: 4px solid var(--status-danger);
+  background: var(--status-danger-bg);
+  flex-wrap: wrap;
+  animation: slideDown 0.3s ease-out;
+}
+
+.overdue-banner > i {
+  font-size: 28px;
+  color: var(--status-danger);
+  margin-top: 2px;
+  flex-shrink: 0;
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+.overdue-banner > div {
+  flex: 1;
+  min-width: 200px;
+}
+
+.overdue-banner h4 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  color: var(--status-danger);
+}
+
+.overdue-banner p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.overdue-action-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.overdue-action-btns button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.overdue-action-btns button:hover {
+  transform: translateY(-2px);
+}
+
+/* ---- Open Dispute Button ---- */
+.btn-dispute {
+  background: #f59e0b !important;
+  color: #111 !important;
+}
+
+.btn-dispute:hover {
+  background: #d97706 !important;
+  box-shadow: 0 8px 25px #f59e0b40;
+}
+
+/* ---- Dispute Banner (blocks other actions while open) ---- */
+.dispute-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: var(--radius-md, 12px);
+  margin: 12px 0;
+  border-left: 4px solid #f59e0b;
+  background: #f59e0b12;
+  flex-wrap: wrap;
+  animation: slideDown 0.3s ease-out;
+}
+
+.dispute-banner.open > i {
+  font-size: 28px;
+  color: #f59e0b;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.dispute-banner > div {
+  flex: 1;
+  min-width: 200px;
+}
+
+.dispute-banner h4 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  color: #f59e0b;
+}
+
+.dispute-banner p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .overdue-banner,
+  .dispute-banner {
+    flex-direction: column;
+    padding: 16px 18px;
+  }
+
+  .overdue-action-btns {
+    flex-direction: column;
+  }
+
+  .overdue-action-btns button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overdue-banner > i,
+  .status-badge.overdue,
+  .mode-badge.overdue {
+    animation: none;
+  }
+}

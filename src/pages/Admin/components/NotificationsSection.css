@@ -1,0 +1,498 @@
+/* ============================================================
+   📨 NOTIFICATIONS SECTION - সম্পূর্ণ CSS
+   Admin Panel - Send & View Notifications
+   ============================================================ */
+
+/* ==========================================
+   কন্টেইনার
+   ========================================== */
+
+.admin-notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0;
+}
+
+.admin-notifications h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ==========================================
+   নোটিফিকেশন ফর্ম
+   ========================================== */
+
+.notification-form {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── ফর্ম গ্রুপ ── */
+.notification-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.notification-form .form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.notification-form .form-group select {
+  padding: 10px 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: all var(--transition-fast);
+}
+
+.notification-form .form-group select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.notification-form .form-group textarea {
+  padding: 10px 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+.notification-form .form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.notification-form .form-group textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ==========================================
+   প্রাপক নির্বাচন
+   ========================================== */
+
+.recipient-select {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.recipient-select::-webkit-scrollbar {
+  width: 4px;
+}
+
+.recipient-select::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.recipient-select::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.recipient-select {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) transparent;
+}
+
+.select-all {
+  padding: 6px 0 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.select-all label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.select-all label input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-list .user-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.user-list .user-check:hover {
+  background: var(--bg-hover);
+}
+
+.user-list .user-check input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.user-list .user-check span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   সেন্ড বাটন
+   ========================================== */
+
+.notification-form .btn-primary {
+  padding: 12px 24px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-inverse);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: 4px;
+}
+
+.notification-form .btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.9;
+}
+
+.notification-form .btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.notification-form .btn-primary:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* ==========================================
+   পাঠানো নোটিফিকেশন
+   ========================================== */
+
+.sent-notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sent-notifications h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notification-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.notification-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) transparent;
+}
+
+/* ── নোটিফিকেশন আইটেম ── */
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.notification-item:hover {
+  background: var(--bg-hover);
+}
+
+.notification-item .notif-message {
+  font-size: 14px;
+  color: var(--text-primary);
+  flex: 1;
+  word-break: break-word;
+}
+
+.notification-item .notif-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ── টাইপ ভ্যারিয়েন্ট ── */
+.notification-item.info {
+  border-left-color: var(--status-info);
+}
+
+.notification-item.success {
+  border-left-color: var(--status-success);
+}
+
+.notification-item.warning {
+  border-left-color: var(--status-warning);
+}
+
+.notification-item.error {
+  border-left-color: var(--status-danger);
+}
+
+/* ==========================================
+   রেসপনসিভ
+   ========================================== */
+
+/* ট্যাবলেট */
+@media (max-width: 1024px) {
+  .admin-notifications h3 {
+    font-size: 18px;
+  }
+
+  .notification-form {
+    padding: 16px;
+  }
+}
+
+/* মোবাইল */
+@media (max-width: 768px) {
+  .admin-notifications h3 {
+    font-size: 16px;
+  }
+
+  .notification-form {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .notification-form .form-group label {
+    font-size: 13px;
+  }
+
+  .notification-form .form-group select,
+  .notification-form .form-group textarea {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .notification-form .btn-primary {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .sent-notifications h4 {
+    font-size: 14px;
+  }
+
+  .notification-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 10px 12px;
+  }
+
+  .notification-item .notif-message {
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .notification-item .notif-meta {
+    font-size: 11px;
+    gap: 8px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .user-list .user-check {
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+
+  .select-all label {
+    font-size: 13px;
+  }
+
+  .recipient-select {
+    max-height: 150px;
+  }
+}
+
+/* ছোট ফোন */
+@media (max-width: 480px) {
+  .admin-notifications h3 {
+    font-size: 14px;
+  }
+
+  .notification-form {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .notification-form .form-group label {
+    font-size: 12px;
+  }
+
+  .notification-form .form-group select,
+  .notification-form .form-group textarea {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .notification-form .btn-primary {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+
+  .notification-item .notif-message {
+    font-size: 12px;
+  }
+
+  .notification-item .notif-meta {
+    font-size: 10px;
+  }
+
+  .user-list .user-check {
+    font-size: 11px;
+  }
+
+  .select-all label {
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   ডার্ক/লাইট মোড
+   ========================================== */
+
+.light-mode .notification-form {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .notification-form .form-group select,
+.light-mode .notification-form .form-group textarea {
+  background: var(--input-bg);
+}
+
+.light-mode .notification-item {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .notification-item:hover {
+  background: var(--bg-hover);
+}
+
+.light-mode .user-list .user-check:hover {
+  background: var(--bg-hover);
+}
+
+/* ==========================================
+   অ্যাক্সেসিবিলিটি
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .notification-form .btn-primary:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .notification-item,
+  .user-list .user-check {
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .notification-form .form-group select,
+  .notification-form .form-group textarea {
+    border: 2px solid var(--border-color);
+  }
+
+  .notification-item {
+    border-left-width: 6px;
+  }
+
+  .notification-form .btn-primary {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ==========================================
+   ফোকাস ভিজিবিলিটি
+   ========================================== */
+
+.notification-form .form-group select:focus-visible,
+.notification-form .form-group textarea:focus-visible,
+.notification-form .btn-primary:focus-visible,
+.user-list .user-check input:focus-visible,
+.select-all label input:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}

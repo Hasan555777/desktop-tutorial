@@ -1,0 +1,704 @@
+/* ============================================================
+   🖼️ CHAT OVERLAYS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 IMAGE ZOOM (Lightbox)
+   ============================================================ */
+
+.zoomLightboxOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: lightboxFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+.lightboxCloseBtn {
+  position: absolute;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-xl);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.lightboxCloseBtn:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+.lightboxContentBox {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightboxZoomedImg {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: imageZoomIn 0.3s ease;
+}
+
+@keyframes imageZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   📌 REPLY INDICATOR
+   ============================================================ */
+
+.replyIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-primary);
+  animation: replySlideIn 0.2s ease;
+}
+
+@keyframes replySlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.replyContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.replyContent i {
+  color: var(--accent-primary);
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+.replyContent span {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.replyContent strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.cancelReply {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-base);
+  flex-shrink: 0;
+}
+
+.cancelReply:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 CONTEXT MENU
+   ============================================================ */
+
+.contextMenu {
+  position: fixed;
+  z-index: 99998;
+  min-width: 180px;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 60px var(--shadow-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: var(--space-xs) 0;
+  animation: menuSlideIn 0.15s ease;
+}
+
+@keyframes menuSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.contextMenuItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-primary);
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.contextMenuItem:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.contextMenuItem i {
+  width: 18px;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.contextMenuItem:hover i {
+  color: var(--text-primary);
+}
+
+.contextMenuItem.delete {
+  color: var(--status-danger);
+}
+
+.contextMenuItem.delete i {
+  color: var(--status-danger);
+}
+
+.contextMenuItem.delete:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.contextMenuItem.delete:hover i {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 EDIT MESSAGE MODAL
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: overlayFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+.editMessageModal {
+  max-width: 480px;
+  width: 100%;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.4s ease;
+  overflow: hidden;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modalHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modalHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalClose:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.modalBody {
+  padding: var(--space-lg);
+}
+
+.modalBody textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  resize: vertical;
+  transition: all var(--transition-normal);
+  outline: none;
+  line-height: 1.6;
+}
+
+.modalBody textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.modalBody textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.modalFooter {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.btnCancel {
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.btnCancel:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.btnSave {
+  flex: 2;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.btnSave:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .lightboxCloseBtn {
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-lg);
+  }
+
+  .lightboxZoomedImg {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+
+  .replyIndicator {
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .replyContent span {
+    font-size: var(--text-xs);
+  }
+
+  .cancelReply {
+    width: 24px;
+    height: 24px;
+    font-size: var(--text-sm);
+  }
+
+  .contextMenu {
+    min-width: 160px;
+  }
+
+  .contextMenuItem {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .contextMenuItem i {
+    font-size: 12px;
+    width: 16px;
+  }
+
+  .editMessageModal {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-md);
+  }
+
+  .modalBody textarea {
+    min-height: 100px;
+    font-size: var(--text-sm);
+  }
+
+  .modalFooter {
+    flex-direction: column;
+  }
+
+  .btnCancel,
+  .btnSave {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .lightboxCloseBtn {
+    top: var(--space-sm);
+    right: var(--space-sm);
+    width: 36px;
+    height: 36px;
+    font-size: var(--text-base);
+  }
+
+  .lightboxZoomedImg {
+    max-width: 98vw;
+    max-height: 80vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .replyIndicator {
+    padding: var(--space-xs) var(--space-sm);
+    border-left-width: 2px;
+  }
+
+  .replyContent {
+    gap: var(--space-xs);
+  }
+
+  .replyContent i {
+    font-size: 12px;
+  }
+
+  .replyContent span {
+    font-size: 10px;
+  }
+
+  .cancelReply {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+
+  .contextMenu {
+    min-width: 140px;
+  }
+
+  .contextMenuItem {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .contextMenuItem i {
+    font-size: 10px;
+    width: 14px;
+  }
+
+  .editMessageModal {
+    border-radius: var(--radius-md);
+    max-height: 98vh;
+  }
+
+  .modalHeader {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .modalClose {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-sm);
+  }
+
+  .modalBody textarea {
+    min-height: 80px;
+    font-size: var(--text-xs);
+    padding: 10px 14px;
+  }
+
+  .modalFooter {
+    padding: var(--space-sm);
+  }
+
+  .btnCancel,
+  .btnSave {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .zoomLightboxOverlay {
+    animation: none;
+  }
+
+  .lightboxZoomedImg {
+    animation: none;
+  }
+
+  .replyIndicator {
+    animation: none;
+  }
+
+  .contextMenu {
+    animation: none;
+  }
+
+  .modalOverlay {
+    animation: none;
+  }
+
+  .editMessageModal {
+    animation: none;
+  }
+
+  .lightboxCloseBtn:hover {
+    transform: none;
+  }
+
+  .cancelReply:hover {
+    transform: none;
+  }
+
+  .modalClose:hover {
+    transform: none;
+  }
+
+  .btnSave:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .lightboxCloseBtn {
+    border: 2px solid currentColor;
+  }
+
+  .replyIndicator {
+    border-left-width: 6px;
+  }
+
+  .contextMenu {
+    border-width: 2px;
+  }
+
+  .contextMenuItem.delete {
+    border: 1px solid transparent;
+  }
+
+  .contextMenuItem.delete:hover {
+    border-color: var(--status-danger);
+  }
+
+  .editMessageModal {
+    border-width: 2px;
+  }
+
+  .btnCancel {
+    border-width: 2px;
+  }
+
+  .btnSave {
+    border: 2px solid currentColor;
+  }
+
+  .modalClose {
+    border: 1px solid currentColor;
+  }
+
+  .modalBody textarea {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.lightboxCloseBtn:focus-visible,
+.cancelReply:focus-visible,
+.contextMenuItem:focus-visible,
+.modalClose:focus-visible,
+.btnCancel:focus-visible,
+.btnSave:focus-visible,
+.modalBody textarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.chatOverlays ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

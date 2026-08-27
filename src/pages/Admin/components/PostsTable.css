@@ -1,0 +1,396 @@
+/* ============================================================
+   📄 POSTS TABLE - সম্পূর্ণ CSS
+   Admin Panel - Approved Posts Management
+   ============================================================ */
+
+/* ==========================================
+   টেবিল কন্টেইনার
+   ========================================== */
+
+.data-table {
+  width: 100%;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 4px 20px var(--shadow-color);
+  padding: 20px;
+}
+
+.data-table .table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 16px 0;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.data-table .table-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.data-table .table-header h3 i {
+  color: var(--accent-primary);
+}
+
+.data-table .table-count {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ==========================================
+   টেবিল
+   ========================================== */
+
+.data-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 700px;
+}
+
+.data-table thead {
+  background: var(--bg-tertiary);
+}
+
+.data-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.data-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.data-table tbody td {
+  padding: 12px 16px;
+  color: var(--text-primary);
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+/* ==========================================
+   টাইপ ব্যাজ
+   ========================================== */
+
+.type-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.type-badge.hire {
+  color: var(--status-info);
+  background: var(--status-info-bg);
+  border: 1px solid var(--status-info);
+}
+
+.type-badge.service {
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success);
+}
+
+.type-badge.job {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+}
+
+.type-badge.freelance {
+  color: var(--accent-primary);
+  background: var(--accent-glow);
+  border: 1px solid var(--accent-primary);
+}
+
+/* ==========================================
+   অ্যাকশন বাটন
+   ========================================== */
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  z-index: 2;
+}
+
+.action-btn.delete:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+/* ==========================================
+   রেসপনসিভ
+   ========================================== */
+
+/* ট্যাবলেট */
+@media (max-width: 1024px) {
+  .data-table {
+    padding: 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .data-table table {
+    font-size: 13px;
+    min-width: 600px;
+  }
+
+  .data-table thead th,
+  .data-table tbody td {
+    padding: 10px 12px;
+  }
+
+  .action-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+/* মোবাইল */
+@media (max-width: 768px) {
+  .data-table {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+  }
+
+  .data-table .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+
+  .data-table .table-header h3 {
+    font-size: 16px;
+  }
+
+  .data-table .table-count {
+    font-size: 12px;
+    padding: 2px 10px;
+  }
+
+  .data-table table {
+    font-size: 12px;
+    min-width: 550px;
+  }
+
+  .data-table thead th,
+  .data-table tbody td {
+    padding: 8px 10px;
+  }
+
+  .data-table thead th {
+    font-size: 10px;
+  }
+
+  .data-table tbody td {
+    font-size: 12px;
+  }
+
+  .type-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .action-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+  }
+}
+
+/* ছোট ফোন */
+@media (max-width: 480px) {
+  .data-table {
+    padding: 10px;
+    border-radius: var(--radius-xs);
+  }
+
+  .data-table .table-header h3 {
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  .data-table .table-header h3 i {
+    font-size: 14px;
+  }
+
+  .data-table .table-count {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  .data-table table {
+    font-size: 11px;
+    min-width: 480px;
+  }
+
+  .data-table thead th,
+  .data-table tbody td {
+    padding: 6px 8px;
+  }
+
+  .data-table thead th {
+    font-size: 9px;
+  }
+
+  .data-table tbody td {
+    font-size: 11px;
+  }
+
+  .type-badge {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+
+  .action-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+}
+
+/* ==========================================
+   ডার্ক/লাইট মোড
+   ========================================== */
+
+.light-mode .data-table {
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.light-mode .data-table thead {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .data-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.light-mode .data-table .table-count {
+  background: var(--bg-tertiary);
+}
+
+.light-mode .action-btn {
+  background: var(--bg-tertiary);
+}
+
+/* ==========================================
+   অ্যাক্সেসিবিলিটি
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .data-table tbody tr:hover {
+    background: transparent;
+  }
+
+  .action-btn:hover {
+    transform: none !important;
+  }
+
+  .action-btn:active {
+    transform: none !important;
+  }
+
+  .action-btn {
+    transition: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .data-table {
+    border: 2px solid var(--border-color);
+  }
+
+  .data-table thead th {
+    border-bottom: 3px solid var(--border-color);
+  }
+
+  .type-badge {
+    border-width: 2px;
+  }
+
+  .action-btn {
+    border-width: 2px;
+  }
+}
+
+/* ==========================================
+   ফোকাস ভিজিবিলিটি
+   ========================================== */
+
+.action-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   স্ক্রলবার
+   ========================================== */
+
+.data-table::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.data-table::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+.data-table::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+.data-table {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+}

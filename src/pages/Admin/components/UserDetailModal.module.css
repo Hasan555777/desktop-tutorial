@@ -1,0 +1,746 @@
+/* ============================================================
+   👤 USER DETAIL MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: modalFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTAINER
+   ============================================================ */
+
+.modalContent {
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modalContent::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 MODAL HEADER
+   ============================================================ */
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.modalHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.modalIcon {
+  font-size: var(--text-xl);
+}
+
+.modalHeader h3 {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.userStatusBadge {
+  display: inline-flex;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.userStatusBadge.verified {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.userStatusBadge.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+.closeBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 MODAL BODY
+   ============================================================ */
+
+.modalBody {
+  padding: var(--space-lg);
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ============================================================
+   📌 USER INFO GRID
+   ============================================================ */
+
+.userInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.userInfoItem {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.userInfoItem .label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.userInfoItem .value {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: var(--space-xs);
+}
+
+.roleBadge {
+  display: inline-flex;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  width: fit-content;
+  margin-top: var(--space-xs);
+}
+
+.roleBadge.client {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.roleBadge.freelancer {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.roleBadge.admin {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+/* ============================================================
+   📌 REVIEW SECTIONS
+   ============================================================ */
+
+.reviewSections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.reviewSectionsTitle {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.reviewSection {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.reviewSectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sectionIcon {
+  font-size: var(--text-lg);
+}
+
+.reviewSectionHeader h4 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.sectionStatus {
+  display: inline-flex;
+  padding: 1px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.sectionStatus.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+.sectionStatus.approved {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.sectionStatus.rejected {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+/* ── Review Section Body ── */
+.reviewSectionBody {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Image Container ── */
+.reviewImageContainer {
+  width: 100%;
+  max-height: 200px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+}
+
+.reviewImage {
+  width: 100%;
+  height: 100%;
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.reviewImagePlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  gap: var(--space-xs);
+}
+
+.reviewImagePlaceholder span {
+  font-size: 48px;
+}
+
+.reviewImagePlaceholder p {
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+/* ── Review Actions ── */
+.reviewActions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.reviewBtn {
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.reviewBtn:hover {
+  background: var(--bg-hover);
+}
+
+.reviewBtn.approve {
+  border-color: var(--status-success);
+  color: var(--status-success);
+}
+
+.reviewBtn.approve:hover,
+.reviewBtn.approve.active {
+  background: var(--status-success);
+  color: #ffffff;
+}
+
+.reviewBtn.reject {
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.reviewBtn.reject:hover,
+.reviewBtn.reject.active {
+  background: var(--status-danger);
+  color: #ffffff;
+}
+
+/* ── Reject Reason Box ── */
+.rejectReasonBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.rejectReasonBox label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.rejectReasonBox .required {
+  color: var(--status-danger);
+}
+
+.rejectReasonInput {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  resize: vertical;
+  transition: all var(--transition-normal);
+  outline: none;
+  min-height: 60px;
+}
+
+.rejectReasonInput:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.rejectReasonInput::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 REVIEW SUMMARY
+   ============================================================ */
+
+.reviewSummary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.summaryLabel {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.summaryStatus {
+  font-size: var(--text-lg);
+}
+
+.summaryStatus.pending {
+  color: var(--status-warning);
+}
+
+.summaryStatus.approved {
+  color: var(--status-success);
+}
+
+.summaryStatus.rejected {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 MODAL FOOTER
+   ============================================================ */
+
+.modalFooter {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.btnSecondary {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btnSecondary:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.btnPrimary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnSaveReview {
+  flex: 2;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .reviewSummary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .modalHeader {
+    padding: var(--space-md);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-md);
+  }
+
+  .userInfoGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .reviewSectionBody {
+    padding: var(--space-sm);
+  }
+
+  .reviewActions {
+    flex-direction: column;
+  }
+
+  .reviewBtn {
+    padding: 6px 12px;
+    font-size: var(--text-xs);
+  }
+
+  .reviewSummary {
+    grid-template-columns: repeat(2, 1fr);
+    padding: var(--space-sm);
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    padding: var(--space-md);
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalContent {
+    border-radius: var(--radius-md);
+    max-height: 98vh;
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .modalIcon {
+    font-size: var(--text-base);
+  }
+
+  .userStatusBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .closeBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-sm);
+  }
+
+  .userInfoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .userInfoItem .value {
+    font-size: var(--text-xs);
+  }
+
+  .reviewImageContainer {
+    max-height: 150px;
+  }
+
+  .reviewImage {
+    max-height: 150px;
+  }
+
+  .rejectReasonInput {
+    font-size: var(--text-xs);
+    padding: 8px 12px;
+    min-height: 50px;
+  }
+
+  .reviewSectionHeader h4 {
+    font-size: var(--text-xs);
+  }
+
+  .sectionStatus {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+
+  .reviewSummary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
+  }
+
+  .summaryLabel {
+    font-size: 9px;
+  }
+
+  .summaryStatus {
+    font-size: var(--text-base);
+  }
+
+  .btn {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .modalOverlay {
+    animation: none;
+  }
+
+  .modalContent {
+    animation: none;
+  }
+
+  .closeBtn:hover {
+    transform: none;
+  }
+
+  .btnPrimary:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .modalContent {
+    border-width: 2px;
+  }
+
+  .userInfoItem {
+    border-width: 2px;
+  }
+
+  .reviewSection {
+    border-width: 2px;
+  }
+
+  .reviewBtn {
+    border-width: 2px;
+  }
+
+  .reviewBtn.approve.active {
+    border-color: var(--status-success);
+  }
+
+  .reviewBtn.reject.active {
+    border-color: var(--status-danger);
+  }
+
+  .btnSecondary {
+    border-width: 2px;
+  }
+
+  .btnPrimary {
+    border: 2px solid currentColor;
+  }
+
+  .rejectReasonInput {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.closeBtn:focus-visible,
+.reviewBtn:focus-visible,
+.rejectReasonInput:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.userDetailModal ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

@@ -1,0 +1,501 @@
+/* ============================================================
+   🔔 NOTIFICATION BANNER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN BANNER CONTAINER
+   ============================================================ */
+
+.notificationBanner {
+  position: fixed;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: 90%;
+  max-width: 600px;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px var(--shadow-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: bannerSlideUp 0.4s ease;
+  padding: var(--space-md) var(--space-lg);
+}
+
+@keyframes bannerSlideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 BANNER CONTENT
+   ============================================================ */
+
+.notificationBannerContent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+/* ============================================================
+   📌 BANNER ICON
+   ============================================================ */
+
+.bannerIcon {
+  font-size: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+}
+
+.bannerIcon .adminBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 8px;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   📌 BANNER TEXT
+   ============================================================ */
+
+.bannerText {
+  flex: 1;
+  min-width: 0;
+}
+
+.bannerText h4 {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.bannerText p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   📌 BANNER ACTIONS
+   ============================================================ */
+
+.bannerActions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-xs);
+}
+
+/* ============================================================
+   📌 BANNER BUTTONS
+   ============================================================ */
+
+.bannerBtn {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  white-space: nowrap;
+}
+
+.bannerBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Enable Button ── */
+.btnEnable {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.btnEnable:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnEnable .spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* ── Not Now Button ── */
+.btnNotNow {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btnNotNow:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 ADMIN VARIANT
+   ============================================================ */
+
+.adminBanner {
+  border-left: 4px solid var(--accent-primary);
+  background: var(--bg-secondary);
+}
+
+.adminBanner .bannerIcon {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  position: relative;
+}
+
+.adminBanner .adminBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 8px;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adminActions {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.adminBtn {
+  width: 100%;
+  justify-content: center;
+}
+
+.adminNotNow {
+  width: 100%;
+  justify-content: center;
+  font-size: var(--text-xs);
+  padding: 6px 12px;
+}
+
+/* ============================================================
+   📌 COMPACT VARIANT
+   ============================================================ */
+
+.compactBanner {
+  padding: var(--space-sm) var(--space-md);
+  max-width: 480px;
+}
+
+.compactContent {
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.compactIcon {
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+}
+
+.compactText p {
+  font-size: var(--text-xs);
+}
+
+.compactActions {
+  gap: var(--space-xs);
+  margin-top: 0;
+}
+
+.compactBtn {
+  padding: 6px 14px;
+  font-size: var(--text-xs);
+}
+
+.compactBtnClose {
+  padding: 6px 10px;
+  font-size: var(--text-sm);
+  min-width: 32px;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .notificationBanner {
+    bottom: var(--space-md);
+    padding: var(--space-md);
+    max-width: 95%;
+    border-radius: var(--radius-md);
+  }
+
+  .notificationBannerContent {
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .bannerIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .bannerText h4 {
+    font-size: var(--text-xs);
+  }
+
+  .bannerText p {
+    font-size: var(--text-xs);
+  }
+
+  .bannerActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .bannerBtn {
+    padding: 6px 14px;
+    font-size: var(--text-xs);
+  }
+
+  .adminActions {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .adminBtn {
+    width: auto;
+    flex: 1;
+  }
+
+  .adminNotNow {
+    width: auto;
+    flex: 1;
+  }
+
+  .compactBanner {
+    padding: var(--space-xs) var(--space-sm);
+    max-width: 100%;
+  }
+
+  .compactContent {
+    flex-wrap: nowrap;
+  }
+
+  .compactText {
+    flex: 1;
+  }
+
+  .compactActions {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .notificationBanner {
+    bottom: var(--space-sm);
+    padding: var(--space-sm);
+    max-width: 98%;
+    border-radius: var(--radius-sm);
+  }
+
+  .notificationBannerContent {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-xs);
+  }
+
+  .bannerIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    align-self: center;
+  }
+
+  .bannerText h4 {
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .bannerText p {
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .bannerActions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .bannerBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 14px;
+    font-size: 10px;
+  }
+
+  .adminActions {
+    flex-direction: column;
+  }
+
+  .adminBtn {
+    width: 100%;
+  }
+
+  .adminNotNow {
+    width: 100%;
+  }
+
+  .compactBanner {
+    padding: var(--space-xs);
+  }
+
+  .compactContent {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .compactText {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .compactActions {
+    flex-shrink: 0;
+  }
+
+  .compactBtn {
+    padding: 4px 10px;
+    font-size: 9px;
+  }
+
+  .compactBtnClose {
+    padding: 4px 8px;
+    font-size: 12px;
+    min-width: 28px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .notificationBanner {
+    animation: none;
+  }
+
+  .btnEnable .spinner {
+    animation: none;
+  }
+
+  .btnEnable:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .btnNotNow:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .notificationBanner {
+    border-width: 2px;
+  }
+
+  .adminBanner {
+    border-left-width: 6px;
+  }
+
+  .btnEnable {
+    border: 2px solid currentColor;
+  }
+
+  .btnNotNow {
+    border-width: 2px;
+  }
+
+  .adminBadge {
+    border: 1px solid currentColor;
+  }
+
+  .bannerIcon {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.bannerBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.notificationBanner ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

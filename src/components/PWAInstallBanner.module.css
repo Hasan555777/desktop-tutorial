@@ -1,0 +1,303 @@
+/* ============================================================
+   📱 PWA INSTALL BANNER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 BANNER CONTAINER
+   ============================================================ */
+
+.pwaInstallBanner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: var(--modal-bg);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -8px 30px var(--shadow-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: var(--space-md) var(--space-lg);
+  animation: bannerSlideUp 0.4s ease;
+}
+
+@keyframes bannerSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📌 BANNER CONTENT
+   ============================================================ */
+
+.pwaInstallContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   📌 ICON
+   ============================================================ */
+
+.pwaInstallIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 TEXT
+   ============================================================ */
+
+.pwaInstallText {
+  flex: 1;
+  min-width: 0;
+}
+
+.pwaInstallText h4 {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+}
+
+.pwaInstallText .workTrustbd {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pwaInstallText p {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 ACTIONS
+   ============================================================ */
+
+.pwaInstallActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+/* ── Install Button ── */
+.pwaInstallBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.pwaInstallBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.pwaInstallBtn:active {
+  transform: translateY(0);
+}
+
+.pwaInstallBtn i {
+  font-size: var(--text-sm);
+}
+
+/* ── Dismiss Button ── */
+.pwaInstallDismiss {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+}
+
+.pwaInstallDismiss:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .pwaInstallBanner {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .pwaInstallContent {
+    gap: var(--space-sm);
+  }
+
+  .pwaInstallIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .pwaInstallText h4 {
+    font-size: var(--text-xs);
+  }
+
+  .pwaInstallText p {
+    font-size: 10px;
+  }
+
+  .pwaInstallBtn {
+    padding: 6px 16px;
+    font-size: var(--text-xs);
+  }
+
+  .pwaInstallDismiss {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .pwaInstallBanner {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .pwaInstallContent {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .pwaInstallIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .pwaInstallText h4 {
+    font-size: 10px;
+  }
+
+  .pwaInstallText p {
+    font-size: 9px;
+  }
+
+  .pwaInstallActions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pwaInstallBtn {
+    padding: 6px 14px;
+    font-size: 10px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .pwaInstallDismiss {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pwaInstallBanner {
+    animation: none;
+  }
+
+  .pwaInstallBtn:hover {
+    transform: none;
+  }
+
+  .pwaInstallDismiss:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .pwaInstallBanner {
+    border-top-width: 2px;
+  }
+
+  .pwaInstallBtn {
+    border: 2px solid currentColor;
+  }
+
+  .pwaInstallDismiss {
+    border-width: 2px;
+  }
+
+  .pwaInstallIcon {
+    border: 1px solid currentColor;
+  }
+
+  .pwaInstallText .workTrustbd {
+    -webkit-text-fill-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.pwaInstallBtn:focus-visible,
+.pwaInstallDismiss:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.pwaInstallBanner ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

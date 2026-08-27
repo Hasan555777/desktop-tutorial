@@ -1,0 +1,476 @@
+/* ============================================================
+   📋 PROPOSAL MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: overlayFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.proposalModal {
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.4s ease;
+}
+
+.proposalModal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.proposalModal::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.proposalModal::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 MODAL HEADER
+   ============================================================ */
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modalHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modalHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalClose:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 MODAL BODY
+   ============================================================ */
+
+.modalBody {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Form Groups ── */
+.formGroups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.formGroups label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.formGroups label i {
+  color: var(--accent-primary);
+}
+
+.formGroups input,
+.formGroups textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.formGroups input:focus,
+.formGroups textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.formGroups input::placeholder,
+.formGroups textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.fieldHint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ── Deadline Input Group ── */
+.deadlineInputGroup {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.deadlineInput {
+  flex: 1;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.deadlineInput:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.deadlineInput::placeholder {
+  color: var(--text-muted);
+}
+
+.deadlineUnitSelect {
+  padding: 12px 16px;
+  padding-right: 36px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  min-width: 80px;
+}
+
+.deadlineUnitSelect:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.detailsTextarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ============================================================
+   📌 MODAL FOOTER
+   ============================================================ */
+
+.modalFooter {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.btnCancelModal {
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.btnCancelModal:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.btnSendProposal {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.btnSendProposal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnSendProposal i {
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .proposalModal {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .modalHeader {
+    padding: var(--space-md);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-md);
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    padding: var(--space-md);
+  }
+
+  .btnCancelModal,
+  .btnSendProposal {
+    width: 100%;
+  }
+
+  .deadlineInputGroup {
+    flex-direction: column;
+  }
+
+  .deadlineUnitSelect {
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .proposalModal {
+    border-radius: var(--radius-md);
+    max-height: 98vh;
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .modalClose {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-sm);
+  }
+
+  .formGroups label {
+    font-size: var(--text-xs);
+  }
+
+  .formGroups input,
+  .formGroups textarea,
+  .deadlineInput {
+    font-size: var(--text-xs);
+    padding: 10px 14px;
+  }
+
+  .deadlineUnitSelect {
+    font-size: var(--text-xs);
+    padding: 10px 14px;
+    padding-right: 32px;
+  }
+
+  .detailsTextarea {
+    min-height: 80px;
+  }
+
+  .modalFooter {
+    padding: var(--space-sm);
+  }
+
+  .btnCancelModal,
+  .btnSendProposal {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+
+  .fieldHint {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .modalOverlay {
+    animation: none;
+  }
+
+  .proposalModal {
+    animation: none;
+  }
+
+  .modalClose:hover {
+    transform: none;
+  }
+
+  .btnSendProposal:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .proposalModal {
+    border-width: 2px;
+  }
+
+  .btnCancelModal {
+    border-width: 2px;
+  }
+
+  .btnSendProposal {
+    border: 2px solid currentColor;
+  }
+
+  .modalClose {
+    border: 1px solid currentColor;
+  }
+
+  .formGroups input,
+  .formGroups textarea,
+  .deadlineInput,
+  .deadlineUnitSelect {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.modalClose:focus-visible,
+.btnCancelModal:focus-visible,
+.btnSendProposal:focus-visible,
+.formGroups input:focus-visible,
+.formGroups textarea:focus-visible,
+.deadlineInput:focus-visible,
+.deadlineUnitSelect:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.proposalModal ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

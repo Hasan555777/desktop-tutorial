@@ -1,0 +1,1185 @@
+/* ============================================================
+   ✏️ PENDING EDITS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN TABLE CONTAINER
+   ============================================================ */
+
+.dataTable {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.pendingEditsTable {
+  background: var(--bg-secondary);
+}
+
+/* ============================================================
+   📌 TABLE HEADER
+   ============================================================ */
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tableHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tableHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.tableCount {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-left: var(--space-sm);
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.refreshBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.refreshBtn i {
+  font-size: 14px;
+}
+
+/* ============================================================
+   📌 PENDING EDITS GRID
+   ============================================================ */
+
+.pendingEditsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+/* ============================================================
+   📌 PENDING EDIT CARD
+   ============================================================ */
+
+.pendingEditCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.pendingEditCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 EDIT HEADER
+   ============================================================ */
+
+.editHeader {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.editTitleSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.editTitle {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.statusBadge.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+.editMetaTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.editMetaTop i {
+  margin-right: var(--space-xs);
+}
+
+/* ============================================================
+   📌 EDIT IMAGES SECTION
+   ============================================================ */
+
+.editImagesSection {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.editImagesLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.editImagesLabel i {
+  margin-right: var(--space-xs);
+}
+
+.editImagesCompare {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.imageGroup {
+  flex: 1;
+  min-width: 120px;
+}
+
+.imageGroupLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.imageGroupLabel.pendingLabel {
+  color: var(--accent-primary);
+}
+
+.imageGroupThumbs {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.imageThumbWrapper {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+}
+
+.imageThumbWrapper:hover {
+  border-color: var(--accent-primary);
+  transform: scale(1.05);
+}
+
+.imageThumbWrapper.pendingThumb {
+  border-color: var(--accent-primary);
+}
+
+.editThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbZoomIcon {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all var(--transition-normal);
+  color: #ffffff;
+  font-size: var(--text-sm);
+}
+
+.imageThumbWrapper:hover .thumbZoomIcon {
+  opacity: 1;
+}
+
+.newBadge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.imageCountMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.imageArrow {
+  color: var(--text-muted);
+  font-size: var(--text-lg);
+  font-weight: 300;
+}
+
+/* ============================================================
+   📌 VERSION COMPARE
+   ============================================================ */
+
+.versionCompare {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.compareHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.compareLabel.currentLabel {
+  color: var(--text-muted);
+}
+
+.compareLabel.pendingLabel {
+  color: var(--accent-primary);
+}
+
+.compareBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.changeRow {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--space-md);
+  align-items: center;
+  font-size: var(--text-sm);
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.changeRow:last-child {
+  border-bottom: none;
+}
+
+.changeLabel {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+}
+
+.changeValues {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.currentValue {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-size: var(--text-sm);
+}
+
+.changeArrow {
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+.pendingValue {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.pendingValue.changed {
+  color: var(--accent-primary);
+}
+
+.pendingValue.same {
+  color: var(--text-muted);
+}
+
+.diffContent {
+  display: inline;
+}
+
+.diffAdded {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+}
+
+.diffRemoved {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  text-decoration: line-through;
+}
+
+.diffSame {
+  color: var(--text-secondary);
+}
+
+.changeIndicator {
+  color: var(--accent-primary);
+  font-size: 12px;
+  margin-left: var(--space-xs);
+}
+
+/* ============================================================
+   📌 DESCRIPTION DIFF
+   ============================================================ */
+
+.fullDescriptionSection {
+  padding: var(--space-sm) var(--space-lg) var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.fullDescriptionSection details {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.fullDescriptionSection summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+
+.fullDescriptionSection summary i {
+  color: var(--accent-primary);
+}
+
+.diffSummaryBadge {
+  margin-left: auto;
+}
+
+.diffAddedBadge {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.descriptionDiff {
+  margin-top: var(--space-sm);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.diffCurrent,
+.diffPending {
+  background: var(--bg-secondary);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+}
+
+.diffCurrent strong,
+.diffPending strong {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.diffCurrent p,
+.diffPending p {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.diffPendingText {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 EDIT META BOTTOM
+   ============================================================ */
+
+.editMetaBottom {
+  padding: var(--space-sm) var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.editMetaBottom i {
+  margin-right: var(--space-xs);
+}
+
+.imageChangeBadge {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* ============================================================
+   📌 EDIT ACTIONS
+   ============================================================ */
+
+.editActions {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.actionBtn i {
+  font-size: 14px;
+}
+
+.actionBtn.edit {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.actionBtn.edit:hover {
+  background: var(--status-info);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.actionBtn.approve {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.actionBtn.approve:hover {
+  background: var(--status-success);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.actionBtn.reject {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.actionBtn.reject:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 IMAGE ZOOM MODAL
+   ============================================================ */
+
+.imageZoomModal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+
+.imageZoomModalContent {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.imageZoomModalContent img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 80px var(--shadow-color);
+}
+
+.imageZoomClose {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--status-danger);
+  color: #ffffff;
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageZoomClose:hover {
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 REJECT MODAL
+   ============================================================ */
+
+.rejectModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: modalFadeIn 0.3s ease;
+}
+
+.rejectModal {
+  max-width: 440px;
+  width: 100%;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  overflow: hidden;
+  animation: modalSlideUp 0.3s ease;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.rejectModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.rejectModalHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rejectModalHeader h3 i {
+  color: var(--status-danger);
+}
+
+.modalCloseBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalCloseBtn:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.rejectModalBody {
+  padding: var(--space-lg);
+}
+
+.rejectModalBody p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-md);
+}
+
+.rejectTextarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  resize: vertical;
+  transition: all var(--transition-normal);
+  outline: none;
+  min-height: 100px;
+}
+
+.rejectTextarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.rejectTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+.rejectModalActions {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.cancelBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.rejectConfirmBtn {
+  flex: 2;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-danger);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.rejectConfirmBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.rejectConfirmBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 EDIT MODAL
+   ============================================================ */
+
+.editModal {
+  max-width: 560px;
+}
+
+.editFormGroup {
+  margin-bottom: var(--space-md);
+}
+
+.editFormGroup label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.editFormGroup .required {
+  color: var(--status-danger);
+}
+
+.editInput,
+.editTextarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.editInput:focus,
+.editTextarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.editInput.error,
+.editTextarea.error {
+  border-color: var(--status-danger);
+}
+
+.editInput::placeholder,
+.editTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+.editInput:disabled,
+.editTextarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  display: block;
+  color: var(--status-danger);
+  font-size: var(--text-xs);
+  margin-top: var(--space-xs);
+}
+
+.editFormRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.editConfirmBtn {
+  flex: 2;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.editConfirmBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.editConfirmBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .editImagesCompare {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .imageArrow {
+    text-align: center;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+  }
+
+  .pendingEditsGrid {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .editHeader {
+    flex-direction: column;
+    padding: var(--space-md);
+  }
+
+  .editTitle {
+    font-size: var(--text-sm);
+  }
+
+  .changeRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+
+  .changeValues {
+    flex-wrap: wrap;
+  }
+
+  .descriptionDiff {
+    grid-template-columns: 1fr;
+  }
+
+  .editActions {
+    flex-wrap: wrap;
+    padding: var(--space-md);
+  }
+
+  .actionBtn {
+    flex: 1;
+    min-width: 80px;
+    justify-content: center;
+    padding: 8px 14px;
+    font-size: var(--text-xs);
+  }
+
+  .editMetaBottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .editFormRow {
+    grid-template-columns: 1fr;
+  }
+
+  .rejectModal {
+    max-width: 100%;
+    margin: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .imageZoomModalContent img {
+    border-radius: var(--radius-md);
+  }
+
+  .compareHeader {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .editTitle {
+    font-size: var(--text-xs);
+  }
+
+  .editMetaTop {
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+
+  .imageThumbWrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .imageCountMore {
+    width: 44px;
+    height: 44px;
+    font-size: var(--text-xs);
+  }
+
+  .actionBtn {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+
+  .actionBtn i {
+    font-size: 12px;
+  }
+
+  .rejectModalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .rejectModalBody p {
+    font-size: var(--text-xs);
+  }
+
+  .rejectTextarea {
+    font-size: var(--text-xs);
+    min-height: 80px;
+  }
+
+  .cancelBtn,
+  .rejectConfirmBtn,
+  .editConfirmBtn {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+
+  .changeLabel {
+    font-size: 10px;
+  }
+
+  .currentValue,
+  .pendingValue {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .imageZoomModal {
+    animation: none;
+  }
+
+  .rejectModal {
+    animation: none;
+  }
+
+  .pendingEditCard:hover {
+    transform: none;
+  }
+
+  .imageThumbWrapper:hover {
+    transform: none;
+  }
+
+  .actionBtn:hover {
+    transform: none;
+  }
+
+  .imageZoomClose:hover {
+    transform: none;
+  }
+
+  .modalCloseBtn:hover {
+    transform: none;
+  }
+
+  .rejectConfirmBtn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .editConfirmBtn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .refreshBtn:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .pendingEditCard {
+    border-width: 2px;
+  }
+
+  .pendingEditCard:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .actionBtn {
+    border: 2px solid currentColor;
+  }
+
+  .actionBtn.edit {
+    border-color: var(--status-info);
+  }
+
+  .actionBtn.approve {
+    border-color: var(--status-success);
+  }
+
+  .actionBtn.reject {
+    border-color: var(--status-danger);
+  }
+
+  .rejectModal {
+    border-width: 2px;
+  }
+
+  .rejectConfirmBtn,
+  .editConfirmBtn {
+    border: 2px solid currentColor;
+  }
+
+  .imageThumbWrapper {
+    border-width: 2px;
+  }
+
+  .imageThumbWrapper.pendingThumb {
+    border-color: var(--accent-primary);
+  }
+
+  .diffAdded {
+    border: 1px solid var(--status-success);
+  }
+
+  .diffRemoved {
+    border: 1px solid var(--status-danger);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.refreshBtn:focus-visible,
+.actionBtn:focus-visible,
+.cancelBtn:focus-visible,
+.rejectConfirmBtn:focus-visible,
+.editConfirmBtn:focus-visible,
+.modalCloseBtn:focus-visible,
+.imageZoomClose:focus-visible,
+.editInput:focus-visible,
+.editTextarea:focus-visible,
+.rejectTextarea:focus-visible,
+.fullDescriptionSection summary:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.pendingEditsTable ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

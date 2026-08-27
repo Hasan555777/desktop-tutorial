@@ -1,0 +1,573 @@
+<!-- public/offline.html -->
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090d16" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Offline - WorkTrustbd</title>
+  <style>
+    /* ── Reset ── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #090d16;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Bengali', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* ── Container ── */
+    .offline-container {
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* ── Logo ── */
+    .offline-logo {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 16px auto;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #438e82, #2d6b5f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(67, 142, 130, 0.3);
+      transition: transform 0.3s ease;
+    }
+    
+    .offline-logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .offline-logo img {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+    
+    /* ── Brand Name ── */
+    .offline-brand {
+      font-size: 22px;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    
+    .offline-tagline {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 24px;
+      letter-spacing: 0.3px;
+    }
+    
+    /* ── Status Icon ── */
+    .offline-status-icon {
+      font-size: 56px;
+      margin-bottom: 12px;
+      display: block;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+      }
+    }
+    
+    /* ── Title ── */
+    .offline-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #f8fafc;
+    }
+    
+    /* ── Subtitle ── */
+    .offline-subtitle {
+      font-size: 15px;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      line-height: 1.7;
+    }
+    
+    .offline-subtitle-light {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    
+    /* ── Connection Status ── */
+    .connection-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 24px;
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      transition: all 0.5s ease;
+    }
+    
+    .connection-status.online {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+    
+    .connection-status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: blink 1.5s infinite;
+    }
+    
+    .connection-status.online .dot {
+      background: #10b981;
+      animation: none;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    
+    /* ── Buttons ── */
+    .offline-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    
+    .offline-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      background: linear-gradient(135deg, #438e82, #2d6b5f);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(67, 142, 130, 0.25);
+    }
+    
+    .offline-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(67, 142, 130, 0.35);
+    }
+    
+    .offline-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(67, 142, 130, 0.2);
+    }
+    
+    .offline-btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      box-shadow: none;
+    }
+    
+    .offline-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #f8fafc;
+      box-shadow: none;
+      transform: translateY(-2px);
+    }
+    
+    /* ── SVG Icon ── */
+    .offline-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    
+    /* ── Cached Pages Section ── */
+    .cached-pages {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    .cached-pages-title {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    
+    .cached-pages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    
+    .cached-page-btn {
+      padding: 10px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      color: #94a3b8;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    
+    .cached-page-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+      transform: translateY(-2px);
+    }
+    
+    .cached-page-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    
+    /* ── Footer ── */
+    .offline-footer {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #475569;
+    }
+    
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .offline-title {
+        font-size: 22px;
+      }
+      
+      .offline-brand {
+        font-size: 19px;
+      }
+      
+      .offline-logo {
+        width: 76px;
+        height: 76px;
+      }
+      
+      .offline-logo img {
+        width: 46px;
+        height: 46px;
+      }
+      
+      .offline-btn {
+        font-size: 14px;
+        padding: 12px 24px;
+      }
+      
+      .cached-pages-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .cached-pages-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* ── Print ── */
+    @media print {
+      body {
+        background: #ffffff;
+        color: #000000;
+      }
+      
+      .offline-logo {
+        background: #f1f5f9;
+        box-shadow: none;
+      }
+      
+      .offline-title,
+      .offline-brand {
+        color: #000000;
+      }
+      
+      .offline-subtitle,
+      .offline-tagline {
+        color: #475569;
+      }
+      
+      .offline-btn {
+        background: #1e293b;
+        color: #ffffff;
+        box-shadow: none;
+      }
+      
+      .connection-status {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="offline-container" role="main" aria-label="Offline page">
+    
+    <!-- ✅ Logo -->
+    <div class="offline-logo">
+      <img 
+        src="/icons/icon-192x192.png" 
+        alt="WorkTrustbd Logo" 
+        width="56" 
+        height="56"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    
+    <!-- ✅ Brand -->
+    <div class="offline-brand">WorkTrustbd</div>
+    <div class="offline-tagline">Trusted Marketplace</div>
+    
+    <!-- ✅ Status Icon -->
+    <span class="offline-status-icon" aria-hidden="true">📡</span>
+    
+    <!-- ✅ Title -->
+    <h1 class="offline-title">আপনি বর্তমানে অফলাইনে আছেন</h1>
+    
+    <!-- ✅ Subtitle -->
+    <p class="offline-subtitle">
+      ইন্টারনেট সংযোগ নেই। দয়া করে আপনার নেটওয়ার্ক সংযোগ চেক করুন।
+    </p>
+    <p class="offline-subtitle-light">
+      আগে দেখা কিছু পৃষ্ঠা এখনও উপলব্ধ থাকতে পারে।
+    </p>
+    
+    <!-- ✅ Connection Status -->
+    <div class="connection-status" id="connectionStatus">
+      <span class="dot"></span>
+      <span id="statusText">সংযোগ নেই</span>
+    </div>
+    
+    <!-- ✅ Actions -->
+    <div class="offline-actions">
+      <button class="offline-btn" type="button" id="retryBtn">
+        <!-- SVG Rotate Icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M21 12a9 9 0 1 1-9-9m0 0v6m0-6h-6" />
+        </svg>
+        আবার চেষ্টা করুন
+      </button>
+      
+      <button class="offline-btn offline-btn-secondary" type="button" id="homeBtn">
+        <!-- SVG Home Icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M3 12l9-9 9 9" />
+          <path d="M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10" />
+        </svg>
+        হোম পেজে যান
+      </button>
+    </div>
+    
+    <!-- ✅ Cached Pages -->
+    <div class="cached-pages">
+      <div class="cached-pages-title">📂 ক্যাশ করা পৃষ্ঠা</div>
+      <div class="cached-pages-grid">
+        <a href="/" class="cached-page-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 12l9-9 9 9" />
+            <path d="M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10" />
+          </svg>
+          হোম
+        </a>
+        <a href="/dashboard" class="cached-page-btn">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          ড্যাশবোর্ড
+        </a>
+        <a href="/settings" class="cached-page-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+          </svg>
+          সেটিংস
+        </a>
+      </div>
+    </div>
+    
+    <!-- ✅ Footer -->
+    <div class="offline-footer">
+      WorkTrustbd &bull; v1.0.0
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ✅ JavaScript -->
+  <!-- ============================================================ -->
+  <script>
+    (function() {
+      'use strict';
+
+      // ── DOM Elements ──
+      const statusEl = document.getElementById('connectionStatus');
+      const statusText = document.getElementById('statusText');
+      const retryBtn = document.getElementById('retryBtn');
+      const homeBtn = document.getElementById('homeBtn');
+
+      // ── Update Connection Status ──
+      function updateConnectionStatus() {
+        const isOnline = navigator.onLine;
+        
+        if (isOnline) {
+          statusEl.classList.add('online');
+          statusText.textContent = '✅ সংযোগ ফিরে এসেছে!';
+          // Auto reload after 1.5 seconds
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
+          statusEl.classList.remove('online');
+          statusText.textContent = '📡 সংযোগ নেই';
+        }
+      }
+
+      // ── Check Connection Every 3 Seconds ──
+      let checkInterval = null;
+
+      function startConnectionCheck() {
+        if (checkInterval) {
+          clearInterval(checkInterval);
+        }
+        checkInterval = setInterval(updateConnectionStatus, 3000);
+      }
+
+      // ── Retry Button ──
+      retryBtn.addEventListener('click', function() {
+        if (navigator.onLine) {
+          window.location.reload();
+        } else {
+          // Show checking status
+          statusText.textContent = '⏳ চেক করা হচ্ছে...';
+          statusEl.classList.remove('online');
+          
+          // Wait and check again
+          setTimeout(() => {
+            updateConnectionStatus();
+          }, 1000);
+        }
+      });
+
+      // ── Home Button ──
+      homeBtn.addEventListener('click', function() {
+        window.location.href = '/';
+      });
+
+      // ── Online/Offline Events ──
+      window.addEventListener('online', function() {
+        statusText.textContent = '🌐 সংযোগ ফিরেছে!';
+        statusEl.classList.add('online');
+        // Auto reload after 1 second
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      });
+
+      window.addEventListener('offline', function() {
+        statusEl.classList.remove('online');
+        statusText.textContent = '📡 সংযোগ হারিয়েছে';
+      });
+
+      // ── Keyboard Shortcuts ──
+      document.addEventListener('keydown', function(e) {
+        // Enter or Space on buttons
+        if (e.key === 'Enter' || e.key === ' ') {
+          const active = document.activeElement;
+          if (active && active.tagName === 'BUTTON') {
+            e.preventDefault();
+            active.click();
+          }
+        }
+        // 'r' key for retry
+        if (e.key === 'r' || e.key === 'R') {
+          retryBtn.click();
+        }
+        // 'h' key for home
+        if (e.key === 'h' || e.key === 'H') {
+          homeBtn.click();
+        }
+      });
+
+      // ── Initial Status ──
+      updateConnectionStatus();
+      startConnectionCheck();
+
+      console.log('📡 Offline page loaded');
+      console.log('📌 Press "r" to retry, "h" for home');
+
+    })();
+  </script>
+
+</body>
+</html>

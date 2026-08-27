@@ -1,0 +1,1023 @@
+/* ============================================================
+   📋 PENDING POSTS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN TABLE CONTAINER
+   ============================================================ */
+
+.dataTable {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.pendingPostsTable {
+  background: var(--bg-secondary);
+}
+
+/* ============================================================
+   📌 TABLE HEADER
+   ============================================================ */
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tableHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tableHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.pendingBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  margin-left: var(--space-sm);
+}
+
+.tableCount {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-left: var(--space-sm);
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.refreshBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.refreshBtn i {
+  font-size: 14px;
+}
+
+/* ============================================================
+   📌 PENDING POSTS GRID
+   ============================================================ */
+
+.pendingPostsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+/* ============================================================
+   📌 PENDING POST CARD
+   ============================================================ */
+
+.pendingPostCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.pendingPostCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 POST HEADER
+   ============================================================ */
+
+.postHeader {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.postTitleSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.postTitle {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.statusBadge.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+.postMetaTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.postMetaTop i {
+  margin-right: var(--space-xs);
+}
+
+/* ============================================================
+   📌 POST IMAGES SECTION
+   ============================================================ */
+
+.postImagesSection {
+  padding: var(--space-md) var(--space-lg) var(--space-sm);
+}
+
+.postImagesLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.postImagesLabel i {
+  margin-right: var(--space-xs);
+}
+
+.postImagesContainer {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.postImageItem {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid var(--border-color);
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+}
+
+.postImageItem:hover {
+  border-color: var(--accent-primary);
+  transform: scale(1.05);
+}
+
+.postImageItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imageZoomOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all var(--transition-normal);
+  color: #ffffff;
+  font-size: var(--text-lg);
+}
+
+.postImageItem:hover .imageZoomOverlay {
+  opacity: 1;
+}
+
+.imageCountBadge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: var(--overlay-bg);
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+/* ============================================================
+   📌 POST CONTENT
+   ============================================================ */
+
+.postContent {
+  padding: var(--space-md) var(--space-lg);
+}
+
+.postTitleFull {
+  margin-bottom: var(--space-md);
+}
+
+.titleLabel,
+.descriptionLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.postTitleText {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.postDescriptionFull {
+  margin-bottom: var(--space-md);
+}
+
+.postDescriptionWrapper {
+  background: var(--bg-tertiary);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+}
+
+.postDescription {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  margin: 0 0 var(--space-xs);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.noDescription {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.descriptionToggleBtn {
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.descriptionToggleBtn:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   📌 POST DETAILS
+   ============================================================ */
+
+.postDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.detailLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.detailLabel i {
+  margin-right: var(--space-xs);
+}
+
+.detailValue {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.negotiableBadge {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+}
+
+.rangeBadge {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--status-info);
+  background: var(--status-info-bg);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 POST ACTIONS
+   ============================================================ */
+
+.postActions {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.actionBtn i {
+  font-size: 14px;
+}
+
+.actionBtn.edit {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.actionBtn.edit:hover {
+  background: var(--status-info);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.actionBtn.approve {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.actionBtn.approve:hover {
+  background: var(--status-success);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.actionBtn.reject {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.actionBtn.reject:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 IMAGE ZOOM MODAL
+   ============================================================ */
+
+.imageZoomModal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+
+.imageZoomModalContent {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.imageZoomModalContent img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 80px var(--shadow-color);
+}
+
+.imageZoomClose {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--status-danger);
+  color: #ffffff;
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageZoomClose:hover {
+  transform: rotate(90deg);
+  background: var(--status-danger);
+}
+
+/* ============================================================
+   📌 REJECT MODAL
+   ============================================================ */
+
+.rejectModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: modalFadeIn 0.3s ease;
+}
+
+.rejectModal {
+  max-width: 440px;
+  width: 100%;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  overflow: hidden;
+  animation: modalSlideUp 0.3s ease;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.rejectModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.rejectModalHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rejectModalHeader h3 i {
+  color: var(--status-danger);
+}
+
+.modalCloseBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalCloseBtn:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.rejectModalBody {
+  padding: var(--space-lg);
+}
+
+.rejectModalBody p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-md);
+}
+
+.rejectTextarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  resize: vertical;
+  transition: all var(--transition-normal);
+  outline: none;
+  min-height: 100px;
+}
+
+.rejectTextarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.rejectTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+.rejectModalActions {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.cancelBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.rejectConfirmBtn {
+  flex: 2;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-danger);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.rejectConfirmBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.rejectConfirmBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 EDIT MODAL (NEW)
+   ============================================================ */
+
+.editModal {
+  max-width: 560px;
+}
+
+.editFormGroup {
+  margin-bottom: var(--space-md);
+}
+
+.editFormGroup label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.editFormGroup .required {
+  color: var(--status-danger);
+}
+
+.editInput,
+.editTextarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.editInput:focus,
+.editTextarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.editInput::placeholder,
+.editTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+.editInput:disabled,
+.editTextarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.editFormRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.editConfirmBtn {
+  flex: 2;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.editConfirmBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.editConfirmBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .postDetails {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+  }
+
+  .pendingPostsGrid {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .postHeader {
+    flex-direction: column;
+    padding: var(--space-md);
+  }
+
+  .postContent {
+    padding: var(--space-md);
+  }
+
+  .postImagesSection {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .postImagesContainer {
+    gap: var(--space-xs);
+  }
+
+  .postImageItem {
+    width: 60px;
+    height: 60px;
+  }
+
+  .postDetails {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .postActions {
+    flex-wrap: wrap;
+    padding: var(--space-md);
+  }
+
+  .actionBtn {
+    flex: 1;
+    min-width: 80px;
+    justify-content: center;
+    padding: 8px 14px;
+    font-size: var(--text-xs);
+  }
+
+  .editFormRow {
+    grid-template-columns: 1fr;
+  }
+
+  .rejectModal {
+    max-width: 100%;
+    margin: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .imageZoomModalContent img {
+    border-radius: var(--radius-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .postTitle {
+    font-size: var(--text-sm);
+  }
+
+  .postTitleText {
+    font-size: var(--text-base);
+  }
+
+  .postMetaTop {
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+
+  .postDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .actionBtn {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+
+  .actionBtn i {
+    font-size: 12px;
+  }
+
+  .postImageItem {
+    width: 50px;
+    height: 50px;
+  }
+
+  .rejectModalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .rejectModalBody p {
+    font-size: var(--text-xs);
+  }
+
+  .rejectTextarea {
+    font-size: var(--text-xs);
+    min-height: 80px;
+  }
+
+  .cancelBtn,
+  .rejectConfirmBtn,
+  .editConfirmBtn {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .imageZoomModal {
+    animation: none;
+  }
+
+  .rejectModal {
+    animation: none;
+  }
+
+  .pendingPostCard:hover {
+    transform: none;
+  }
+
+  .postImageItem:hover {
+    transform: none;
+  }
+
+  .actionBtn:hover {
+    transform: none;
+  }
+
+  .imageZoomClose:hover {
+    transform: none;
+  }
+
+  .modalCloseBtn:hover {
+    transform: none;
+  }
+
+  .rejectConfirmBtn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .editConfirmBtn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .refreshBtn:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .pendingPostCard {
+    border-width: 2px;
+  }
+
+  .pendingPostCard:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .actionBtn {
+    border: 2px solid currentColor;
+  }
+
+  .actionBtn.edit {
+    border-color: var(--status-info);
+  }
+
+  .actionBtn.approve {
+    border-color: var(--status-success);
+  }
+
+  .actionBtn.reject {
+    border-color: var(--status-danger);
+  }
+
+  .rejectModal {
+    border-width: 2px;
+  }
+
+  .rejectConfirmBtn,
+  .editConfirmBtn {
+    border: 2px solid currentColor;
+  }
+
+  .postImageItem {
+    border-width: 2px;
+  }
+
+  .imageZoomModalContent img {
+    border: 2px solid var(--border-color);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.refreshBtn:focus-visible,
+.actionBtn:focus-visible,
+.cancelBtn:focus-visible,
+.rejectConfirmBtn:focus-visible,
+.editConfirmBtn:focus-visible,
+.modalCloseBtn:focus-visible,
+.imageZoomClose:focus-visible,
+.descriptionToggleBtn:focus-visible,
+.editInput:focus-visible,
+.editTextarea:focus-visible,
+.rejectTextarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.pendingPostsTable ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

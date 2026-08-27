@@ -1,0 +1,422 @@
+/* ============================================================
+   ⭐ FEATURES SECTION - সম্পূর্ণ আপডেটেড
+   ============================================================ */
+
+.features-section {
+  padding: 80px var(--space-lg);
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative background elements */
+.features-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  background: var(--accent-glow);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.features-section::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: var(--status-info-bg);
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   📌 SECTION HEADER
+   ============================================================ */
+
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.section-header h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  position: relative;
+  display: inline-block;
+}
+
+.section-header h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  margin: var(--space-sm) auto 0;
+}
+
+.section-header p {
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  margin-top: var(--space-sm);
+}
+
+/* ============================================================
+   📌 FEATURES GRID
+   ============================================================ */
+
+.features-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-xl);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   📌 FEATURE CARD
+   ============================================================ */
+
+.feature-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Gradient border effect on hover */
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-lg);
+  opacity: 0;
+  transition: all var(--transition-normal);
+  z-index: -1;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px var(--shadow-color);
+  border-color: transparent;
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+}
+
+/* Card content */
+.feature-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   🎨 FEATURE ICON
+   ============================================================ */
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  background: var(--accent-glow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  font-size: 28px;
+  color: var(--accent-primary);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.feature-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: all var(--transition-normal);
+  z-index: -1;
+}
+
+.feature-card:hover .feature-icon {
+  color: #ffffff;
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.feature-card:hover .feature-icon::after {
+  opacity: 1;
+}
+
+.feature-icon i {
+  transition: all var(--transition-normal);
+}
+
+.feature-card:hover .feature-icon i {
+  transform: scale(1.1);
+}
+
+/* ============================================================
+   📝 FEATURE CONTENT
+   ============================================================ */
+
+.feature-card h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  transition: color var(--transition-normal);
+}
+
+.feature-card:hover h3 {
+  color: var(--accent-primary);
+}
+
+.feature-card p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ============================================================
+   🎯 INDEX ANIMATION (Staggered)
+   ============================================================ */
+
+.feature-card {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.feature-card:nth-child(1) { animation-delay: 0.05s; }
+.feature-card:nth-child(2) { animation-delay: 0.10s; }
+.feature-card:nth-child(3) { animation-delay: 0.15s; }
+.feature-card:nth-child(4) { animation-delay: 0.20s; }
+.feature-card:nth-child(5) { animation-delay: 0.25s; }
+.feature-card:nth-child(6) { animation-delay: 0.30s; }
+.feature-card:nth-child(7) { animation-delay: 0.35s; }
+.feature-card:nth-child(8) { animation-delay: 0.40s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   🎨 HOVER GLOW EFFECT
+   ============================================================ */
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    var(--accent-glow),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: all var(--transition-normal);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.feature-card:hover::after {
+  opacity: 0.1;
+  transform: scale(1.5);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .features-section {
+    padding: 60px var(--space-md);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+    gap: var(--space-md);
+  }
+
+  .feature-card {
+    padding: var(--space-lg);
+  }
+
+  .feature-card h3 {
+    font-size: var(--text-lg);
+  }
+
+  .section-header p {
+    font-size: var(--text-base);
+  }
+
+  .features-section::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .features-section::after {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .features-section {
+    padding: 40px var(--space-sm);
+  }
+
+  .feature-card {
+    padding: var(--space-md);
+  }
+
+  .feature-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+  }
+
+  .feature-card h3 {
+    font-size: var(--text-base);
+  }
+
+  .feature-card p {
+    font-size: var(--text-xs);
+  }
+
+  .section-header h2 {
+    font-size: clamp(1.6rem, 5vw, 2rem);
+  }
+
+  .section-header p {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-card {
+    opacity: 1;
+    animation: none;
+  }
+
+  .feature-card:hover {
+    transform: none;
+  }
+
+  .feature-card::before,
+  .feature-card::after {
+    display: none;
+  }
+
+  .feature-card:hover .feature-icon {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .feature-card {
+    border-width: 2px;
+  }
+
+  .feature-card::before {
+    display: none;
+  }
+
+  .feature-card:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .feature-icon {
+    border: 2px solid var(--accent-primary);
+  }
+
+  .feature-card:hover .feature-icon {
+    background: var(--accent-primary);
+  }
+}
+
+/* Focus visible for keyboard navigation */
+.feature-card:focus-within {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   🎯 SELECTION STYLING
+   ============================================================ */
+
+.feature-card ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🌈 SCROLLBAR FOR CARDS (if content overflows)
+   ============================================================ */
+
+.feature-card p::-webkit-scrollbar {
+  width: 4px;
+}
+
+.feature-card p::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.feature-card p::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}

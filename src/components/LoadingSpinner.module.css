@@ -1,0 +1,50 @@
+/* ============================================
+   LOADING SPINNER - CSS MODULE
+   ============================================ */
+
+/* ── Container ── */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--bg-primary, #090d16);
+  color: var(--text-secondary, #94a3b8);
+}
+
+/* ── Content ── */
+.loadingContent {
+  text-align: center;
+}
+
+/* ── Icon ── */
+.loadingIcon {
+  font-size: 48px;
+  color: var(--accent-primary, #14b8a6);
+  margin-bottom: 16px;
+  display: block;
+}
+
+/* ── Text ── */
+.loadingText {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .loadingIcon {
+    animation: none;
+  }
+}
+
+/* ── Light Mode ── */
+:global(.light-mode) .loadingContainer {
+  background: #f8fafc;
+}
+
+:global(.light-mode) .loadingText {
+  color: #64748b;
+}

@@ -1,0 +1,243 @@
+/* ============================================================
+   📬 INBOX PAGE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 PAGE LAYOUT
+   ============================================================ */
+
+.inboxPageLayout {
+  display: flex;
+  height: calc(100vh - var(--navbar-height));
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  overflow: hidden;
+}
+
+/* ============================================================
+   📌 WORKSPACE INBOX WRAPPER
+   ============================================================ */
+
+.workspaceInboxWrapper {
+  width: 380px;
+  min-width: 320px;
+  max-width: 420px;
+  height: 100%;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📌 WORKSPACE INBOX
+   ============================================================ */
+
+.workspaceInbox {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--space-md);
+  overflow: hidden;
+}
+
+/* ── Inbox Rows Container ── */
+.inboxRowsContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin-top: var(--space-xs);
+}
+
+.inboxRowsContainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.inboxRowsContainer::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.inboxRowsContainer::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 ACTIVE CHAT AREA
+   ============================================================ */
+
+.activeChatArea {
+  flex: 1;
+  height: 100%;
+  background: var(--bg-primary);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── No Chat Selected Message ── */
+.noChatSelectedMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  gap: var(--space-md);
+  padding: var(--space-2xl);
+  text-align: center;
+}
+
+.noChatSelectedMessage i {
+  font-size: 48px;
+  color: var(--accent-primary);
+  opacity: 0.5;
+}
+
+.noChatSelectedMessage p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  max-width: 300px;
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .workspaceInboxWrapper {
+    width: 340px;
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .inboxPageLayout {
+    flex-direction: column;
+    height: calc(100vh - var(--navbar-height));
+  }
+
+  .workspaceInboxWrapper {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    height: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .workspaceInbox {
+    padding: var(--space-sm);
+  }
+
+  .activeChatArea {
+    display: none;
+    height: 100%;
+  }
+
+  .inboxPageLayout.chatActive .workspaceInboxWrapper {
+    display: none;
+  }
+
+  .inboxPageLayout.chatActive .activeChatArea {
+    display: flex;
+    height: 100%;
+  }
+
+  .noChatSelectedMessage {
+    display: flex !important;
+    height: 100%;
+  }
+
+  .noChatSelectedMessage i {
+    font-size: 40px;
+  }
+
+  .noChatSelectedMessage p {
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .inboxPageLayout {
+    height: calc(100vh - var(--navbar-height));
+  }
+
+  .workspaceInbox {
+    padding: var(--space-xs);
+  }
+
+  .inboxRowsContainer {
+    padding-right: 2px;
+  }
+
+  .noChatSelectedMessage i {
+    font-size: 32px;
+  }
+
+  .noChatSelectedMessage p {
+    font-size: var(--text-xs);
+    max-width: 200px;
+  }
+}
+
+/* ============================================================
+   📌 LOADING STATE (Inline)
+   ============================================================ */
+
+/* This is used for the loading state in the component */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes spin {
+    from, to {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .workspaceInboxWrapper {
+    border-right-width: 2px;
+  }
+
+  .inboxPageLayout.chatActive .workspaceInboxWrapper {
+    border-right: none;
+  }
+
+  .activeChatArea {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .noChatSelectedMessage i {
+    opacity: 0.8;
+  }
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.inboxPageLayout ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

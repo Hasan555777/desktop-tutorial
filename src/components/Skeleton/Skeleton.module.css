@@ -1,0 +1,275 @@
+/* ============================================================
+   💀 SKELETON - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 SKELETON SHIMMER (Base)
+   ============================================================ */
+
+.skeletonShimmer {
+  display: inline-block;
+  background: var(--bg-tertiary);
+  background-image: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 0%,
+    var(--bg-hover) 20%,
+    var(--bg-tertiary) 40%,
+    var(--bg-tertiary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================================
+   📌 SKELETON ROW (Avatar + Content)
+   ============================================================ */
+
+.skeletonRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+
+.skeletonRowContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ============================================================
+   📌 SKELETON LIST
+   ============================================================ */
+
+.skeletonList {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   🎨 VARIANT - DARK (for dark backgrounds)
+   ============================================================ */
+
+.skeletonShimmer.dark {
+  background: var(--bg-secondary);
+  background-image: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--bg-tertiary) 20%,
+    var(--bg-secondary) 40%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+}
+
+/* ============================================================
+   🎨 VARIANT - LIGHT (for light backgrounds)
+   ============================================================ */
+
+.skeletonShimmer.light {
+  background: #e2e8f0;
+  background-image: linear-gradient(
+    90deg,
+    #e2e8f0 0%,
+    #f1f5f9 20%,
+    #e2e8f0 40%,
+    #e2e8f0 100%
+  );
+  background-size: 200% 100%;
+}
+
+/* ============================================================
+   📌 SKELETON TEXT (Multiple lines)
+   ============================================================ */
+
+.skeletonText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.skeletonText .skeletonShimmer {
+  width: 100%;
+  height: 14px;
+}
+
+.skeletonText .skeletonShimmer:last-child {
+  width: 70%;
+}
+
+/* ============================================================
+   📌 SKELETON CARD
+   ============================================================ */
+
+.skeletonCard {
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.skeletonCard .skeletonShimmer {
+  height: 120px;
+  border-radius: var(--radius-sm);
+}
+
+.skeletonCard .skeletonText {
+  gap: var(--space-xs);
+}
+
+/* ============================================================
+   📌 SKELETON AVATAR (Circle)
+   ============================================================ */
+
+.skeletonAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  background-image: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 0%,
+    var(--bg-hover) 20%,
+    var(--bg-tertiary) 40%,
+    var(--bg-tertiary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .skeletonRow {
+    gap: var(--space-xs);
+    padding: var(--space-xs) 0;
+  }
+
+  .skeletonRowContent .skeletonShimmer:first-child {
+    height: 12px;
+  }
+
+  .skeletonRowContent .skeletonShimmer:last-child {
+    height: 10px;
+  }
+
+  .skeletonCard {
+    padding: var(--space-sm);
+  }
+
+  .skeletonCard .skeletonShimmer {
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .skeletonRow {
+    gap: var(--space-xs);
+  }
+
+  .skeletonAvatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .skeletonRowContent .skeletonShimmer:first-child {
+    height: 10px;
+  }
+
+  .skeletonRowContent .skeletonShimmer:last-child {
+    height: 9px;
+  }
+
+  .skeletonCard {
+    padding: var(--space-xs);
+  }
+
+  .skeletonCard .skeletonShimmer {
+    height: 60px;
+  }
+
+  .skeletonText .skeletonShimmer {
+    height: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonShimmer {
+    animation: none;
+    background: var(--bg-tertiary);
+  }
+
+  .skeletonAvatar {
+    animation: none;
+  }
+
+  .skeletonShimmer.dark {
+    animation: none;
+    background: var(--bg-secondary);
+  }
+
+  .skeletonShimmer.light {
+    animation: none;
+    background: #e2e8f0;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .skeletonShimmer {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+  }
+
+  .skeletonAvatar {
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+  }
+
+  .skeletonShimmer.dark {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+  }
+
+  .skeletonShimmer.light {
+    background: #e2e8f0;
+    border-color: #94a3b8;
+  }
+
+  .skeletonCard {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.skeletonShimmer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

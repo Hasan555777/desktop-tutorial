@@ -1,0 +1,1374 @@
+/* ============================================================
+   🗄️ IDENTITY DATABASE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.identityDatabase {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  font-family: var(--font-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.idbHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.idbHeaderLeft h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.idbHeaderLeft h2 i {
+  color: var(--accent-primary);
+}
+
+.idbBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  margin-left: var(--space-xs);
+}
+
+.idbBadge.auto {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.idbHeaderRight {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.idbBtnExport,
+.idbBtnAdd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.idbBtnExport {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.idbBtnExport:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.idbBtnAdd {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.idbBtnAdd:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 STATS
+   ============================================================ */
+
+.idbStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.idbStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.idbStat:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.idbStatValue {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.idbStatLabel {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.idbStat.nid .idbStatValue { color: var(--status-info); }
+.idbStat.birth .idbStatValue { color: var(--status-success); }
+.idbStat.passport .idbStatValue { color: var(--status-warning); }
+.idbStat.pending .idbStatValue { color: var(--status-warning); }
+.idbStat.approved .idbStatValue { color: var(--status-success); }
+.idbStat.duplicate .idbStatValue { color: var(--status-danger); }
+
+/* ============================================================
+   📌 FILTERS
+   ============================================================ */
+
+.idbFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm) 0;
+}
+
+.idbFilterGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.idbFilterBtn {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-primary);
+  white-space: nowrap;
+}
+
+.idbFilterBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.idbFilterBtn.active {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.idbSearch {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.idbSearch i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.idbSearch input {
+  width: 100%;
+  padding: 8px 36px 8px 36px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.idbSearch input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.idbSearch input::placeholder {
+  color: var(--text-muted);
+}
+
+.idbSearchClear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  padding: 4px;
+}
+
+.idbSearchClear:hover {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 BULK ACTIONS
+   ============================================================ */
+
+.idbBulkActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+  border: 1px solid var(--border-color);
+}
+
+.idbBulkActions span {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.idbBulkDelete {
+  padding: 6px 16px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-danger);
+  color: #ffffff;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.idbBulkDelete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.idbBulkClear {
+  padding: 6px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.idbBulkClear:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 TABLE
+   ============================================================ */
+
+.idbTableWrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.idbTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.idbTable thead {
+  background: var(--bg-tertiary);
+}
+
+.idbTable th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.idbTable th input[type="checkbox"] {
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.idbTable td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+}
+
+.idbTable tbody tr {
+  transition: all var(--transition-fast);
+}
+
+.idbTable tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.idbTable tbody tr.selected {
+  background: var(--accent-glow);
+}
+
+.idbTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.idbTable td input[type="checkbox"] {
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+/* ============================================================
+   📌 USER INFO
+   ============================================================ */
+
+.idbUserInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.idbUserName {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.idbUserAddress {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.idbAutoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  font-size: 10px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+/* ============================================================
+   📌 TYPE BADGE
+   ============================================================ */
+
+.idbTypeBadge {
+  display: inline-flex;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.idbTypeBadge.nid {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.idbTypeBadge.birth_certificate {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.idbTypeBadge.passport {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+/* ============================================================
+   📌 ID NUMBER
+   ============================================================ */
+
+.idbIdNumber {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   📌 CONTACT
+   ============================================================ */
+
+.idbContact {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.idbContact.small {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 DOCUMENT BUTTON
+   ============================================================ */
+
+.idbDocBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-primary);
+  margin-right: var(--space-xs);
+}
+
+.idbDocBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.idbDocBtn.secondary {
+  background: var(--bg-tertiary);
+}
+
+/* ============================================================
+   📌 STATUS
+   ============================================================ */
+
+.idbStatus {
+  display: inline-flex;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.idbStatus.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+.idbStatus.approved,
+.idbStatus.verified {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.idbStatus.rejected {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.idbStatus.duplicate {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 ACTIONS
+   ============================================================ */
+
+.idbActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.idbActions button {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+}
+
+.idbActions button:hover {
+  transform: scale(1.1);
+}
+
+.idbActionApprove:hover {
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+  color: var(--status-success);
+}
+
+.idbActionReject:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.idbActionFlag:hover {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+}
+
+.idbActionEdit:hover {
+  background: var(--status-info-bg);
+  border-color: var(--status-info);
+  color: var(--status-info);
+}
+
+.idbActionDelete:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 EMPTY STATE
+   ============================================================ */
+
+.idbEmpty {
+  text-align: center;
+  padding: var(--space-2xl) !important;
+  color: var(--text-muted);
+}
+
+.idbEmpty i {
+  font-size: 48px;
+  display: block;
+  margin-bottom: var(--space-md);
+  opacity: 0.3;
+}
+
+.idbEmpty p {
+  margin-bottom: var(--space-md);
+  font-size: var(--text-base);
+}
+
+.idbBtnAddSmall {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.idbBtnAddSmall:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.idbFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.idbFooterInfo {
+  margin-left: var(--space-sm);
+  color: var(--text-muted);
+}
+
+.idbBtnRefresh {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.idbBtnRefresh:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.idbLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl);
+  gap: var(--space-md);
+}
+
+.idbLoadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--bg-tertiary);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.idbLoading p {
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 IMAGE ZOOM MODAL
+   ============================================================ */
+
+.idbZoomModal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: modalFadeIn 0.3s ease;
+}
+
+.idbZoomModalContent {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.idbZoomModalContent img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 80px var(--shadow-color);
+}
+
+.idbZoomClose {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--status-danger);
+  color: #ffffff;
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.idbZoomClose:hover {
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 FORM MODAL
+   ============================================================ */
+
+.idbModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: modalFadeIn 0.3s ease;
+}
+
+.idbModal {
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.3s ease;
+}
+
+.idbModal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.idbModal::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.idbModal::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+.idbModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.idbModalHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.idbModalHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.idbModalClose {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.idbModalClose:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.idbModalBody {
+  padding: var(--space-lg);
+}
+
+.idbModalFooter {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.idbDuplicateWarning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+  border-radius: var(--radius-md);
+  color: var(--status-warning);
+  margin-bottom: var(--space-md);
+}
+
+.idbDuplicateWarning i {
+  font-size: var(--text-lg);
+  margin-top: 2px;
+}
+
+.idbDuplicateWarning strong {
+  display: block;
+  color: var(--text-primary);
+}
+
+.idbDuplicateWarning p {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.idbFormGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.idbFormGroup {
+  margin-bottom: 0;
+}
+
+.idbFormGroup.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.idbFormGroup label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.idbFormGroup .required {
+  color: var(--status-danger);
+}
+
+.idbFormGroup .optional {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.idbFormGroup input,
+.idbFormGroup select,
+.idbFormGroup textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.idbFormGroup input:focus,
+.idbFormGroup select:focus,
+.idbFormGroup textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.idbFormGroup input.error,
+.idbFormGroup textarea.error {
+  border-color: var(--status-danger);
+}
+
+.idbFormGroup input::placeholder,
+.idbFormGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.idbFormGroup textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.idbError {
+  display: block;
+  color: var(--status-danger);
+  font-size: var(--text-xs);
+  margin-top: var(--space-xs);
+}
+
+.idbHint {
+  display: block;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  margin-top: var(--space-xs);
+}
+
+.idbFormError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-md);
+  color: var(--status-danger);
+  font-size: var(--text-sm);
+  margin-top: var(--space-md);
+}
+
+.idbUploadArea {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+}
+
+.idbUploadArea:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.idbUploadArea.hasFile {
+  border-color: var(--accent-primary);
+  border-style: solid;
+}
+
+.idbUploadPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--text-muted);
+}
+
+.idbUploadPlaceholder i {
+  font-size: 32px;
+  color: var(--accent-primary);
+}
+
+.idbUploadPlaceholder span {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.idbUploadPlaceholder small {
+  font-size: var(--text-xs);
+}
+
+.idbUploadPreview {
+  position: relative;
+  width: 100%;
+  max-height: 150px;
+  display: flex;
+  justify-content: center;
+}
+
+.idbUploadPreview img {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+}
+
+.idbUploadRemove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--status-danger);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.idbUploadRemove:hover {
+  transform: scale(1.1);
+}
+
+.idbBtnCancel {
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.idbBtnCancel:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.idbBtnSave {
+  flex: 2;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.idbBtnSave:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.idbBtnSave:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .idbStats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .identityDatabase {
+    padding: var(--space-md);
+  }
+
+  .idbHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .idbHeaderRight {
+    justify-content: stretch;
+  }
+
+  .idbHeaderRight button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .idbStats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .idbFilters {
+    flex-direction: column;
+  }
+
+  .idbFilterGroup {
+    justify-content: center;
+  }
+
+  .idbSearch {
+    min-width: 100%;
+  }
+
+  .idbFormGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .idbModal {
+    max-width: 100%;
+    margin: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .idbTable th,
+  .idbTable td {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-xs);
+  }
+
+  .idbActions button {
+    width: 26px;
+    height: 26px;
+    font-size: var(--text-xs);
+  }
+
+  .idbDocBtn {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .identityDatabase {
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .idbStats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
+  }
+
+  .idbStat {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .idbStatValue {
+    font-size: var(--text-lg);
+  }
+
+  .idbStatLabel {
+    font-size: 9px;
+  }
+
+  .idbFilterBtn {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .idbTable {
+    font-size: 10px;
+  }
+
+  .idbTable th,
+  .idbTable td {
+    padding: var(--space-xs) var(--space-xs);
+  }
+
+  .idbUserName {
+    font-size: 10px;
+  }
+
+  .idbTypeBadge {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+
+  .idbStatus {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .idbModalBody {
+    padding: var(--space-md);
+  }
+
+  .idbModalFooter {
+    flex-direction: column;
+  }
+
+  .idbBtnCancel,
+  .idbBtnSave {
+    width: 100%;
+  }
+
+  .idbBulkActions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .idbLoadingSpinner {
+    animation: none;
+  }
+
+  .idbBtnAdd:hover {
+    transform: none;
+  }
+
+  .idbBtnAddSmall:hover {
+    transform: none;
+  }
+
+  .idbBulkDelete:hover {
+    transform: none;
+  }
+
+  .idbBtnSave:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .idbStat:hover {
+    transform: none;
+  }
+
+  .idbZoomClose:hover {
+    transform: none;
+  }
+
+  .idbModalClose:hover {
+    transform: none;
+  }
+
+  .idbActions button:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .idbTable {
+    border-width: 2px;
+  }
+
+  .idbTable th {
+    border-bottom-width: 3px;
+  }
+
+  .idbStat {
+    border-width: 2px;
+  }
+
+  .idbFilterBtn.active {
+    border-width: 2px;
+  }
+
+  .idbBtnAdd {
+    border: 2px solid currentColor;
+  }
+
+  .idbBtnExport {
+    border-width: 2px;
+  }
+
+  .idbBulkDelete {
+    border: 2px solid currentColor;
+  }
+
+  .idbBtnSave {
+    border: 2px solid currentColor;
+  }
+
+  .idbUploadArea {
+    border-width: 2px;
+  }
+
+  .idbModal {
+    border-width: 2px;
+  }
+
+  .idbStatus {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.idbBtnAdd:focus-visible,
+.idbBtnExport:focus-visible,
+.idbFilterBtn:focus-visible,
+.idbSearch input:focus-visible,
+.idbBulkDelete:focus-visible,
+.idbBulkClear:focus-visible,
+.idbBtnSave:focus-visible,
+.idbBtnCancel:focus-visible,
+.idbModalClose:focus-visible,
+.idbZoomClose:focus-visible,
+.idbActions button:focus-visible,
+.idbDocBtn:focus-visible,
+.idbBtnRefresh:focus-visible,
+.idbBtnAddSmall:focus-visible,
+.idbSearchClear:focus-visible,
+.idbFormGroup input:focus-visible,
+.idbFormGroup select:focus-visible,
+.idbFormGroup textarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.identityDatabase ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

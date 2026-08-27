@@ -1,0 +1,216 @@
+/* ============================================================
+   ⚠️ ERROR BOUNDARY - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 ERROR CONTAINER
+   ============================================================ */
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-2xl);
+  text-align: center;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+}
+
+/* ============================================================
+   📌 ERROR ICON (Optional - add if needed)
+   ============================================================ */
+
+.errorContainer::before {
+  content: '😕';
+  font-size: 64px;
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================================
+   📌 ERROR TITLE
+   ============================================================ */
+
+.errorTitle {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-sm);
+  line-height: 1.2;
+}
+
+/* ============================================================
+   📌 ERROR MESSAGE
+   ============================================================ */
+
+.errorMessage {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin: 0 auto var(--space-xl);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   📌 ERROR BUTTON
+   ============================================================ */
+
+.errorButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 14px 36px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+}
+
+.errorButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 35px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.errorButton:active {
+  transform: translateY(-1px);
+}
+
+.errorButton::before {
+  content: '🔄';
+  font-size: var(--text-lg);
+}
+
+/* ============================================================
+   📌 ERROR DETAILS (For development - optional)
+   ============================================================ */
+
+.errorDetails {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  max-width: 600px;
+  width: 100%;
+  text-align: left;
+  overflow: auto;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Courier New', monospace;
+  max-height: 200px;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .errorContainer {
+    padding: var(--space-xl);
+  }
+
+  .errorContainer::before {
+    font-size: 48px;
+  }
+
+  .errorTitle {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+  }
+
+  .errorMessage {
+    font-size: var(--text-sm);
+    max-width: 100%;
+    padding: 0 var(--space-sm);
+  }
+
+  .errorButton {
+    padding: 12px 28px;
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .errorContainer {
+    padding: var(--space-lg);
+  }
+
+  .errorContainer::before {
+    font-size: 40px;
+    margin-bottom: var(--space-sm);
+  }
+
+  .errorTitle {
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+  }
+
+  .errorMessage {
+    font-size: var(--text-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .errorButton {
+    padding: 10px 24px;
+    font-size: var(--text-xs);
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .errorDetails {
+    padding: var(--space-sm);
+    font-size: 9px;
+    max-height: 150px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .errorButton:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .errorButton {
+    border: 2px solid currentColor;
+    background: var(--accent-primary);
+  }
+
+  .errorDetails {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.errorButton:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.errorContainer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

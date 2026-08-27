@@ -1,0 +1,321 @@
+/* ============================================================
+   📄 PAGE HEADER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 HEADER CONTAINER
+   ============================================================ */
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-secondary);
+  gap: var(--space-md);
+  min-height: 64px;
+  transition: all var(--transition-normal);
+  flex-wrap: wrap;
+}
+
+/* ── Variants ── */
+.pageHeader.border {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pageHeader.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: var(--glass-bg);
+}
+
+.pageHeader.transparent {
+  background: transparent;
+}
+
+/* ============================================================
+   📌 LEFT SECTION
+   ============================================================ */
+
+.pageHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+  min-width: 0;
+}
+
+/* ============================================================
+   📌 HEADER INFO
+   ============================================================ */
+
+.pageHeaderInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.pageHeaderIcon {
+  font-size: var(--text-xl);
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.pageHeaderTitle {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.pageHeaderSubtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+  width: 100%;
+}
+
+/* ============================================================
+   📌 CENTER SECTION
+   ============================================================ */
+
+.pageHeaderCenter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  justify-content: center;
+}
+
+/* ============================================================
+   📌 RIGHT SECTION
+   ============================================================ */
+
+.pageHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📌 SIZE VARIANTS
+   ============================================================ */
+
+/* ── Small ── */
+.pageHeader.small {
+  min-height: 48px;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.pageHeader.small .pageHeaderTitle {
+  font-size: var(--text-base);
+}
+
+.pageHeader.small .pageHeaderIcon {
+  font-size: var(--text-base);
+}
+
+.pageHeader.small .pageHeaderSubtitle {
+  font-size: var(--text-xs);
+}
+
+/* ── Large ── */
+.pageHeader.large {
+  min-height: 80px;
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.pageHeader.large .pageHeaderTitle {
+  font-size: var(--text-2xl);
+}
+
+.pageHeader.large .pageHeaderIcon {
+  font-size: var(--text-2xl);
+}
+
+.pageHeader.large .pageHeaderSubtitle {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 WITH ICON ONLY (No Title)
+   ============================================================ */
+
+.pageHeader.iconOnly .pageHeaderTitle {
+  display: none;
+}
+
+.pageHeader.iconOnly .pageHeaderIcon {
+  font-size: var(--text-2xl);
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .pageHeader {
+    padding: var(--space-sm) var(--space-md);
+    min-height: 56px;
+    gap: var(--space-sm);
+  }
+
+  .pageHeaderTitle {
+    font-size: var(--text-lg);
+  }
+
+  .pageHeaderIcon {
+    font-size: var(--text-lg);
+  }
+
+  .pageHeaderSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .pageHeader.large {
+    min-height: 64px;
+    padding: var(--space-md);
+  }
+
+  .pageHeader.large .pageHeaderTitle {
+    font-size: var(--text-xl);
+  }
+
+  .pageHeader.large .pageHeaderIcon {
+    font-size: var(--text-xl);
+  }
+
+  .pageHeader.large .pageHeaderSubtitle {
+    font-size: var(--text-sm);
+  }
+
+  .pageHeader.small {
+    min-height: 44px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .pageHeader.small .pageHeaderTitle {
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .pageHeader {
+    padding: var(--space-xs) var(--space-sm);
+    min-height: 48px;
+    flex-wrap: wrap;
+  }
+
+  .pageHeaderLeft {
+    flex: 1 1 100%;
+  }
+
+  .pageHeaderCenter {
+    flex: 1 1 100%;
+    order: 3;
+  }
+
+  .pageHeaderRight {
+    flex: 0 0 auto;
+  }
+
+  .pageHeaderTitle {
+    font-size: var(--text-base);
+  }
+
+  .pageHeaderIcon {
+    font-size: var(--text-base);
+  }
+
+  .pageHeaderSubtitle {
+    font-size: 10px;
+    width: 100%;
+  }
+
+  .pageHeader.large {
+    min-height: 56px;
+    padding: var(--space-sm);
+  }
+
+  .pageHeader.large .pageHeaderTitle {
+    font-size: var(--text-lg);
+  }
+
+  .pageHeader.large .pageHeaderIcon {
+    font-size: var(--text-lg);
+  }
+
+  .pageHeader.small {
+    min-height: 40px;
+    padding: var(--space-xs);
+  }
+
+  .pageHeader.small .pageHeaderTitle {
+    font-size: var(--text-xs);
+  }
+
+  .pageHeader.sticky {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pageHeader {
+    transition: none;
+  }
+
+  .pageHeader.sticky {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .pageHeader.border {
+    border-bottom-width: 2px;
+  }
+
+  .pageHeader.sticky {
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  .pageHeader.transparent {
+    background: var(--bg-secondary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.pageHeader :focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.pageHeader ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

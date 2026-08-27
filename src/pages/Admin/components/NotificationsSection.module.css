@@ -1,0 +1,497 @@
+/* ============================================================
+   📨 NOTIFICATIONS SECTION - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.adminNotifications {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.adminNotifications h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.adminNotifications h3 i {
+  color: var(--accent-primary);
+}
+
+.adminNotifications h4 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================================
+   📌 NOTIFICATION FORM
+   ============================================================ */
+
+.notificationForm {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.formGroup {
+  margin-bottom: var(--space-md);
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.formGroup select:focus,
+.formGroup textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.formGroup select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.formGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 RECIPIENT SELECT
+   ============================================================ */
+
+.recipientSelect {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.selectAll {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+}
+
+.selectAll label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.selectAll input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.userList {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: var(--space-sm);
+}
+
+.userList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.userList::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.userList::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+.userCheck {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.userCheck:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.userCheck input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.userCheck span {
+  word-break: break-word;
+}
+
+/* ============================================================
+   📌 BUTTONS
+   ============================================================ */
+
+.btn {
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.btnPrimary {
+  width: 100%;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  padding: 14px 24px;
+  font-size: var(--text-base);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 SENT NOTIFICATIONS LIST
+   ============================================================ */
+
+.sentNotifications {
+  margin-top: var(--space-lg);
+}
+
+.notificationList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notificationList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notificationList::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.notificationList::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+.notificationItem {
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--border-color);
+  background: var(--bg-tertiary);
+  transition: all var(--transition-fast);
+}
+
+.notificationItem:hover {
+  background: var(--bg-hover);
+}
+
+/* Notification types */
+.notificationItem.info {
+  border-left-color: var(--status-info);
+}
+
+.notificationItem.success {
+  border-left-color: var(--status-success);
+}
+
+.notificationItem.warning {
+  border-left-color: var(--status-warning);
+}
+
+.notificationItem.error {
+  border-left-color: var(--status-danger);
+}
+
+.notifMessage {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  line-height: 1.5;
+}
+
+.notifMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.notifMeta span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* ============================================================
+   📌 EMPTY STATE
+   ============================================================ */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.emptyState i {
+  font-size: 48px;
+  margin-bottom: var(--space-md);
+  opacity: 0.3;
+}
+
+.emptyState h4 {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.emptyState p {
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .adminNotifications {
+    padding: var(--space-md);
+  }
+
+  .notificationForm {
+    padding: var(--space-md);
+  }
+
+  .formGroup select,
+  .formGroup textarea {
+    font-size: var(--text-xs);
+    padding: 8px 12px;
+  }
+
+  .btnPrimary {
+    font-size: var(--text-sm);
+    padding: 12px 20px;
+  }
+
+  .notifMessage {
+    font-size: var(--text-xs);
+  }
+
+  .notifMeta {
+    font-size: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .userCheck {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .selectAll label {
+    font-size: var(--text-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .adminNotifications {
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .adminNotifications h3 {
+    font-size: var(--text-lg);
+  }
+
+  .adminNotifications h4 {
+    font-size: var(--text-base);
+  }
+
+  .notificationForm {
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .formGroup {
+    margin-bottom: var(--space-sm);
+  }
+
+  .formGroup label {
+    font-size: var(--text-xs);
+  }
+
+  .formGroup textarea {
+    min-height: 80px;
+  }
+
+  .btnPrimary {
+    font-size: var(--text-xs);
+    padding: 10px 16px;
+  }
+
+  .userList {
+    max-height: 150px;
+  }
+
+  .notificationItem {
+    padding: var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .btnPrimary:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .notificationItem:hover {
+    transform: none;
+  }
+
+  .userCheck:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .notificationForm {
+    border-width: 2px;
+  }
+
+  .recipientSelect {
+    border-width: 2px;
+  }
+
+  .formGroup select,
+  .formGroup textarea {
+    border-width: 2px;
+  }
+
+  .btnPrimary {
+    border: 2px solid currentColor;
+  }
+
+  .notificationItem {
+    border-left-width: 6px;
+  }
+
+  .userCheck input[type="checkbox"] {
+    border: 2px solid currentColor;
+  }
+
+  .userCheck input[type="checkbox"]:checked {
+    background: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btnPrimary:focus-visible,
+.formGroup select:focus-visible,
+.formGroup textarea:focus-visible,
+.userCheck input[type="checkbox"]:focus-visible,
+.selectAll input[type="checkbox"]:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.adminNotifications ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

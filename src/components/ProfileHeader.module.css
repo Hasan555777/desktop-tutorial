@@ -1,0 +1,546 @@
+/* ============================================================
+   👤 PROFILE HEADER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 PROFILE HEADER WRAPPER
+   ============================================================ */
+
+.profileHeaderWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: var(--space-xl);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   📌 AVATAR WRAPPER
+   ============================================================ */
+
+.profileAvatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profileAvatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--border-color);
+  transition: all var(--transition-normal);
+}
+
+.profileAvatar:hover {
+  border-color: var(--accent-primary);
+}
+
+.avatarUploadBtn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: 2px solid var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-sm);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.avatarUploadBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 PROFILE INFO WRAPPER
+   ============================================================ */
+
+.profileInfoWrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Name Section ── */
+.profileNameSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xs);
+}
+
+.profileNameSection h1 {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ── Badges ── */
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.verifiedBadge i {
+  font-size: 14px;
+}
+
+.unverifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.unverifiedBadge i {
+  font-size: 14px;
+}
+
+/* ── Headline ── */
+.profileHeadline {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-xs);
+}
+
+/* ── Email ── */
+.profileEmail {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: 0 0 var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.profileEmail i {
+  color: var(--accent-primary);
+}
+
+/* ── Edit Button ── */
+.editProfileBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.editProfileBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   📌 EDIT MODAL
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: modalFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+.editModal {
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.4s ease;
+  padding: var(--space-xl);
+}
+
+.editModal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.editModal::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.editModal::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Modal Header ── */
+.editModal h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-lg);
+}
+
+.editModal h3 i {
+  color: var(--accent-primary);
+}
+
+/* ── Form ── */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.editForm input,
+.editForm textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.editForm input:focus,
+.editForm textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.editForm input::placeholder,
+.editForm textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.editForm textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ── Actions ── */
+.editActions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.cancelBtn,
+.saveBtn {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.cancelBtn {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.cancelBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.saveBtn {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.saveBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .profileHeaderWrapper {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-lg);
+    gap: var(--space-md);
+  }
+
+  .profileAvatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profileNameSection {
+    justify-content: center;
+  }
+
+  .profileNameSection h1 {
+    font-size: var(--text-xl);
+  }
+
+  .profileHeadline {
+    font-size: var(--text-sm);
+  }
+
+  .profileEmail {
+    justify-content: center;
+    font-size: var(--text-xs);
+  }
+
+  .profileInfoWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .editModal {
+    max-width: 100%;
+    margin: var(--space-sm);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+  }
+
+  .editModal h3 {
+    font-size: var(--text-lg);
+  }
+
+  .editActions {
+    flex-direction: column;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileHeaderWrapper {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .profileAvatar {
+    width: 80px;
+    height: 80px;
+    border-width: 3px;
+  }
+
+  .avatarUploadBtn {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+    bottom: 2px;
+    right: 2px;
+  }
+
+  .profileNameSection h1 {
+    font-size: var(--text-lg);
+  }
+
+  .verifiedBadge,
+  .unverifiedBadge {
+    font-size: 10px;
+    padding: 1px 10px;
+  }
+
+  .profileHeadline {
+    font-size: var(--text-xs);
+  }
+
+  .editProfileBtn {
+    font-size: var(--text-xs);
+    padding: 6px 16px;
+  }
+
+  .editModal {
+    padding: var(--space-md);
+  }
+
+  .editModal h3 {
+    font-size: var(--text-base);
+  }
+
+  .editForm input,
+  .editForm textarea {
+    font-size: var(--text-xs);
+    padding: 10px 14px;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    font-size: var(--text-xs);
+    padding: 10px 16px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .modalOverlay {
+    animation: none;
+  }
+
+  .editModal {
+    animation: none;
+  }
+
+  .profileAvatar:hover {
+    transform: none;
+  }
+
+  .avatarUploadBtn:hover {
+    transform: none;
+  }
+
+  .editProfileBtn:hover {
+    transform: none;
+  }
+
+  .saveBtn:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .profileHeaderWrapper {
+    border-width: 2px;
+  }
+
+  .profileAvatar {
+    border-width: 4px;
+  }
+
+  .editModal {
+    border-width: 2px;
+  }
+
+  .cancelBtn {
+    border-width: 2px;
+  }
+
+  .saveBtn {
+    border: 2px solid currentColor;
+  }
+
+  .avatarUploadBtn {
+    border: 2px solid currentColor;
+  }
+
+  .editProfileBtn {
+    border-width: 2px;
+  }
+
+  .verifiedBadge,
+  .unverifiedBadge {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.editProfileBtn:focus-visible,
+.cancelBtn:focus-visible,
+.saveBtn:focus-visible,
+.avatarUploadBtn:focus-visible,
+.editForm input:focus-visible,
+.editForm textarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.profileHeaderWrapper ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

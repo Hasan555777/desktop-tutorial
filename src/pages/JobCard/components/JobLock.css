@@ -1,0 +1,120 @@
+/* src/pages/JobCard/components/JobLock.css */
+
+.job-lock-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+/* ── ব্যাজ স্টাইল ── */
+.job-lock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  width: fit-content;
+  animation: slideDown 0.3s ease-out;
+}
+
+.job-lock-badge.busy {
+  background: #ef4444;
+  color: white;
+}
+
+.job-lock-badge.deal-active {
+  background: #f59e0b;
+  color: white;
+}
+
+.job-lock-badge.available {
+  background: #22c55e;
+  color: white;
+}
+
+/* ── টগল বাটন ── */
+.job-lock-toggle-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-secondary, #1e293b);
+  color: var(--text-primary, #e2e8f0);
+  width: fit-content;
+}
+
+.job-lock-toggle-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.job-lock-toggle-btn.active {
+  background: #ef4444;
+  color: white;
+}
+
+.job-lock-toggle-btn.active:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.job-lock-toggle-btn:not(.active):hover:not(:disabled) {
+  background: #22c55e;
+  color: white;
+}
+
+.job-lock-toggle-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── লকড ইনফো ── */
+.job-lock-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.job-lock-info i {
+  color: #ef4444;
+  font-size: 14px;
+}
+
+/* ── অ্যানিমেশন ── */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── রেসপন্সিভ ── */
+@media (max-width: 640px) {
+  .job-lock-toggle-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .job-lock-badge {
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+}

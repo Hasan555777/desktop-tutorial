@@ -1,0 +1,470 @@
+/* ============================================================
+   📋 INBOX CHAT MENU - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 DROPDOWN CONTAINER
+   ============================================================ */
+
+.chatMenuDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1000;
+  min-width: 220px;
+  background: var(--dropdown-bg, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: 0 20px 60px var(--shadow-color, rgba(0, 0, 0, 0.15));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: var(--space-xs, 6px) 0;
+  animation: dropdownSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
+}
+
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 MENU ITEMS
+   ============================================================ */
+
+.chatMenuDropdown button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 10px);
+  width: 100%;
+  padding: var(--space-sm, 10px) var(--space-md, 16px);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #4b5563);
+  font-size: var(--text-sm, 14px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  font-family: var(--font-primary, inherit);
+  text-align: left;
+  line-height: 1.4;
+  position: relative;
+}
+
+.chatMenuDropdown button:hover:not(:disabled) {
+  background: var(--bg-hover, #f3f4f6);
+  color: var(--text-primary, #1f2937);
+}
+
+.chatMenuDropdown button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.chatMenuDropdown button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.chatMenuDropdown button i {
+  width: 18px;
+  text-align: center;
+  font-size: var(--text-sm, 14px);
+  color: var(--text-muted, #9ca3af);
+  transition: color var(--transition-fast, 0.15s) ease;
+  flex-shrink: 0;
+}
+
+.chatMenuDropdown button:hover:not(:disabled) i {
+  color: var(--text-primary, #1f2937);
+}
+
+/* ── Delete Button ── */
+.chatMenuDropdown .deleteBtn {
+  color: var(--status-danger, #ef4444);
+}
+
+.chatMenuDropdown .deleteBtn i {
+  color: var(--status-danger, #ef4444);
+}
+
+.chatMenuDropdown .deleteBtn:hover:not(:disabled) {
+  background: var(--status-danger-bg, #fef2f2);
+  color: var(--status-danger, #ef4444);
+}
+
+.chatMenuDropdown .deleteBtn:hover:not(:disabled) i {
+  color: var(--status-danger, #ef4444);
+}
+
+/* ── Block Button ── */
+.chatMenuDropdown .blockBtn {
+  color: var(--text-secondary, #4b5563);
+}
+
+.chatMenuDropdown .blockBtn i {
+  color: var(--text-muted, #9ca3af);
+}
+
+.chatMenuDropdown .blockBtn:hover:not(:disabled) {
+  background: var(--bg-hover, #f3f4f6);
+  color: var(--text-primary, #1f2937);
+}
+
+.chatMenuDropdown .blockBtn:hover:not(:disabled) i {
+  color: var(--text-primary, #1f2937);
+}
+
+/* ── Unblock Button ── */
+.chatMenuDropdown .unblockBtn {
+  color: var(--status-success, #10b981);
+}
+
+.chatMenuDropdown .unblockBtn i {
+  color: var(--status-success, #10b981);
+}
+
+.chatMenuDropdown .unblockBtn:hover:not(:disabled) {
+  background: var(--status-success-bg, #ecfdf5);
+  color: var(--status-success, #10b981);
+}
+
+.chatMenuDropdown .unblockBtn:hover:not(:disabled) i {
+  color: var(--status-success, #10b981);
+}
+
+/* ── Disabled State ── */
+.chatMenuDropdown button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chatMenuDropdown button.disabled:hover {
+  background: transparent;
+  color: var(--text-secondary, #4b5563);
+}
+
+.chatMenuDropdown button.disabled i {
+  color: var(--text-muted, #9ca3af);
+}
+
+/* ── Divider ── */
+.chatMenuDivider {
+  height: 1px;
+  margin: var(--space-xs, 6px) var(--space-md, 16px);
+  background: var(--border-color, #e5e7eb);
+}
+
+/* ── Active Deal Indicator ── */
+.chatMenuDropdown .activeDealIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 10px);
+  padding: var(--space-xs, 6px) var(--space-md, 16px);
+  font-size: var(--text-xs, 12px);
+  color: var(--status-success, #10b981);
+  background: var(--status-success-bg, #ecfdf5);
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  border-radius: var(--radius-md, 12px) var(--radius-md, 12px) 0 0;
+  font-weight: 600;
+}
+
+.chatMenuDropdown .activeDealIndicator i {
+  color: var(--status-success, #10b981);
+  font-size: 14px;
+}
+
+/* ── Lock Icon for Disabled Items ── */
+.chatMenuDropdown .lockIcon {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-muted, #9ca3af);
+}
+
+/* ============================================================
+   📌 POSITION VARIANTS
+   ============================================================ */
+
+.chatMenuDropdown.top {
+  bottom: calc(100% + 8px);
+  top: auto;
+  animation: dropdownSlideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: bottom right;
+}
+
+@keyframes dropdownSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.chatMenuDropdown.left {
+  right: auto;
+  left: 0;
+  transform-origin: top left;
+}
+
+.chatMenuDropdown.left.top {
+  transform-origin: bottom left;
+}
+
+/* ============================================================
+   📌 SCROLLABLE (যদি অনেক আইটেম থাকে)
+   ============================================================ */
+
+.chatMenuDropdown.scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.chatMenuDropdown.scrollable::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chatMenuDropdown.scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatMenuDropdown.scrollable::-webkit-scrollbar-thumb {
+  background: var(--border-color, #e5e7eb);
+  border-radius: 10px;
+}
+
+.chatMenuDropdown.scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted, #9ca3af);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .chatMenuDropdown {
+    min-width: 180px;
+    right: -4px;
+  }
+
+  .chatMenuDropdown button {
+    font-size: var(--text-xs, 13px);
+    padding: var(--space-xs, 8px) var(--space-sm, 12px);
+    gap: var(--space-xs, 8px);
+  }
+
+  .chatMenuDropdown button i {
+    font-size: 12px;
+    width: 16px;
+  }
+
+  .chatMenuDropdown .activeDealIndicator {
+    font-size: 11px;
+    padding: var(--space-xs, 6px) var(--space-sm, 12px);
+  }
+
+  .chatMenuDropdown .activeDealIndicator i {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chatMenuDropdown {
+    min-width: 160px;
+    right: -8px;
+    padding: var(--space-xs, 4px) 0;
+  }
+
+  .chatMenuDropdown button {
+    font-size: 11px;
+    padding: var(--space-xs, 6px) var(--space-sm, 10px);
+    gap: var(--space-xs, 6px);
+  }
+
+  .chatMenuDropdown button i {
+    font-size: 10px;
+    width: 14px;
+  }
+
+  .chatMenuDropdown .activeDealIndicator {
+    font-size: 10px;
+    padding: var(--space-xs, 4px) var(--space-sm, 10px);
+  }
+
+  .chatMenuDropdown .activeDealIndicator i {
+    font-size: 10px;
+  }
+
+  .chatMenuDivider {
+    margin: var(--space-xs, 4px) var(--space-sm, 10px);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .chatMenuDropdown {
+    animation: none !important;
+  }
+
+  .chatMenuDropdown.top {
+    animation: none !important;
+  }
+
+  .chatMenuDropdown button:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .chatMenuDropdown button:active:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .chatMenuDropdown {
+    border-width: 2px;
+  }
+
+  .chatMenuDropdown .deleteBtn {
+    border: 1px solid transparent;
+  }
+
+  .chatMenuDropdown .deleteBtn:hover:not(:disabled) {
+    border-color: var(--status-danger, #ef4444);
+  }
+
+  .chatMenuDropdown button.disabled {
+    border: 1px solid transparent;
+  }
+
+  .chatMenuDivider {
+    border-top: 1px solid var(--border-color, #e5e7eb);
+  }
+
+  .chatMenuDropdown .activeDealIndicator {
+    border-bottom-width: 2px;
+  }
+
+  .chatMenuDropdown button:focus-visible {
+    outline: 2px solid var(--accent-primary, #4f46e5);
+    outline-offset: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.chatMenuDropdown button:focus-visible {
+  outline: 3px solid var(--accent-primary, #4f46e5);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm, 6px);
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.chatMenuDropdown ::selection {
+  background: var(--accent-primary, #4f46e5);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🌙 DARK MODE SUPPORT (যদি গ্লোবাল ডার্ক ভেরিয়েবল থাকে)
+   ============================================================ */
+
+@media (prefers-color-scheme: dark) {
+  .chatMenuDropdown {
+    background: var(--dropdown-bg-dark, #1f2937);
+    border-color: var(--border-color-dark, #374151);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+
+  .chatMenuDropdown button {
+    color: var(--text-secondary-dark, #9ca3af);
+  }
+
+  .chatMenuDropdown button:hover:not(:disabled) {
+    background: var(--bg-hover-dark, #374151);
+    color: var(--text-primary-dark, #f9fafb);
+  }
+
+  .chatMenuDropdown button i {
+    color: var(--text-muted-dark, #6b7280);
+  }
+
+  .chatMenuDropdown button:hover:not(:disabled) i {
+    color: var(--text-primary-dark, #f9fafb);
+  }
+
+  .chatMenuDropdown .deleteBtn {
+    color: var(--status-danger-dark, #f87171);
+  }
+
+  .chatMenuDropdown .deleteBtn i {
+    color: var(--status-danger-dark, #f87171);
+  }
+
+  .chatMenuDropdown .deleteBtn:hover:not(:disabled) {
+    background: var(--status-danger-bg-dark, #450a0a);
+    color: var(--status-danger-dark, #f87171);
+  }
+
+  .chatMenuDropdown .deleteBtn:hover:not(:disabled) i {
+    color: var(--status-danger-dark, #f87171);
+  }
+
+  .chatMenuDropdown .unblockBtn {
+    color: var(--status-success-dark, #34d399);
+  }
+
+  .chatMenuDropdown .unblockBtn i {
+    color: var(--status-success-dark, #34d399);
+  }
+
+  .chatMenuDropdown .unblockBtn:hover:not(:disabled) {
+    background: var(--status-success-bg-dark, #064e3b);
+    color: var(--status-success-dark, #34d399);
+  }
+
+  .chatMenuDropdown .unblockBtn:hover:not(:disabled) i {
+    color: var(--status-success-dark, #34d399);
+  }
+
+  .chatMenuDropdown .activeDealIndicator {
+    background: var(--status-success-bg-dark, #064e3b);
+    color: var(--status-success-dark, #34d399);
+    border-bottom-color: var(--border-color-dark, #374151);
+  }
+
+  .chatMenuDropdown .activeDealIndicator i {
+    color: var(--status-success-dark, #34d399);
+  }
+
+  .chatMenuDivider {
+    background: var(--border-color-dark, #374151);
+  }
+
+  .chatMenuDropdown button.disabled:hover {
+    background: transparent;
+    color: var(--text-secondary-dark, #9ca3af);
+  }
+
+  .chatMenuDropdown button.disabled i {
+    color: var(--text-muted-dark, #6b7280);
+  }
+}
