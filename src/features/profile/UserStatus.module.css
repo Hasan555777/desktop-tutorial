@@ -1,0 +1,284 @@
+/* ============================================================
+   👤 USER STATUS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 WRAPPER
+   ============================================================ */
+
+.userStatusWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.userStatusContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* ============================================================
+   📌 STATUS DOT
+   ============================================================ */
+
+.statusDot {
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  border: 2px solid var(--bg-secondary);
+}
+
+/* ── Sizes ── */
+.statusDotSmall {
+  width: 8px;
+  height: 8px;
+}
+
+.statusDotMedium {
+  width: 12px;
+  height: 12px;
+}
+
+.statusDotLarge {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── States ── */
+.statusDot.online {
+  background: var(--status-success);
+  box-shadow: 0 0 12px var(--shadow-glow);
+}
+
+.statusDot.offline {
+  background: var(--text-muted);
+}
+
+.statusDotLoading {
+  background: var(--bg-tertiary);
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+/* ── Pulse Animation ── */
+.statusDot.online {
+  animation: onlinePulse 2s ease-in-out infinite;
+}
+
+@keyframes onlinePulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  }
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+/* ── Size specific pulse ── */
+.statusDotSmall.online {
+  animation-duration: 2.5s;
+}
+
+.statusDotLarge.online {
+  animation-duration: 1.8s;
+}
+
+/* ============================================================
+   📌 STATUS TEXT
+   ============================================================ */
+
+.statusText {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.statusText i {
+  font-size: 8px;
+}
+
+.onlineText {
+  color: var(--status-success);
+}
+
+.offlineText {
+  color: var(--text-muted);
+}
+
+.statusLastSeen {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.statusLastSeen i {
+  font-size: 10px;
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.statusLoading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.statusLoadingText {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .statusDotSmall {
+    width: 6px;
+    height: 6px;
+  }
+
+  .statusDotMedium {
+    width: 10px;
+    height: 10px;
+  }
+
+  .statusDotLarge {
+    width: 14px;
+    height: 14px;
+  }
+
+  .statusText {
+    font-size: var(--text-xs);
+  }
+
+  .statusText i {
+    font-size: 6px;
+  }
+
+  .statusLastSeen {
+    font-size: 10px;
+  }
+
+  .statusLastSeen i {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .statusDotSmall {
+    width: 6px;
+    height: 6px;
+  }
+
+  .statusDotMedium {
+    width: 8px;
+    height: 8px;
+  }
+
+  .statusDotLarge {
+    width: 12px;
+    height: 12px;
+  }
+
+  .statusText {
+    font-size: 10px;
+  }
+
+  .statusText i {
+    font-size: 5px;
+  }
+
+  .statusLastSeen {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .statusDot.online {
+    animation: none;
+  }
+
+  .statusDotLoading {
+    animation: none;
+  }
+
+  .statusDot.online {
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .statusDot.online {
+    background: var(--status-success);
+    border: 2px solid var(--status-success);
+    box-shadow: none;
+  }
+
+  .statusDot.offline {
+    background: var(--text-muted);
+    border: 2px solid var(--text-muted);
+  }
+
+  .statusDotLoading {
+    background: var(--text-muted);
+    border: 2px solid var(--text-muted);
+  }
+
+  .onlineText {
+    color: var(--status-success);
+  }
+
+  .offlineText {
+    color: var(--text-muted);
+  }
+
+  .statusDot.online {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.userStatusWrapper:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.userStatusWrapper ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

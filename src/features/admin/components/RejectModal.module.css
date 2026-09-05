@@ -1,0 +1,452 @@
+/* ============================================================
+   ❌ REJECT MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.modalContent {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.rejectModal {
+  max-width: 480px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.modalHeader h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.closeBtn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.closeBtn:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 BODY
+   ============================================================ */
+
+.modalBody {
+  padding: var(--space-xl);
+  flex: 1;
+}
+
+.rejectHint {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.rejectTextarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  resize: vertical;
+  min-height: 80px;
+}
+
+.rejectTextarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.rejectTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.modalFooter {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  flex-shrink: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex: 1;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.btnDanger {
+  background: var(--gradient-danger);
+  color: #ffffff;
+}
+
+.btnDanger:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .modalContent {
+    max-width: 420px;
+  }
+
+  .modalHeader {
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-lg);
+  }
+
+  .modalFooter {
+    padding: var(--space-sm) var(--space-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: var(--space-md);
+  }
+
+  .modalContent {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: var(--radius-md);
+  }
+
+  .modalHeader {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .closeBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-md);
+  }
+
+  .rejectHint {
+    font-size: var(--text-xs);
+  }
+
+  .rejectTextarea {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+    min-height: 60px;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .btn {
+    width: 100%;
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .modalOverlay {
+    padding: var(--space-sm);
+  }
+
+  .modalContent {
+    max-height: 98vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .modalHeader {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-xs);
+  }
+
+  .closeBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+  }
+
+  .modalBody {
+    padding: var(--space-sm);
+  }
+
+  .rejectTextarea {
+    font-size: 10px;
+    padding: var(--space-xs);
+    min-height: 50px;
+  }
+
+  .btn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .modalOverlay {
+    animation: none !important;
+  }
+
+  .modalContent {
+    animation: none !important;
+  }
+
+  .closeBtn:hover {
+    transform: none !important;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .modalContent {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .modalContent {
+    border-width: 2px;
+  }
+
+  .closeBtn {
+    border-width: 2px;
+  }
+
+  .rejectTextarea {
+    border-width: 2px;
+  }
+
+  .rejectTextarea:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .btnSecondary {
+    border-width: 2px;
+  }
+
+  .btnDanger {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.closeBtn:focus-visible,
+.rejectTextarea:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.modalContent ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .modalOverlay {
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 20px !important;
+  }
+
+  .modalContent {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    max-height: none !important;
+  }
+
+  .closeBtn {
+    display: none !important;
+  }
+
+  .btn {
+    display: none !important;
+  }
+
+  .rejectTextarea {
+    border: 1px solid #000000 !important;
+  }
+}

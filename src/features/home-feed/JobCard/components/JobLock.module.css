@@ -1,0 +1,237 @@
+/* ============================================================
+   🔒 JOB LOCK - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.jobLockContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 BADGE
+   ============================================================ */
+
+.jobLockBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: fit-content;
+}
+
+.jobLockBadge.busy {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+.jobLockBadge.dealActive {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.jobLockBadge.available {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.jobLockBadge i {
+  font-size: var(--text-xs);
+}
+
+/* ============================================================
+   📌 INFO
+   ============================================================ */
+
+.jobLockInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jobLockInfo i {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .jobLockBadge {
+    font-size: var(--text-xs);
+    padding: 3px 12px;
+  }
+
+  .jobLockInfo {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .jobLockBadge {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+
+  .jobLockBadge i {
+    font-size: 10px;
+  }
+
+  .jobLockInfo {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .jobLockInfo i {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .jobLockBadge {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
+  .jobLockInfo {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .jobLockContainer {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .jobLockBadge {
+    border-width: 2px;
+  }
+
+  .jobLockBadge.busy {
+    border-color: #ff0000;
+    color: #ff0000;
+  }
+
+  .jobLockBadge.dealActive {
+    border-color: #ffaa00;
+    color: #ffaa00;
+  }
+
+  .jobLockBadge.available {
+    border-color: #00ff00;
+    color: #00ff00;
+  }
+
+  .jobLockInfo {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.jobLockBadge:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.jobLockContainer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .jobLockContainer {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .jobLockBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .jobLockBadge.busy {
+    color: #000000 !important;
+    border-color: #000000 !important;
+  }
+
+  .jobLockBadge.dealActive {
+    color: #000000 !important;
+    border-color: #000000 !important;
+  }
+
+  .jobLockBadge.available {
+    color: #000000 !important;
+    border-color: #000000 !important;
+  }
+
+  .jobLockInfo {
+    border: 1px solid #000000 !important;
+    color: #000000 !important;
+  }
+
+  .jobLockInfo i {
+    color: #000000 !important;
+  }
+}

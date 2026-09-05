@@ -1,0 +1,159 @@
+/* ============================================================
+   📦 TAB WRAPPER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.settingsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.settingsSection h2 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.settingsSection h2 i {
+  color: var(--accent-primary);
+  font-size: var(--text-xl);
+}
+
+/* ============================================================
+   📌 FORM
+   ============================================================ */
+
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .settingsSection {
+    gap: var(--space-md);
+  }
+
+  .settingsSection h2 {
+    font-size: var(--text-lg);
+  }
+
+  .settingsSection h2 i {
+    font-size: var(--text-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .settingsSection {
+    gap: var(--space-sm);
+  }
+
+  .settingsSection h2 {
+    font-size: var(--text-base);
+  }
+
+  .settingsSection h2 i {
+    font-size: var(--text-base);
+  }
+
+  .settingsForm {
+    gap: var(--space-sm);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .settingsSection h2 {
+    font-size: var(--text-sm);
+  }
+
+  .settingsSection h2 i {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .settingsSection {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.settingsSection:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.settingsSection ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .settingsSection {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .settingsSection h2 i {
+    color: #000000 !important;
+  }
+}

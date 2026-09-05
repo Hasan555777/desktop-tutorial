@@ -1,0 +1,547 @@
+/* ============================================================
+   📋 POST JOB BOX - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.globalModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: overlayFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.postAddBox {
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.4s ease;
+  padding: 0;
+}
+
+.postAddBox::-webkit-scrollbar {
+  width: 6px;
+}
+
+.postAddBox::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.postAddBox::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.pboxHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.pboxHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.pboxCloseBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+}
+
+.pboxCloseBtn:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border-color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 NOTICE
+   ============================================================ */
+
+.pboxNotice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--status-warning-bg);
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  color: var(--status-warning);
+}
+
+.pboxNotice i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 FORM BODY
+   ============================================================ */
+
+.pboxBodyForm {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Error ── */
+.pboxError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-md);
+  color: var(--status-danger);
+  font-size: var(--text-sm);
+}
+
+.pboxError i {
+  font-size: var(--text-base);
+  flex-shrink: 0;
+}
+
+/* ── Form Group ── */
+.pbGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.pbGroup label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.requiredStar {
+  color: var(--status-danger);
+}
+
+.charCount {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+.pbGroup input,
+.pbGroup textarea,
+.pbGroup select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.pbGroup input:focus,
+.pbGroup textarea:focus,
+.pbGroup select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.pbGroup input::placeholder,
+.pbGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.pbGroup input:disabled,
+.pbGroup textarea:disabled,
+.pbGroup select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pbGroup textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.pbGroup small {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ── Radio Group ── */
+.pbRadioGroup {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.pbRadioLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.pbRadioLabel input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+/* ── Budget & Deadline Rows ── */
+.pbRowTwin {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.pbBudgetFixed,
+.pbDeadlineFixed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.pbBudgetRange,
+.pbDeadlineRange {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.pboxFooter {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.pboxBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  min-width: 80px;
+}
+
+.pboxBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pbBtnClose {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.pbBtnClose:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.pbBtnReset {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.pbBtnReset:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.pbBtnPublish {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.pbBtnPublish:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.pbBtnPublish:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .postAddBox {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .pboxHeader {
+    padding: var(--space-md);
+  }
+
+  .pboxHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .pboxCloseBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .pboxBodyForm {
+    padding: var(--space-md);
+  }
+
+  .pbRowTwin {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .pboxFooter {
+    flex-direction: column;
+  }
+
+  .pboxBtn {
+    width: 100%;
+  }
+
+  .pboxNotice {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .postAddBox {
+    border-radius: var(--radius-md);
+    max-height: 98vh;
+  }
+
+  .pboxHeader {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .pboxHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .pboxCloseBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+  }
+
+  .pboxBodyForm {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .pbGroup input,
+  .pbGroup textarea,
+  .pbGroup select {
+    font-size: var(--text-xs);
+    padding: 8px 12px;
+  }
+
+  .pbGroup textarea {
+    min-height: 80px;
+  }
+
+  .pbRadioLabel {
+    font-size: var(--text-xs);
+  }
+
+  .pboxFooter {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .pboxBtn {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+
+  .pboxNotice {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .globalModalOverlay {
+    animation: none;
+  }
+
+  .postAddBox {
+    animation: none;
+  }
+
+  .pboxCloseBtn:hover {
+    transform: none;
+  }
+
+  .pbBtnPublish:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .postAddBox {
+    border-width: 2px;
+  }
+
+  .pboxCloseBtn {
+    border-width: 2px;
+  }
+
+  .pboxBtn {
+    border: 2px solid currentColor;
+  }
+
+  .pbBtnPublish {
+    border-color: var(--accent-primary);
+  }
+
+  .pbBtnPublish:disabled {
+    border-color: var(--text-muted);
+  }
+
+  .pboxError {
+    border-width: 2px;
+  }
+
+  .pboxNotice {
+    border-bottom-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.pboxCloseBtn:focus-visible,
+.pboxBtn:focus-visible,
+.pbGroup input:focus-visible,
+.pbGroup textarea:focus-visible,
+.pbGroup select:focus-visible,
+.pbRadioLabel input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.postAddBox ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

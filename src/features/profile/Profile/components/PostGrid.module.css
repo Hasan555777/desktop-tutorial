@@ -1,0 +1,781 @@
+/* ============================================================
+   📋 POST GRID - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingIcon {
+  font-size: 36px;
+  color: var(--accent-primary);
+}
+
+.loadingContainer p {
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 EMPTY STATE
+   ============================================================ */
+
+.noPosts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.noPosts i {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.noPosts p {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.createPostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  margin-top: var(--space-sm);
+}
+
+.createPostBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 POSTS GRID
+   ============================================================ */
+
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* ============================================================
+   📌 POST CARD
+   ============================================================ */
+
+.postCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.postCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  transform: translateY(-4px);
+}
+
+.postCard.statusActive {
+  border-color: var(--status-warning);
+  opacity: 0.85;
+}
+
+.postCard.statusActive:hover {
+  border-color: var(--status-warning);
+}
+
+/* ============================================================
+   📌 STATUS BADGES
+   ============================================================ */
+
+.postStatusBadge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.postStatusBadge.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.postStatusBadge.rejected {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+.postStatusBadge.approved {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.activeDealBadge {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ============================================================
+   📌 IMAGES
+   ============================================================ */
+
+.postImagesContainer {
+  display: grid;
+  gap: 2px;
+  background: var(--bg-tertiary);
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.postImagesContainer.oneImage {
+  grid-template-columns: 1fr;
+}
+
+.postImagesContainer.twoImages {
+  grid-template-columns: 1fr 1fr;
+}
+
+.postImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.postImage:hover {
+  transform: scale(1.05);
+}
+
+.postImageBadge {
+  position: absolute;
+  bottom: var(--space-sm);
+  right: var(--space-sm);
+  background: var(--overlay-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  z-index: 1;
+}
+
+/* ============================================================
+   📌 CONTENT
+   ============================================================ */
+
+.postContent {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  flex: 1;
+}
+
+.postContent h4 {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.postDescription {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.postMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.postMeta span {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.postMeta i {
+  font-size: var(--text-xs);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 POST ACTIONS
+   ============================================================ */
+
+.postActions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  margin-top: var(--space-xs);
+}
+
+/* ── Status Toggle Button ── */
+.statusToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusToggleBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.statusToggleBtn.active {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+}
+
+.statusToggleBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.statusToggleBtn i {
+  font-size: var(--text-xs);
+}
+
+/* ── Edit Button ── */
+.editPostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.editPostBtn:hover:not(.disabled) {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.editPostBtn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editPendingInfo {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--status-warning);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--status-warning-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--status-warning);
+}
+
+/* ── Delete Button ── */
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.deleteBtn:hover:not(.disabled) {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: translateY(-2px);
+}
+
+.deleteBtn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Pending Info ── */
+.pendingInfo {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--status-warning);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--status-warning-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--status-warning);
+}
+
+/* ── Rejected Info ── */
+.rejectedInfo {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--status-danger);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--status-danger-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--status-danger);
+  flex: 1;
+}
+
+.rejectReason {
+  font-weight: 100;
+  opacity: 0.8;
+}
+
+/* ── Unsave Button ── */
+.unsaveBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.unsaveBtn:hover {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .postsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .postImagesContainer {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .postsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .postContent h4 {
+    font-size: var(--text-sm);
+  }
+
+  .postDescription {
+    font-size: var(--text-xs);
+  }
+
+  .postMeta span {
+    font-size: 10px;
+  }
+
+  .postActions {
+    flex-direction: column;
+  }
+
+  .statusToggleBtn,
+  .editPostBtn,
+  .deleteBtn,
+  .unsaveBtn,
+  .pendingInfo,
+  .rejectedInfo,
+  .editPendingInfo {
+    width: 100%;
+    justify-content: center;
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .postStatusBadge {
+    font-size: 9px;
+    padding: 2px 10px;
+    top: var(--space-xs);
+    right: var(--space-xs);
+  }
+
+  .activeDealBadge {
+    font-size: 9px;
+    padding: 2px 10px;
+    top: var(--space-xs);
+    left: var(--space-xs);
+  }
+
+  .postImageBadge {
+    font-size: 9px;
+    padding: 2px 10px;
+    bottom: var(--space-xs);
+    right: var(--space-xs);
+  }
+
+  .noPosts i {
+    font-size: 36px;
+  }
+
+  .noPosts p {
+    font-size: var(--text-sm);
+  }
+
+  .createPostBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .loadingContainer p {
+    font-size: var(--text-sm);
+  }
+
+  .loadingIcon {
+    font-size: 28px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .postsGrid {
+    gap: var(--space-sm);
+  }
+
+  .postContent {
+    padding: var(--space-sm);
+  }
+
+  .postContent h4 {
+    font-size: var(--text-xs);
+  }
+
+  .postImagesContainer {
+    aspect-ratio: 16 / 9;
+  }
+
+  .postStatusBadge,
+  .activeDealBadge {
+    font-size: 8px;
+    padding: 2px 8px;
+  }
+
+  .postMeta span {
+    font-size: 9px;
+  }
+
+  .postMeta i {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .postCard:hover {
+    transform: none !important;
+  }
+
+  .postImage:hover {
+    transform: none !important;
+  }
+
+  .statusToggleBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .editPostBtn:hover:not(.disabled) {
+    transform: none !important;
+  }
+
+  .deleteBtn:hover:not(.disabled) {
+    transform: none !important;
+  }
+
+  .unsaveBtn:hover {
+    transform: none !important;
+  }
+
+  .createPostBtn:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .postCard {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .postCard {
+    border-width: 2px;
+  }
+
+  .postCard.statusActive {
+    border-width: 2px;
+  }
+
+  .postStatusBadge {
+    border-width: 2px;
+  }
+
+  .activeDealBadge {
+    border-width: 2px;
+  }
+
+  .postImageBadge {
+    border: 2px solid currentColor;
+  }
+
+  .statusToggleBtn {
+    border-width: 2px;
+  }
+
+  .statusToggleBtn.active {
+    border-width: 2px;
+  }
+
+  .editPostBtn {
+    border-width: 2px;
+  }
+
+  .deleteBtn {
+    border-width: 2px;
+  }
+
+  .unsaveBtn {
+    border-width: 2px;
+  }
+
+  .pendingInfo {
+    border-width: 2px;
+  }
+
+  .rejectedInfo {
+    border-width: 2px;
+  }
+
+  .editPendingInfo {
+    border-width: 2px;
+  }
+
+  .createPostBtn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.statusToggleBtn:focus-visible,
+.editPostBtn:focus-visible,
+.deleteBtn:focus-visible,
+.unsaveBtn:focus-visible,
+.createPostBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.postContent ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .postsGrid {
+    display: block;
+  }
+
+  .postCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+
+  .postCard:hover {
+    transform: none !important;
+  }
+
+  .postStatusBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .activeDealBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .postActions {
+    display: none !important;
+  }
+
+  .postImageBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .loadingContainer {
+    display: none !important;
+  }
+
+  .noPosts {
+    display: none !important;
+  }
+}

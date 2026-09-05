@@ -1,0 +1,454 @@
+/* ==========================================================================
+   🌌 WORKHUB - MAIN APP STYLES
+   ========================================================================== */
+
+/* ==========================================================================
+   🎨 CSS Variables (Light/Dark Mode)
+   ========================================================================== */
+
+@import '../shared/styles/global-variables.css';
+
+/* Light Mode Variables */
+:root.light-mode {
+  --success: var(--status-success);
+  --warning: var(--status-warning);
+  --danger: var(--status-danger);
+  --info: var(--status-info);
+}
+
+/* Dark Mode Variables - WorkHub Brand Theme */
+:root {
+  --success: var(--status-success);
+  --warning: var(--status-warning);
+  --danger: var(--status-danger);
+  --info: var(--status-info);
+  
+  /* ---- Fonts ---- */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-handwriting: 'Caveat', cursive;
+}
+
+/* ==========================================================================
+   🔄 RESET & BASE STYLES
+   ========================================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   📦 MAIN APP CONTAINER
+   ========================================================================== */
+
+.main-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+/* Navbar Sticky */
+.main-app > nav:first-child {
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Page Content */
+.app-content {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+/* ==========================================================================
+   ⏳ LOADING SCREEN
+   ========================================================================== */
+
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--accent-primary);
+  font-family: var(--font-primary, 'Plus Jakarta Sans', sans-serif);
+  gap: 20px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   🔘 SCROLLBAR CUSTOMIZATION
+   ========================================================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
+/* ==========================================================================
+   📱 RESPONSIVE DESIGN
+   ========================================================================== */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .app-content {
+    padding: 16px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .app-content {
+    padding: 12px;
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ==========================================================================
+   🌙 LIGHT MODE OVERRIDES
+   ========================================================================== */
+
+.light-mode .main-app {
+  background: var(--bg-primary);
+}
+
+.light-mode .loading-screen {
+  background: var(--bg-primary);
+}
+
+/* ==========================================================================
+   ♿ ACCESSIBILITY & REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   🎨 BUTTON STYLES (Fixed)
+   ========================================================================== */
+
+/* ---- Primary Button ---- */
+.btn-primary {
+  padding: 12px 24px;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md, 12px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-family: var(--font-primary, 'Plus Jakarta Sans', sans-serif);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  background: var(--gradient-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---- Secondary Button ---- */
+.btn-secondary {
+  padding: 12px 24px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 12px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-family: var(--font-primary, 'Plus Jakarta Sans', sans-serif);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---- Danger Button ---- */
+.btn-danger {
+  padding: 12px 24px;
+  background: var(--gradient-danger);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md, 12px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-family: var(--font-primary, 'Plus Jakarta Sans', sans-serif);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-danger:hover {
+  background: var(--gradient-danger);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--status-danger-bg);
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---- Ghost Button ---- */
+.btn-ghost {
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 12px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-family: var(--font-primary, 'Plus Jakarta Sans', sans-serif);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-hover);
+  color: var(--accent-primary);
+}
+
+.btn-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- Success Button ---- */
+.btn-success {
+  padding: 12px 24px;
+  background: var(--gradient-success);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md, 12px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-family: var(--font-primary, 'Plus Jakarta Sans', sans-serif);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-success:hover {
+  background: var(--gradient-success);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--status-success-bg);
+}
+
+.btn-success:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==========================================================================
+   🎬 ANIMATIONS
+   ========================================================================== */
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   🎯 UTILITY CLASSES
+   ========================================================================== */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mt-4 { margin-top: 32px; }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.mb-4 { margin-bottom: 32px; }
+
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-column { display: flex; flex-direction: column; }
+.gap-1 { gap: 8px; }
+.gap-2 { gap: 16px; }
+.gap-3 { gap: 24px; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+
+.rounded { border-radius: var(--radius-md, 12px); }
+.rounded-full { border-radius: var(--radius-full, 9999px); }
+
+.handwriting {
+  font-family: var(--font-handwriting, 'Caveat', cursive);
+}
+
+/* ==========================================================================
+   🌙 LIGHT MODE BUTTON OVERRIDES
+   ========================================================================== */
+
+.light-mode .btn-primary {
+  background: var(--gradient-primary);
+}
+
+.light-mode .btn-secondary {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+.light-mode .btn-secondary:hover {
+  background: var(--bg-hover);
+}
+
+.light-mode .btn-danger {
+  background: var(--gradient-danger);
+}
+
+.light-mode .btn-success {
+  background: var(--gradient-success);
+}
+
+.light-mode .btn-ghost {
+  color: var(--text-secondary);
+}
+
+.light-mode .btn-ghost:hover {
+  background: var(--bg-hover);
+  color: var(--accent-primary);
+}

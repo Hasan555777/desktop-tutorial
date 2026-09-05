@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// ============================================================
+// FIREBASE STORAGE SECURITY RULES
+// ============================================================
+// Important context: this codebase's actual file uploads (profile
+// photos, NID/birth-cert documents, deposit receipts, face
+// verification photos) all go through CLOUDINARY
+// (pages/Register/hooks/registerHelpers.js), not Firebase Storage.
+// getStorage() is only imported in firebase.js/hooks/usePWA.js —
+// nothing uploads user documents here.
+//
+// That means Firebase Storage is currently NOT the access-control
+// boundary for your sensitive files — Cloudinary's own unsigned
+// upload preset ("workhub_preset") is. Firestore/Storage rules
+// can't reach into Cloudinary's dashboard; if you want tighter
+// control over who can upload what there, that's configured in
+// Cloudinary's console (upload preset restrictions: allowed
+// formats, max size, signed vs unsigned uploads), not here.
+//
+// This file exists so Storage defaults to fully closed rather than
+// the wide-open 30-day "test mode" rules Firebase issues new
+// projects, in case Storage is ever used later or already holds
+// something from an earlier version of the app.
+// ============================================================
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

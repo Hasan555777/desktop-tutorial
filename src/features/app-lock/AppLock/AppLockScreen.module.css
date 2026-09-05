@@ -1,0 +1,1010 @@
+/* ============================================================
+   🔒 APP LOCK SCREEN - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.appLockScreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  z-index: 99999;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   📌 BACKGROUND
+   ============================================================ */
+
+.lockBackground {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.lockGradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, var(--accent-glow), transparent 70%);
+  opacity: 0.3;
+}
+
+.lockPattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, var(--accent-glow) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, var(--accent-glow) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.05;
+}
+
+/* ============================================================
+   📌 CONTENT
+   ============================================================ */
+
+.lockContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl);
+  max-width: 400px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 APP ICON
+   ============================================================ */
+
+.lockAppIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #ffffff;
+  box-shadow: 0 4px 20px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 TITLE & SUBTITLE
+   ============================================================ */
+
+.lockTitle {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.lockSubtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 PIN DOTS
+   ============================================================ */
+
+.pinDots {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  justify-content: center;
+  min-height: 48px;
+}
+
+.pinDots.shake {
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-10px); }
+  80% { transform: translateX(10px); }
+}
+
+.pin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pin-dot.filled {
+  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+}
+
+.pin-dot.active {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.pin-dot-fill {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* ============================================================
+   📌 ERROR
+   ============================================================ */
+
+.lockError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+  text-align: left;
+}
+
+.lockError i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 ATTEMPTS
+   ============================================================ */
+
+.lockAttempts {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+  text-align: left;
+}
+
+.lockAttempts i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 KEYPAD
+   ============================================================ */
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 280px;
+}
+
+.keypad-key {
+  padding: var(--space-md) 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: var(--text-xl);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.keypad-key:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: scale(1.02);
+}
+
+.keypad-key:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.keypad-key:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.keypad-delete {
+  color: var(--text-muted);
+  font-size: var(--text-lg);
+}
+
+.keypad-delete:hover:not(:disabled) {
+  color: var(--status-danger);
+  border-color: var(--status-danger);
+}
+
+.keypad-empty {
+  visibility: hidden;
+}
+
+/* ============================================================
+   📌 BIOMETRIC
+   ============================================================ */
+
+.lockBiometric {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+}
+
+.lockBiometric:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.lockBiometric:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lockBiometric i {
+  font-size: var(--text-lg);
+}
+
+/* ============================================================
+   📌 FORGOT PIN
+   ============================================================ */
+
+.lockForgot {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: var(--space-xs) 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--border-color);
+}
+
+.lockForgot:hover {
+  color: var(--accent-primary);
+  text-decoration-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 SUCCESS
+   ============================================================ */
+
+.lockSuccess {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+  text-align: left;
+  animation: successPulse 0.5s ease;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(0.95); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.lockSuccess i {
+  font-size: var(--text-lg);
+}
+
+/* ============================================================
+   📌 FORGOT PIN MODAL
+   ============================================================ */
+
+.forgotPinOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.forgotPinModal {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 420px;
+  width: 100%;
+  padding: var(--space-xl);
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s ease;
+}
+
+.forgotPinModal h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.forgotPinModal h3 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.forgotPinModal p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-md) 0;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.formGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recoveryHint {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: block;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.btnSecondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnEmergency {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-warning);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+}
+
+.btnEmergency:hover:not(:disabled) {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.btnEmergency:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.emergencyUnlockSection {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.emergencyDivider {
+  text-align: center;
+  margin-bottom: var(--space-sm);
+}
+
+.emergencyDivider span {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: 0 var(--space-sm);
+}
+
+.emergencyInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.emergencyInfo i {
+  font-size: var(--text-lg);
+  color: var(--status-warning);
+}
+
+.emergencyTitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.emergencyDesc {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .lockContent {
+    padding: var(--space-xl);
+    max-width: 360px;
+  }
+
+  .keypad {
+    max-width: 240px;
+  }
+
+  .keypad-key {
+    font-size: var(--text-lg);
+    padding: var(--space-sm) 0;
+  }
+
+  .forgotPinModal {
+    max-width: 380px;
+    padding: var(--space-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .lockContent {
+    padding: var(--space-lg);
+    max-width: 320px;
+    border-radius: var(--radius-md);
+    margin: var(--space-md);
+  }
+
+  .lockAppIcon {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+  }
+
+  .lockTitle {
+    font-size: var(--text-lg);
+  }
+
+  .lockSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .pinDots {
+    gap: var(--space-sm);
+    min-height: 40px;
+  }
+
+  .pin-dot {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pin-dot-fill {
+    width: 6px;
+    height: 6px;
+  }
+
+  .keypad {
+    max-width: 200px;
+    gap: var(--space-xs);
+  }
+
+  .keypad-key {
+    font-size: var(--text-base);
+    padding: var(--space-xs) 0;
+    border-radius: var(--radius-sm);
+  }
+
+  .forgotPinOverlay {
+    padding: var(--space-md);
+  }
+
+  .forgotPinModal {
+    padding: var(--space-md);
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .forgotPinModal h3 {
+    font-size: var(--text-base);
+  }
+
+  .lockBiometric {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .lockError,
+  .lockAttempts,
+  .lockSuccess {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .lockError i,
+  .lockAttempts i {
+    font-size: var(--text-sm);
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .btnEmergency {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .emergencyInfo {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .emergencyTitle {
+    font-size: var(--text-xs);
+  }
+
+  .emergencyDesc {
+    font-size: 9px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .lockContent {
+    padding: var(--space-md);
+    max-width: 280px;
+    border-radius: var(--radius-sm);
+    margin: var(--space-sm);
+  }
+
+  .lockAppIcon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .lockTitle {
+    font-size: var(--text-base);
+  }
+
+  .pinDots {
+    gap: var(--space-xs);
+    min-height: 32px;
+  }
+
+  .pin-dot {
+    width: 12px;
+    height: 12px;
+    border-width: 1.5px;
+  }
+
+  .pin-dot-fill {
+    width: 5px;
+    height: 5px;
+  }
+
+  .keypad {
+    max-width: 160px;
+    gap: 4px;
+  }
+
+  .keypad-key {
+    font-size: var(--text-sm);
+    padding: 6px 0;
+    border-radius: 4px;
+  }
+
+  .forgotPinModal {
+    padding: var(--space-sm);
+  }
+
+  .forgotPinModal h3 {
+    font-size: var(--text-sm);
+  }
+
+  .forgotPinModal p {
+    font-size: var(--text-xs);
+  }
+
+  .input {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .recoveryHint {
+    font-size: 9px;
+  }
+
+  .lockBiometric i {
+    font-size: var(--text-base);
+  }
+
+  .lockForgot {
+    font-size: var(--text-xs);
+  }
+
+  .lockError,
+  .lockAttempts,
+  .lockSuccess {
+    font-size: 10px;
+    padding: 2px var(--space-xs);
+  }
+
+  .lockSuccess i {
+    font-size: var(--text-base);
+  }
+
+  .emergencyTitle {
+    font-size: 10px;
+  }
+
+  .emergencyDesc {
+    font-size: 8px;
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .btnEmergency {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .lockContent {
+    animation: none !important;
+  }
+
+  .forgotPinOverlay {
+    animation: none !important;
+  }
+
+  .forgotPinModal {
+    animation: none !important;
+  }
+
+  .lockSuccess {
+    animation: none !important;
+  }
+
+  .pinDots.shake {
+    animation: none !important;
+  }
+
+  .keypad-key:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .keypad-key:active:not(:disabled) {
+    transform: none !important;
+  }
+
+  .lockBiometric:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .btnPrimary:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .btnSecondary:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .btnEmergency:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .appLockScreen {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .lockContent {
+    border-width: 2px;
+  }
+
+  .forgotPinModal {
+    border-width: 2px;
+  }
+
+  .keypad-key {
+    border-width: 2px;
+  }
+
+  .keypad-key:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+  }
+
+  .pin-dot {
+    border-width: 2px;
+  }
+
+  .pin-dot.filled {
+    border-color: var(--accent-primary);
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .btnEmergency {
+    border: 2px solid currentColor;
+  }
+
+  .lockBiometric {
+    border-width: 2px;
+  }
+
+  .lockBiometric:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+  }
+
+  .lockForgot {
+    text-decoration-color: var(--border-color);
+  }
+
+  .lockForgot:hover {
+    text-decoration-color: var(--accent-primary);
+  }
+
+  .lockError,
+  .lockAttempts,
+  .lockSuccess {
+    border-width: 2px;
+  }
+
+  .emergencyInfo {
+    border-width: 2px;
+  }
+
+  .input {
+    border-width: 2px;
+  }
+
+  .input:focus {
+    border-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.keypad-key:focus-visible,
+.lockBiometric:focus-visible,
+.lockForgot:focus-visible,
+.btnPrimary:focus-visible,
+.btnSecondary:focus-visible,
+.btnEmergency:focus-visible,
+.input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.appLockScreen ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .appLockScreen {
+    display: none !important;
+  }
+}

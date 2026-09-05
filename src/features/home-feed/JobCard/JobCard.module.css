@@ -1,0 +1,1139 @@
+/* ============================================================
+   📋 JOB CARD - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   🎯 BASE RESET
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   📦 JOB POST CARD
+   ============================================================ */
+
+.jobPostCard {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 520px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  will-change: transform, box-shadow;
+  padding: var(--space-md);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  
+}
+
+/* Top gradient bar */
+.jobPostCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.jobPostCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 40px var(--shadow-color);
+}
+
+.jobPostCard:hover::before {
+  opacity: 1;
+}
+
+/* ============================================================
+   👤 TOP META SECTION
+   ============================================================ */
+
+.postTopMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: var(--space-sm);
+}
+
+.clientProfileBlock {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  min-width: 0;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ── Avatar ── */
+.clientAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: var(--text-base);
+  background: var(--gradient-primary);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  transition: transform var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jobPostCard:hover .clientAvatar {
+  transform: scale(1.05);
+}
+
+.clientAvatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.clientAvatarImg.hidden {
+  opacity: 0;
+  position: absolute;
+}
+
+.clientAvatarImg.loaded {
+  opacity: 1;
+  position: relative;
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--text-base);
+  color: #ffffff;
+  background: var(--gradient-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jcSkeletonAvatar {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ── Client Info ── */
+.clientInfo {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.clientName {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.clientName:hover {
+  color: var(--accent-primary);
+}
+
+/* ── Rating Section ── */
+.clientRatingSection {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.ratingStars {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 10px;
+}
+
+.ratingStars .fa-star,
+.ratingStars .fa-star-half-stroke {
+  color: #fbbf24;
+}
+
+.ratingStars .fa-regular.fa-star {
+  color: var(--text-muted);
+}
+
+.ratingAverage {
+  font-weight: 600;
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-left: 2px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.ratingReviewsCount {
+  font-size: 9px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.noReviews {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.ratingLoading {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ── Verified Badge ── */
+.verifiedBadges {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--status-success);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.verifiedBadges i {
+  font-size: 8px;
+}
+
+/* ── Top Right Actions ── */
+.jcTopRightActions {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.postTimeBadge {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jcActionIconGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.jcActionIconBtn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jcActionIconBtn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.jcActionIconBtn:active {
+  transform: scale(0.92);
+}
+
+.jcActionIconBtn.saved {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+}
+
+.jcActionIconBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ============================================================
+   📝 MAIN CONTENT
+   ============================================================ */
+
+.postMainContent {
+  text-align: left;
+}
+
+.jobTitle {
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs) 0;
+  line-height: 1.4;
+  letter-spacing: -0.3px;
+  word-break: break-word;
+  transition: color var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jcDynamicText {
+  word-break: break-word;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  margin: 0;
+  min-height: 60px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jcDynamicText .highlight {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.jcSeeMoreBtn {
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: var(--text-sm);
+  display: inline-block;
+  transition: all var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jcSeeMoreBtn:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   🖼️ IMAGE GALLERY
+   ============================================================ */
+
+.jcImageGalleryGrid {
+  display: grid;
+  gap: 4px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  background: var(--bg-tertiary);
+}
+
+.galleryCols1 {
+  grid-template-columns: 1fr;
+  max-height: 400px;
+}
+
+.galleryCols2 {
+  grid-template-columns: 1fr 1fr;
+  max-height: 300px;
+}
+
+.galleryCols3 {
+  grid-template-columns: 1fr 1fr 1fr;
+  max-height: 280px;
+}
+
+.jcGalleryImgWrapper {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  cursor: pointer;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+}
+
+.jcFeedLiveImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.jcFeedLiveImg.hidden {
+  opacity: 0;
+  position: absolute;
+}
+
+.jcFeedLiveImg.loaded {
+  opacity: 1;
+  position: relative;
+}
+
+.jcGalleryImgWrapper:hover .jcFeedLiveImg {
+  transform: scale(1.05);
+}
+
+/* Image Hover Overlay */
+.imgHoverOverlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.imgHoverOverlay i {
+  font-size: 20px;
+}
+
+.jcGalleryImgWrapper:hover .imgHoverOverlay {
+  opacity: 1;
+}
+
+/* More Overlay */
+.moreOverlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jcSkeletonImage {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-tertiary);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   📌 JOB LOCK WRAPPER
+   ============================================================ */
+
+.jobLockWrapper {
+  margin-bottom: var(--space-xs);
+}
+
+/* ============================================================
+   💰 POST INFO STRIP
+   ============================================================ */
+
+.postInfoStrip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.stripItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--bg-tertiary);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  flex-wrap: wrap;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.jobPostCard:hover .stripItem {
+  border-color: var(--accent-primary);
+}
+
+.stripItem i {
+  font-size: 14px;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.stripItem strong {
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-left: auto;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.siBudget i {
+  color: var(--status-warning);
+}
+
+.siBudget strong {
+  color: var(--status-warning);
+}
+
+.siDeadline i {
+  color: var(--status-info);
+}
+
+.siDeadline strong {
+  color: var(--status-info);
+}
+
+/* ── Badges ── */
+.negotiableBadge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--accent-primary);
+  background: var(--accent-glow);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+  white-space: nowrap;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.rangeBadge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+  white-space: nowrap;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.flexibleBadge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  margin-left: 4px;
+  white-space: nowrap;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   🎯 FOOTER ACTIONS
+   ============================================================ */
+
+.postFooterActions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-sm);
+  border-top: 1px solid var(--border-light);
+  padding-top: var(--space-md);
+}
+
+.btnApplyJob {
+  background: var(--gradient-primary);
+  border: none;
+  color: #ffffff;
+  padding: 12px 28px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.btnApplyJob:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnApplyJob:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.btnApplyJob:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnApplyJob.locked {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  box-shadow: none;
+}
+
+.btnApplyJob.locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============================================================
+   🔍 ZOOM LIGHTBOX
+   ============================================================ */
+
+.zoomLightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: lightboxFadeIn var(--transition-normal);
+}
+
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.lightboxContentBox {
+  max-width: 85%;
+  max-height: 85vh;
+  box-shadow: 0 25px 50px -12px var(--shadow-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.lightboxZoomedImg {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  display: block;
+  cursor: zoom-out;
+}
+
+.lightboxCloseBtn {
+  position: fixed;
+  top: var(--space-xl);
+  right: var(--space-xl);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: var(--text-xl);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  z-index: 100000;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.lightboxCloseBtn:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border-color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .jobPostCard {
+    gap: var(--space-lg);
+    max-width: 720px;
+    margin-top: 55px;
+  }
+
+  .clientAvatar {
+    width: 48px;
+    height: 48px;
+    font-size: var(--text-base);
+  }
+
+  .jobTitle {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+  }
+
+  .stripItem {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .btnApplyJob {
+    padding: 12px 28px;
+    font-size: var(--text-sm);
+  }
+
+  .galleryCols1 {
+    max-height: 480px;
+  }
+  .galleryCols2 {
+    max-height: 360px;
+  }
+  .galleryCols3 {
+    max-height: 320px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .jobPostCard {
+    gap: var(--space-sm);
+    max-width: 100%;
+    padding: var(--space-sm);
+    /* margin-top: 55px; */
+  }
+
+  .postTopMeta {
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    padding-bottom: var(--space-xs);
+  }
+
+  .clientAvatar {
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-sm);
+  }
+
+  .clientName {
+    font-size: var(--text-xs);
+  }
+
+  .ratingStars {
+    font-size: 9px;
+  }
+
+  .jcTopRightActions {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: var(--space-xs);
+  }
+
+  .postTimeBadge {
+    font-size: 9px;
+    padding: 2px 10px;
+  }
+
+  .jcActionIconBtn {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+    border-radius: var(--radius-sm);
+  }
+
+  .jobTitle {
+    font-size: clamp(0.95rem, 4vw, 1.1rem);
+    margin-bottom: var(--space-xs);
+  }
+
+  .jcDynamicText {
+    font-size: var(--text-xs);
+    line-height: 1.6;
+  }
+
+  .jcImageGalleryGrid {
+    gap: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  .galleryCols2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .galleryCols3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .galleryCols3 .jcGalleryImgWrapper:last-child {
+    display: none;
+  }
+
+  .jcGalleryImgWrapper {
+    aspect-ratio: 16 / 9;
+    min-height: 100px;
+  }
+
+  .galleryCols1 {
+    max-height: 320px;
+  }
+  .galleryCols2 {
+    max-height: 240px;
+  }
+  .galleryCols3 {
+    max-height: 200px;
+  }
+
+  .imgHoverOverlay {
+    font-size: 10px;
+  }
+
+  .imgHoverOverlay i {
+    font-size: 16px;
+  }
+
+  .stripItem {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 10px;
+    border-radius: var(--radius-sm);
+    gap: var(--space-xs);
+  }
+
+  .stripItem i {
+    font-size: 12px;
+    width: 14px;
+  }
+
+  .stripItem strong {
+    font-size: 10px;
+  }
+
+  .postFooterActions {
+    padding-top: var(--space-sm);
+  }
+
+  .btnApplyJob {
+    padding: 10px 16px;
+    font-size: var(--text-xs);
+    border-radius: var(--radius-full);
+  }
+
+  .lightboxContentBox {
+    max-width: 95%;
+    border-radius: var(--radius-sm);
+  }
+
+  .lightboxCloseBtn {
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 36px;
+    height: 36px;
+    font-size: var(--text-base);
+  }
+
+  .negotiableBadge,
+  .rangeBadge,
+  .flexibleBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+    margin-left: 3px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 400px) {
+  .jobPostCard {
+    gap: var(--space-xs);
+    padding: var(--space-xs);
+    
+  }
+
+  .clientAvatar {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .clientName {
+    font-size: 10px;
+  }
+
+  .clientRatingSection .ratingStars {
+    font-size: 8px;
+  }
+
+  .jobTitle {
+    font-size: clamp(0.85rem, 4vw, 0.95rem);
+  }
+
+  .jcDynamicText {
+    font-size: 10px;
+  }
+
+  .stripItem {
+    padding: var(--space-xs);
+    font-size: 9px;
+  }
+
+  .stripItem i {
+    font-size: 10px;
+    width: 12px;
+  }
+
+  .stripItem strong {
+    font-size: 9px;
+  }
+
+  .btnApplyJob {
+    padding: 8px 14px;
+    font-size: 10px;
+  }
+
+  .jcActionIconBtn {
+    width: 26px;
+    height: 26px;
+    font-size: 10px;
+  }
+
+  .postTimeBadge {
+    font-size: 8px;
+    padding: 2px 8px;
+  }
+
+  .lightboxCloseBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+    top: var(--space-sm);
+    right: var(--space-sm);
+  }
+
+  .galleryCols1 {
+    max-height: 240px;
+  }
+  .galleryCols2 {
+    max-height: 180px;
+  }
+  .galleryCols3 {
+    max-height: 150px;
+  }
+
+  .jcGalleryImgWrapper {
+    min-height: 80px;
+  }
+
+  .negotiableBadge,
+  .rangeBadge,
+  .flexibleBadge {
+    font-size: 7px;
+    padding: 1px 4px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .jcGalleryImgWrapper:hover .jcFeedLiveImg {
+    transform: none !important;
+  }
+
+  .lightboxContentBox {
+    animation: none !important;
+  }
+
+  .zoomLightboxOverlay {
+    animation: none !important;
+  }
+
+  .jcSkeletonAvatar,
+  .jcSkeletonImage {
+    animation: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .jobPostCard {
+    border-width: 2px;
+  }
+
+  .btnApplyJob {
+    border: 2px solid currentColor;
+  }
+
+  .jcActionIconBtn {
+    border-width: 2px;
+  }
+
+  .lightboxCloseBtn {
+    border-width: 2px;
+  }
+
+  .stripItem {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🛠️ UTILITY CLASSES
+   ============================================================ */
+
+.visuallyHidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.textEllipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   📊 SCROLLBAR
+   ============================================================ */
+
+.jobPostCard::-webkit-scrollbar {
+  width: 4px;
+}
+
+.jobPostCard::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+.jobPostCard::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.jobPostCard::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
+.jobPostCard {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-tertiary);
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.jcActionIconBtn:focus-visible,
+.btnApplyJob:focus-visible,
+.jcSeeMoreBtn:focus-visible,
+.lightboxCloseBtn:focus-visible,
+.jcGalleryImgWrapper:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.jobPostCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

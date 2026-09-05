@@ -1,0 +1,41 @@
+{
+	"name": "worktrust-push",
+	"main": "src/index.js",
+	"compatibility_date": "2026-08-13",
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	"vars": {
+		"ENVIRONMENT": "development"
+	},
+	// 🔧 REQUIRED: create a KV namespace and bind it here before
+	// deploying — used only for basic per-IP rate limiting, same as
+	// OTP_STORE in worktrust-otp-worker.
+	//
+	//   npx wrangler kv namespace create PUSH_STORE
+	//
+	// then replace "REPLACE_WITH_KV_NAMESPACE_ID" below with the id
+	// that command prints out (do the same again with
+	// --env production for the id under "env.production" further
+	// down).
+	"kv_namespaces": [
+		{
+			"binding": "PUSH_STORE",
+			"id": "2ef9c2ef849e461d971a2c5e3538288a"
+		}
+	],
+	"env": {
+		"production": {
+			"vars": {
+				"ENVIRONMENT": "production"
+			},
+			"kv_namespaces": [
+				{
+					"binding": "PUSH_STORE",
+					"id": "REPLACE_WITH_KV_NAMESPACE_ID"
+				}
+			]
+		}
+	}
+}

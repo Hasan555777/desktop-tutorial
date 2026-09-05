@@ -1,0 +1,369 @@
+/* ============================================================
+   📬 INBOX - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN LAYOUT
+   ============================================================ */
+
+.inboxPageLayout {
+  display: flex;
+  height: 100vh;
+  background: var(--bg-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+/* ============================================================
+   📌 CHAT LIST (LEFT PANEL)
+   ============================================================ */
+
+.workspaceInboxWrapper {
+  flex: 1;
+  min-width: 320px;
+  max-width: 420px;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-left: 120px;
+}
+
+.workspaceInbox {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ============================================================
+   📌 INBOX ROWS
+   ============================================================ */
+
+.inboxRowsContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-xs) 0;
+}
+
+.inboxRowsContainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.inboxRowsContainer::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+.inboxRowsContainer::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 SKELETON LOADING
+   ============================================================ */
+
+.inboxSkeletonList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.inboxSkeletonRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.inboxSkeletonAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--border-color);
+  flex-shrink: 0;
+}
+
+.inboxSkeletonLines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inboxSkeletonLine {
+  height: 12px;
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 NO CHAT SELECTED MESSAGE
+   ============================================================ */
+
+.noChatSelectedMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--space-2xl);
+  text-align: center;
+  color: var(--text-secondary);
+  gap: var(--space-md);
+}
+
+.noChatSelectedMessage i {
+  font-size: 48px;
+  color: var(--accent-primary);
+  opacity: 0.5;
+}
+
+.noChatSelectedMessage p {
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  max-width: 280px;
+}
+
+/* ============================================================
+   📌 ACTIVE CHAT AREA
+   ============================================================ */
+
+.activeChatArea {
+  flex: 2;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .workspaceInboxWrapper {
+    min-width: 280px;
+    max-width: 360px;
+    margin-left: 100px;
+  }
+
+  .noChatSelectedMessage i {
+    font-size: 36px;
+  }
+
+  .noChatSelectedMessage p {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .inboxPageLayout {
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .workspaceInboxWrapper {
+    min-width: unset;
+    max-width: unset;
+    flex: 1;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    margin-left: 0;
+  }
+
+  .workspaceInbox {
+    height: 100vh;
+  }
+
+  .activeChatArea {
+    display: none;
+  }
+
+  .inboxPageLayout.chatActive .workspaceInboxWrapper {
+    display: none;
+  }
+
+  .inboxPageLayout.chatActive .activeChatArea {
+    display: flex;
+    flex: 1;
+    height: 100vh;
+  }
+
+  .noChatSelectedMessage i {
+    font-size: 32px;
+  }
+
+  .noChatSelectedMessage p {
+    font-size: var(--text-xs);
+  }
+
+  .inboxSkeletonAvatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .inboxSkeletonLine {
+    height: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .workspaceInboxWrapper {
+    flex: 1;
+    margin-left: 0;
+  }
+
+  .workspaceInbox {
+    height: 100vh;
+  }
+
+  .noChatSelectedMessage i {
+    font-size: 28px;
+  }
+
+  .noChatSelectedMessage p {
+    font-size: 10px;
+    max-width: 200px;
+  }
+
+  .inboxSkeletonAvatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .inboxSkeletonLine {
+    height: 8px;
+  }
+
+  .inboxSkeletonRow {
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .inboxSkeletonRow {
+    animation: none !important;
+  }
+
+  .inboxSkeletonList {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .inboxPageLayout {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .workspaceInboxWrapper {
+    border-right-width: 2px;
+  }
+
+  .inboxSkeletonRow {
+    border: 1px solid var(--border-color);
+  }
+
+  .inboxSkeletonAvatar {
+    border: 1px solid var(--border-color);
+  }
+
+  .inboxSkeletonLine {
+    border: 1px solid var(--border-color);
+  }
+
+  .noChatSelectedMessage i {
+    color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.inboxPageLayout:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.inboxPageLayout ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .inboxPageLayout {
+    background: #ffffff !important;
+    color: #000000 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .workspaceInboxWrapper {
+    border-right: 1px solid #000000 !important;
+  }
+
+  .activeChatArea {
+    display: none !important;
+  }
+
+  .noChatSelectedMessage {
+    display: none !important;
+  }
+
+  .inboxSkeletonList {
+    display: none !important;
+  }
+}

@@ -1,0 +1,413 @@
+/* ============================================================
+   🏠 HOME PAGE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 RESET & BASE STYLES
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ============================================================
+   📌 HOME WRAPPER
+   ============================================================ */
+
+.homeWrapper {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ============================================================
+   📌 HOME CONTENT
+   ============================================================ */
+
+.homeContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: 0 var(--space-md);
+}
+
+/* ============================================================
+   📌 HOME FEED POSTS LIST
+   ============================================================ */
+
+.homeFeedPostsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--space-md);
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-md) 0;
+  box-sizing: border-box;
+  margin-top: 100px;
+  margin-left: 50px;
+}
+
+/* ============================================================
+   📌 SKELETON CARD
+   ============================================================ */
+
+.skeletonCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.skeletonHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.skeletonHeaderText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.skeletonFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.skeletonFooterRight {
+  margin-left: auto;
+}
+
+/* ============================================================
+   📌 EMPTY FEED STATE
+   ============================================================ */
+
+.emptyFeedState {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  width: 100%;
+  gap: var(--space-md);
+  text-align: center;
+  padding: 60px var(--space-lg);
+  color: var(--text-muted);
+}
+
+.emptyFeedState i {
+  font-size: 64px;
+  color: var(--accent-primary);
+  margin-bottom: var(--space-sm);
+  opacity: 0.5;
+}
+
+.emptyFeedState p {
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: 0;
+}
+
+.emptyFeedState small {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  margin-top: var(--space-xs);
+}
+
+.clearSearchBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  margin-top: var(--space-xs);
+}
+
+.clearSearchBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 LOADING FEED STATE
+   ============================================================ */
+
+.loadingFeedState {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  width: 100%;
+  gap: var(--space-md);
+  background: transparent;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 OFFLINE BANNER
+   ============================================================ */
+
+.offlineBanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+  border-radius: var(--radius-md);
+  color: var(--status-warning);
+  font-size: var(--text-sm);
+  margin: var(--space-md) auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+/* ============================================================
+   📌 SEARCH HIGHLIGHT
+   ============================================================ */
+
+.searchHighlight {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+/* ============================================================
+   📌 HIGHLIGHT POST
+   ============================================================ */
+
+.highlightPost {
+  animation: highlightPulse 0.5s ease 3;
+  border: 2px solid var(--accent-light) !important;
+  box-shadow: 0 0 30px var(--shadow-glow) !important;
+  border-radius: var(--radius-lg) !important;
+  transition: all 0.3s ease !important;
+}
+
+@keyframes highlightPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE - TABLET
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .homeFeedPostsList {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE - MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .homeContent {
+    padding: 0 var(--space-sm);
+  }
+
+  .homeFeedPostsList {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    margin-top: 100px;
+    margin-left: 0;
+  }
+
+  .emptyFeedState {
+    padding: 40px var(--space-md);
+    min-height: 50vh;
+  }
+
+  .emptyFeedState i {
+    font-size: 56px;
+  }
+
+  .emptyFeedState p {
+    font-size: var(--text-base);
+  }
+
+  .skeletonCard {
+    padding: var(--space-md);
+  }
+
+  .offlineBanner {
+    margin: var(--space-sm) var(--space-sm);
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE - SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .homeFeedPostsList {
+    gap: var(--space-sm);
+    padding: var(--space-xs) 0;
+    margin-top: 80px;
+  }
+
+  .emptyFeedState {
+    padding: 32px var(--space-sm);
+    min-height: 40vh;
+  }
+
+  .emptyFeedState i {
+    font-size: 48px;
+  }
+
+  .emptyFeedState p {
+    font-size: var(--text-sm);
+  }
+
+  .emptyFeedState small {
+    font-size: var(--text-xs);
+  }
+
+  .clearSearchBtn {
+    font-size: var(--text-xs);
+    padding: 8px 18px;
+  }
+
+  .skeletonCard {
+    padding: var(--space-sm);
+  }
+
+  .skeletonFooter {
+    flex-wrap: wrap;
+  }
+
+  .highlightPost {
+    border-width: 2px !important;
+  }
+}
+
+/* ============================================================
+   ☀️ LIGHT MODE OVERRIDES
+   ============================================================ */
+
+.lightMode .skeletonCard {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.lightMode .emptyFeedState i {
+  color: var(--accent-primary);
+  opacity: 0.4;
+}
+
+.lightMode .searchHighlight {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonCard {
+    animation: none;
+  }
+
+  .highlightPost {
+    animation: none;
+  }
+
+  .highlightPost {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .highlightPost {
+    border-width: 3px !important;
+  }
+
+  .skeletonCard {
+    border-width: 2px;
+  }
+
+  .clearSearchBtn {
+    border-width: 2px;
+  }
+
+  .offlineBanner {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.clearSearchBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.homeContent ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

@@ -1,0 +1,897 @@
+/* ============================================================
+   ✏️ EDIT POST MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.editModal {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.editPostModal {
+  max-width: 640px;
+}
+
+/* ============================================================
+   📌 MODAL HEADER
+   ============================================================ */
+
+.editModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.editModalHeader h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.editModalHeader h3 i {
+  font-size: var(--text-xl);
+}
+
+.modalCloseBtn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.modalCloseBtn:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 MODAL BODY
+   ============================================================ */
+
+.editForm {
+  padding: var(--space-xl);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.editForm::-webkit-scrollbar {
+  width: 4px;
+}
+
+.editForm::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.editForm::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 FORM GROUP
+   ============================================================ */
+
+.pbGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.pbGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.requiredStar {
+  color: var(--status-danger);
+  font-weight: 100;
+}
+
+.editInput {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.editInput:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.editInput::placeholder {
+  color: var(--text-muted);
+}
+
+.editInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.editInput.withIcon {
+  padding-left: 36px;
+}
+
+.editTextarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.editTextarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.editTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+.charCount {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: right;
+}
+
+/* ============================================================
+   📌 INPUT WITH ICON
+   ============================================================ */
+
+.inputWithIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 12px;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  pointer-events: none;
+}
+
+/* ============================================================
+   📌 ROW TWIN
+   ============================================================ */
+
+.pbRowTwin {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+/* ============================================================
+   📌 MODE TOGGLE
+   ============================================================ */
+
+.budgetModeToggle {
+  display: flex;
+  gap: var(--space-xs);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+}
+
+.modeToggleBtn {
+  flex: 1;
+  padding: var(--space-xs) var(--space-md);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.modeToggleBtn.active {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 8px var(--shadow-glow);
+}
+
+.modeToggleBtn:hover:not(.active) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 NEGOTIABLE CHECKBOX
+   ============================================================ */
+
+.negotiableCheckbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  cursor: pointer;
+}
+
+.negotiableCheckbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+/* ============================================================
+   📌 IMAGE SECTION
+   ============================================================ */
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.imageWrapper {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid var(--border-color);
+  transition: all var(--transition-normal);
+}
+
+.imageWrapper:hover {
+  border-color: var(--accent-primary);
+}
+
+.imageThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.removeImageBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  color: var(--status-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-xs);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.removeImageBtn:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.uploadLabel {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  border: 2px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  min-height: 100px;
+}
+
+.uploadLabel:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.uploadLabel.compressing {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.uploadIcon {
+  font-size: var(--text-2xl);
+  color: var(--text-muted);
+  transition: all var(--transition-normal);
+}
+
+.uploadLabel:hover .uploadIcon {
+  color: var(--accent-primary);
+  transform: scale(1.1);
+}
+
+.compressingInfo {
+  text-align: center;
+  margin-top: var(--space-xs);
+}
+
+.compressingInfo small {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.compressingInfo small i {
+  margin-right: var(--space-xs);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 PROGRESS
+   ============================================================ */
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
+}
+
+.progressText {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: center;
+}
+
+/* ============================================================
+   📌 ACTION BUTTONS
+   ============================================================ */
+
+.editActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.cancelBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: translateY(-2px);
+}
+
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.saveBtn {
+  flex: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.saveBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .editModal {
+    max-width: 560px;
+  }
+
+  .editForm {
+    padding: var(--space-lg);
+  }
+
+  .editModalHeader {
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .editModalHeader h3 {
+    font-size: var(--text-base);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: var(--space-md);
+  }
+
+  .editModal {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: var(--radius-md);
+  }
+
+  .editForm {
+    padding: var(--space-md);
+  }
+
+  .editModalHeader {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .editModalHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .editModalHeader h3 i {
+    font-size: var(--text-base);
+  }
+
+  .modalCloseBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .pbGroup {
+    margin-bottom: var(--space-md);
+  }
+
+  .pbGroup label {
+    font-size: var(--text-xs);
+  }
+
+  .editInput,
+  .editTextarea {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .editTextarea {
+    min-height: 60px;
+  }
+
+  .pbRowTwin {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+
+  .modeToggleBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .imageGrid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--space-xs);
+  }
+
+  .uploadLabel {
+    min-height: 80px;
+  }
+
+  .uploadIcon {
+    font-size: var(--text-xl);
+  }
+
+  .editActions {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+  }
+
+  .charCount {
+    font-size: 9px;
+  }
+
+  .negotiableCheckbox {
+    font-size: var(--text-xs);
+  }
+
+  .inputIcon {
+    font-size: var(--text-xs);
+    left: 10px;
+  }
+
+  .editInput.withIcon {
+    padding-left: 30px;
+  }
+
+  .progressText {
+    font-size: 10px;
+  }
+
+  .compressingInfo small {
+    font-size: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .modalOverlay {
+    padding: var(--space-sm);
+  }
+
+  .editModal {
+    max-height: 98vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .editForm {
+    padding: var(--space-sm);
+  }
+
+  .editModalHeader {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .editModalHeader h3 {
+    font-size: var(--text-xs);
+  }
+
+  .editModalHeader h3 i {
+    font-size: var(--text-sm);
+  }
+
+  .modalCloseBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+  }
+
+  .imageGrid {
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  }
+
+  .uploadLabel {
+    min-height: 64px;
+  }
+
+  .uploadIcon {
+    font-size: var(--text-base);
+  }
+
+  .removeImageBtn {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+  }
+
+  .editActions {
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .modalOverlay {
+    animation: none !important;
+  }
+
+  .editModal {
+    animation: none !important;
+  }
+
+  .modalCloseBtn:hover {
+    transform: none !important;
+  }
+
+  .removeImageBtn:hover {
+    transform: none !important;
+  }
+
+  .uploadLabel:hover .uploadIcon {
+    transform: none !important;
+  }
+
+  .cancelBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .saveBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .editModal {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .editModal {
+    border-width: 2px;
+  }
+
+  .modalCloseBtn {
+    border-width: 2px;
+  }
+
+  .editInput,
+  .editTextarea {
+    border-width: 2px;
+  }
+
+  .editInput:focus,
+  .editTextarea:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .modeToggleBtn.active {
+    border: 2px solid currentColor;
+  }
+
+  .uploadLabel {
+    border-width: 2px;
+  }
+
+  .imageWrapper {
+    border-width: 2px;
+  }
+
+  .removeImageBtn {
+    border-width: 2px;
+  }
+
+  .cancelBtn {
+    border-width: 2px;
+  }
+
+  .saveBtn {
+    border: 2px solid currentColor;
+  }
+
+  .budgetModeToggle {
+    border-width: 2px;
+  }
+
+  .progressBar {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.editInput:focus-visible,
+.editTextarea:focus-visible,
+.modeToggleBtn:focus-visible,
+.modalCloseBtn:focus-visible,
+.removeImageBtn:focus-visible,
+.cancelBtn:focus-visible,
+.saveBtn:focus-visible,
+.uploadLabel:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.editForm ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .modalOverlay {
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 20px !important;
+  }
+
+  .editModal {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    max-height: none !important;
+  }
+
+  .modalCloseBtn {
+    display: none !important;
+  }
+
+  .editActions {
+    display: none !important;
+  }
+
+  .uploadLabel {
+    display: none !important;
+  }
+
+  .removeImageBtn {
+    display: none !important;
+  }
+}

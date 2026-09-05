@@ -1,0 +1,322 @@
+/* ============================================================
+   💬 MESSAGE BUBBLE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MESSAGE ROW
+   ============================================================ */
+
+.msgRow {
+  display: flex;
+  flex-direction: column;
+  max-width: 75%;
+  animation: messageSlideIn 0.2s ease;
+  margin-bottom: var(--space-xs);
+}
+
+.msgRow.sent {
+  align-self: flex-end;
+}
+
+.msgRow.received {
+  align-self: flex-start;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 BUBBLE
+   ============================================================ */
+
+.bubble {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  position: relative;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.bubble.sent {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+  border-bottom-right-radius: 4px;
+}
+
+.bubble.received {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  border-bottom-left-radius: 4px;
+}
+
+/* ============================================================
+   📌 SENDER NAME
+   ============================================================ */
+
+.senderName {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin-bottom: var(--space-xs);
+  display: block;
+}
+
+.bubble.received .senderName {
+  color: var(--accent-secondary);
+}
+
+/* ============================================================
+   📌 MESSAGE IMAGE
+   ============================================================ */
+
+.messageImage {
+  margin-bottom: var(--space-xs);
+  cursor: pointer;
+}
+
+.chatImage {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.chatImage:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.bubble.sent .chatImage {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.bubble.received .chatImage {
+  border: 2px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 MESSAGE TEXT
+   ============================================================ */
+
+.messageText {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.bubble.sent .messageText {
+  color: #ffffff;
+}
+
+.bubble.received .messageText {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 MESSAGE FOOTER
+   ============================================================ */
+
+.messageFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+  font-size: 10px;
+  justify-content: flex-end;
+}
+
+.messageTime {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.bubble.sent .messageTime {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.bubble.received .messageTime {
+  color: var(--text-muted);
+}
+
+.editedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 9px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.editedBadge i {
+  font-size: 8px;
+}
+
+.bubble.sent .editedBadge {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.readStatus {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+.readStatus i {
+  color: var(--text-muted);
+}
+
+.readStatus i.fa-check-double {
+  color: var(--status-info);
+}
+
+.bubble.sent .readStatus i {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.bubble.sent .readStatus i.fa-check-double {
+  color: var(--status-info);
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .msgRow {
+    max-width: 85%;
+  }
+
+  .chatImage {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .bubble {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .messageText {
+    font-size: var(--text-xs);
+  }
+
+  .senderName {
+    font-size: 10px;
+  }
+
+  .messageTime {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .msgRow {
+    max-width: 90%;
+  }
+
+  .chatImage {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .bubble {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .messageText {
+    font-size: 10px;
+  }
+
+  .senderName {
+    font-size: 9px;
+  }
+
+  .messageTime {
+    font-size: 8px;
+  }
+
+  .editedBadge {
+    font-size: 8px;
+  }
+
+  .readStatus {
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .msgRow {
+    animation: none;
+  }
+
+  .chatImage:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .bubble {
+    border-width: 2px;
+  }
+
+  .bubble.sent {
+    border-color: var(--accent-primary);
+  }
+
+  .bubble.received {
+    border-color: var(--border-color);
+  }
+
+  .chatImage {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.messageImage:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.bubble ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.bubble.sent ::selection {
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}

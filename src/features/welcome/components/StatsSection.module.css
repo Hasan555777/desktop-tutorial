@@ -1,0 +1,489 @@
+/* ============================================================
+   📊 STATS SECTION - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.statsSection {
+  padding: 80px var(--space-lg);
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ── Background Decorations ── */
+.statsSection::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: var(--accent-glow);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.statsSection::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: var(--status-info-bg);
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* ============================================================
+   📌 STATS GRID
+   ============================================================ */
+
+.statsGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-xl);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   📌 STAT ITEM
+   ============================================================ */
+
+.statItem {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ── Gradient Border on Hover ── */
+.statItem::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 2px;
+  background: var(--gradient-primary);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: all var(--transition-normal);
+}
+
+.statItem:hover::before {
+  opacity: 1;
+}
+
+.statItem:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px var(--shadow-color);
+}
+
+/* ── Inner Glow on Hover ── */
+.statItem::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    var(--accent-glow),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: all var(--transition-normal);
+  pointer-events: none;
+}
+
+.statItem:hover::after {
+  opacity: 0.08;
+}
+
+/* ============================================================
+   📊 STAT NUMBER
+   ============================================================ */
+
+.statNumber {
+  display: block;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  position: relative;
+  z-index: 1;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.statItem:hover .statNumber {
+  transform: scale(1.05);
+}
+
+/* ── Shimmer Effect on Number ── */
+.statNumber.shimmer {
+  background-size: 200% 100%;
+  animation: shimmerText 3s ease-in-out infinite;
+}
+
+@keyframes shimmerText {
+  0%, 100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 200% center;
+  }
+}
+
+/* ============================================================
+   📌 STAT LABEL
+   ============================================================ */
+
+.statLabel {
+  display: block;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.5px;
+  transition: color var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.statItem:hover .statLabel {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   🎯 ICON VARIANT (Optional)
+   ============================================================ */
+
+.statItem.withIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statItem .statIcon {
+  font-size: 28px;
+  color: var(--accent-primary);
+  margin-bottom: var(--space-sm);
+  transition: all var(--transition-normal);
+  position: relative;
+  z-index: 1;
+}
+
+.statItem:hover .statIcon {
+  transform: scale(1.2) rotate(-5deg);
+  color: var(--accent-secondary);
+}
+
+/* ============================================================
+   🎨 STAT ITEM VARIANTS
+   ============================================================ */
+
+/* ── Glass Variant ── */
+.statItem.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* ── Gradient Background Variant ── */
+.statItem.gradientBg {
+  background: var(--gradient-primary);
+  border-color: transparent;
+}
+
+.statItem.gradientBg .statNumber {
+  -webkit-text-fill-color: #ffffff;
+  background: none;
+}
+
+.statItem.gradientBg .statLabel {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.statItem.gradientBg:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 40px var(--shadow-glow);
+}
+
+/* ============================================================
+   🎬 COUNTER ANIMATION
+   ============================================================ */
+
+.statNumber {
+  opacity: 0;
+  animation: countUp 0.6s ease forwards;
+}
+
+.statItem:nth-child(1) .statNumber { animation-delay: 0.1s; }
+.statItem:nth-child(2) .statNumber { animation-delay: 0.15s; }
+.statItem:nth-child(3) .statNumber { animation-delay: 0.20s; }
+.statItem:nth-child(4) .statNumber { animation-delay: 0.25s; }
+.statItem:nth-child(5) .statNumber { animation-delay: 0.30s; }
+.statItem:nth-child(6) .statNumber { animation-delay: 0.35s; }
+.statItem:nth-child(7) .statNumber { animation-delay: 0.40s; }
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .statItem {
+    padding: var(--space-lg) var(--space-md);
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .statsSection {
+    padding: 60px var(--space-md);
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .statItem {
+    padding: var(--space-md);
+    min-height: 100px;
+  }
+
+  .statNumber {
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  }
+
+  .statLabel {
+    font-size: var(--text-xs);
+  }
+
+  .statsSection::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .statsSection::after {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsSection {
+    padding: 40px var(--space-sm);
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .statItem {
+    padding: var(--space-sm);
+    min-height: 80px;
+    border-radius: var(--radius-md);
+  }
+
+  .statNumber {
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+  }
+
+  .statLabel {
+    font-size: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Hide some stats on very small screens */
+  .statItem.hideMobile {
+    display: none;
+  }
+}
+
+/* ============================================================
+   🎯 ANIMATED COUNTER WITH DECORATION
+   ============================================================ */
+
+/* ── Sparkle Decoration on Number ── */
+.statNumber .sparkle {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--accent-primary);
+  margin-left: 2px;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.5);
+  }
+}
+
+/* ── Progress Bar Under Stat ── */
+.statItem .statProgress {
+  width: 100%;
+  height: 3px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  margin-top: var(--space-sm);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.statItem .statProgress .bar {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  width: 0%;
+  animation: progressBar 1.5s ease forwards;
+}
+
+.statItem:nth-child(1) .statProgress .bar { animation-delay: 0.3s; width: 85%; }
+.statItem:nth-child(2) .statProgress .bar { animation-delay: 0.35s; width: 75%; }
+.statItem:nth-child(3) .statProgress .bar { animation-delay: 0.40s; width: 80%; }
+.statItem:nth-child(4) .statProgress .bar { animation-delay: 0.45s; width: 90%; }
+.statItem:nth-child(5) .statProgress .bar { animation-delay: 0.50s; width: 70%; }
+.statItem:nth-child(6) .statProgress .bar { animation-delay: 0.55s; width: 95%; }
+.statItem:nth-child(7) .statProgress .bar { animation-delay: 0.60s; width: 98%; }
+
+@keyframes progressBar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-width);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .statNumber {
+    opacity: 1;
+    animation: none;
+  }
+
+  .statItem .statProgress .bar {
+    animation: none;
+    width: 100%;
+  }
+
+  .statItem:hover {
+    transform: none;
+  }
+
+  .statItem::before,
+  .statItem::after {
+    display: none;
+  }
+
+  .statNumber .sparkle {
+    animation: none;
+  }
+
+  .statNumber.shimmer {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .statItem {
+    border-width: 2px;
+  }
+
+  .statItem:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .statNumber {
+    -webkit-text-fill-color: var(--accent-primary);
+  }
+
+  .statItem.gradientBg .statNumber {
+    -webkit-text-fill-color: #ffffff;
+  }
+
+  .statItem .statProgress .bar {
+    background: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.statItem:focus-within {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.statItem ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

@@ -1,0 +1,993 @@
+/* ============================================================
+   💰 DEPOSIT PAGE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.depositContainer {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.depositCard {
+  max-width: 560px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  transition: all var(--transition-normal);
+}
+
+.depositCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 40px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 BACK BUTTON
+   ============================================================ */
+
+.backBtnSimple {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-bottom: var(--space-md);
+}
+
+.backBtnSimple:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.backBtnSimple i {
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.depositHeader {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.depositHeader h2 {
+  font-size: var(--text-2xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.depositHeader h2 i {
+  margin-right: var(--space-sm);
+}
+
+.depositHeader p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: var(--space-xs) 0 0 0;
+}
+
+/* ============================================================
+   📌 STATUS MESSAGE
+   ============================================================ */
+
+.statusMessage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-bottom: var(--space-md);
+}
+
+.statusMessage.processing {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+.statusMessage.success {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.statusMessage i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 ERROR MESSAGE
+   ============================================================ */
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-bottom: var(--space-md);
+}
+
+.errorMessage i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 AMOUNT PRESETS
+   ============================================================ */
+
+.amountPresets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.amountPresets label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.presetButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.presetBtn {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.presetBtn:hover:not(:disabled) {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.presetBtn.active {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.presetBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 INPUT GROUP
+   ============================================================ */
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.inputGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.inputGroup label i {
+  color: var(--accent-primary);
+}
+
+.inputGroup input,
+.inputGroup textarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.inputGroup input::placeholder,
+.inputGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.inputGroup input:disabled,
+.inputGroup textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.inputGroup textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.inputHint {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.charCount {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: right;
+}
+
+/* ============================================================
+   📌 METHOD OPTIONS
+   ============================================================ */
+
+.methodOptions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.methodLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.methodLabel:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.methodLabel.active {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+  color: var(--text-primary);
+}
+
+.methodLabel input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.methodLabel i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 BANK DETAILS SECTION
+   ============================================================ */
+
+.bankDetailsSection {
+  margin-bottom: var(--space-md);
+}
+
+.bankDetailsSection h4 {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.bankDetailsSection h4 i {
+  margin-right: var(--space-xs);
+  color: var(--accent-primary);
+}
+
+.bankInfoCard {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.bankInfoRow {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.bankInfoRow:last-child {
+  border-bottom: none;
+}
+
+.bankInfoRow span {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.bankInfoRow strong {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 FILE UPLOAD
+   ============================================================ */
+
+.fileUploadArea {
+  position: relative;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.fileUploadArea:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.fileInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.fileUploadPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  color: var(--text-muted);
+}
+
+.fileUploadPlaceholder i {
+  font-size: 36px;
+  color: var(--accent-primary);
+}
+
+.fileUploadPlaceholder p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.fileUploadPlaceholder small {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.fileUploadPreview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+  z-index: 1;
+}
+
+.receiptPreview {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.fileNameDisplay {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+}
+
+.fileNameDisplay i {
+  font-size: 36px;
+  color: var(--status-danger);
+}
+
+.fileNameDisplay span {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.removeFileBtn {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  color: var(--status-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-sm);
+  z-index: 3;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.removeFileBtn:hover:not(:disabled) {
+  background: var(--status-danger);
+  color: #ffffff;
+}
+
+.removeFileBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 PAYMENT INSTRUCTIONS
+   ============================================================ */
+
+.paymentInstructions {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin: var(--space-md) 0;
+}
+
+.paymentInstructions h4 {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.paymentInstructions h4 i {
+  color: var(--status-info);
+}
+
+.paymentInstructions ol {
+  padding-left: var(--space-lg);
+  margin: 0;
+}
+
+.paymentInstructions ol li {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  line-height: 1.8;
+}
+
+.paymentInstructions ol li strong {
+  font-weight: 100;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 DEPOSIT BUTTON
+   ============================================================ */
+
+.depositBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-base);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.depositBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.depositBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.depositBtn.loading {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.loadingContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.loadingContent i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.depositFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.depositFooter p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.depositFooter p i {
+  color: var(--accent-primary);
+}
+
+.footerNote {
+  font-size: var(--text-xs) !important;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .depositContainer {
+    padding: var(--space-md);
+  }
+
+  .depositCard {
+    padding: var(--space-lg);
+  }
+
+  .depositHeader h2 {
+    font-size: var(--text-xl);
+  }
+
+  .methodOptions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .depositContainer {
+    padding: var(--space-sm);
+    align-items: flex-start;
+    padding-top: var(--space-xl);
+  }
+
+  .depositCard {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .depositHeader h2 {
+    font-size: var(--text-lg);
+  }
+
+  .depositHeader p {
+    font-size: var(--text-xs);
+  }
+
+  .presetButtons {
+    gap: 4px;
+  }
+
+  .presetBtn {
+    font-size: var(--text-xs);
+    padding: 2px 10px;
+  }
+
+  .methodOptions {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+  }
+
+  .methodLabel {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .bankInfoRow {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .bankInfoRow span {
+    font-size: var(--text-xs);
+  }
+
+  .bankInfoRow strong {
+    font-size: var(--text-xs);
+  }
+
+  .inputGroup label {
+    font-size: var(--text-xs);
+  }
+
+  .inputGroup input,
+  .inputGroup textarea {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .inputHint {
+    font-size: 10px;
+  }
+
+  .paymentInstructions ol li {
+    font-size: var(--text-xs);
+  }
+
+  .depositBtn {
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-xl);
+  }
+
+  .depositFooter p {
+    font-size: var(--text-xs);
+  }
+
+  .fileUploadArea {
+    min-height: 100px;
+  }
+
+  .fileUploadPlaceholder i {
+    font-size: 28px;
+  }
+
+  .fileUploadPlaceholder p {
+    font-size: var(--text-xs);
+  }
+
+  .receiptPreview {
+    max-height: 150px;
+  }
+
+  .statusMessage {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .errorMessage {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .backBtnSimple {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .charCount {
+    font-size: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .depositCard {
+    padding: var(--space-sm);
+  }
+
+  .depositHeader h2 {
+    font-size: var(--text-base);
+  }
+
+  .methodOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .presetBtn {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .bankInfoCard {
+    padding: var(--space-sm);
+  }
+
+  .fileUploadArea {
+    min-height: 80px;
+  }
+
+  .fileUploadPlaceholder i {
+    font-size: 24px;
+  }
+
+  .receiptPreview {
+    max-height: 120px;
+  }
+
+  .removeFileBtn {
+    width: 24px;
+    height: 24px;
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loadingContent i {
+    animation: none;
+  }
+
+  .depositBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .backBtnSimple:hover {
+    transform: none !important;
+  }
+
+  .presetBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .fileUploadArea:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .depositContainer {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .depositCard {
+    border-width: 2px;
+  }
+
+  .backBtnSimple {
+    border-width: 2px;
+  }
+
+  .presetBtn {
+    border-width: 2px;
+  }
+
+  .presetBtn.active {
+    border-width: 2px;
+  }
+
+  .methodLabel {
+    border-width: 2px;
+  }
+
+  .methodLabel.active {
+    border-width: 2px;
+  }
+
+  .inputGroup input,
+  .inputGroup textarea {
+    border-width: 2px;
+  }
+
+  .inputGroup input:focus,
+  .inputGroup textarea:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .depositBtn {
+    border: 2px solid currentColor;
+  }
+
+  .fileUploadArea {
+    border-width: 2px;
+  }
+
+  .removeFileBtn {
+    border-width: 2px;
+  }
+
+  .bankInfoCard {
+    border-width: 2px;
+  }
+
+  .paymentInstructions {
+    border-width: 2px;
+  }
+
+  .statusMessage {
+    border-width: 2px;
+  }
+
+  .errorMessage {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.backBtnSimple:focus-visible,
+.presetBtn:focus-visible,
+.methodLabel input:focus-visible + *,
+.inputGroup input:focus-visible,
+.inputGroup textarea:focus-visible,
+.depositBtn:focus-visible,
+.removeFileBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.depositCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .depositContainer {
+    background: #ffffff !important;
+    padding: 20px !important;
+  }
+
+  .depositCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .depositBtn {
+    display: none !important;
+  }
+
+  .backBtnSimple {
+    display: none !important;
+  }
+
+  .removeFileBtn {
+    display: none !important;
+  }
+
+  .fileUploadArea {
+    border: 1px solid #000000 !important;
+  }
+}

@@ -1,0 +1,806 @@
+/* ============================================================
+   🔐 LOGIN PAGE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.shopnestLogin {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  padding: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 AUTH CARD
+   ============================================================ */
+
+.authCard {
+  max-width: 420px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  transition: all var(--transition-normal);
+}
+
+.authCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 40px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 CARD BODY
+   ============================================================ */
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ============================================================
+   📌 LOGIN PANEL
+   ============================================================ */
+
+.loginPanel {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-md);
+  animation: fadeIn 0.3s ease;
+}
+
+.loginPanel.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📌 LOGO
+   ============================================================ */
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.logo i {
+  font-size: 32px;
+  color: var(--accent-primary);
+}
+
+.logo h2 {
+  font-size: var(--text-2xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 STEP TITLE & SUBTITLE
+   ============================================================ */
+
+.stepTitle {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: center;
+}
+
+.stepSubtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: center;
+}
+
+/* ============================================================
+   📌 FORM FIELDS
+   ============================================================ */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.field label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.field input,
+.field select {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.field input::placeholder {
+  color: var(--text-muted);
+}
+
+.field input:disabled,
+.field select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Password Wrap ── */
+.pwWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pwWrap input {
+  flex: 1;
+  padding-right: 44px;
+}
+
+.pwToggle {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: 0;
+  line-height: 1;
+}
+
+.pwToggle:hover {
+  color: var(--text-primary);
+}
+
+/* ── Phone Row ── */
+.phoneRow {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.phoneRow select {
+  flex: 0 0 80px;
+}
+
+.phoneRow input {
+  flex: 1;
+}
+
+/* ── Options ── */
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  cursor: pointer;
+}
+
+.rememberMe input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.forgotLink {
+  background: transparent;
+  border: none;
+  color: var(--accent-primary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.forgotLink:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   📌 BUTTONS
+   ============================================================ */
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  width: 100%;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex: 1;
+}
+
+.btnGhost:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.btnGhost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnRow {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.btnRow .btnPrimary {
+  flex: 2;
+}
+
+/* ── Resend Button ── */
+.resendBtn {
+  background: transparent;
+  border: none;
+  color: var(--accent-primary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.resendBtn:hover:not(:disabled) {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+.resendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.resendRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 OTP SECTION
+   ============================================================ */
+
+.loginOtpSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.otpContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.otpContainer label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.otpRow {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+}
+
+.otpBox {
+  width: 44px;
+  height: 52px;
+  text-align: center;
+  font-size: var(--text-xl);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal);
+}
+
+.otpBox:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.otpBox.filled {
+  border-color: var(--status-success);
+}
+
+.otpBox:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 INFO BOX
+   ============================================================ */
+
+.infoBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-info-bg);
+  border: 1px solid var(--status-info);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.infoIcon {
+  font-size: var(--text-lg);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📌 CARD FOOTER
+   ============================================================ */
+
+.cardFooter {
+  text-align: center;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.link {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 100;
+  transition: all var(--transition-normal);
+  margin-left: 4px;
+}
+
+.link:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   📌 LOADING SPINNER
+   ============================================================ */
+
+.loadingSpinner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.loadingSpinner i {
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   📌 TOAST
+   ============================================================ */
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .authCard {
+    padding: var(--space-xl);
+    max-width: 380px;
+  }
+
+  .logo h2 {
+    font-size: var(--text-xl);
+  }
+
+  .otpBox {
+    width: 40px;
+    height: 48px;
+    font-size: var(--text-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .shopnestLogin {
+    padding: var(--space-md);
+  }
+
+  .authCard {
+    padding: var(--space-lg);
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .logo i {
+    font-size: 28px;
+  }
+
+  .logo h2 {
+    font-size: var(--text-lg);
+  }
+
+  .stepTitle {
+    font-size: var(--text-base);
+  }
+
+  .stepSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .phoneRow {
+    flex-direction: column;
+  }
+
+  .phoneRow select {
+    flex: unset;
+  }
+
+  .otpBox {
+    width: 36px;
+    height: 44px;
+    font-size: var(--text-base);
+  }
+
+  .btnRow {
+    flex-direction: column;
+  }
+
+  .btnGhost {
+    width: 100%;
+  }
+
+  .options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .field label {
+    font-size: var(--text-xs);
+  }
+
+  .field input,
+  .field select {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .cardFooter {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .shopnestLogin {
+    padding: var(--space-sm);
+  }
+
+  .authCard {
+    padding: var(--space-md);
+    border-radius: var(--radius-sm);
+  }
+
+  .logo i {
+    font-size: 24px;
+  }
+
+  .logo h2 {
+    font-size: var(--text-base);
+  }
+
+  .otpBox {
+    width: 32px;
+    height: 40px;
+    font-size: var(--text-sm);
+  }
+
+  .otpRow {
+    gap: 4px;
+  }
+
+  .btnPrimary,
+  .btnGhost {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .resendBtn {
+    font-size: var(--text-xs);
+  }
+
+  .resendRow {
+    font-size: var(--text-xs);
+  }
+
+  .infoBox {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .infoIcon {
+    font-size: var(--text-base);
+  }
+
+  .pwToggle {
+    font-size: var(--text-base);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loginPanel {
+    animation: none !important;
+  }
+
+  .btnPrimary:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .btnGhost:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .forgotLink:hover {
+    transform: none !important;
+  }
+
+  .resendBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .link:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .shopnestLogin {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .authCard {
+    border-width: 2px;
+  }
+
+  .field input,
+  .field select {
+    border-width: 2px;
+  }
+
+  .field input:focus,
+  .field select:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .btnPrimary {
+    border: 2px solid currentColor;
+  }
+
+  .btnGhost {
+    border-width: 2px;
+  }
+
+  .otpBox {
+    border-width: 2px;
+  }
+
+  .otpBox:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .otpBox.filled {
+    border-color: var(--status-success);
+  }
+
+  .infoBox {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.field input:focus-visible,
+.field select:focus-visible,
+.otpBox:focus-visible,
+.btnPrimary:focus-visible,
+.btnGhost:focus-visible,
+.forgotLink:focus-visible,
+.resendBtn:focus-visible,
+.pwToggle:focus-visible,
+.link:focus-visible,
+.rememberMe input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.authCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .shopnestLogin {
+    background: #ffffff !important;
+    padding: 20px !important;
+  }
+
+  .authCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .btnPrimary,
+  .btnGhost,
+  .forgotLink,
+  .resendBtn,
+  .pwToggle,
+  .link {
+    display: none !important;
+  }
+
+  .field input,
+  .field select {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .otpBox {
+    border: 1px solid #000000 !important;
+  }
+
+  .cardFooter {
+    border-top: 1px solid #000000 !important;
+  }
+}

@@ -1,0 +1,623 @@
+/* ============================================================
+   👤 PROFILE HEADER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN WRAPPER
+   ============================================================ */
+
+.profileHeaderWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xl);
+  padding: var(--space-xl);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex-wrap: wrap;
+}
+
+.profileHeaderWrapper:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 AVATAR
+   ============================================================ */
+
+.profileAvatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profileAvatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  transition: all var(--transition-normal);
+  background: var(--bg-tertiary);
+}
+
+.profileAvatar:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 30px var(--shadow-glow);
+}
+
+.avatarUploadBtn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: 2px solid var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-sm);
+}
+
+.avatarUploadBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 PROGRESS SECTION
+   ============================================================ */
+
+.progressSection {
+  flex: 1;
+  min-width: 180px;
+}
+
+/* ============================================================
+   📌 PROFILE INFO
+   ============================================================ */
+
+.profileInfoWrapper {
+  flex: 2;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ── Name Section ── */
+.profileNameSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.profileNameSection h1 {
+  font-size: var(--text-2xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.copyLinkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.copyLinkBtn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+/* ── Headline ── */
+.profileHeadline {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ── Email ── */
+.profileEmail {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.profileEmail i {
+  color: var(--accent-primary);
+}
+
+/* ── Stats Row ── */
+.profileStatsRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xs) 0;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.statNumber {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statLabel {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statLabel i {
+  color: var(--accent-primary);
+}
+
+.statDivider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+}
+
+/* ── Unique IDs ── */
+.profileUniqueIds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+
+.uniqueIdItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 4px 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idLabel {
+  color: var(--text-muted);
+}
+
+.idValue {
+  color: var(--text-primary);
+  font-weight: 100;
+}
+
+.copyIdBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-xs);
+  padding: 2px 4px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.copyIdBtn:hover {
+  color: var(--accent-primary);
+  transform: scale(1.1);
+}
+
+/* ── Edit Button ── */
+.editProfileBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  align-self: flex-start;
+}
+
+.editProfileBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .profileHeaderWrapper {
+    padding: var(--space-lg);
+    gap: var(--space-lg);
+  }
+
+  .profileAvatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profileNameSection h1 {
+    font-size: var(--text-xl);
+  }
+
+  .profileInfoWrapper {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .profileUniqueIds {
+    gap: var(--space-xs);
+  }
+
+  .uniqueIdItem {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .profileHeaderWrapper {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .profileAvatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatarUploadBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-xs);
+    bottom: 2px;
+    right: 2px;
+  }
+
+  .progressSection {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .profileInfoWrapper {
+    width: 100%;
+    min-width: unset;
+    align-items: center;
+  }
+
+  .profileNameSection {
+    justify-content: center;
+  }
+
+  .profileNameSection h1 {
+    font-size: var(--text-lg);
+  }
+
+  .profileHeadline {
+    font-size: var(--text-sm);
+  }
+
+  .profileEmail {
+    font-size: var(--text-xs);
+  }
+
+  .profileStatsRow {
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
+  .statNumber {
+    font-size: var(--text-base);
+  }
+
+  .statLabel {
+    font-size: var(--text-xs);
+  }
+
+  .profileUniqueIds {
+    justify-content: center;
+  }
+
+  .uniqueIdItem {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
+  .editProfileBtn {
+    align-self: center;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .copyLinkBtn {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+
+  .statDivider {
+    height: 18px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .profileHeaderWrapper {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .profileAvatar {
+    width: 80px;
+    height: 80px;
+    border-width: 3px;
+  }
+
+  .avatarUploadBtn {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+
+  .profileNameSection h1 {
+    font-size: var(--text-base);
+  }
+
+  .profileHeadline {
+    font-size: var(--text-xs);
+  }
+
+  .profileEmail {
+    font-size: 10px;
+  }
+
+  .statNumber {
+    font-size: var(--text-sm);
+  }
+
+  .statLabel {
+    font-size: 10px;
+  }
+
+  .statDivider {
+    height: 14px;
+  }
+
+  .profileUniqueIds {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  .uniqueIdItem {
+    width: 100%;
+    justify-content: center;
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .editProfileBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-md);
+    width: 100%;
+    justify-content: center;
+  }
+
+  .copyLinkBtn {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
+  .profileStatsRow {
+    gap: var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .profileHeaderWrapper:hover {
+    transform: none !important;
+  }
+
+  .profileAvatar:hover {
+    transform: none !important;
+  }
+
+  .avatarUploadBtn:hover {
+    transform: none !important;
+  }
+
+  .copyLinkBtn:hover {
+    transform: none !important;
+  }
+
+  .copyIdBtn:hover {
+    transform: none !important;
+  }
+
+  .editProfileBtn:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .profileHeaderWrapper {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .profileHeaderWrapper {
+    border-width: 2px;
+  }
+
+  .profileAvatar {
+    border-width: 4px;
+  }
+
+  .avatarUploadBtn {
+    border: 2px solid currentColor;
+  }
+
+  .copyLinkBtn {
+    border-width: 2px;
+  }
+
+  .copyIdBtn {
+    border: 1px solid transparent;
+  }
+
+  .copyIdBtn:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .editProfileBtn {
+    border: 2px solid currentColor;
+  }
+
+  .uniqueIdItem {
+    border-width: 2px;
+  }
+
+  .statDivider {
+    background: var(--border-color);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.avatarUploadBtn:focus-visible,
+.copyLinkBtn:focus-visible,
+.copyIdBtn:focus-visible,
+.editProfileBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.profileHeaderWrapper ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .profileHeaderWrapper {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
+  .profileAvatar {
+    border: 2px solid #000000 !important;
+  }
+
+  .avatarUploadBtn {
+    display: none !important;
+  }
+
+  .copyLinkBtn {
+    display: none !important;
+  }
+
+  .copyIdBtn {
+    display: none !important;
+  }
+
+  .editProfileBtn {
+    display: none !important;
+  }
+
+  .profileUniqueIds {
+    border: 1px solid #000000 !important;
+    border-radius: 4px;
+    padding: 4px 8px;
+  }
+
+  .uniqueIdItem {
+    border: 1px solid #000000 !important;
+  }
+}

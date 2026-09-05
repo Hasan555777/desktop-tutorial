@@ -1,0 +1,856 @@
+/* ============================================================
+   📄 DOCUMENTS TAB - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+.documentsPanel {
+  padding: 0;
+}
+
+.tabPanel h3 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.tabPanel h3 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.tabSubtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+/* ============================================================
+   📌 VERIFICATION STATUS
+   ============================================================ */
+
+.verificationStatusBox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.statusBadgeLarge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusBadgeLarge.verified {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.statusBadgeLarge.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.statusBadgeLarge.rejected {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--status-success);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.verifiedBadge i {
+  font-size: var(--text-lg);
+}
+
+/* ============================================================
+   📌 VERIFICATION ERROR
+   ============================================================ */
+
+.verifyError {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-md);
+}
+
+.verifyError strong {
+  font-weight: 100;
+  color: var(--status-danger);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.verifyError p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.uploadAgainBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  align-self: flex-start;
+}
+
+.uploadAgainBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 INFO BOX
+   ============================================================ */
+
+.infoBox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.infoBox.success {
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success);
+}
+
+.infoBox .infoIcon {
+  font-size: var(--text-xl);
+  flex-shrink: 0;
+}
+
+.infoBox strong {
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.infoBox p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 FORM GROUP
+   ============================================================ */
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.formGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.required {
+  color: var(--status-danger);
+  font-weight: 100;
+}
+
+.editInput {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.editInput:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.editInput::placeholder {
+  color: var(--text-muted);
+}
+
+.editInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.fieldError {
+  color: var(--status-danger);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: none;
+}
+
+.fieldError.show {
+  display: block;
+}
+
+.fieldHint {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 UPLOAD ROW
+   ============================================================ */
+
+.uploadRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+/* ============================================================
+   📌 UPLOAD AREA
+   ============================================================ */
+
+.uploadArea {
+  position: relative;
+  min-height: 160px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.uploadArea:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.uploadArea.hasFile {
+  border-color: var(--accent-primary);
+  border-style: solid;
+  cursor: default;
+}
+
+.uploadArea.hasFile:hover {
+  background: var(--bg-tertiary);
+}
+
+.uploadDefault {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.uploadIcon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.uploadLabel {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.uploadPreviewContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadPreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-height: 200px;
+}
+
+.uploadRemoveBtn {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  color: var(--status-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.uploadRemoveBtn:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+/* ============================================================
+   📌 PDF PREVIEW
+   ============================================================ */
+
+.pdfPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.pdfPreview i {
+  font-size: 48px;
+  color: var(--status-danger);
+}
+
+.pdfPreview span {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  word-break: break-all;
+  max-width: 200px;
+}
+
+.pdfViewBtn {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.pdfViewBtn:hover {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   📌 UPLOAD PROGRESS
+   ============================================================ */
+
+.uploadProgress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+}
+
+.progressText {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.progressBarSmall {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.progressFillSmall {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
+}
+
+/* ============================================================
+   📌 SAVE BUTTON
+   ============================================================ */
+
+.saveBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-base);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  width: 100%;
+}
+
+.saveBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .tabPanel {
+    gap: var(--space-md);
+  }
+
+  .tabPanel h3 {
+    font-size: var(--text-lg);
+  }
+
+  .uploadRow {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .tabPanel {
+    gap: var(--space-sm);
+  }
+
+  .tabPanel h3 {
+    font-size: var(--text-base);
+  }
+
+  .tabSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .verificationStatusBox {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-sm);
+  }
+
+  .statusBadgeLarge {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .verifiedBadge {
+    font-size: var(--text-xs);
+  }
+
+  .uploadRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .uploadArea {
+    min-height: 140px;
+  }
+
+  .uploadIcon {
+    font-size: 28px;
+  }
+
+  .uploadLabel {
+    font-size: var(--text-xs);
+  }
+
+  .uploadPreview {
+    max-height: 160px;
+  }
+
+  .uploadRemoveBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+  }
+
+  .editInput {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .formGroup label {
+    font-size: var(--text-xs);
+  }
+
+  .fieldError {
+    font-size: 10px;
+  }
+
+  .fieldHint {
+    font-size: 10px;
+  }
+
+  .verifyError {
+    padding: var(--space-sm);
+  }
+
+  .verifyError strong {
+    font-size: var(--text-sm);
+  }
+
+  .verifyError p {
+    font-size: var(--text-xs);
+  }
+
+  .uploadAgainBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .infoBox {
+    padding: var(--space-sm);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .infoBox strong {
+    font-size: var(--text-sm);
+  }
+
+  .infoBox p {
+    font-size: var(--text-xs);
+  }
+
+  .saveBtn {
+    padding: var(--space-sm) var(--space-xl);
+    font-size: var(--text-sm);
+  }
+
+  .progressText {
+    font-size: var(--text-xs);
+  }
+
+  .pdfPreview i {
+    font-size: 36px;
+  }
+
+  .pdfPreview span {
+    font-size: 10px;
+    max-width: 150px;
+  }
+
+  .pdfViewBtn {
+    font-size: 10px;
+    padding: 2px var(--space-sm);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .tabPanel h3 {
+    font-size: var(--text-sm);
+  }
+
+  .tabSubtitle {
+    font-size: 10px;
+  }
+
+  .uploadArea {
+    min-height: 120px;
+  }
+
+  .uploadIcon {
+    font-size: 24px;
+  }
+
+  .uploadLabel {
+    font-size: 10px;
+  }
+
+  .uploadPreview {
+    max-height: 130px;
+  }
+
+  .uploadRemoveBtn {
+    width: 24px;
+    height: 24px;
+    font-size: var(--text-xs);
+  }
+
+  .statusBadgeLarge {
+    font-size: 10px;
+    padding: 2px var(--space-md);
+  }
+
+  .verifiedBadge {
+    font-size: 10px;
+  }
+
+  .editInput {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .formGroup label {
+    font-size: 10px;
+  }
+
+  .saveBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .pdfPreview i {
+    font-size: 28px;
+  }
+
+  .pdfPreview span {
+    font-size: 9px;
+    max-width: 120px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .uploadAgainBtn:hover {
+    transform: none !important;
+  }
+
+  .uploadRemoveBtn:hover {
+    transform: none !important;
+  }
+
+  .saveBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .uploadArea:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .tabPanel {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .statusBadgeLarge {
+    border-width: 2px;
+  }
+
+  .verifyError {
+    border-width: 2px;
+  }
+
+  .uploadAgainBtn {
+    border: 2px solid currentColor;
+  }
+
+  .infoBox {
+    border-width: 2px;
+  }
+
+  .uploadArea {
+    border-width: 2px;
+  }
+
+  .uploadArea.hasFile {
+    border-width: 2px;
+  }
+
+  .editInput {
+    border-width: 2px;
+  }
+
+  .editInput:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .uploadRemoveBtn {
+    border-width: 2px;
+  }
+
+  .saveBtn {
+    border: 2px solid currentColor;
+  }
+
+  .pdfViewBtn {
+    border-width: 2px;
+  }
+
+  .progressBarSmall {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.editInput:focus-visible,
+.uploadAgainBtn:focus-visible,
+.uploadRemoveBtn:focus-visible,
+.saveBtn:focus-visible,
+.pdfViewBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.tabPanel ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .tabPanel {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .statusBadgeLarge {
+    border: 1px solid #000000 !important;
+  }
+
+  .uploadArea {
+    border: 1px solid #000000 !important;
+  }
+
+  .uploadRemoveBtn {
+    display: none !important;
+  }
+
+  .uploadAgainBtn {
+    display: none !important;
+  }
+
+  .saveBtn {
+    border: 1px solid #000000 !important;
+  }
+
+  .infoBox {
+    border: 1px solid #000000 !important;
+  }
+
+  .verifyError {
+    border: 1px solid #000000 !important;
+  }
+
+  .pdfViewBtn {
+    display: none !important;
+  }
+
+  .editInput {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}

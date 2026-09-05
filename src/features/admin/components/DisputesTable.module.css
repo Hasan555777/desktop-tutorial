@@ -1,0 +1,547 @@
+/* ============================================================
+   ⚖️ DISPUTES TABLE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.dataTable {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  padding: var(--space-md);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: 0 var(--space-xs) var(--space-sm) var(--space-xs);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tableHeader h3 {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.tableHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.tableCount {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  background: var(--bg-tertiary);
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+}
+
+.refreshBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.refreshBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 LOADING & EMPTY
+   ============================================================ */
+
+.loadingText {
+  text-align: center;
+  padding: var(--space-xl);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.emptyText {
+  text-align: center;
+  padding: var(--space-xl);
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 DISPUTES LIST
+   ============================================================ */
+
+.disputesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+.disputesList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.disputesList::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.disputesList::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 DISPUTE CARD
+   ============================================================ */
+
+.disputeCard {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: all var(--transition-normal);
+  border-left: 4px solid var(--status-danger);
+}
+
+.disputeCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.disputeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xs);
+}
+
+.dealTitle {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.dealMeta {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-top: 2px;
+}
+
+.escrowAmount {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--status-warning);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  background: var(--status-warning-bg);
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--status-warning);
+  white-space: nowrap;
+}
+
+.disputeReason {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: var(--space-xs) 0;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--status-danger);
+}
+
+.disputeReason strong {
+  font-weight: 100;
+  color: var(--text-primary);
+}
+
+.partyIds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.partyIds code {
+  font-family: monospace;
+  font-size: var(--text-xs);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 ACTION BUTTONS
+   ============================================================ */
+
+.actionButtons {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex: 1;
+}
+
+.actionBtn:hover {
+  transform: translateY(-2px);
+}
+
+.actionBtn.approve {
+  border-color: var(--status-success);
+  color: var(--status-success);
+}
+
+.actionBtn.approve:hover {
+  background: var(--status-success);
+  color: #ffffff;
+}
+
+.actionBtn.reject {
+  border-color: var(--status-info);
+  color: var(--status-info);
+}
+
+.actionBtn.reject:hover {
+  background: var(--status-info);
+  color: #ffffff;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .dataTable {
+    padding: var(--space-sm);
+  }
+
+  .disputeCard {
+    padding: var(--space-sm);
+  }
+
+  .disputeHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .escrowAmount {
+    align-self: flex-start;
+    font-size: var(--text-xs);
+  }
+
+  .actionBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dataTable {
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+  }
+
+  .tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tableHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .disputeCard {
+    padding: var(--space-sm);
+    border-left-width: 3px;
+  }
+
+  .dealTitle {
+    font-size: var(--text-sm);
+  }
+
+  .dealMeta {
+    font-size: 10px;
+  }
+
+  .disputeReason {
+    font-size: var(--text-xs);
+    padding: var(--space-xs);
+  }
+
+  .partyIds {
+    gap: var(--space-xs);
+    font-size: 10px;
+  }
+
+  .partyIds code {
+    font-size: 10px;
+  }
+
+  .escrowAmount {
+    font-size: 10px;
+    padding: 1px 10px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+
+  .actionBtn {
+    width: 100%;
+    justify-content: center;
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .refreshBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .loadingText {
+    font-size: var(--text-xs);
+    padding: var(--space-lg);
+  }
+
+  .emptyText {
+    font-size: var(--text-sm);
+    padding: var(--space-lg);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .disputeCard {
+    padding: var(--space-xs);
+    border-left-width: 2px;
+  }
+
+  .dealTitle {
+    font-size: var(--text-xs);
+  }
+
+  .dealMeta {
+    font-size: 9px;
+  }
+
+  .disputeReason {
+    font-size: 10px;
+  }
+
+  .partyIds {
+    font-size: 9px;
+  }
+
+  .partyIds code {
+    font-size: 9px;
+  }
+
+  .escrowAmount {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .actionBtn {
+    font-size: 9px;
+    padding: 2px var(--space-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .disputeCard:hover {
+    transform: none !important;
+  }
+
+  .actionBtn:hover {
+    transform: none !important;
+  }
+
+  .refreshBtn:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .dataTable {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .dataTable {
+    border-width: 2px;
+  }
+
+  .disputeCard {
+    border-width: 2px;
+    border-left-width: 6px;
+  }
+
+  .escrowAmount {
+    border-width: 2px;
+  }
+
+  .actionBtn {
+    border-width: 2px;
+  }
+
+  .refreshBtn {
+    border-width: 2px;
+  }
+
+  .partyIds code {
+    border-width: 2px;
+  }
+
+  .disputeReason {
+    border-left-width: 4px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.actionBtn:focus-visible,
+.refreshBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.dataTable ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .dataTable {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .disputeCard {
+    border: 1px solid #000000 !important;
+  }
+
+  .actionBtn {
+    display: none !important;
+  }
+
+  .refreshBtn {
+    display: none !important;
+  }
+
+  .escrowAmount {
+    border: 1px solid #000000 !important;
+  }
+
+  .partyIds code {
+    border: 1px solid #000000 !important;
+  }
+
+  .disputeReason {
+    border-left: 3px solid #000000 !important;
+  }
+}

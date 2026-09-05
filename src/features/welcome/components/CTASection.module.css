@@ -1,0 +1,388 @@
+/* ============================================================
+   🚀 CTA SECTION - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.ctaSection {
+  padding: 100px var(--space-lg);
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ── Background Decorations ── */
+.ctaSection::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: var(--accent-glow);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.ctaSection::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -20%;
+  width: 500px;
+  height: 500px;
+  background: var(--status-success-bg);
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================================
+   📌 TITLE
+   ============================================================ */
+
+.ctaSection h2 {
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  position: relative;
+  display: inline-block;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.ctaSection h2::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  margin: var(--space-sm) auto 0;
+}
+
+/* ============================================================
+   📌 DESCRIPTION
+   ============================================================ */
+
+.ctaSection p {
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: 1.8;
+  max-width: 700px;
+  margin: var(--space-md) auto var(--space-xl);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ============================================================
+   📌 CTA ACTIONS (Buttons)
+   ============================================================ */
+
+.ctaActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* ── Primary Button ── */
+.heroBtnPrimary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  padding: 16px 36px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.heroBtnPrimary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: all 0.6s ease;
+}
+
+.heroBtnPrimary:hover::before {
+  left: 100%;
+}
+
+.heroBtnPrimary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 35px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.heroBtnPrimary:active {
+  transform: translateY(-1px);
+}
+
+.heroBtnPrimary i {
+  font-size: 18px;
+  transition: transform var(--transition-normal);
+}
+
+.heroBtnPrimary:hover i {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+/* ── Secondary Button ── */
+.heroBtnSecondary {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 16px 36px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.heroBtnSecondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.heroBtnSecondary:active {
+  transform: translateY(-1px);
+}
+
+.heroBtnSecondary i {
+  font-size: 16px;
+  transition: transform var(--transition-normal);
+}
+
+.heroBtnSecondary:hover i {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   🎨 VARIANT - WITH BACKGROUND CARD
+   ============================================================ */
+
+.ctaSection.withCard {
+  padding: 60px var(--space-lg);
+}
+
+.ctaSection.withCard .ctaCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl) var(--space-xl);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 20px 60px var(--shadow-color);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ============================================================
+   🎬 ANIMATION
+   ============================================================ */
+
+.ctaSection {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .ctaSection {
+    padding: 60px var(--space-md);
+  }
+
+  .ctaSection h2 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+  }
+
+  .ctaSection p {
+    font-size: var(--text-sm);
+    padding: 0 var(--space-sm);
+  }
+
+  .ctaActions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .heroBtnPrimary,
+  .heroBtnSecondary {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 24px;
+    font-size: var(--text-sm);
+  }
+
+  .ctaSection::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .ctaSection::after {
+    width: 250px;
+    height: 250px;
+  }
+
+  .ctaSection.withCard {
+    padding: 40px var(--space-sm);
+  }
+
+  .ctaSection.withCard .ctaCard {
+    padding: var(--space-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .ctaSection {
+    padding: 40px var(--space-sm);
+  }
+
+  .ctaSection h2 {
+    font-size: clamp(1.6rem, 4vw, 2rem);
+  }
+
+  .ctaSection p {
+    font-size: var(--text-xs);
+    line-height: 1.6;
+  }
+
+  .heroBtnPrimary,
+  .heroBtnSecondary {
+    padding: 12px 20px;
+    font-size: var(--text-xs);
+  }
+
+  .heroBtnPrimary i,
+  .heroBtnSecondary i {
+    font-size: 14px;
+  }
+
+  .ctaSection.withCard .ctaCard {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaSection {
+    animation: none;
+  }
+
+  .heroBtnPrimary::before {
+    display: none;
+  }
+
+  .heroBtnPrimary:hover {
+    transform: none;
+  }
+
+  .heroBtnSecondary:hover {
+    transform: none;
+  }
+
+  .heroBtnPrimary:hover i {
+    transform: none;
+  }
+
+  .heroBtnSecondary:hover i {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .heroBtnPrimary {
+    background: var(--accent-primary);
+    border: 2px solid currentColor;
+  }
+
+  .heroBtnSecondary {
+    border: 2px solid var(--text-primary);
+  }
+
+  .ctaSection h2::after {
+    background: var(--accent-primary);
+  }
+
+  .ctaSection.withCard .ctaCard {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.heroBtnPrimary:focus-visible,
+.heroBtnSecondary:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.ctaSection ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

@@ -1,0 +1,434 @@
+/* ============================================================
+   ⭐ FEATURES SECTION - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.featuresSection {
+  padding: 80px var(--space-lg);
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ── Background Decorations ── */
+.featuresSection::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  background: var(--accent-glow);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.featuresSection::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: var(--status-info-bg);
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   📌 SECTION HEADER
+   ============================================================ */
+
+.sectionHeader {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.sectionHeader h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  position: relative;
+  display: inline-block;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.sectionHeader h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  margin: var(--space-sm) auto 0;
+}
+
+.sectionHeader p {
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  margin-top: var(--space-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ============================================================
+   📌 FEATURES GRID
+   ============================================================ */
+
+.featuresGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-xl);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   📌 FEATURE CARD
+   ============================================================ */
+
+.featureCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  text-align: center;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ── Gradient Border on Hover ── */
+.featureCard::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-lg);
+  opacity: 0;
+  transition: all var(--transition-normal);
+  z-index: -1;
+}
+
+.featureCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px var(--shadow-color);
+  border-color: transparent;
+}
+
+/* ── Card Content ── */
+.featureCard > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Inner Glow on Hover ── */
+.featureCard::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+  transition: all var(--transition-normal);
+  pointer-events: none;
+}
+
+.featureCard:hover::after {
+  opacity: 0.08;
+}
+
+/* ============================================================
+   🎨 FEATURE ICON
+   ============================================================ */
+
+.featureIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-md);
+  font-size: 32px;
+  color: var(--accent-primary);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+/* ── Icon Background Gradient on Hover ── */
+.featureIcon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  opacity: 0;
+  z-index: -1;
+}
+
+.featureCard:hover .featureIcon {
+  color: #ffffff;
+}
+
+.featureCard:hover .featureIcon::after {
+  opacity: 1;
+}
+
+.featureIcon i {
+  transition: all var(--transition-normal);
+}
+
+.featureCard:hover .featureIcon i {
+  transform: scale(1.1);
+}
+
+/* ============================================================
+   📝 FEATURE CONTENT
+   ============================================================ */
+
+.featureCard h3 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  transition: color var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.featureCard:hover h3 {
+  color: var(--accent-primary);
+}
+
+.featureCard p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  margin: 0;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ============================================================
+   🎯 INDEX ANIMATION (Staggered)
+   ============================================================ */
+
+.featureCard {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.featureCard:nth-child(1) { animation-delay: 0.05s; }
+.featureCard:nth-child(2) { animation-delay: 0.10s; }
+.featureCard:nth-child(3) { animation-delay: 0.15s; }
+.featureCard:nth-child(4) { animation-delay: 0.20s; }
+.featureCard:nth-child(5) { animation-delay: 0.25s; }
+.featureCard:nth-child(6) { animation-delay: 0.30s; }
+.featureCard:nth-child(7) { animation-delay: 0.35s; }
+.featureCard:nth-child(8) { animation-delay: 0.40s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .featuresGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .featuresSection {
+    padding: 60px var(--space-md);
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+    gap: var(--space-md);
+  }
+
+  .featureCard {
+    padding: var(--space-lg);
+  }
+
+  .featureIcon {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .featureCard h3 {
+    font-size: var(--text-lg);
+  }
+
+  .featureCard p {
+    font-size: var(--text-sm);
+  }
+
+  .sectionHeader p {
+    font-size: var(--text-base);
+  }
+
+  .featuresSection::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .featuresSection::after {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .featuresSection {
+    padding: 40px var(--space-sm);
+  }
+
+  .featureCard {
+    padding: var(--space-md);
+  }
+
+  .featureIcon {
+    width: 52px;
+    height: 52px;
+    font-size: 24px;
+  }
+
+  .featureCard h3 {
+    font-size: var(--text-base);
+  }
+
+  .featureCard p {
+    font-size: var(--text-xs);
+    line-height: 1.6;
+  }
+
+  .sectionHeader h2 {
+    font-size: clamp(1.6rem, 5vw, 2rem);
+  }
+
+  .sectionHeader p {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .featureCard {
+    opacity: 1;
+    animation: none;
+  }
+
+  .featureCard:hover {
+    transform: none;
+  }
+
+  .featureCard::before,
+  .featureCard::after {
+    display: none;
+  }
+
+  .featureCard:hover .featureIcon {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .featureCard {
+    border-width: 2px;
+  }
+
+  .featureCard::before {
+    display: none;
+  }
+
+  .featureCard:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .featureIcon {
+    border: 2px solid var(--accent-primary);
+  }
+
+  .featureCard:hover .featureIcon {
+    background: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.featureCard:focus-within {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.featureCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🌈 SCROLLBAR FOR CARDS (if content overflows)
+   ============================================================ */
+
+.featureCard p::-webkit-scrollbar {
+  width: 4px;
+}
+
+.featureCard p::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.featureCard p::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}

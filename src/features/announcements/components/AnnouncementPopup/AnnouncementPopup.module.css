@@ -1,0 +1,455 @@
+/* ============================================================
+   📢 ANNOUNCEMENT POPUP - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 OVERLAY
+   ============================================================ */
+
+.announcementOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📌 POPUP
+   ============================================================ */
+
+.announcementPopup {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 480px;
+  width: 100%;
+  padding: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 ICON
+   ============================================================ */
+
+.announcementIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: var(--space-md);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📌 TITLE & MESSAGE
+   ============================================================ */
+
+.announcementTitle {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.announcementMessage {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  line-height: 1.8;
+  margin: 0 0 var(--space-md) 0;
+}
+
+/* ============================================================
+   📌 VERSION & BADGES
+   ============================================================ */
+
+.announcementVersion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.announcementCategory {
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.announcementTypeBadge {
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  color: #ffffff;
+  font-weight: 100;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 CHECKBOX
+   ============================================================ */
+
+.announcementCheckbox {
+  width: 100%;
+  margin-bottom: var(--space-md);
+  padding: var(--space-xs) 0;
+}
+
+.announcementCheckbox label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  cursor: pointer;
+}
+
+.announcementCheckbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+/* ============================================================
+   📌 BUTTON
+   ============================================================ */
+
+.announcementBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-2xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-base);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  width: 100%;
+}
+
+.announcementBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.announcementFooter {
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+  width: 100%;
+}
+
+.announcementFooter p {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .announcementPopup {
+    max-width: 420px;
+    padding: var(--space-xl);
+  }
+
+  .announcementTitle {
+    font-size: var(--text-lg);
+  }
+
+  .announcementMessage {
+    font-size: var(--text-sm);
+  }
+
+  .announcementIcon {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .announcementOverlay {
+    padding: var(--space-md);
+  }
+
+  .announcementPopup {
+    max-width: 100%;
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+  }
+
+  .announcementTitle {
+    font-size: var(--text-base);
+  }
+
+  .announcementMessage {
+    font-size: var(--text-xs);
+  }
+
+  .announcementIcon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .announcementBtn {
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-xl);
+  }
+
+  .announcementCheckbox label {
+    font-size: var(--text-xs);
+  }
+
+  .announcementCheckbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .announcementVersion {
+    font-size: 10px;
+    gap: var(--space-xs);
+  }
+
+  .announcementTypeBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .announcementOverlay {
+    padding: var(--space-sm);
+  }
+
+  .announcementPopup {
+    padding: var(--space-md);
+    border-radius: var(--radius-sm);
+  }
+
+  .announcementTitle {
+    font-size: var(--text-sm);
+  }
+
+  .announcementMessage {
+    font-size: 10px;
+  }
+
+  .announcementIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    margin-bottom: var(--space-sm);
+  }
+
+  .announcementBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .announcementCheckbox label {
+    font-size: 10px;
+  }
+
+  .announcementCheckbox input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+  }
+
+  .announcementVersion {
+    font-size: 8px;
+  }
+
+  .announcementTypeBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .announcementFooter p {
+    font-size: 8px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .announcementOverlay {
+    animation: none !important;
+  }
+
+  .announcementPopup {
+    animation: none !important;
+  }
+
+  .announcementBtn:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .announcementPopup {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .announcementPopup {
+    border-width: 2px;
+  }
+
+  .announcementBtn {
+    border: 2px solid currentColor;
+  }
+
+  .announcementTypeBadge {
+    border: 2px solid currentColor;
+  }
+
+  .announcementCategory {
+    border-width: 2px;
+  }
+
+  .announcementCheckbox input[type="checkbox"] {
+    accent-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.announcementBtn:focus-visible,
+.announcementCheckbox input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.announcementPopup ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .announcementOverlay {
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 20px !important;
+  }
+
+  .announcementPopup {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .announcementBtn {
+    display: none !important;
+  }
+
+  .announcementCheckbox {
+    display: none !important;
+  }
+
+  .announcementFooter {
+    display: none !important;
+  }
+}

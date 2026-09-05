@@ -1,0 +1,290 @@
+/* ============================================================
+   🔊 VOLUME SLIDER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.volumeSliderWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.volumeSliderWrapper:hover {
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.volumeSliderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.volumeLabel {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.volumeValue {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 SLIDER
+   ============================================================ */
+
+.volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-full);
+  outline: none;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: all var(--transition-normal);
+  border: 2px solid var(--accent-primary);
+}
+
+.volumeSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.volumeSlider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: 2px solid var(--accent-primary);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.volumeSlider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+}
+
+.volumeSlider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.volumeSlider:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+}
+
+.volumeSlider:disabled::-moz-range-thumb {
+  cursor: not-allowed;
+}
+
+.volumeSlider:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .volumeSliderWrapper {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .volumeLabel {
+    font-size: var(--text-sm);
+  }
+
+  .volumeValue {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .volumeSliderWrapper {
+    padding: var(--space-sm);
+  }
+
+  .volumeLabel {
+    font-size: var(--text-xs);
+  }
+
+  .volumeValue {
+    font-size: var(--text-xs);
+  }
+
+  .volumeSlider {
+    height: 5px;
+  }
+
+  .volumeSlider::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+  }
+
+  .volumeSlider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .volumeSliderWrapper {
+    padding: var(--space-xs);
+  }
+
+  .volumeLabel {
+    font-size: 10px;
+  }
+
+  .volumeValue {
+    font-size: 10px;
+  }
+
+  .volumeSlider {
+    height: 4px;
+  }
+
+  .volumeSlider::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+  }
+
+  .volumeSlider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .volumeSliderWrapper:hover {
+    border-color: var(--border-color) !important;
+  }
+
+  .volumeSlider::-webkit-slider-thumb:hover {
+    transform: none !important;
+  }
+
+  .volumeSlider::-moz-range-thumb:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .volumeSliderWrapper {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .volumeSliderWrapper {
+    border-width: 2px;
+  }
+
+  .volumeSlider {
+    border-width: 2px;
+  }
+
+  .volumeSlider::-webkit-slider-thumb {
+    border-width: 2px;
+  }
+
+  .volumeSlider::-moz-range-thumb {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.volumeSlider:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.volumeSliderWrapper ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .volumeSliderWrapper {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+  }
+
+  .volumeSlider {
+    border: 1px solid #000000 !important;
+  }
+
+  .volumeSlider::-webkit-slider-thumb {
+    border: 1px solid #000000 !important;
+  }
+
+  .volumeSlider::-moz-range-thumb {
+    border: 1px solid #000000 !important;
+  }
+}

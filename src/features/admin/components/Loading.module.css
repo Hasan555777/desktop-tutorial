@@ -1,0 +1,186 @@
+/* ============================================================
+   ⏳ LOADING - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.loadingContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 CONTENT
+   ============================================================ */
+
+.loadingContent {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.loadingIcon {
+  font-size: 48px;
+  color: var(--accent-primary);
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingContent h2 {
+  margin-top: var(--space-md);
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent p {
+  margin-top: var(--space-sm);
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent p i {
+  margin-right: var(--space-xs);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .loadingIcon {
+    font-size: 40px;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-lg);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .loadingIcon {
+    font-size: 32px;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-base);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .loadingIcon {
+    font-size: 28px;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-sm);
+  }
+
+  .loadingContent p {
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loadingIcon {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .loadingContainer {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .loadingIcon {
+    color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.loadingContainer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .loadingContainer {
+    background: #ffffff !important;
+    min-height: auto !important;
+    padding: 40px !important;
+  }
+
+  .loadingIcon {
+    color: #000000 !important;
+  }
+
+  .loadingContent h2 {
+    color: #000000 !important;
+  }
+
+  .loadingContent p {
+    color: #666666 !important;
+  }
+
+  .loadingContent p i {
+    display: none !important;
+  }
+}

@@ -1,0 +1,523 @@
+/* ============================================================
+   🚀 HERO SECTION - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.heroSection {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: calc(var(--navbar-height) + 40px) var(--space-lg) 80px;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ============================================================
+   🎨 BACKGROUND DECORATIONS
+   ============================================================ */
+
+.heroSection::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -20%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(
+    circle,
+    var(--accent-glow),
+    transparent 70%
+  );
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.3;
+  pointer-events: none;
+  animation: floatGlow 8s ease-in-out infinite alternate;
+}
+
+.heroSection::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    var(--status-info-bg),
+    transparent 70%
+  );
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.2;
+  pointer-events: none;
+  animation: floatGlow 10s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatGlow {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(30px, -30px) scale(1.2);
+  }
+}
+
+/* ── Grid Pattern Overlay ── */
+.heroSection .gridPattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.04;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+/* ============================================================
+   📌 HERO BADGE
+   ============================================================ */
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--accent-glow);
+  padding: 8px 20px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--border-color);
+  position: relative;
+  z-index: 1;
+  animation: fadeInDown 0.6s ease;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📌 HERO TITLE
+   ============================================================ */
+
+.heroTitle {
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.8s ease;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.heroTitle .highlight {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+}
+
+.heroTitle .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  opacity: 0.3;
+}
+
+/* ── Shimmer Effect on Title ── */
+.heroTitle .shimmer {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📌 HERO SUBTITLE
+   ============================================================ */
+
+.heroSubtitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto var(--space-xl);
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 1s ease;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ============================================================
+   📌 HERO ACTIONS (Buttons)
+   ============================================================ */
+
+.heroActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 1.2s ease;
+}
+
+/* ── Primary Button ── */
+.heroBtnPrimary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  padding: 16px 36px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.heroBtnPrimary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: all 0.6s ease;
+}
+
+.heroBtnPrimary:hover::before {
+  left: 100%;
+}
+
+.heroBtnPrimary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 35px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.heroBtnPrimary:active {
+  transform: translateY(-1px) scale(1);
+}
+
+.heroBtnPrimary i {
+  font-size: 20px;
+  animation: rocket 2s ease-in-out infinite;
+}
+
+@keyframes rocket {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-5deg);
+  }
+}
+
+/* ── Secondary Button ── */
+.heroBtnSecondary {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 16px 36px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.heroBtnSecondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.heroBtnSecondary:active {
+  transform: translateY(-1px);
+}
+
+.heroBtnSecondary i {
+  font-size: 18px;
+  transition: transform var(--transition-normal);
+}
+
+.heroBtnSecondary:hover i {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   🎬 ANIMATIONS
+   ============================================================ */
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .heroSection {
+    padding: calc(var(--navbar-height) + 30px) var(--space-md) 60px;
+    min-height: auto;
+  }
+
+  .heroTitle {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+  }
+
+  .heroSubtitle {
+    font-size: var(--text-base);
+    padding: 0 var(--space-sm);
+  }
+
+  .heroActions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .heroBtnPrimary,
+  .heroBtnSecondary {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 24px;
+    font-size: var(--text-sm);
+  }
+
+  .heroBadge {
+    font-size: 15px;
+    padding: 6px 16px;
+  }
+
+  .heroSection::before {
+    width: 400px;
+    height: 400px;
+    top: -30%;
+  }
+
+  .heroSection::after {
+    width: 350px;
+    height: 350px;
+    bottom: -20%;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding: calc(var(--navbar-height) + 20px) var(--space-sm) 40px;
+  }
+
+  .heroTitle {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+  }
+
+  .heroSubtitle {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  .heroBtnPrimary,
+  .heroBtnSecondary {
+    padding: 12px 20px;
+    font-size: var(--text-xs);
+  }
+
+  .heroBtnPrimary i,
+  .heroBtnSecondary i {
+    font-size: 16px;
+  }
+
+  .heroBadge {
+    font-size: 11px;
+    padding: 4px 12px;
+    margin-bottom: var(--space-md);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .heroSection::before,
+  .heroSection::after {
+    animation: none;
+  }
+
+  .heroBadge {
+    animation: none;
+  }
+
+  .heroTitle,
+  .heroSubtitle,
+  .heroActions {
+    animation: none;
+  }
+
+  .heroBtnPrimary::before {
+    display: none;
+  }
+
+  .heroBtnPrimary i {
+    animation: none;
+  }
+
+  .heroTitle .shimmer {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .heroBtnPrimary {
+    background: var(--accent-primary);
+    border: 2px solid currentColor;
+  }
+
+  .heroBtnSecondary {
+    border: 2px solid var(--text-primary);
+  }
+
+  .heroBadge {
+    border: 2px solid var(--accent-primary);
+  }
+
+  .heroTitle .highlight {
+    -webkit-text-fill-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.heroBtnPrimary:focus-visible,
+.heroBtnSecondary:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.heroSection ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🌟 CURSOR GLOW (Optional Enhancement)
+   ============================================================ */
+
+.heroSection .cursorGlow {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .heroSection .cursorGlow {
+    display: block;
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(
+      circle,
+      var(--accent-glow),
+      transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    transition: all 0.1s ease;
+    z-index: 0;
+  }
+}

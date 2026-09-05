@@ -1,0 +1,632 @@
+/* ============================================================
+   💰 WALLET ACTIONS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.walletActionsModule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 BALANCE CARD
+   ============================================================ */
+
+.balanceCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  transition: all var(--transition-normal);
+}
+
+.balanceCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+.balanceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.balanceLabel {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.refreshBtnSmall {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.refreshBtnSmall:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: rotate(90deg);
+}
+
+.balanceValue {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-3xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.balanceValue i {
+  color: var(--accent-primary);
+  font-size: var(--text-2xl);
+}
+
+.walletIdRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-light);
+}
+
+.walletIdLabel {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.walletIdLabel i {
+  margin-right: var(--space-xs);
+}
+
+.copyIdBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: 2px 4px;
+}
+
+.copyIdBtn:hover {
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 ACTIONS GRID
+   ============================================================ */
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.actionCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: left;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.actionCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  transform: translateY(-2px);
+}
+
+.actionIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  flex-shrink: 0;
+}
+
+.actionInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.actionInfo h4 {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.actionInfo p {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 2px 0 0 0;
+}
+
+.actionArrow {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  transition: all var(--transition-normal);
+}
+
+.actionCard:hover .actionArrow {
+  color: var(--accent-primary);
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   📌 MORE ACTIONS SECTION
+   ============================================================ */
+
+.moreActionsSection {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  transition: all var(--transition-normal);
+}
+
+.moreActionsSection:hover {
+  border-color: var(--accent-primary);
+}
+
+.moreActionsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: var(--space-sm);
+}
+
+.moreActionsHeader span {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.moreActionsHeader i {
+  color: var(--text-muted);
+  font-size: var(--text-base);
+}
+
+.moreActionsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.moreActionItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: left;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.moreActionItem:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.moreActionIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  flex-shrink: 0;
+}
+
+.moreActionInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.moreActionInfo h4 {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.moreActionInfo p {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 2px 0 0 0;
+}
+
+.moreActionItem i:last-child {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  transition: all var(--transition-normal);
+}
+
+.moreActionItem:hover i:last-child {
+  color: var(--accent-primary);
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .actionsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .balanceValue {
+    font-size: var(--text-2xl);
+  }
+
+  .actionCard {
+    padding: var(--space-sm);
+  }
+
+  .actionIcon {
+    width: 36px;
+    height: 36px;
+    font-size: var(--text-base);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .walletActionsModule {
+    gap: var(--space-md);
+  }
+
+  .balanceCard {
+    padding: var(--space-md);
+  }
+
+  .balanceValue {
+    font-size: var(--text-xl);
+  }
+
+  .balanceValue i {
+    font-size: var(--text-lg);
+  }
+
+  .actionsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+
+  .actionCard {
+    padding: var(--space-sm);
+  }
+
+  .actionInfo h4 {
+    font-size: var(--text-xs);
+  }
+
+  .actionInfo p {
+    font-size: 10px;
+  }
+
+  .moreActionsSection {
+    padding: var(--space-sm);
+  }
+
+  .moreActionItem {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .moreActionInfo h4 {
+    font-size: var(--text-xs);
+  }
+
+  .moreActionInfo p {
+    font-size: 10px;
+  }
+
+  .moreActionIcon {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+
+  .refreshBtnSmall {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .balanceLabel {
+    font-size: var(--text-xs);
+  }
+
+  .walletIdLabel {
+    font-size: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .balanceCard {
+    padding: var(--space-sm);
+  }
+
+  .balanceValue {
+    font-size: var(--text-lg);
+  }
+
+  .balanceValue i {
+    font-size: var(--text-base);
+  }
+
+  .actionCard {
+    padding: var(--space-xs);
+    gap: var(--space-sm);
+  }
+
+  .actionIcon {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+  }
+
+  .actionInfo h4 {
+    font-size: 10px;
+  }
+
+  .actionInfo p {
+    font-size: 9px;
+  }
+
+  .moreActionItem {
+    padding: var(--space-xs);
+    gap: var(--space-sm);
+  }
+
+  .moreActionIcon {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .moreActionInfo h4 {
+    font-size: 10px;
+  }
+
+  .moreActionInfo p {
+    font-size: 9px;
+  }
+
+  .moreActionsHeader span {
+    font-size: var(--text-xs);
+  }
+
+  .walletIdLabel {
+    font-size: 9px;
+  }
+
+  .copyIdBtn {
+    font-size: var(--text-xs);
+  }
+
+  .refreshBtnSmall {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .actionCard:hover {
+    transform: none !important;
+  }
+
+  .actionCard:hover .actionArrow {
+    transform: none !important;
+  }
+
+  .moreActionItem:hover {
+    transform: none !important;
+  }
+
+  .moreActionItem:hover i:last-child {
+    transform: none !important;
+  }
+
+  .refreshBtnSmall:hover {
+    transform: none !important;
+  }
+
+  .copyIdBtn:hover {
+    transform: none !important;
+  }
+
+  .balanceCard:hover {
+    transform: none !important;
+  }
+
+  .moreActionsSection:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .walletActionsModule {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .balanceCard {
+    border-width: 2px;
+  }
+
+  .actionCard {
+    border-width: 2px;
+  }
+
+  .moreActionsSection {
+    border-width: 2px;
+  }
+
+  .moreActionItem {
+    border-width: 1px;
+  }
+
+  .moreActionItem:hover {
+    border-width: 2px;
+  }
+
+  .refreshBtnSmall {
+    border-width: 2px;
+  }
+
+  .copyIdBtn {
+    border: 1px solid transparent;
+  }
+
+  .copyIdBtn:hover {
+    border-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.actionCard:focus-visible,
+.moreActionItem:focus-visible,
+.refreshBtnSmall:focus-visible,
+.copyIdBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.walletActionsModule ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .walletActionsModule {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .balanceCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .actionCard {
+    border: 1px solid #000000 !important;
+  }
+
+  .moreActionsSection {
+    border: 1px solid #000000 !important;
+  }
+
+  .actionCard:hover {
+    transform: none !important;
+  }
+
+  .actionArrow {
+    display: none !important;
+  }
+
+  .refreshBtnSmall {
+    display: none !important;
+  }
+
+  .copyIdBtn {
+    display: none !important;
+  }
+
+  .moreActionItem:hover {
+    transform: none !important;
+  }
+
+  .moreActionsHeader i {
+    display: none !important;
+  }
+}

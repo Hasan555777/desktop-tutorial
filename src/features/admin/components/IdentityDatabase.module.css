@@ -1,0 +1,1692 @@
+/* ============================================================
+   🗄️ IDENTITY DATABASE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.identityDatabase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.idbHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.idbHeaderLeft h2 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.idbHeaderLeft h2 i {
+  color: var(--accent-primary);
+}
+
+.idbBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbBadge.auto {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border-color: var(--status-info);
+}
+
+.idbHeaderRight {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.idbBtnAdd,
+.idbBtnExport {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbBtnAdd {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.idbBtnAdd:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.idbBtnExport {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.idbBtnExport:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   📌 STATS
+   ============================================================ */
+
+.idbStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.idbStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+}
+
+.idbStatValue {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbStatLabel {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbStat.nid .idbStatValue {
+  color: var(--status-info);
+}
+.idbStat.birth .idbStatValue {
+  color: var(--status-success);
+}
+.idbStat.passport .idbStatValue {
+  color: var(--status-warning);
+}
+.idbStat.pending .idbStatValue {
+  color: var(--status-warning);
+}
+.idbStat.approved .idbStatValue {
+  color: var(--status-success);
+}
+.idbStat.duplicate .idbStatValue {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 FILTERS
+   ============================================================ */
+
+.idbFilters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.idbFilterGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.idbFilterBtn {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbFilterBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.idbFilterBtn.active {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.idbSearch {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.idbSearch i {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.idbSearch input {
+  width: 100%;
+  padding: var(--space-xs) var(--space-md) var(--space-xs) 36px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+}
+
+.idbSearch input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.idbSearch input::placeholder {
+  color: var(--text-muted);
+}
+
+.idbSearchClear {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbSearchClear:hover {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 BULK ACTIONS
+   ============================================================ */
+
+.idbBulkActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-info-bg);
+  border: 1px solid var(--status-info);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-secondary);
+}
+
+.idbBulkDelete {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--gradient-danger);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbBulkDelete:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.idbBulkClear {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbBulkClear:hover {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 TABLE
+   ============================================================ */
+
+.idbTableWrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+}
+
+.idbTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  min-width: 900px;
+}
+
+.idbTable thead {
+  background: var(--bg-tertiary);
+}
+
+.idbTable th {
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.idbTable td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  vertical-align: middle;
+}
+
+.idbTable tr:hover td {
+  background: var(--bg-hover);
+}
+
+.idbTable tr.selected td {
+  background: var(--accent-glow);
+}
+
+.idbTable th input[type="checkbox"],
+.idbTable td input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+/* ============================================================
+   📌 TABLE CELLS
+   ============================================================ */
+
+.idbUserInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.idbUserName {
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbUserAddress {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbAutoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 9px;
+  font-weight: 100;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: fit-content;
+}
+
+.idbTypeBadge {
+  display: inline-flex;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbTypeBadge.nid {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+.idbTypeBadge.birth_certificate {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.idbTypeBadge.passport {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.idbIdNumber {
+  font-family: monospace;
+  font-size: var(--text-xs);
+  color: var(--text-primary);
+}
+
+.idbContact {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbContact.small {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.idbDocBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbDocBtn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.idbDocBtn.secondary {
+  border-color: var(--status-info);
+  color: var(--status-info);
+}
+
+.idbDocBtn.secondary:hover {
+  background: var(--status-info);
+  color: #ffffff;
+}
+
+.idbStatus {
+  display: inline-flex;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbStatus.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.idbStatus.approved {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.idbStatus.verified {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.idbStatus.rejected {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+.idbStatus.duplicate {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+.idbStatus.superseded {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+.idbActions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.idbActions button {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbActions button:hover {
+  transform: translateY(-2px);
+}
+
+.idbActionApprove {
+  border-color: var(--status-success) !important;
+  color: var(--status-success) !important;
+}
+
+.idbActionApprove:hover {
+  background: var(--status-success) !important;
+  color: #ffffff !important;
+}
+
+.idbActionReject {
+  border-color: var(--status-danger) !important;
+  color: var(--status-danger) !important;
+}
+
+.idbActionReject:hover {
+  background: var(--status-danger) !important;
+  color: #ffffff !important;
+}
+
+.idbActionFlag {
+  border-color: var(--status-warning) !important;
+  color: var(--status-warning) !important;
+}
+
+.idbActionFlag:hover {
+  background: var(--status-warning) !important;
+  color: #ffffff !important;
+}
+
+.idbActionEdit:hover {
+  border-color: var(--status-info);
+  color: var(--status-info);
+}
+
+.idbActionDelete:hover {
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.idbEmpty {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg) !important;
+  color: var(--text-muted);
+}
+
+.idbEmpty i {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.idbEmpty p {
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: var(--space-sm) 0;
+}
+
+.idbBtnAddSmall {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbBtnAddSmall:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.idbFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbFooter strong {
+  font-weight: 100;
+  color: var(--text-secondary);
+}
+
+.idbFooterInfo {
+  margin-left: var(--space-xs);
+  color: var(--status-info);
+}
+
+.idbBtnRefresh {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idbBtnRefresh:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 LOADING
+   ============================================================ */
+
+.idb-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl);
+  gap: var(--space-md);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idb-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.idb-loading p {
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 IMAGE ZOOM MODAL
+   ============================================================ */
+
+.idb-zoom-modal {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+.idb-zoom-modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+}
+
+.idb-zoom-modal-content img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 60px var(--shadow-color);
+}
+
+.idb-zoom-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: var(--text-xl);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.idb-zoom-close:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 FORM MODAL
+   ============================================================ */
+
+.idb-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+.idb-modal {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+.idb-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.idb-modal-header h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.idb-modal-header h3 i {
+  color: var(--accent-primary);
+}
+
+.idb-modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+}
+
+.idb-modal-close:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.idb-modal-body {
+  padding: var(--space-xl);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.idb-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.idb-form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.idb-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.idb-form-group label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idb-form-group .required {
+  color: var(--status-danger);
+}
+
+.idb-form-group .optional {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.idb-form-group input,
+.idb-form-group select,
+.idb-form-group textarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.idb-form-group input:focus,
+.idb-form-group select:focus,
+.idb-form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.idb-form-group input.error,
+.idb-form-group textarea.error {
+  border-color: var(--status-danger);
+}
+
+.idb-error {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--status-danger);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idb-hint {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idb-upload-area {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+}
+
+.idb-upload-area:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.idb-upload-area.has-file {
+  border-color: var(--status-success);
+  border-style: solid;
+}
+
+.idb-upload-preview {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.idb-upload-preview img {
+  max-height: 150px;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.idb-upload-remove {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  color: var(--status-danger);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.idb-upload-remove:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+}
+
+.idb-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.idb-upload-placeholder i {
+  font-size: 36px;
+  color: var(--accent-primary);
+}
+
+.idb-upload-placeholder span {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idb-upload-placeholder small {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idb-duplicate-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.idb-duplicate-warning i {
+  font-size: var(--text-xl);
+  color: var(--status-warning);
+  margin-top: 2px;
+}
+
+.idb-duplicate-warning strong {
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idb-duplicate-warning p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 2px 0 0 0;
+}
+
+.idb-form-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-top: var(--space-md);
+}
+
+.idb-form-error i {
+  font-size: var(--text-base);
+}
+
+.idb-modal-footer {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+}
+
+.idb-btn-cancel,
+.idb-btn-save {
+  flex: 1;
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.idb-btn-cancel {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.idb-btn-cancel:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.idb-btn-save {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+}
+
+.idb-btn-save:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.idb-btn-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .identityDatabase {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .idbHeaderLeft h2 {
+    font-size: var(--text-lg);
+  }
+
+  .idbStats {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  }
+
+  .idb-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .idb-form-grid .full-width {
+    grid-column: 1;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .identityDatabase {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .idbHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .idbHeaderLeft h2 {
+    font-size: var(--text-base);
+  }
+
+  .idbHeaderRight {
+    width: 100%;
+  }
+
+  .idbBtnAdd,
+  .idbBtnExport {
+    flex: 1;
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .idbStats {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    padding: var(--space-xs);
+  }
+
+  .idbStatValue {
+    font-size: var(--text-base);
+  }
+
+  .idbStatLabel {
+    font-size: 8px;
+  }
+
+  .idbFilters {
+    padding: var(--space-xs);
+  }
+
+  .idbFilterBtn {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
+  .idbSearch input {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm) var(--space-xs) 32px;
+  }
+
+  .idbTableWrapper {
+    border-radius: var(--radius-sm);
+  }
+
+  .idbTable {
+    font-size: var(--text-xs);
+    min-width: 700px;
+  }
+
+  .idbTable th,
+  .idbTable td {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .idbActions button {
+    width: 26px;
+    height: 26px;
+    font-size: var(--text-xs);
+  }
+
+  .idb-modal {
+    max-width: 100%;
+    margin: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .idb-modal-header {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .idb-modal-header h3 {
+    font-size: var(--text-sm);
+  }
+
+  .idb-modal-body {
+    padding: var(--space-md);
+  }
+
+  .idb-modal-footer {
+    flex-direction: column;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .idb-btn-cancel,
+  .idb-btn-save {
+    width: 100%;
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .idb-upload-area {
+    min-height: 80px;
+  }
+
+  .idb-upload-placeholder i {
+    font-size: 28px;
+  }
+
+  .idb-upload-placeholder span {
+    font-size: var(--text-xs);
+  }
+
+  .idbBulkActions {
+    flex-wrap: wrap;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .idbEmpty i {
+    font-size: 36px;
+  }
+
+  .idbEmpty p {
+    font-size: var(--text-sm);
+  }
+
+  .idbFooter {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-xs);
+  }
+
+  .idbFooterInfo {
+    display: block;
+    margin-left: 0;
+  }
+
+  .idb-zoom-modal {
+    padding: var(--space-md);
+  }
+
+  .idb-zoom-close {
+    top: -40px;
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .identityDatabase {
+    padding: var(--space-xs);
+  }
+
+  .idbStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .idbStatValue {
+    font-size: var(--text-sm);
+  }
+
+  .idbFilterBtn {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .idbTable th,
+  .idbTable td {
+    padding: 2px 6px;
+    font-size: 9px;
+  }
+
+  .idbTable th input[type="checkbox"],
+  .idbTable td input[type="checkbox"] {
+    width: 12px;
+    height: 12px;
+  }
+
+  .idbActions button {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+
+  .idbBtnAddSmall {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .idb-modal-body {
+    padding: var(--space-sm);
+  }
+
+  .idb-form-group input,
+  .idb-form-group select,
+  .idb-form-group textarea {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .idb-upload-placeholder i {
+    font-size: 24px;
+  }
+
+  .idb-upload-placeholder span {
+    font-size: 10px;
+  }
+
+  .idb-upload-area {
+    min-height: 60px;
+  }
+
+  .idb-upload-preview img {
+    max-height: 100px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .idb-loading-spinner {
+    animation: none;
+  }
+
+  .idb-modal-overlay {
+    animation: none !important;
+  }
+
+  .idb-modal {
+    animation: none !important;
+  }
+
+  .idb-zoom-modal {
+    animation: none !important;
+  }
+
+  .idbBtnAdd:hover {
+    transform: none !important;
+  }
+
+  .idbBtnExport:hover {
+    transform: none !important;
+  }
+
+  .idbBulkDelete:hover {
+    transform: none !important;
+  }
+
+  .idbActions button:hover {
+    transform: none !important;
+  }
+
+  .idbBtnAddSmall:hover {
+    transform: none !important;
+  }
+
+  .idbBtnRefresh:hover {
+    transform: none !important;
+  }
+
+  .idb-btn-save:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .idb-zoom-close:hover {
+    transform: none !important;
+  }
+
+  .idb-modal-close:hover {
+    transform: none !important;
+  }
+
+  .idb-upload-remove:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .identityDatabase {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .identityDatabase {
+    border-width: 2px;
+  }
+
+  .idbFilterBtn {
+    border-width: 2px;
+  }
+
+  .idbFilterBtn.active {
+    border-width: 2px;
+  }
+
+  .idbSearch input {
+    border-width: 2px;
+  }
+
+  .idbSearch input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .idbTable {
+    border-width: 2px;
+  }
+
+  .idbTable th {
+    border-bottom-width: 2px;
+  }
+
+  .idbTable td {
+    border-bottom-width: 2px;
+  }
+
+  .idbTypeBadge {
+    border-width: 2px;
+  }
+
+  .idbStatus {
+    border-width: 2px;
+  }
+
+  .idbActions button {
+    border-width: 2px;
+  }
+
+  .idbDocBtn {
+    border-width: 2px;
+  }
+
+  .idbBtnAdd,
+  .idbBtnAddSmall {
+    border: 2px solid currentColor;
+  }
+
+  .idbBtnExport {
+    border-width: 2px;
+  }
+
+  .idbBulkDelete {
+    border: 2px solid currentColor;
+  }
+
+  .idb-modal {
+    border-width: 2px;
+  }
+
+  .idb-modal-close {
+    border-width: 2px;
+  }
+
+  .idb-btn-cancel {
+    border-width: 2px;
+  }
+
+  .idb-btn-save {
+    border: 2px solid currentColor;
+  }
+
+  .idb-upload-area {
+    border-width: 2px;
+  }
+
+  .idb-upload-remove {
+    border-width: 2px;
+  }
+
+  .idb-duplicate-warning {
+    border-width: 2px;
+  }
+
+  .idb-form-error {
+    border-width: 2px;
+  }
+
+  .idb-zoom-close {
+    border-width: 2px;
+  }
+
+  .idbAutoBadge {
+    border-width: 2px;
+  }
+
+  .idbBadge {
+    border-width: 2px;
+  }
+
+  .idbBadge.auto {
+    border-width: 2px;
+  }
+
+  .idbBtnRefresh {
+    border-width: 2px;
+  }
+
+  .idbSearchClear {
+    border: 1px solid transparent;
+  }
+
+  .idbSearchClear:hover {
+    border-color: var(--status-danger);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.idbBtnAdd:focus-visible,
+.idbBtnExport:focus-visible,
+.idbFilterBtn:focus-visible,
+.idbSearch input:focus-visible,
+.idbSearchClear:focus-visible,
+.idbBulkDelete:focus-visible,
+.idbBulkClear:focus-visible,
+.idbDocBtn:focus-visible,
+.idbActions button:focus-visible,
+.idbBtnAddSmall:focus-visible,
+.idbBtnRefresh:focus-visible,
+.idb-modal-close:focus-visible,
+.idb-btn-cancel:focus-visible,
+.idb-btn-save:focus-visible,
+.idb-upload-remove:focus-visible,
+.idb-zoom-close:focus-visible,
+.idbTable input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.identityDatabase ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .identityDatabase {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .idbHeader {
+    border-bottom: 1px solid #000000 !important;
+  }
+
+  .idbStats {
+    border: 1px solid #000000 !important;
+  }
+
+  .idbFilters {
+    border: 1px solid #000000 !important;
+  }
+
+  .idbTableWrapper {
+    border: 1px solid #000000 !important;
+  }
+
+  .idbTable th {
+    border-bottom: 2px solid #000000 !important;
+  }
+
+  .idbTable td {
+    border-bottom: 1px solid #000000 !important;
+  }
+
+  .idbBtnAdd,
+  .idbBtnExport,
+  .idbBulkActions,
+  .idbActions button,
+  .idbBtnRefresh,
+  .idbBtnAddSmall,
+  .idb-zoom-modal,
+  .idb-modal-overlay {
+    display: none !important;
+  }
+
+  .idbFooter {
+    border-top: 1px solid #000000 !important;
+  }
+
+  .idbTypeBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .idbStatus {
+    border: 1px solid #000000 !important;
+  }
+
+  .idbBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .idbAutoBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .idb-loading {
+    display: none !important;
+  }
+}

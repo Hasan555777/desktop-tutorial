@@ -1,0 +1,584 @@
+/* ============================================================
+   👥 USERS TABLE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.usersTable {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 TABLE
+   ============================================================ */
+
+.usersTable table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  min-width: 800px;
+}
+
+.usersTable thead {
+  background: var(--bg-tertiary);
+}
+
+.usersTable th {
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--bg-tertiary);
+  z-index: 5;
+}
+
+.usersTable td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  vertical-align: middle;
+}
+
+.usersTable tr:hover td {
+  background: var(--bg-hover);
+}
+
+.usersTable tr.banned td {
+  opacity: 0.6;
+}
+
+/* ============================================================
+   📌 USER ID
+   ============================================================ */
+
+.userId {
+  font-family: monospace;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 USER NAME
+   ============================================================ */
+
+.userName {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.userAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.userName span {
+  font-weight: 100;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 ROLE BADGE
+   ============================================================ */
+
+.roleBadge {
+  display: inline-flex;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.roleBadge.admin {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+.roleBadge.freelancer {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.roleBadge.client {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+/* ============================================================
+   📌 DOCUMENT STATUS
+   ============================================================ */
+
+.docStatus {
+  display: flex;
+  gap: 2px;
+}
+
+.docCheck {
+  font-size: var(--text-base);
+}
+
+.docMissing {
+  font-size: var(--text-base);
+  opacity: 0.5;
+}
+
+/* ============================================================
+   📌 STATUS BADGE
+   ============================================================ */
+
+.statusBadges {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.statusBadge {
+  display: inline-flex;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusBadge.verified {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.statusBadge.pending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.statusBadge.pending_verification {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.statusBadge.incomplete {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.statusBadge.banned {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+.statusBadge.needsReview {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+/* ============================================================
+   📌 ACTION BUTTONS
+   ============================================================ */
+
+.actionButtons {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.actionBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.actionBtn:active {
+  transform: scale(0.95);
+}
+
+.actionBtn.view {
+  background: var(--status-info-bg);
+  border-color: var(--status-info);
+  color: var(--status-info);
+}
+
+.actionBtn.view:hover {
+  background: var(--status-info);
+  color: #ffffff;
+}
+
+.actionBtn.fullAccess {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+}
+
+.actionBtn.fullAccess:hover {
+  background: var(--status-warning);
+  color: #ffffff;
+}
+
+.actionBtn.review {
+  background: var(--status-info-bg);
+  border-color: var(--status-info);
+  color: var(--status-info);
+}
+
+.actionBtn.review:hover {
+  background: var(--status-info);
+  color: #ffffff;
+}
+
+.actionBtn.verify {
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+  color: var(--status-success);
+}
+
+.actionBtn.verify:hover {
+  background: var(--status-success);
+  color: #ffffff;
+}
+
+.actionBtn.unverify {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+}
+
+.actionBtn.unverify:hover {
+  background: var(--status-warning);
+  color: #ffffff;
+}
+
+.actionBtn.block {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.actionBtn.block:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+}
+
+.actionBtn.unblock {
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+  color: var(--status-success);
+}
+
+.actionBtn.unblock:hover {
+  background: var(--status-success);
+  color: #ffffff;
+}
+
+.actionBtn.delete {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.actionBtn.delete:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+}
+
+.actionBtn.emergencyUnlock {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+}
+
+.actionBtn.emergencyUnlock:hover {
+  background: var(--status-warning);
+  color: #ffffff;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .usersTable table {
+    font-size: var(--text-xs);
+    min-width: 700px;
+  }
+
+  .usersTable th,
+  .usersTable td {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .actionBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+  }
+
+  .userAvatar {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .usersTable {
+    border-radius: var(--radius-md);
+  }
+
+  .usersTable table {
+    font-size: var(--text-xs);
+    min-width: 600px;
+  }
+
+  .usersTable th,
+  .usersTable td {
+    padding: var(--space-xs) var(--space-sm);
+    white-space: nowrap;
+  }
+
+  .actionBtn {
+    width: 24px;
+    height: 24px;
+    font-size: var(--text-xs);
+  }
+
+  .userAvatar {
+    width: 20px;
+    height: 20px;
+  }
+
+  .userId {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+
+  .statusBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .roleBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .docCheck,
+  .docMissing {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .usersTable table {
+    min-width: 500px;
+  }
+
+  .usersTable th,
+  .usersTable td {
+    padding: 2px 6px;
+    font-size: 9px;
+  }
+
+  .actionBtn {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+  }
+
+  .userAvatar {
+    width: 16px;
+    height: 16px;
+  }
+
+  .statusBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .roleBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .actionBtn:hover {
+    transform: none !important;
+  }
+
+  .actionBtn:active {
+    transform: none !important;
+  }
+
+  .usersTable tr:hover td {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .usersTable {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .usersTable {
+    border-width: 2px;
+  }
+
+  .usersTable th {
+    border-bottom-width: 2px;
+  }
+
+  .usersTable td {
+    border-bottom-width: 2px;
+  }
+
+  .userId {
+    border-width: 2px;
+  }
+
+  .roleBadge {
+    border-width: 2px;
+  }
+
+  .statusBadge {
+    border-width: 2px;
+  }
+
+  .actionBtn {
+    border-width: 2px;
+  }
+
+  .userAvatar {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.actionBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.usersTable ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .usersTable {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .usersTable th {
+    border-bottom: 2px solid #000000 !important;
+  }
+
+  .usersTable td {
+    border-bottom: 1px solid #000000 !important;
+  }
+
+  .actionBtn {
+    display: none !important;
+  }
+
+  .userId {
+    border: 1px solid #000000 !important;
+  }
+
+  .roleBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .statusBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .userAvatar {
+    border: 1px solid #000000 !important;
+  }
+}

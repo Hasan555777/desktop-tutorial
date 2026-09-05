@@ -1,0 +1,500 @@
+/* ============================================================
+   📋 BOTTOM SHEET - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERRIDE
+   ============================================================ */
+
+.sheetModal {
+  position: fixed !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  background: var(--overlay-bg) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 99999 !important;
+}
+
+.sheetModal > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+/* ============================================================
+   📌 SHEET CONTAINER
+   ============================================================ */
+
+.sheetContainer {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--modal-bg);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: 0 -25px 80px var(--shadow-color);
+  animation: sheetSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 0 var(--space-lg) var(--space-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+  transform-origin: bottom center;
+}
+
+.sheetContainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sheetContainer::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.sheetContainer::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+@keyframes sheetSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 SNAP POINTS
+   ============================================================ */
+
+/* ── Auto ── */
+.sheetContainer.sheet-auto {
+  height: auto;
+  max-height: 80vh;
+}
+
+/* ── Small ── */
+.sheetContainer.sheet-small {
+  height: 200px;
+  max-height: 200px;
+}
+
+/* ── Half ── */
+.sheetContainer.sheet-half {
+  height: 50vh;
+  max-height: 50vh;
+}
+
+/* ── Large ── */
+.sheetContainer.sheet-large {
+  height: 75vh;
+  max-height: 75vh;
+}
+
+/* ── Full ── */
+.sheetContainer.sheet-full {
+  height: 95vh;
+  max-height: 95vh;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+/* ============================================================
+   📌 HANDLE
+   ============================================================ */
+
+.sheetHandleWrapper {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-sm) 0;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.sheetHandleWrapper:active {
+  cursor: grabbing;
+}
+
+.sheetHandle {
+  width: 40px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.sheetHandle:hover {
+  background: var(--text-muted);
+}
+
+/* ============================================================
+   📌 CLOSE BUTTON
+   ============================================================ */
+
+.sheetCloseBtn {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  z-index: 10;
+}
+
+.sheetCloseBtn:hover:not(:disabled) {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border-color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.sheetCloseBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 TITLE
+   ============================================================ */
+
+.sheetTitle {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: var(--space-xs) 0 var(--space-md);
+  padding-right: var(--space-xl);
+  line-height: 1.3;
+}
+
+/* ============================================================
+   📌 CONTENT
+   ============================================================ */
+
+.sheetContent {
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  padding: var(--space-xs) 0;
+}
+
+.sheetContent p {
+  margin: 0 0 var(--space-sm);
+}
+
+.sheetContent p:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================================
+   📌 ACTIONS
+   ============================================================ */
+
+.sheetActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+/* ── Buttons ── */
+.sheetBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.sheetBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+.sheetBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Variants ── */
+.sheetBtn-primary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.sheetBtn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.sheetBtn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.sheetBtn-secondary:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+.sheetBtn-danger {
+  background: var(--gradient-danger);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.sheetBtn-danger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.sheetBtn-success {
+  background: var(--gradient-success);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.sheetBtn-success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.sheetBtn-warning {
+  background: var(--gradient-warning);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.sheetBtn-warning:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.sheetBtn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+.sheetBtn-ghost:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.sheetBtn i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .sheetContainer {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 0 var(--space-md) var(--space-md);
+  }
+
+  .sheetContainer.sheet-full {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .sheetTitle {
+    font-size: var(--text-lg);
+  }
+
+  .sheetContent {
+    font-size: var(--text-sm);
+  }
+
+  .sheetBtn {
+    padding: 12px 20px;
+    font-size: var(--text-sm);
+  }
+
+  .sheetCloseBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .sheetHandle {
+    width: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sheetContainer {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    padding: 0 var(--space-sm) var(--space-sm);
+    max-height: 85vh;
+  }
+
+  .sheetContainer.sheet-full {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+
+  .sheetContainer.sheet-small {
+    height: 160px;
+    max-height: 160px;
+  }
+
+  .sheetContainer.sheet-half {
+    height: 40vh;
+    max-height: 40vh;
+  }
+
+  .sheetContainer.sheet-large {
+    height: 70vh;
+    max-height: 70vh;
+  }
+
+  .sheetTitle {
+    font-size: var(--text-base);
+    margin: var(--space-xs) 0 var(--space-sm);
+  }
+
+  .sheetContent {
+    font-size: var(--text-xs);
+  }
+
+  .sheetBtn {
+    padding: 10px 16px;
+    font-size: var(--text-xs);
+  }
+
+  .sheetBtn i {
+    font-size: var(--text-sm);
+  }
+
+  .sheetCloseBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+    top: var(--space-sm);
+    right: var(--space-sm);
+  }
+
+  .sheetHandle {
+    width: 28px;
+    height: 3px;
+  }
+
+  .sheetActions {
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .sheetContainer {
+    animation: none;
+  }
+
+  .sheetBtn-primary:hover:not(:disabled),
+  .sheetBtn-danger:hover:not(:disabled),
+  .sheetBtn-success:hover:not(:disabled),
+  .sheetBtn-warning:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .sheetCloseBtn:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .sheetContainer {
+    border: 2px solid var(--border-color);
+    border-bottom: none;
+  }
+
+  .sheetBtn {
+    border: 2px solid currentColor;
+  }
+
+  .sheetBtn-primary {
+    border-color: var(--accent-primary);
+  }
+
+  .sheetBtn-danger {
+    border-color: var(--status-danger);
+  }
+
+  .sheetBtn-success {
+    border-color: var(--status-success);
+  }
+
+  .sheetBtn-warning {
+    border-color: var(--status-warning);
+  }
+
+  .sheetBtn-secondary {
+    border-color: var(--text-secondary);
+  }
+
+  .sheetBtn-ghost {
+    border-color: transparent;
+  }
+
+  .sheetBtn-ghost:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+  }
+
+  .sheetCloseBtn {
+    border-width: 2px;
+  }
+
+  .sheetHandle {
+    background: var(--text-muted);
+  }
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.sheetContainer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

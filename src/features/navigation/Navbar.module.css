@@ -1,0 +1,1270 @@
+/* ============================================================
+   🌌 NAVBAR - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 BASE CONTAINER
+   ============================================================ */
+
+.darkCyberThemeContainer {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* ============================================================
+   💻 DESKTOP SIDEBAR
+   ============================================================ */
+
+.cyberSideDock {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  bottom: 20px;
+  width: 85px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.dockLogo {
+  font-size: 26px;
+  color: var(--accent-primary);
+  margin-bottom: 30px;
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.dockMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+}
+
+.dockItem {
+  position: relative;
+  overflow: visible !important;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.dockItem:hover,
+.dockItem.active {
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+  transform: scale(1.05);
+}
+
+.dockItem.active {
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.dockItem.activeTrigger {
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.dockMenuWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================================================
+   📌 UNREAD BADGE
+   ============================================================ */
+
+.unreadBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, var(--status-danger), var(--status-danger));
+  color: var(--text-inverse);
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  box-shadow: 0 0 15px var(--status-danger-bg);
+  z-index: 999;
+  line-height: 1;
+  border: 2px solid var(--bg-primary);
+  pointer-events: none;
+}
+
+.unreadBadge.bottom {
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  font-size: 9px;
+  border-width: 1.5px;
+}
+
+/* ============================================================
+   🛠️ TOP BAR
+   ============================================================ */
+
+.floatingUtilityHub {
+  position: fixed;
+  top: 20px;
+  left: 130px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 16px 24px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 99;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease,
+              background 0.3s ease,
+              border-color 0.3s ease;
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+.headerHidden {
+  transform: translateY(-150%);
+  opacity: 0;
+}
+
+.headerVisible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Page Title ── */
+.pageIntentTitle {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.titleFlexTrigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.titleFlexTrigger h1 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.titleFlexTrigger i {
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: transform 0.3s;
+}
+
+.pageIntentTitle.active .titleFlexTrigger i {
+  transform: rotate(180deg);
+  color: var(--accent-primary);
+}
+
+/* ── Mode Switcher Dropdown ── */
+.modeSwitcherDropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  width: 260px;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 10px;
+  display: none;
+  z-index: 9999;
+  box-shadow: 0 10px 40px var(--shadow-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.modeSwitcherDropdown.show {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modeOpt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  transition: all 0.25s;
+  cursor: pointer;
+}
+
+.modeOpt:hover,
+.modeOpt.selected {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.modeOpt.selected i {
+  color: var(--accent-primary);
+}
+
+.optMeta {
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.optTitle {
+  font-weight: 700;
+}
+
+.optDesc {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.optCheck {
+  color: var(--accent-primary);
+  margin-left: auto;
+}
+
+/* ── Search Container ── */
+.searchContainer {
+  position: relative;
+  width: 280px;
+}
+
+.searchPill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 10px 18px;
+  border-radius: 14px;
+  width: 100%;
+  transition: all 0.3s;
+}
+
+.searchPill:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.searchPill input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 14px;
+  width: 100%;
+}
+
+.searchPill input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 SEARCH RESULTS DROPDOWN
+   ============================================================ */
+
+.searchResultsDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 9999;
+  box-shadow: 0 20px 50px var(--shadow-color);
+  max-height: 400px;
+  overflow-y: auto;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 8px 0;
+}
+
+.searchResultsDropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.searchResultsDropdown::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+.searchResultsDropdown::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 10px;
+}
+
+/* ── Section Header ── */
+.searchSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.countBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 20px;
+  background: var(--accent-primary);
+  color: #04120f;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ── Result Item ── */
+.searchResultItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+  margin: 2px 8px;
+}
+
+.searchResultItem:hover {
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.resultIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.resultIcon i {
+  color: var(--accent-primary);
+}
+
+.resultInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.resultInfo h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 2px 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.resultInfo p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.resultBadge {
+  flex-shrink: 0;
+}
+
+.resultBadge span {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badgeJob {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+.badgeService {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.searchHighlight {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+/* ── Empty State ── */
+.searchEmptyMode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.searchEmptyMode i {
+  color: var(--text-muted);
+}
+
+.searchNoResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 8px;
+}
+
+.searchNoResults i {
+  font-size: 36px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  margin-bottom: 4px;
+}
+
+.searchNoResults p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+.searchNoResults p strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.searchNoResults span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Divider ── */
+.searchDivider {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--border-color);
+}
+
+/* ── Other Mode Footer ── */
+.otherModeSearchFooter {
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.otherModeSearchFooter > span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.otherModeResultsPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0.85;
+}
+
+.otherModeResultsPreview .searchResultItem {
+  border-radius: 8px;
+}
+
+.switchModeSearchBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--gradient-primary);
+  color: #04120f;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.switchModeSearchBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px var(--shadow-glow);
+}
+
+.switchModeSearchBtn i {
+  font-size: 12px;
+}
+
+/* ============================================================
+   📌 MINIMAL DROPDOWN (Gear Menu)
+   ============================================================ */
+
+.minimalDropdown {
+  position: fixed;
+  width: 320px;
+  max-width: calc(100vw - 40px);
+  background: var(--dropdown-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 30px 70px var(--shadow-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: none;
+  z-index: 99999;
+  box-sizing: border-box;
+  animation: fadeIn 0.3s ease;
+  pointer-events: auto;
+  touch-action: manipulation;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(-10px) scale(0.96);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.minimalDropdown.show {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* ── Desktop Position ── */
+.desktopDropdownPos {
+  left: 95px;
+  bottom: 30px;
+  position: fixed;
+  transform-origin: bottom left;
+}
+
+/* ── Mobile Position ── */
+.mobileDropdownPos {
+  right: 15px;
+  bottom: 80px;
+  position: fixed;
+  transform-origin: bottom right;
+}
+
+/* ── Dropdown Header ── */
+.dropHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 12px;
+}
+
+/* ── Avatar Glow ── */
+.avatarGlow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-primary), var(--bg-tertiary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--accent-glow);
+  flex-shrink: 0;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── User Meta ── */
+.userMeta h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: left;
+  margin: 0;
+}
+
+.userMeta p {
+  font-size: 11px;
+  color: var(--accent-primary);
+  font-weight: 600;
+  text-align: left;
+  margin: 4px 0 0 0;
+}
+
+/* ── Drop Items ── */
+.dropItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 14px;
+  margin-bottom: 4px;
+  transition: all 0.25s;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.itemLeft i {
+  font-size: 14px;
+  color: var(--text-secondary);
+  width: 16px;
+  text-align: center;
+  transition: color 0.25s;
+}
+
+.itemLeft span {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.walletHighlightRow {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+}
+
+.badgeUsdt {
+  background: var(--status-success-bg);
+  color: var(--accent-primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 8px;
+}
+
+.dropItem:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.dropItem:hover .itemLeft i {
+  color: var(--accent-primary);
+}
+
+.dropDivider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 8px 0;
+}
+
+.dropItem.logoutAction:hover .itemLeft i,
+.dropItem.logoutAction:hover .itemLeft span {
+  color: var(--status-danger);
+}
+
+/* ── Theme Toggle Indicator ── */
+.themeToggleIndicator {
+  font-size: 16px;
+}
+
+/* ============================================================
+   📌 SETTINGS DROPDOWN (Child Component)
+   ============================================================ */
+
+.settingsDropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ============================================================
+   🔘 FAB BUTTON
+   ============================================================ */
+
+.globalFloatingFab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.globalFloatingFab:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+/* ============================================================
+   📱 MOBILE BOTTOM BAR
+   ============================================================ */
+
+.cyberBottomBar {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  height: 60px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  display: none;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 15px 40px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.cbItem {
+  position: relative;
+  overflow: visible !important;
+  color: var(--text-secondary);
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.cbItem:hover,
+.cbItem.active {
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+  transform: translateY(-2px);
+}
+
+.cbItem.active {
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.cbItem.activeTrigger {
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+/* ============================================================
+   📌 CONTENT WRAPPER
+   ============================================================ */
+
+.contentContainerWrapper {
+  /* margin-left: 115px; */
+  /* padding-top: 100px; */
+  /* padding-left: 30px; */
+  /* padding-right: 30px; */
+  /* padding-bottom: 30px; */
+  /* min-height: 100vh; */
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.contentBodyReal {
+  width: 100%;
+  min-height: auto;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .floatingUtilityHub {
+    left: 130px;
+    right: 20px;
+    padding: 14px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cyberSideDock {
+    display: none;
+  }
+
+  .desktopDropdownPos {
+    display: none;
+  }
+
+  .cyberBottomBar {
+    display: flex;
+  }
+
+  .contentContainerWrapper {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+    /* padding: 50px 0px 60px 0px; */
+    box-sizing: border-box;
+  }
+
+  .floatingUtilityHub {
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    top: 15px;
+    width: calc(100% - 30px);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px;
+    border-radius: 16px;
+    box-sizing: border-box;
+    z-index: 9999;
+  }
+
+  .titleFlexTrigger h1 {
+    font-size: 16px;
+  }
+
+  .searchPill {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 14px;
+  }
+
+  .searchContainer {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .searchResultsDropdown {
+    position: fixed;
+    top: auto;
+    left: 15px;
+    right: 15px;
+    margin-top: 8px;
+    max-height: 350px;
+  }
+
+  .mobileDropdownPos {
+    position: fixed;
+    display: block;
+    bottom: -100%;
+    top: auto;
+    left: 15px;
+    right: 15px;
+    width: calc(100% - 30px);
+    border-radius: 24px 24px 0 0;
+    transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9999;
+  }
+
+  .mobileDropdownPos.show {
+    bottom: 80px;
+  }
+
+  .globalFloatingFab {
+    bottom: 90px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+    font-size: 22px;
+    z-index: 999;
+  }
+
+  .contentBodyReal {
+    padding-left: 0;
+    padding-top: 0;
+    width: 100%;
+  }
+
+  .searchResultItem {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .resultIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .resultInfo h4 {
+    font-size: 13px;
+  }
+
+  .resultInfo p {
+    font-size: 11px;
+  }
+
+  .badgeJob,
+  .badgeService {
+    padding: 3px 8px;
+    font-size: 9px;
+  }
+
+  .searchSectionHeader {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+
+  .otherModeSearchFooter {
+    padding: 10px 14px 14px;
+  }
+
+  .switchModeSearchBtn {
+    width: 100%;
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentContainerWrapper {
+    /* padding: 0px 0px 0px 0px; */
+  }
+
+  .floatingUtilityHub {
+    left: 10px;
+    right: 10px;
+    width: calc(100% - 20px);
+    padding: 10px 12px;
+    margin-top: -10px;
+  }
+
+  .titleFlexTrigger h1 {
+    font-size: 15px;
+  }
+
+  .cyberBottomBar {
+    left: 10px;
+    right: 10px;
+    height: 55px;
+    bottom: 10px;
+  }
+
+  .cbItem {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .globalFloatingFab {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    bottom: 80px;
+    right: 15px;
+  }
+
+  .minimalDropdown {
+    width: calc(100% - 30px);
+    right: 15px;
+    pointer-events: auto;
+  }
+
+  .searchResultsDropdown {
+    left: 10px;
+    right: 10px;
+    max-height: 300px;
+  }
+
+  .searchResultItem {
+    padding: 10px;
+  }
+
+  .resultIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .resultInfo h4 {
+    font-size: 12px;
+  }
+
+  .resultInfo p {
+    font-size: 10px;
+  }
+
+  .unreadBadge {
+    font-size: 8px;
+    min-width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .floatingUtilityHub {
+    padding: 8px 10px;
+  }
+
+  .titleFlexTrigger h1 {
+    font-size: 14px;
+  }
+
+  .cbItem {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .globalFloatingFab {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+}
+
+/* ============================================================
+   ☀️ LIGHT MODE OVERRIDES
+   ============================================================ */
+
+.lightMode .darkCyberThemeContainer {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.lightMode .cyberSideDock,
+.lightMode .floatingUtilityHub,
+.lightMode .cyberBottomBar,
+.lightMode .minimalDropdown,
+.lightMode .searchResultsDropdown {
+  background: var(--dropdown-bg);
+  border-color: var(--border-color);
+}
+
+.lightMode .dockItem {
+  color: var(--text-secondary);
+}
+
+.lightMode .dockItem:hover,
+.lightMode .cbItem:hover {
+  background: var(--bg-hover);
+  color: var(--accent-primary);
+}
+
+.lightMode .dropItem {
+  color: var(--text-primary);
+}
+
+.lightMode .dropItem:hover {
+  background: var(--bg-hover);
+}
+
+.lightMode .searchPill {
+  background: var(--bg-tertiary);
+}
+
+.lightMode .walletHighlightRow {
+  background: var(--bg-tertiary);
+}
+
+.lightMode .unreadBadge {
+  border-color: var(--text-inverse);
+}
+
+.lightMode .badgeUsdt {
+  border-color: var(--status-success);
+}
+
+/* ============================================================
+   🌙 DARK MODE OVERRIDES
+   ============================================================ */
+
+.darkMode .unreadBadge {
+  border-color: var(--bg-primary);
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .minimalDropdown {
+    animation-duration: 0.01ms;
+    transition-duration: 0.01ms;
+    transform: none;
+  }
+
+  .minimalDropdown.show {
+    transform: none;
+  }
+
+  .modeSwitcherDropdown {
+    animation: none;
+  }
+
+  .dockItem:hover {
+    transform: none;
+  }
+
+  .cbItem:hover {
+    transform: none;
+  }
+
+  .globalFloatingFab:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .minimalDropdown {
+    border-width: 2px;
+  }
+
+  .cyberSideDock {
+    border-width: 2px;
+  }
+
+  .floatingUtilityHub {
+    border-width: 2px;
+  }
+
+  .cyberBottomBar {
+    border-width: 2px;
+  }
+
+  .searchResultsDropdown {
+    border-width: 2px;
+  }
+
+  .unreadBadge {
+    border-width: 2px;
+  }
+
+  .badgeUsdt {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.dockItem:focus-visible,
+.cbItem:focus-visible,
+.globalFloatingFab:focus-visible,
+.dropItem:focus-visible,
+.switchModeSearchBtn:focus-visible,
+.searchPill input:focus-visible,
+.modeOpt:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.darkCyberThemeContainer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

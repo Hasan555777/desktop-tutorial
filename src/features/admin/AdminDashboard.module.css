@@ -1,0 +1,641 @@
+/* ============================================================
+   👑 ADMIN DASHBOARD - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.adminContainer {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+.adminWrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin-left: 120px;
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.adminHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.adminHeader h1 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.adminHeader h1 i {
+  color: var(--accent-primary);
+}
+
+.headerTabName {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.refreshBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: rotate(90deg);
+}
+
+.mobileMenuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.mobileMenuBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 TABS
+   ============================================================ */
+
+.adminTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+.tabBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  position: relative;
+  white-space: nowrap;
+}
+
+.tabBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.tabBtn.active {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.tabBtn i {
+  font-size: var(--text-base);
+}
+
+.tabBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.tabBadge.danger {
+  background: var(--status-danger);
+  color: #ffffff;
+}
+
+/* ============================================================
+   📌 MOBILE SIDEBAR
+   ============================================================ */
+
+.mobileSidebarBackdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  z-index: 999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mobileSidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  max-width: 80vw;
+  height: 100vh;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  z-index: 1000;
+  padding: var(--space-md);
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.mobileSidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--space-sm);
+}
+
+.mobileSidebarHeader span {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.mobileSidebarHeader button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.mobileSidebarHeader button:hover {
+  background: var(--bg-hover);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.mobileSidebarItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+  text-align: left;
+  position: relative;
+}
+
+.mobileSidebarItem:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.mobileSidebarItem.active {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+}
+
+.mobileSidebarItem i {
+  font-size: var(--text-base);
+  width: 24px;
+  text-align: center;
+}
+
+.mobileSidebarItem span {
+  flex: 1;
+}
+
+/* ============================================================
+   📌 CONTENT
+   ============================================================ */
+
+.adminContent {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  min-height: 400px;
+}
+
+/* ============================================================
+   📌 NEEDS REVIEW SECTION
+   ============================================================ */
+
+.needsReviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sectionHeader h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.sectionHeader h3 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.sectionSubtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .adminWrapper {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .adminHeader {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .adminHeader h1 {
+    font-size: var(--text-lg);
+  }
+
+  .adminTabs {
+    padding: var(--space-xs);
+    gap: 4px;
+  }
+
+  .tabBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .adminContent {
+    padding: var(--space-md);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .adminWrapper {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    margin-left: 0;
+  }
+
+  .adminHeader {
+    padding: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .adminHeader h1 {
+    font-size: var(--text-base);
+    order: 1;
+  }
+
+  .mobileMenuBtn {
+    display: flex !important;
+    order: 0;
+  }
+
+  .headerActions {
+    order: 2;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .adminTabs {
+    display: none !important;
+  }
+
+  .adminContent {
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .refreshBtn {
+    width: 36px;
+    height: 36px;
+    font-size: var(--text-sm);
+  }
+
+  .sectionHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .sectionSubtitle {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .adminWrapper {
+    padding: var(--space-xs);
+    margin-left: 0;
+  }
+
+  .adminHeader {
+    padding: var(--space-xs);
+  }
+
+  .adminHeader h1 {
+    font-size: var(--text-sm);
+  }
+
+  .mobileMenuBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .refreshBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-xs);
+  }
+
+  .adminContent {
+    padding: var(--space-xs);
+    border-radius: var(--radius-sm);
+  }
+
+  .mobileSidebar {
+    width: 260px;
+    padding: var(--space-sm);
+  }
+
+  .mobileSidebarItem {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .mobileSidebarItem i {
+    font-size: var(--text-sm);
+    width: 20px;
+  }
+
+  .sectionHeader h3 {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .mobileSidebarBackdrop {
+    animation: none !important;
+  }
+
+  .mobileSidebar {
+    animation: none !important;
+  }
+
+  .refreshBtn:hover {
+    transform: none !important;
+  }
+
+  .mobileMenuBtn:hover {
+    transform: none !important;
+  }
+
+  .mobileSidebarHeader button:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .adminContainer {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .adminHeader {
+    border-width: 2px;
+  }
+
+  .adminTabs {
+    border-width: 2px;
+  }
+
+  .tabBtn {
+    border-width: 1px;
+  }
+
+  .tabBtn.active {
+    border-width: 2px;
+  }
+
+  .adminContent {
+    border-width: 2px;
+  }
+
+  .refreshBtn {
+    border-width: 2px;
+  }
+
+  .mobileMenuBtn {
+    border-width: 2px;
+  }
+
+  .mobileSidebar {
+    border-right-width: 2px;
+  }
+
+  .mobileSidebarItem.active {
+    border: 2px solid var(--accent-primary);
+  }
+
+  .tabBadge.danger {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.tabBtn:focus-visible,
+.refreshBtn:focus-visible,
+.mobileMenuBtn:focus-visible,
+.mobileSidebarItem:focus-visible,
+.mobileSidebarHeader button:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.adminContainer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .adminContainer {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .adminHeader {
+    border: 1px solid #000000 !important;
+  }
+
+  .adminTabs {
+    display: none !important;
+  }
+
+  .adminContent {
+    border: 1px solid #000000 !important;
+  }
+
+  .refreshBtn {
+    display: none !important;
+  }
+
+  .mobileMenuBtn {
+    display: none !important;
+  }
+
+  .mobileSidebar {
+    display: none !important;
+  }
+
+  .mobileSidebarBackdrop {
+    display: none !important;
+  }
+}

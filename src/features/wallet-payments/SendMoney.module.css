@@ -1,0 +1,974 @@
+/* ============================================================
+   💸 SEND MONEY - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.sendmoneyContainer {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.sendmoneyCard {
+  max-width: 480px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  transition: all var(--transition-normal);
+}
+
+.sendmoneyCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 40px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.loadingIcon {
+  font-size: 48px;
+  color: var(--accent-primary);
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingContent h2 {
+  margin-top: var(--space-md);
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent p {
+  margin-top: var(--space-sm);
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 BACK BUTTON
+   ============================================================ */
+
+.backBtnSimple {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-bottom: var(--space-md);
+}
+
+.backBtnSimple:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.backBtnSimple i {
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.sendmoneyHeader {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.sendmoneyHeader h2 {
+  font-size: var(--text-2xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.sendmoneyHeader h2 i {
+  margin-right: var(--space-sm);
+}
+
+/* ============================================================
+   📌 BALANCE DISPLAY
+   ============================================================ */
+
+.balanceDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-xl);
+}
+
+.balanceLabel {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.balanceAmount {
+  font-size: var(--text-2xl);
+  font-weight: 100;
+  color: var(--accent-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.lockedHint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.lockedHint i {
+  color: var(--status-warning);
+}
+
+.lockedTotal {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 ERROR
+   ============================================================ */
+
+.sendmoneyError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-bottom: var(--space-md);
+}
+
+.sendmoneyError i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 INPUT GROUP
+   ============================================================ */
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.inputGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.inputGroup textarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+  resize: vertical;
+  min-height: 50px;
+}
+
+.inputGroup textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.inputGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.inputGroup textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.charCount {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: right;
+}
+
+/* ============================================================
+   📌 RECEIVER INPUT GROUP
+   ============================================================ */
+
+.receiverInputGroup {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.receiverInputGroup input {
+  flex: 1;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+}
+
+.receiverInputGroup input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.receiverInputGroup input::placeholder {
+  color: var(--text-muted);
+}
+
+.receiverInputGroup input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.findBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-sm);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.findBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.findBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 RECEIVER FOUND
+   ============================================================ */
+
+.receiverFound {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex-wrap: wrap;
+}
+
+.receiverFound i {
+  font-size: var(--text-base);
+}
+
+.receiverFound strong {
+  font-weight: 100;
+  color: var(--text-primary);
+}
+
+.receiverWalletId {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 AMOUNT INPUT
+   ============================================================ */
+
+.amountInputGroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currencyIcon {
+  position: absolute;
+  left: 14px;
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.amountInputGroup input {
+  flex: 1;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  padding-left: 36px;
+  font-size: var(--text-lg);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+}
+
+.amountInputGroup input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.amountInputGroup input::placeholder {
+  color: var(--text-muted);
+}
+
+.amountInputGroup input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.amountHint {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 PRESET AMOUNTS
+   ============================================================ */
+
+.presetAmounts {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+}
+
+.presetBtn {
+  flex: 1;
+  min-width: 60px;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.presetBtn:hover:not(:disabled) {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.presetBtn.active {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.presetBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 SEND SUMMARY
+   ============================================================ */
+
+.sendSummary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.summaryRow strong {
+  font-weight: 100;
+  color: var(--text-primary);
+}
+
+.summaryRow.total {
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--text-base);
+}
+
+.summaryRow.total strong {
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 SEND BUTTON
+   ============================================================ */
+
+.sendBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-base);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.sendBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.sendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sendBtn i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.sendmoneyFooter {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.sendmoneyFooter p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.sendmoneyFooter p i {
+  color: var(--accent-primary);
+  margin-right: var(--space-xs);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .sendmoneyContainer {
+    padding: var(--space-md);
+  }
+
+  .sendmoneyCard {
+    padding: var(--space-lg);
+  }
+
+  .sendmoneyHeader h2 {
+    font-size: var(--text-xl);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .sendmoneyContainer {
+    padding: var(--space-sm);
+    align-items: flex-start;
+    padding-top: var(--space-xl);
+  }
+
+  .sendmoneyCard {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .sendmoneyHeader h2 {
+    font-size: var(--text-lg);
+  }
+
+  .balanceAmount {
+    font-size: var(--text-xl);
+  }
+
+  .receiverInputGroup {
+    flex-direction: column;
+  }
+
+  .findBtn {
+    width: 100%;
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .presetAmounts {
+    gap: 4px;
+  }
+
+  .presetBtn {
+    font-size: 10px;
+    padding: 2px 8px;
+    min-width: 50px;
+  }
+
+  .amountInputGroup input {
+    font-size: var(--text-base);
+    padding-left: 32px;
+  }
+
+  .currencyIcon {
+    font-size: var(--text-base);
+    left: 12px;
+  }
+
+  .sendBtn {
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-xl);
+  }
+
+  .inputGroup label {
+    font-size: var(--text-xs);
+  }
+
+  .inputGroup textarea {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+    min-height: 40px;
+  }
+
+  .sendmoneyError {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .backBtnSimple {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .balanceDisplay {
+    padding: var(--space-sm);
+  }
+
+  .balanceLabel {
+    font-size: var(--text-xs);
+  }
+
+  .lockedHint {
+    font-size: 10px;
+  }
+
+  .lockedTotal {
+    font-size: 10px;
+  }
+
+  .receiverFound {
+    font-size: var(--text-xs);
+    padding: var(--space-xs);
+  }
+
+  .receiverFound i {
+    font-size: var(--text-sm);
+  }
+
+  .receiverWalletId {
+    font-size: 9px;
+  }
+
+  .sendSummary {
+    padding: var(--space-sm);
+  }
+
+  .summaryRow {
+    font-size: var(--text-xs);
+  }
+
+  .summaryRow.total {
+    font-size: var(--text-sm);
+  }
+
+  .sendmoneyFooter p {
+    font-size: var(--text-xs);
+  }
+
+  .charCount {
+    font-size: 10px;
+  }
+
+  .amountHint {
+    font-size: 10px;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-lg);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-sm);
+  }
+
+  .loadingIcon {
+    font-size: 36px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .sendmoneyContainer {
+    padding: var(--space-xs);
+  }
+
+  .sendmoneyCard {
+    padding: var(--space-sm);
+  }
+
+  .sendmoneyHeader h2 {
+    font-size: var(--text-base);
+  }
+
+  .balanceAmount {
+    font-size: var(--text-lg);
+  }
+
+  .presetBtn {
+    font-size: 9px;
+    padding: 2px 6px;
+    min-width: 40px;
+  }
+
+  .amountInputGroup input {
+    font-size: var(--text-sm);
+    padding-left: 28px;
+  }
+
+  .currencyIcon {
+    font-size: var(--text-sm);
+    left: 10px;
+  }
+
+  .sendBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .receiverInputGroup input {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .summaryRow.total {
+    font-size: var(--text-xs);
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-base);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-xs);
+  }
+
+  .loadingIcon {
+    font-size: 28px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loadingIcon {
+    animation: none;
+  }
+
+  .findBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .backBtnSimple:hover {
+    transform: none !important;
+  }
+
+  .sendBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .presetBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .sendmoneyContainer {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .sendmoneyCard {
+    border-width: 2px;
+  }
+
+  .backBtnSimple {
+    border-width: 2px;
+  }
+
+  .balanceDisplay {
+    border-width: 2px;
+  }
+
+  .receiverInputGroup input {
+    border-width: 2px;
+  }
+
+  .receiverInputGroup input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .findBtn {
+    border: 2px solid currentColor;
+  }
+
+  .amountInputGroup input {
+    border-width: 2px;
+  }
+
+  .amountInputGroup input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .presetBtn {
+    border-width: 2px;
+  }
+
+  .presetBtn.active {
+    border-width: 2px;
+  }
+
+  .sendBtn {
+    border: 2px solid currentColor;
+  }
+
+  .sendmoneyError {
+    border-width: 2px;
+  }
+
+  .receiverFound {
+    border-width: 2px;
+  }
+
+  .sendSummary {
+    border-width: 2px;
+  }
+
+  .summaryRow.total {
+    border-top-width: 2px;
+  }
+
+  .inputGroup textarea {
+    border-width: 2px;
+  }
+
+  .inputGroup textarea:focus {
+    border-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.backBtnSimple:focus-visible,
+.findBtn:focus-visible,
+.presetBtn:focus-visible,
+.sendBtn:focus-visible,
+.receiverInputGroup input:focus-visible,
+.amountInputGroup input:focus-visible,
+.inputGroup textarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.sendmoneyCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .sendmoneyContainer {
+    background: #ffffff !important;
+    padding: 20px !important;
+  }
+
+  .sendmoneyCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .sendBtn {
+    display: none !important;
+  }
+
+  .findBtn {
+    display: none !important;
+  }
+
+  .backBtnSimple {
+    display: none !important;
+  }
+
+  .presetBtn {
+    display: none !important;
+  }
+
+  .balanceDisplay {
+    border: 1px solid #000000 !important;
+  }
+
+  .sendSummary {
+    border: 1px solid #000000 !important;
+  }
+
+  .receiverFound {
+    border: 1px solid #000000 !important;
+  }
+
+  .loadingContainer {
+    display: none !important;
+  }
+}

@@ -1,0 +1,282 @@
+/* ============================================================
+   🌓 THEME TOGGLE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 TOGGLE BUTTON
+   ============================================================ */
+
+.themeToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  user-select: none;
+}
+
+.themeToggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.themeToggle:active {
+  transform: scale(0.96);
+}
+
+/* ── Icon ── */
+.themeToggle i {
+  font-size: var(--text-base);
+  transition: all var(--transition-normal);
+}
+
+.themeToggle:hover i {
+  transform: rotate(20deg);
+}
+
+/* ── Text ── */
+.themeText {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: all var(--transition-normal);
+}
+
+/* ============================================================
+   📌 ICON ONLY VARIANT
+   ============================================================ */
+
+.themeToggle.iconOnly {
+  padding: 8px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+}
+
+.themeToggle.iconOnly .themeText {
+  display: none;
+}
+
+.themeToggle.iconOnly i {
+  font-size: var(--text-lg);
+}
+
+/* ============================================================
+   📌 COMPACT VARIANT
+   ============================================================ */
+
+.themeToggle.compact {
+  padding: 4px 12px;
+  font-size: var(--text-xs);
+  border-radius: var(--radius-md);
+}
+
+.themeToggle.compact i {
+  font-size: var(--text-sm);
+}
+
+.themeToggle.compact .themeText {
+  font-size: var(--text-xs);
+}
+
+/* ============================================================
+   📌 LARGE VARIANT
+   ============================================================ */
+
+.themeToggle.large {
+  padding: 12px 24px;
+  font-size: var(--text-base);
+  border-radius: var(--radius-md);
+}
+
+.themeToggle.large i {
+  font-size: var(--text-xl);
+}
+
+.themeToggle.large .themeText {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 DARK MODE ACTIVE STATE
+   ============================================================ */
+
+.themeToggle.darkActive {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.themeToggle.darkActive i {
+  color: var(--status-warning);
+}
+
+.themeToggle.darkActive:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 LIGHT MODE ACTIVE STATE
+   ============================================================ */
+
+.themeToggle.lightActive {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.themeToggle.lightActive i {
+  color: var(--accent-primary);
+}
+
+.themeToggle.lightActive:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .themeToggle {
+    padding: 6px 14px;
+    font-size: var(--text-xs);
+  }
+
+  .themeToggle i {
+    font-size: var(--text-sm);
+  }
+
+  .themeToggle .themeText {
+    font-size: var(--text-xs);
+  }
+
+  .themeToggle.iconOnly {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+
+  .themeToggle.iconOnly i {
+    font-size: var(--text-base);
+  }
+
+  .themeToggle.large {
+    padding: 10px 20px;
+    font-size: var(--text-sm);
+  }
+
+  .themeToggle.large i {
+    font-size: var(--text-lg);
+  }
+
+  .themeToggle.large .themeText {
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .themeToggle {
+    padding: 4px 12px;
+    font-size: 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .themeToggle i {
+    font-size: 12px;
+  }
+
+  .themeToggle .themeText {
+    font-size: 10px;
+  }
+
+  .themeToggle.iconOnly {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+  }
+
+  .themeToggle.iconOnly i {
+    font-size: var(--text-sm);
+  }
+
+  .themeToggle.large {
+    padding: 8px 16px;
+    font-size: 10px;
+  }
+
+  .themeToggle.large i {
+    font-size: var(--text-base);
+  }
+
+  .themeToggle.large .themeText {
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .themeToggle:hover {
+    transform: none;
+  }
+
+  .themeToggle:active {
+    transform: none;
+  }
+
+  .themeToggle:hover i {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .themeToggle {
+    border-width: 2px;
+  }
+
+  .themeToggle:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .themeToggle:focus-visible {
+    border-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.themeToggle:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.themeToggle ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

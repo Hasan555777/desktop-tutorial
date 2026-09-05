@@ -1,0 +1,1010 @@
+/* ============================================================
+   🪪 PROFILE CARD / DIGITAL TRUST CARD - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.profilecardContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  padding: var(--space-md);
+  font-family: var(--font-primary);
+}
+
+.profilecardWrapper {
+  max-width: 560px;
+  width: 100%;
+}
+
+/* ============================================================
+   📌 BACK BUTTON
+   ============================================================ */
+
+.backBtnSimple {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  margin-bottom: var(--space-md);
+}
+
+.backBtnSimple:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 PROFILE CARD
+   ============================================================ */
+
+.profileCard {
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  padding: var(--space-xl);
+  animation: cardSlideUp 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.profileCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 300px;
+  height: 300px;
+  background: var(--accent-glow);
+  border-radius: 50%;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 CARD HEADER
+   ============================================================ */
+
+.cardHeader {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cardAvatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cardAvatar img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--border-color);
+}
+
+.avatarInitials {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  border: 3px solid var(--border-color);
+}
+
+.verifiedBadge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--status-success);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 2px solid var(--bg-secondary);
+}
+
+.cardUserInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+
+.nameRow h2 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.levelBadge {
+  display: inline-flex;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.cardRole {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+}
+
+.cardRating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.cardRating .fa-star,
+.cardRating .fa-star-half-stroke {
+  color: var(--border-color);
+  font-size: 14px;
+}
+
+.cardRating .fa-star.filled,
+.cardRating .fa-star-half-stroke.filled {
+  color: #fbbf24;
+}
+
+.ratingScore {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.ratingTotal {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 TRUST CARD ID
+   ============================================================ */
+
+.trustCardId {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.idLabel {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.idValue {
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: var(--accent-primary);
+  letter-spacing: 1px;
+}
+
+.copyIdBtnSmall {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-base);
+  padding: 4px;
+}
+
+.copyIdBtnSmall:hover {
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 TRUST SCORE
+   ============================================================ */
+
+.cardTrustScore {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: center;
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.trustScoreCircle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.trustScoreCircle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.trustBg {
+  fill: none;
+  stroke: var(--bg-secondary);
+  stroke-width: 6;
+}
+
+.trustProgress {
+  fill: none;
+  stroke: var(--gradient-primary);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1s ease;
+}
+
+.trustScoreText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.trustNumber {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.trustLabel {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.trustStats {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+}
+
+.trustStat {
+  display: flex;
+  flex-direction: column;
+}
+
+.statNumber {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 STATS ROW
+   ============================================================ */
+
+.cardStatsRow {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding: var(--space-xs) 0;
+  margin-bottom: var(--space-md);
+}
+
+.statMini {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.statMini i {
+  color: var(--accent-primary);
+  font-size: 12px;
+}
+
+/* ============================================================
+   📌 VERIFICATION BADGES
+   ============================================================ */
+
+.cardVerification {
+  margin-bottom: var(--space-md);
+}
+
+.cardVerification h4 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-xs);
+}
+
+.badgesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-xs);
+}
+
+.badgeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-xs) var(--space-xs);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  font-size: 10px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  background: var(--bg-secondary);
+}
+
+.badgeItem i {
+  font-size: var(--text-base);
+}
+
+.badgeItem.verified {
+  border-color: var(--status-success);
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.badgeItem.pending {
+  border-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+.badgeItem span {
+  font-size: 9px;
+}
+
+/* ============================================================
+   📌 QR CODE SECTION
+   ============================================================ */
+
+.cardQrSection {
+  margin-bottom: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qrToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.qrToggleBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.qrDisplay {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.qrDisplay img {
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border-color);
+  background: #ffffff;
+}
+
+.qrHint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 PUBLIC URL
+   ============================================================ */
+
+.cardPublicUrl {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-md);
+}
+
+.cardPublicUrl i {
+  color: var(--accent-primary);
+  font-size: var(--text-sm);
+}
+
+.urlText {
+  flex: 1;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copyUrlBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-sm);
+  padding: 4px;
+}
+
+.copyUrlBtn:hover {
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 CARD FOOTER
+   ============================================================ */
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.cardFooter i {
+  margin-right: var(--space-xs);
+}
+
+/* ============================================================
+   📌 CARD ACTIONS
+   ============================================================ */
+
+.cardActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.actionBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.actionBtn i {
+  font-size: var(--text-sm);
+}
+
+.actionBtn.share {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.actionBtn.share:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.actionBtn.copy {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.actionBtn.copy:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.actionBtn.download {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.actionBtn.download:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 VERIFIED BY
+   ============================================================ */
+
+.cardVerifiedBy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.cardVerifiedBy i {
+  color: var(--status-success);
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.profilecardFooter {
+  margin-top: var(--space-md);
+  text-align: center;
+}
+
+.profilecardFooter p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.profilecardFooter i {
+  color: var(--status-success);
+}
+
+/* ============================================================
+   📌 ERROR STATE
+   ============================================================ */
+
+.profilecardError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.profilecardError i {
+  font-size: 48px;
+  color: var(--status-danger);
+}
+
+.profilecardError p {
+  font-size: var(--text-base);
+}
+
+.retryBtn {
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.retryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-2xl);
+}
+
+.loadingContent {
+  text-align: center;
+}
+
+.loadingIcon {
+  font-size: 48px;
+  color: var(--accent-primary);
+  margin-bottom: var(--space-md);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+}
+
+.loadingContent h2 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.loadingContent p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .profilecardContainer {
+    padding: var(--space-sm);
+  }
+
+  .profileCard {
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cardAvatar img,
+  .avatarInitials {
+    width: 80px;
+    height: 80px;
+  }
+
+  .nameRow {
+    justify-content: center;
+  }
+
+  .cardRating {
+    justify-content: center;
+  }
+
+  .cardTrustScore {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .trustStats {
+    width: 100%;
+  }
+
+  .badgesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cardStatsRow {
+    justify-content: center;
+  }
+
+  .cardActions {
+    flex-wrap: wrap;
+  }
+
+  .actionBtn {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .trustCardId {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profilecardContainer {
+    padding: var(--space-xs);
+  }
+
+  .profileCard {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .cardAvatar img,
+  .avatarInitials {
+    width: 64px;
+    height: 64px;
+  }
+
+  .nameRow h2 {
+    font-size: var(--text-lg);
+  }
+
+  .levelBadge {
+    font-size: 9px;
+    padding: 1px 10px;
+  }
+
+  .trustScoreCircle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .trustNumber {
+    font-size: var(--text-lg);
+  }
+
+  .trustStats {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+  }
+
+  .statNumber {
+    font-size: var(--text-base);
+  }
+
+  .badgesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .badgeItem {
+    padding: var(--space-xs);
+    font-size: 9px;
+  }
+
+  .badgeItem i {
+    font-size: var(--text-sm);
+  }
+
+  .cardActions {
+    flex-direction: column;
+  }
+
+  .actionBtn {
+    width: 100%;
+  }
+
+  .cardPublicUrl {
+    flex-wrap: wrap;
+  }
+
+  .urlText {
+    width: 100%;
+    white-space: normal;
+    word-break: break-all;
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    text-align: center;
+  }
+
+  .qrDisplay img {
+    width: 140px;
+    height: 140px;
+  }
+
+  .loadingIcon {
+    font-size: 36px;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-lg);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .profileCard {
+    animation: none;
+  }
+
+  .loadingIcon {
+    animation: none;
+  }
+
+  .trustProgress {
+    transition: none;
+  }
+
+  .qrDisplay {
+    animation: none;
+  }
+
+  .actionBtn.share:hover,
+  .retryBtn:hover {
+    transform: none;
+  }
+
+  .backBtnSimple:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .profileCard {
+    border-width: 2px;
+  }
+
+  .trustCardId {
+    border-width: 2px;
+  }
+
+  .cardTrustScore {
+    border-width: 2px;
+  }
+
+  .badgeItem {
+    border-width: 2px;
+  }
+
+  .badgeItem.verified {
+    border-color: var(--status-success);
+  }
+
+  .badgeItem.pending {
+    border-color: var(--text-muted);
+  }
+
+  .actionBtn {
+    border: 2px solid currentColor;
+  }
+
+  .actionBtn.share {
+    border-color: var(--accent-primary);
+  }
+
+  .actionBtn.copy {
+    border-color: var(--text-secondary);
+  }
+
+  .actionBtn.download {
+    border-color: var(--text-secondary);
+  }
+
+  .qrDisplay img {
+    border-width: 3px;
+  }
+
+  .backBtnSimple {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.backBtnSimple:focus-visible,
+.actionBtn:focus-visible,
+.qrToggleBtn:focus-visible,
+.copyIdBtnSmall:focus-visible,
+.copyUrlBtn:focus-visible,
+.retryBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.profileCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

@@ -1,0 +1,759 @@
+/* ============================================================
+   📖 GUIDE EDITOR - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.guideEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.guideEditorHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.guideEditorHeader h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.guideEditorHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.sectionSubtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 TABS
+   ============================================================ */
+
+.guideTabs {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.guideTabBtn {
+  padding: var(--space-xs) var(--space-xl);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.guideTabBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.guideTabBtn.active {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.guideTabHint {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 LOADING
+   ============================================================ */
+
+.guideEditorLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl);
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.guideEditorLoading i {
+  font-size: var(--text-xl);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 FORM
+   ============================================================ */
+
+.guideEditorForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Toggle ── */
+.guideEditorToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  cursor: pointer;
+}
+
+.guideEditorToggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+/* ── Form Group ── */
+.geFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.geFormGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.geFormGroup input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.geFormGroup input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.geFormGroup input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 STEPS EDITOR
+   ============================================================ */
+
+.guideStepsEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.guideStepsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.guideStepsHeader label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.btnAddStep {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.btnAddStep:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ── Step Row ── */
+.guideStepRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal);
+}
+
+.guideStepRow:hover {
+  border-color: var(--accent-primary);
+}
+
+.guideStepControls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.guideStepControls button {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.guideStepControls button:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.guideStepControls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.btnRemoveStep:hover:not(:disabled) {
+  border-color: var(--status-danger) !important;
+  color: var(--status-danger) !important;
+}
+
+.guideStepIconInput {
+  width: 44px;
+  min-width: 44px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  text-align: center;
+}
+
+.guideStepIconInput:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.guideStepFields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.guideStepFields input,
+.guideStepFields textarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.guideStepFields input:focus,
+.guideStepFields textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.guideStepFields input::placeholder,
+.guideStepFields textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.guideStepFields textarea {
+  resize: vertical;
+  min-height: 40px;
+}
+
+/* ============================================================
+   📌 SAVE BUTTON
+   ============================================================ */
+
+.btnSaveGuide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.btnSaveGuide:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnSaveGuide:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .guideEditor {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .guideEditorHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .guideStepRow {
+    flex-wrap: wrap;
+  }
+
+  .guideStepControls {
+    flex-direction: row;
+  }
+
+  .guideStepIconInput {
+    width: 36px;
+    min-width: 36px;
+    font-size: var(--text-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .guideEditor {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .guideEditorHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .sectionSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .guideTabs {
+    gap: 4px;
+  }
+
+  .guideTabBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .guideStepsEditor {
+    padding: var(--space-sm);
+  }
+
+  .guideStepsHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btnAddStep {
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .guideStepRow {
+    flex-direction: column;
+    padding: var(--space-xs);
+  }
+
+  .guideStepControls {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .guideStepControls button {
+    width: 26px;
+    height: 26px;
+    font-size: 10px;
+  }
+
+  .guideStepIconInput {
+    width: 40px;
+    min-width: 40px;
+    font-size: var(--text-sm);
+    padding: 2px 4px;
+  }
+
+  .guideStepFields input,
+  .guideStepFields textarea {
+    font-size: var(--text-xs);
+    padding: var(--space-xs);
+  }
+
+  .guideStepFields textarea {
+    min-height: 30px;
+  }
+
+  .btnSaveGuide {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .geFormGroup input {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .guideEditorToggle {
+    font-size: var(--text-xs);
+  }
+
+  .guideTabHint {
+    font-size: 10px;
+  }
+
+  .guideEditorLoading {
+    font-size: var(--text-sm);
+    padding: var(--space-lg);
+  }
+
+  .guideEditorLoading i {
+    font-size: var(--text-base);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .guideEditor {
+    padding: var(--space-xs);
+  }
+
+  .guideTabBtn {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
+  .guideStepRow {
+    padding: var(--space-xs);
+  }
+
+  .guideStepIconInput {
+    width: 32px;
+    min-width: 32px;
+    font-size: var(--text-xs);
+  }
+
+  .guideStepFields input,
+  .guideStepFields textarea {
+    font-size: 10px;
+  }
+
+  .btnAddStep {
+    font-size: 10px;
+  }
+
+  .btnSaveGuide {
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .btnAddStep:hover {
+    transform: none !important;
+  }
+
+  .btnSaveGuide:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .guideTabBtn:hover {
+    transform: none !important;
+  }
+
+  .guideStepControls button:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .guideStepRow:hover {
+    transform: none !important;
+  }
+
+  .guideEditorLoading i {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .guideEditor {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .guideEditor {
+    border-width: 2px;
+  }
+
+  .guideTabBtn {
+    border-width: 2px;
+  }
+
+  .guideTabBtn.active {
+    border-width: 2px;
+  }
+
+  .geFormGroup input {
+    border-width: 2px;
+  }
+
+  .geFormGroup input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .guideStepsEditor {
+    border-width: 2px;
+  }
+
+  .guideStepRow {
+    border-width: 2px;
+  }
+
+  .guideStepControls button {
+    border-width: 2px;
+  }
+
+  .guideStepIconInput {
+    border-width: 2px;
+  }
+
+  .guideStepIconInput:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .guideStepFields input,
+  .guideStepFields textarea {
+    border-width: 2px;
+  }
+
+  .guideStepFields input:focus,
+  .guideStepFields textarea:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .btnAddStep {
+    border: 2px solid currentColor;
+  }
+
+  .btnSaveGuide {
+    border: 2px solid currentColor;
+  }
+
+  .guideEditorToggle input[type="checkbox"] {
+    accent-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.guideTabBtn:focus-visible,
+.geFormGroup input:focus-visible,
+.guideStepIconInput:focus-visible,
+.guideStepFields input:focus-visible,
+.guideStepFields textarea:focus-visible,
+.btnAddStep:focus-visible,
+.btnSaveGuide:focus-visible,
+.guideStepControls button:focus-visible,
+.guideEditorToggle input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.guideEditor ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .guideEditor {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .guideEditorHeader {
+    border-bottom: 1px solid #000000 !important;
+  }
+
+  .guideTabs {
+    display: none !important;
+  }
+
+  .guideTabHint {
+    display: none !important;
+  }
+
+  .guideStepsEditor {
+    border: 1px solid #000000 !important;
+  }
+
+  .guideStepRow {
+    border: 1px solid #000000 !important;
+  }
+
+  .guideStepControls button {
+    display: none !important;
+  }
+
+  .btnAddStep {
+    display: none !important;
+  }
+
+  .btnSaveGuide {
+    display: none !important;
+  }
+
+  .geFormGroup input {
+    border: 1px solid #000000 !important;
+  }
+
+  .guideStepIconInput {
+    border: 1px solid #000000 !important;
+  }
+
+  .guideStepFields input,
+  .guideStepFields textarea {
+    border: 1px solid #000000 !important;
+  }
+
+  .guideEditorLoading {
+    display: none !important;
+  }
+
+  .guideEditorToggle {
+    display: none !important;
+  }
+}

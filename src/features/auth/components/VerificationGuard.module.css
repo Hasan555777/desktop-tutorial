@@ -1,0 +1,260 @@
+/* ============================================================
+   🛡️ VERIFICATION GUARD - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.verificationRequired {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  min-height: 200px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.verificationRequired h3 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.verificationRequired h3 i {
+  color: var(--status-warning);
+  font-size: var(--text-2xl);
+}
+
+/* ============================================================
+   📌 DESCRIPTION
+   ============================================================ */
+
+.verificationRequired p {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  max-width: 400px;
+}
+
+/* ============================================================
+   📌 VERIFY BUTTON
+   ============================================================ */
+
+.verifyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  margin-top: var(--space-xs);
+}
+
+.verifyBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.verifyBtn:active {
+  transform: scale(0.95);
+}
+
+.verifyBtn i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .verificationRequired {
+    padding: var(--space-xl) var(--space-lg);
+    min-height: 160px;
+  }
+
+  .verificationRequired h3 {
+    font-size: var(--text-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .verificationRequired {
+    padding: var(--space-lg) var(--space-md);
+    min-height: 140px;
+    border-radius: var(--radius-md);
+  }
+
+  .verificationRequired h3 {
+    font-size: var(--text-base);
+  }
+
+  .verificationRequired h3 i {
+    font-size: var(--text-xl);
+  }
+
+  .verificationRequired p {
+    font-size: var(--text-sm);
+    max-width: 300px;
+  }
+
+  .verifyBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .verifyBtn i {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .verificationRequired {
+    padding: var(--space-md) var(--space-sm);
+    min-height: 120px;
+    border-radius: var(--radius-sm);
+  }
+
+  .verificationRequired h3 {
+    font-size: var(--text-sm);
+  }
+
+  .verificationRequired h3 i {
+    font-size: var(--text-base);
+  }
+
+  .verificationRequired p {
+    font-size: var(--text-xs);
+    max-width: 240px;
+  }
+
+  .verifyBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-md);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .verifyBtn:hover {
+    transform: none !important;
+  }
+
+  .verifyBtn:active {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .verificationRequired {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .verificationRequired {
+    border-width: 2px;
+  }
+
+  .verifyBtn {
+    border: 2px solid currentColor;
+  }
+
+  .verificationRequired h3 i {
+    color: #ffaa00;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.verifyBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.verificationRequired ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .verificationRequired {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+  }
+
+  .verificationRequired h3 {
+    color: #000000 !important;
+  }
+
+  .verificationRequired p {
+    color: #333333 !important;
+  }
+
+  .verifyBtn {
+    display: none !important;
+  }
+}

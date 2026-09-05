@@ -1,0 +1,842 @@
+/* ============================================================
+   📦 POST SERVICE BOX - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.globalModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: overlayFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.postAddBox {
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.4s ease;
+  padding: 0;
+}
+
+.postAddBox::-webkit-scrollbar {
+  width: 6px;
+}
+
+.postAddBox::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.postAddBox::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.pboxHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.pboxHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.pboxCloseBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+}
+
+.pboxCloseBtn:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border-color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 NOTICE
+   ============================================================ */
+
+.pboxNotice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--status-warning-bg);
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  color: var(--status-warning);
+}
+
+.pboxNotice i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 UPLOAD PROGRESS BAR
+   ============================================================ */
+
+.uploadProgressBar {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.progressText {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.progressTrack {
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* ============================================================
+   📌 FORM BODY
+   ============================================================ */
+
+.pboxBodyForm {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Error ── */
+.pboxError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-md);
+  color: var(--status-danger);
+  font-size: var(--text-sm);
+}
+
+.pboxError i {
+  font-size: var(--text-base);
+  flex-shrink: 0;
+}
+
+/* ── Image Size Info ── */
+.imageSizeInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success);
+  border-radius: var(--radius-md);
+  color: var(--status-success);
+  font-size: var(--text-xs);
+  flex-wrap: wrap;
+}
+
+.imageSizeInfo i {
+  font-size: var(--text-sm);
+}
+
+.sizeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 1px 10px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  margin-left: auto;
+}
+
+/* ── Form Group ── */
+.pbGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.pbGroup label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.requiredStar {
+  color: var(--status-danger);
+}
+
+.charCount {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+.imageHint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.pbGroup input,
+.pbGroup textarea,
+.pbGroup select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.pbGroup input:focus,
+.pbGroup textarea:focus,
+.pbGroup select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.pbGroup input::placeholder,
+.pbGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.pbGroup input:disabled,
+.pbGroup textarea:disabled,
+.pbGroup select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pbGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.pbGroup small {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ── Radio Group ── */
+.pbRadioGroup {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.pbRadioLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.pbRadioLabel input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+/* ── Price & Delivery Rows ── */
+.pbRowTwin {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.pbPriceFixed,
+.pbDeliveryFixed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.pbPriceRange,
+.pbDeliveryRange {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ============================================================
+   📌 IMAGE UPLOAD
+   ============================================================ */
+
+.uploadDropZone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  background: var(--bg-tertiary);
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.uploadDropZone:hover:not(.disabled) {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.uploadDropZone.dragOver {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+}
+
+.uploadDropZone.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.uploadDropZone i {
+  font-size: 36px;
+  color: var(--accent-primary);
+}
+
+.uploadDropZone p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.uploadDropZone span {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.uploadWarning {
+  color: var(--status-warning) !important;
+  font-weight: 600;
+}
+
+.uploadDropZoneDisabled {
+  border: 2px solid var(--status-success);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  text-align: center;
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  font-size: var(--text-sm);
+}
+
+.uploadDropZoneDisabled p {
+  margin: 0;
+}
+
+/* ── Multi Preview Grid ── */
+.multiPreviewGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.uploadPreviewContainer {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid var(--border-color);
+  aspect-ratio: 1;
+  background: var(--bg-tertiary);
+}
+
+.uploadedLiveImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.removeImgBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--status-danger);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.removeImgBtn:hover {
+  transform: scale(1.1);
+}
+
+.removeImgBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.imageOrderBadge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--overlay-bg);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageSizeBadge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  background: var(--overlay-bg);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.pboxFooter {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.pboxBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  min-width: 80px;
+}
+
+.pboxBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pbBtnClose {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.pbBtnClose:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.pbBtnReset {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.pbBtnReset:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.pbBtnPublish {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.pbBtnPublish:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.pbBtnPublish.btnLockedStyle {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.pbBtnPublish.btnLockedStyle:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .postAddBox {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .pboxHeader {
+    padding: var(--space-md);
+  }
+
+  .pboxHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .pboxBodyForm {
+    padding: var(--space-md);
+  }
+
+  .pbRowTwin {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .multiPreviewGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pboxFooter {
+    flex-direction: column;
+  }
+
+  .pboxBtn {
+    width: 100%;
+  }
+
+  .pboxNotice {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .postAddBox {
+    border-radius: var(--radius-md);
+    max-height: 98vh;
+  }
+
+  .pboxHeader {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .pboxHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .pboxCloseBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .pboxBodyForm {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .pbGroup input,
+  .pbGroup textarea,
+  .pbGroup select {
+    font-size: var(--text-xs);
+    padding: 8px 12px;
+  }
+
+  .pbRadioLabel {
+    font-size: var(--text-xs);
+  }
+
+  .uploadDropZone {
+    padding: var(--space-md);
+    min-height: 100px;
+  }
+
+  .uploadDropZone i {
+    font-size: 28px;
+  }
+
+  .uploadDropZone p {
+    font-size: var(--text-xs);
+  }
+
+  .multiPreviewGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+  }
+
+  .pboxFooter {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .pboxBtn {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+
+  .pboxNotice {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+
+  .imageSizeInfo {
+    font-size: 9px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .sizeBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .progressText {
+    font-size: 9px;
+  }
+
+  .progressTrack {
+    height: 4px;
+  }
+
+  .removeImgBtn {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .imageOrderBadge {
+    width: 18px;
+    height: 18px;
+    font-size: 8px;
+  }
+
+  .imageSizeBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .globalModalOverlay {
+    animation: none;
+  }
+
+  .postAddBox {
+    animation: none;
+  }
+
+  .progressFill {
+    transition: none;
+  }
+
+  .pboxCloseBtn:hover {
+    transform: none;
+  }
+
+  .pbBtnPublish:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .removeImgBtn:hover {
+    transform: none;
+  }
+
+  .uploadDropZone:hover:not(.disabled) {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .postAddBox {
+    border-width: 2px;
+  }
+
+  .pboxCloseBtn {
+    border-width: 2px;
+  }
+
+  .uploadDropZone {
+    border-width: 2px;
+  }
+
+  .uploadDropZoneDisabled {
+    border-width: 2px;
+  }
+
+  .uploadPreviewContainer {
+    border-width: 2px;
+  }
+
+  .pboxBtn {
+    border: 2px solid currentColor;
+  }
+
+  .pbBtnPublish {
+    border-color: var(--accent-primary);
+  }
+
+  .pbBtnPublish.btnLockedStyle {
+    border-color: var(--text-muted);
+  }
+
+  .pboxError {
+    border-width: 2px;
+  }
+
+  .imageSizeInfo {
+    border-width: 2px;
+  }
+
+  .pboxNotice {
+    border-bottom-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.pboxCloseBtn:focus-visible,
+.pboxBtn:focus-visible,
+.pbGroup input:focus-visible,
+.pbGroup textarea:focus-visible,
+.pbGroup select:focus-visible,
+.pbRadioLabel input:focus-visible,
+.removeImgBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.postAddBox ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

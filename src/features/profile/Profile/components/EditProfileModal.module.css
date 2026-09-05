@@ -1,0 +1,502 @@
+/* ============================================================
+   ✏️ EDIT PROFILE MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.editModal {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 520px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 MODAL HEADER
+   ============================================================ */
+
+.editModal h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: var(--space-lg) var(--space-xl) var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.editModal h3 i {
+  color: var(--accent-primary);
+  font-size: var(--text-xl);
+}
+
+/* ============================================================
+   📌 MODAL BODY
+   ============================================================ */
+
+.editForm {
+  padding: var(--space-xl);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.editForm::-webkit-scrollbar {
+  width: 4px;
+}
+
+.editForm::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.editForm::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 FORM GROUP
+   ============================================================ */
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.formGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.requiredStar {
+  color: var(--status-danger);
+  font-weight: 100;
+}
+
+.hintText {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.editInput {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.editInput:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.editInput::placeholder {
+  color: var(--text-muted);
+}
+
+.editInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.editTextarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.editTextarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.editTextarea::placeholder {
+  color: var(--text-muted);
+}
+
+.charCount {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: right;
+}
+
+/* ============================================================
+   📌 ACTION BUTTONS
+   ============================================================ */
+
+.editActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.cancelBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.cancelBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: translateY(-2px);
+}
+
+.saveBtn {
+  flex: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.saveBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .editModal {
+    max-width: 480px;
+  }
+
+  .editForm {
+    padding: var(--space-lg);
+  }
+
+  .editModal h3 {
+    font-size: var(--text-base);
+    padding: var(--space-md) var(--space-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: var(--space-md);
+  }
+
+  .editModal {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: var(--radius-md);
+  }
+
+  .editForm {
+    padding: var(--space-md);
+  }
+
+  .editModal h3 {
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .editModal h3 i {
+    font-size: var(--text-base);
+  }
+
+  .formGroup {
+    margin-bottom: var(--space-md);
+  }
+
+  .formGroup label {
+    font-size: var(--text-xs);
+  }
+
+  .editInput,
+  .editTextarea {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .editTextarea {
+    min-height: 60px;
+  }
+
+  .editActions {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+  }
+
+  .charCount {
+    font-size: 9px;
+  }
+
+  .hintText {
+    font-size: 9px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .modalOverlay {
+    padding: var(--space-sm);
+  }
+
+  .editModal {
+    max-height: 98vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .editForm {
+    padding: var(--space-sm);
+  }
+
+  .editModal h3 {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .editModal h3 i {
+    font-size: var(--text-sm);
+  }
+
+  .editInput,
+  .editTextarea {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .editTextarea {
+    min-height: 50px;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .modalOverlay {
+    animation: none !important;
+  }
+
+  .editModal {
+    animation: none !important;
+  }
+
+  .cancelBtn:hover {
+    transform: none !important;
+  }
+
+  .saveBtn:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .editModal {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .editModal {
+    border-width: 2px;
+  }
+
+  .editInput,
+  .editTextarea {
+    border-width: 2px;
+  }
+
+  .editInput:focus,
+  .editTextarea:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .cancelBtn {
+    border-width: 2px;
+  }
+
+  .saveBtn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.editInput:focus-visible,
+.editTextarea:focus-visible,
+.cancelBtn:focus-visible,
+.saveBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.editForm ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .modalOverlay {
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 20px !important;
+  }
+
+  .editModal {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    max-height: none !important;
+  }
+
+  .editActions {
+    display: none !important;
+  }
+}

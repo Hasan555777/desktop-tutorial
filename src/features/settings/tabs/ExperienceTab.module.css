@@ -1,0 +1,542 @@
+/* ============================================================
+   💼 EXPERIENCE TAB - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.settingsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+.settingsSection h2 {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.settingsSection h2 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+/* ============================================================
+   📌 FORM
+   ============================================================ */
+
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ============================================================
+   📌 ITEM CARD
+   ============================================================ */
+
+.itemCard {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: all var(--transition-normal);
+}
+
+.itemCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.itemHeader h4 {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  flex: 1;
+  word-break: break-word;
+}
+
+.deleteBtnSmall {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex-shrink: 0;
+}
+
+.deleteBtnSmall:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: scale(1.05);
+}
+
+.deleteBtnSmall:active {
+  transform: scale(0.92);
+}
+
+.itemDate {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.itemDescription {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ============================================================
+   📌 ADD FORM
+   ============================================================ */
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.addForm:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.addForm input,
+.addForm textarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.addForm input:focus,
+.addForm textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.addForm input::placeholder,
+.addForm textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.addForm textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.cancelBtn {
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.cancelBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: translateY(-2px);
+}
+
+.saveBtn {
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.saveBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 ADD BUTTON
+   ============================================================ */
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 2px dashed var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+}
+
+.addBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.addBtn i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .settingsSection {
+    gap: var(--space-md);
+  }
+
+  .settingsSection h2 {
+    font-size: var(--text-lg);
+  }
+
+  .itemCard {
+    padding: var(--space-md);
+  }
+
+  .itemHeader h4 {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .settingsSection {
+    gap: var(--space-sm);
+  }
+
+  .settingsSection h2 {
+    font-size: var(--text-base);
+  }
+
+  .itemCard {
+    padding: var(--space-sm);
+  }
+
+  .itemHeader h4 {
+    font-size: var(--text-sm);
+  }
+
+  .itemDate {
+    font-size: 10px;
+  }
+
+  .itemDescription {
+    font-size: var(--text-xs);
+  }
+
+  .addForm {
+    padding: var(--space-sm);
+  }
+
+  .addForm input,
+  .addForm textarea {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .addForm textarea {
+    min-height: 50px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+  }
+
+  .addBtn {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+  }
+
+  .deleteBtnSmall {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .settingsSection h2 {
+    font-size: var(--text-sm);
+  }
+
+  .itemCard {
+    padding: var(--space-xs);
+    border-radius: var(--radius-sm);
+  }
+
+  .itemHeader h4 {
+    font-size: var(--text-xs);
+  }
+
+  .itemDate {
+    font-size: 9px;
+  }
+
+  .itemDescription {
+    font-size: 10px;
+  }
+
+  .deleteBtnSmall {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .addForm {
+    padding: var(--space-xs);
+    gap: var(--space-xs);
+  }
+
+  .addForm input,
+  .addForm textarea {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .addForm textarea {
+    min-height: 40px;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .addBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .itemCard:hover {
+    transform: none !important;
+  }
+
+  .deleteBtnSmall:hover {
+    transform: none !important;
+  }
+
+  .cancelBtn:hover {
+    transform: none !important;
+  }
+
+  .saveBtn:hover {
+    transform: none !important;
+  }
+
+  .addBtn:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .settingsSection {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .itemCard {
+    border-width: 2px;
+  }
+
+  .addForm {
+    border-width: 2px;
+  }
+
+  .addBtn {
+    border-width: 2px;
+  }
+
+  .cancelBtn {
+    border-width: 2px;
+  }
+
+  .saveBtn {
+    border: 2px solid currentColor;
+  }
+
+  .deleteBtnSmall {
+    border-width: 2px;
+  }
+
+  .addForm input,
+  .addForm textarea {
+    border-width: 2px;
+  }
+
+  .addForm input:focus,
+  .addForm textarea:focus {
+    border-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.addForm input:focus-visible,
+.addForm textarea:focus-visible,
+.deleteBtnSmall:focus-visible,
+.cancelBtn:focus-visible,
+.saveBtn:focus-visible,
+.addBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.settingsSection ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .settingsSection {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .itemCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .addForm {
+    border: 1px solid #000000 !important;
+  }
+
+  .addBtn {
+    border: 1px solid #000000 !important;
+  }
+
+  .deleteBtnSmall {
+    display: none !important;
+  }
+
+  .saveBtn,
+  .cancelBtn {
+    border: 1px solid #000000 !important;
+  }
+}

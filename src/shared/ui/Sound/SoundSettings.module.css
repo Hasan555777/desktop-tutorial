@@ -1,0 +1,589 @@
+/* ============================================================
+   🔊 SOUND SETTINGS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.soundSettings {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.soundSettings:hover {
+  border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.soundSettingsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.soundSettingsHeader:hover {
+  background: var(--bg-hover);
+}
+
+.soundSettingsTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.soundSettingsTitle i {
+  color: var(--accent-primary);
+  font-size: var(--text-base);
+}
+
+.soundIndicator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--status-success);
+  font-size: var(--text-xs);
+}
+
+.soundSettingsStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.statusDot.active {
+  background: var(--status-success);
+}
+
+.statusDot.muted {
+  background: var(--text-muted);
+}
+
+.volumeText {
+  font-weight: 600;
+  min-width: 32px;
+  text-align: center;
+}
+
+.soundSettingsStatus i {
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: transform var(--transition-fast);
+}
+
+/* ============================================================
+   📌 BODY
+   ============================================================ */
+
+.soundSettingsBody {
+  padding: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  animation: slideDown 0.25s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📌 SETTING ITEMS
+   ============================================================ */
+
+.soundSettingItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.settingLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.settingLabel i {
+  font-size: var(--text-base);
+  color: var(--accent-primary);
+  width: 18px;
+  text-align: center;
+}
+
+.settingLabelText {
+  font-weight: 500;
+}
+
+.settingLabelText strong {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 MUTE TOGGLE
+   ============================================================ */
+
+.muteToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  border: none;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.muteToggle.active {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.muteToggle.active:hover {
+  background: var(--status-success);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.muteToggle.muted {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.muteToggle.muted:hover {
+  background: var(--status-danger);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.muteToggle i {
+  font-size: 12px;
+}
+
+/* ============================================================
+   📌 VOLUME SLIDER
+   ============================================================ */
+
+.volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  max-width: 160px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  outline: none;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 8px var(--shadow-glow);
+}
+
+.volumeSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.volumeSlider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: none;
+}
+
+.volumeSlider:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.volumeSlider:disabled::-webkit-slider-thumb {
+  background: var(--text-muted);
+}
+
+/* ============================================================
+   📌 TEST SOUND
+   ============================================================ */
+
+.testSoundItem {
+  flex-wrap: wrap;
+}
+
+.testSoundControls {
+  display: flex;
+  gap: var(--space-xs);
+  flex: 1;
+  min-width: 160px;
+}
+
+.testSoundSelect {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: var(--text-xs);
+  font-family: var(--font-primary);
+  outline: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.testSoundSelect:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.testSoundSelect:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.testSoundBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  white-space: nowrap;
+}
+
+.testSoundBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.testSoundBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.testSoundBtn i {
+  font-size: 10px;
+}
+
+/* ============================================================
+   📌 STATUS BAR
+   ============================================================ */
+
+.soundStatusBar {
+  display: flex;
+  gap: var(--space-lg);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-light);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.statusLabel {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.statusValue {
+  font-weight: 600;
+}
+
+.statusValue.active {
+  color: var(--status-success);
+}
+
+.statusValue.muted {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingText {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 ADMIN VARIANT
+   ============================================================ */
+
+.adminSoundSettings {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.adminSoundSettings .soundSettingsHeader {
+  padding: var(--space-md) var(--space-lg);
+}
+
+.adminSoundSettings .soundSettingsBody {
+  padding: var(--space-md) var(--space-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 COMPACT VARIANT
+   ============================================================ */
+
+.soundSettings.compact {
+  border: none;
+  background: transparent;
+}
+
+.soundSettings.compact .soundSettingsBody {
+  padding: var(--space-xs) 0;
+  border-top: none;
+}
+
+.soundSettings.compact .soundSettingItem {
+  padding: var(--space-xs) 0;
+}
+
+.soundSettings.compact .volumeSlider {
+  max-width: 100px;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .soundSettingItem {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .volumeSlider {
+    max-width: 100%;
+  }
+
+  .testSoundControls {
+    flex-direction: column;
+  }
+
+  .testSoundSelect {
+    width: 100%;
+  }
+
+  .testSoundBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .soundSettingsStatus {
+    font-size: 10px;
+  }
+
+  .volumeText {
+    min-width: 24px;
+  }
+
+  .adminSoundSettings .soundSettingsHeader {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .adminSoundSettings .soundSettingsBody {
+    padding: var(--space-sm) var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .soundSettingsHeader {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .soundSettingsTitle {
+    font-size: var(--text-xs);
+  }
+
+  .soundSettingsStatus {
+    gap: var(--space-xs);
+  }
+
+  .soundSettingsBody {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .muteToggle {
+    padding: 3px 10px;
+    font-size: 9px;
+  }
+
+  .volumeSlider::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+  }
+
+  .testSoundBtn {
+    font-size: 9px;
+    padding: 4px 10px;
+  }
+
+  .testSoundSelect {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .soundStatusBar {
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: 9px;
+  }
+
+  .statusDot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .soundSettingsBody {
+    animation: none;
+  }
+
+  .muteToggle.active:hover,
+  .muteToggle.muted:hover {
+    transform: none;
+  }
+
+  .testSoundBtn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .soundSettingsHeader:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .soundSettings {
+    border-width: 2px;
+  }
+
+  .muteToggle {
+    border: 1px solid currentColor;
+  }
+
+  .muteToggle.active {
+    border-color: var(--status-success);
+  }
+
+  .muteToggle.muted {
+    border-color: var(--status-danger);
+  }
+
+  .volumeSlider::-webkit-slider-thumb {
+    border: 2px solid currentColor;
+  }
+
+  .volumeSlider::-moz-range-thumb {
+    border: 2px solid currentColor;
+  }
+
+  .testSoundBtn {
+    border: 2px solid currentColor;
+  }
+
+  .testSoundSelect {
+    border-width: 2px;
+  }
+
+  .statusDot {
+    border: 1px solid currentColor;
+  }
+
+  .soundSettingsHeader:hover {
+    background: var(--bg-hover);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.muteToggle:focus-visible,
+.testSoundBtn:focus-visible,
+.testSoundSelect:focus-visible,
+.volumeSlider:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.soundSettings ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

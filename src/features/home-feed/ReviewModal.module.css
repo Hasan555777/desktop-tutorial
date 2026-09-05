@@ -1,0 +1,601 @@
+/* ============================================================
+   ⭐ REVIEW MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.reviewModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: modalFadeIn 0.3s ease;
+  padding: var(--space-md);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.reviewModal {
+  max-width: 520px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  animation: modalSlideUp 0.3s ease;
+}
+
+.reviewModal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.reviewModal::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+  border-radius: var(--radius-full);
+}
+
+.reviewModal::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 MODAL HEADER
+   ============================================================ */
+
+.reviewModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.reviewModalHeader h3 {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalCloseBtn:hover {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+}
+
+/* ============================================================
+   📌 MODAL BODY
+   ============================================================ */
+
+.reviewModalBody {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ── User Info ── */
+.reviewUserInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.reviewUserAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.reviewUserDetails h4 {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+}
+
+.reviewUserDetails p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ── Already Reviewed ── */
+.reviewAlreadyDone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg);
+  color: var(--status-success);
+  text-align: center;
+}
+
+.reviewAlreadyDone i {
+  font-size: 48px;
+}
+
+.reviewAlreadyDone p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ── Rating Section ── */
+.ratingSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ratingSection label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.starsContainer {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.star {
+  font-size: 32px;
+  transition: transform 0.15s ease;
+  cursor: pointer;
+  line-height: 1;
+  color: var(--border-color);
+  user-select: none;
+}
+
+.star.filled {
+  color: #fbbf24;
+}
+
+.star:hover:not(.disabled) {
+  transform: scale(1.2);
+}
+
+.star.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ratingText {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ── Review Text Section ── */
+.reviewTextSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.reviewTextSection label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.reviewTextSection textarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-family: var(--font-primary);
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+  transition: all var(--transition-normal);
+}
+
+.reviewTextSection textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.reviewTextSection textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.reviewTextSection textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.charCount {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* ── Error ── */
+.reviewError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-sm);
+  color: var(--status-danger);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.reviewError i {
+  font-size: var(--text-base);
+  flex-shrink: 0;
+}
+
+/* ── Actions ── */
+.reviewActions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+
+.cancelBtn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 10px 24px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submitBtn i {
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .reviewModal {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: var(--space-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .reviewModalHeader {
+    padding: var(--space-md);
+  }
+
+  .reviewModalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .modalCloseBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-base);
+  }
+
+  .reviewModalBody {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .reviewUserAvatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .reviewUserDetails h4 {
+    font-size: var(--text-sm);
+  }
+
+  .reviewUserDetails p {
+    font-size: var(--text-xs);
+  }
+
+  .star {
+    font-size: 28px;
+  }
+
+  .reviewTextSection textarea {
+    min-height: 80px;
+    font-size: var(--text-xs);
+  }
+
+  .reviewActions {
+    flex-direction: column;
+  }
+
+  .cancelBtn,
+  .submitBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .reviewAlreadyDone {
+    padding: var(--space-lg);
+  }
+
+  .reviewAlreadyDone i {
+    font-size: 36px;
+  }
+
+  .reviewAlreadyDone p {
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .reviewModalOverlay {
+    padding: var(--space-sm);
+  }
+
+  .reviewModal {
+    border-radius: var(--radius-md);
+    max-height: 98vh;
+  }
+
+  .reviewModalHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .reviewModalBody {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .reviewUserInfo {
+    gap: var(--space-sm);
+    padding-bottom: var(--space-sm);
+  }
+
+  .reviewUserAvatar {
+    width: 40px;
+    height: 40px;
+    border-width: 2px;
+  }
+
+  .reviewUserDetails h4 {
+    font-size: var(--text-xs);
+  }
+
+  .star {
+    font-size: 24px;
+  }
+
+  .ratingText {
+    font-size: var(--text-xs);
+  }
+
+  .reviewTextSection textarea {
+    min-height: 60px;
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .charCount {
+    font-size: 9px;
+  }
+
+  .reviewError {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .reviewError i {
+    font-size: var(--text-sm);
+  }
+
+  .cancelBtn,
+  .submitBtn {
+    font-size: var(--text-xs);
+    padding: 8px 16px;
+  }
+
+  .submitBtn i {
+    font-size: 12px;
+  }
+
+  .reviewAlreadyDone i {
+    font-size: 28px;
+  }
+
+  .reviewAlreadyDone p {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .reviewModalOverlay {
+    animation: none;
+  }
+
+  .reviewModal {
+    animation: none;
+  }
+
+  .star:hover:not(.disabled) {
+    transform: none;
+  }
+
+  .submitBtn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .modalCloseBtn:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .reviewModal {
+    border-width: 2px;
+  }
+
+  .reviewUserAvatar {
+    border-width: 3px;
+  }
+
+  .star {
+    color: #666666;
+  }
+
+  .star.filled {
+    color: #fbbf24;
+  }
+
+  .submitBtn {
+    border: 2px solid currentColor;
+  }
+
+  .cancelBtn {
+    border-width: 2px;
+  }
+
+  .modalCloseBtn {
+    border: 1px solid transparent;
+  }
+
+  .modalCloseBtn:hover {
+    border-color: var(--status-danger);
+  }
+
+  .reviewError {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.modalCloseBtn:focus-visible,
+.cancelBtn:focus-visible,
+.submitBtn:focus-visible,
+.reviewTextSection textarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.reviewModal ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

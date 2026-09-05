@@ -1,0 +1,602 @@
+/* ============================================================
+   📨 NOTIFICATIONS SECTION - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.adminNotifications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+.adminNotifications h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 NOTIFICATION FORM
+   ============================================================ */
+
+.notificationForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Form Group ── */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.formGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.formGroup select {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+  cursor: pointer;
+}
+
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.formGroup select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.formGroup textarea {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.formGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 RECIPIENT SELECT
+   ============================================================ */
+
+.recipientSelect {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  background: var(--bg-tertiary);
+}
+
+.selectAll {
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.selectAll label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  cursor: pointer;
+}
+
+.selectAll input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.userList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-xs);
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+.userList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.userList::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.userList::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.userCheck {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.userCheck:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.userCheck input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.userCheck span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   📌 SEND BUTTON
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnPrimary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 SENT NOTIFICATIONS
+   ============================================================ */
+
+.sentNotifications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.sentNotifications h4 {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.notificationList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+.notificationList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.notificationList::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.notificationList::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.notificationItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--border-color);
+  background: var(--bg-tertiary);
+  transition: all var(--transition-normal);
+  flex-wrap: wrap;
+}
+
+.notificationItem:hover {
+  border-color: var(--accent-primary);
+}
+
+.notificationItem.info {
+  border-left-color: var(--status-info);
+}
+
+.notificationItem.success {
+  border-left-color: var(--status-success);
+}
+
+.notificationItem.warning {
+  border-left-color: var(--status-warning);
+}
+
+.notificationItem.error {
+  border-left-color: var(--status-danger);
+}
+
+.notifMessage {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex: 1;
+}
+
+.notifMeta {
+  display: flex;
+  gap: var(--space-md);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .adminNotifications {
+    padding: var(--space-md);
+    gap: var(--space-lg);
+  }
+
+  .userList {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .adminNotifications {
+    padding: var(--space-sm);
+    gap: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .adminNotifications h3 {
+    font-size: var(--text-base);
+  }
+
+  .formGroup label {
+    font-size: var(--text-xs);
+  }
+
+  .formGroup select,
+  .formGroup textarea {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .userList {
+    grid-template-columns: 1fr 1fr;
+    max-height: 150px;
+  }
+
+  .userCheck {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .userCheck input[type="checkbox"] {
+    width: 12px;
+    height: 12px;
+  }
+
+  .selectAll label {
+    font-size: var(--text-xs);
+  }
+
+  .selectAll input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .sentNotifications h4 {
+    font-size: var(--text-sm);
+  }
+
+  .notificationItem {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .notifMessage {
+    font-size: var(--text-xs);
+  }
+
+  .notifMeta {
+    font-size: 10px;
+    gap: var(--space-sm);
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .adminNotifications {
+    padding: var(--space-xs);
+  }
+
+  .userList {
+    grid-template-columns: 1fr;
+  }
+
+  .userCheck {
+    font-size: 9px;
+  }
+
+  .notifMessage {
+    font-size: 10px;
+  }
+
+  .notifMeta {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .userCheck:hover {
+    transform: none !important;
+  }
+
+  .notificationItem:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .adminNotifications {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .adminNotifications {
+    border-width: 2px;
+  }
+
+  .formGroup select {
+    border-width: 2px;
+  }
+
+  .formGroup select:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .formGroup textarea {
+    border-width: 2px;
+  }
+
+  .formGroup textarea:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .recipientSelect {
+    border-width: 2px;
+  }
+
+  .userCheck {
+    border-width: 2px;
+  }
+
+  .btnPrimary {
+    border: 2px solid currentColor;
+  }
+
+  .notificationItem {
+    border-left-width: 6px;
+  }
+
+  .notificationItem.info {
+    border-left-color: var(--status-info);
+  }
+
+  .notificationItem.success {
+    border-left-color: var(--status-success);
+  }
+
+  .notificationItem.warning {
+    border-left-color: var(--status-warning);
+  }
+
+  .notificationItem.error {
+    border-left-color: var(--status-danger);
+  }
+
+  .selectAll input[type="checkbox"],
+  .userCheck input[type="checkbox"] {
+    accent-color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.formGroup select:focus-visible,
+.formGroup textarea:focus-visible,
+.btn:focus-visible,
+.selectAll input:focus-visible,
+.userCheck input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.adminNotifications ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .adminNotifications {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .formGroup select {
+    border: 1px solid #000000 !important;
+  }
+
+  .formGroup textarea {
+    border: 1px solid #000000 !important;
+  }
+
+  .recipientSelect {
+    border: 1px solid #000000 !important;
+  }
+
+  .userCheck {
+    border: 1px solid #000000 !important;
+  }
+
+  .btn {
+    display: none !important;
+  }
+
+  .notificationItem {
+    border-left: 3px solid #000000 !important;
+  }
+}

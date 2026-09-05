@@ -1,0 +1,1137 @@
+/* ============================================================
+   📱 APP & DEVICE TAB - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.appDeviceTab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.appDeviceHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.appDeviceHeader h2 {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.appDeviceHeader h2 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.headerSubtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingState p {
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 APP DEVICE CARD
+   ============================================================ */
+
+.appDeviceCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.appDeviceCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+/* ── Card Header ── */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.cardIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.cardTitle h3 {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ── Status Badge ── */
+.statusBadge {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusBadge.installed {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.statusBadge.notInstalled {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.statusBadge.updateAvailable {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+.statusBadge.online {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.statusBadge.offline {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+.statusBadge.info {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+/* ── Card Body ── */
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ============================================================
+   📌 INSTALLATION
+   ============================================================ */
+
+.installSuccess {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  text-align: center;
+  background: var(--status-success-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--status-success);
+}
+
+.installSuccess i {
+  font-size: 36px;
+  color: var(--status-success);
+}
+
+.installSuccess p {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.installSuccess small {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.installActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: center;
+  text-align: center;
+}
+
+.installDescription {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.installBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.installBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.installBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.iosHint,
+.browserHint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.browserHint.ready {
+  color: var(--status-success);
+}
+
+/* ============================================================
+   📌 UPDATE
+   ============================================================ */
+
+.updateAvailable {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.updateInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-info-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--status-info);
+}
+
+.updateInfo i {
+  font-size: var(--text-xl);
+  color: var(--status-info);
+  margin-top: 2px;
+}
+
+.updateInfo div p {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.updateInfo div small {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.updateActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.updateBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.updateBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.updateLaterBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.updateLaterBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.updateCurrent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.updateCurrent i {
+  font-size: var(--text-xl);
+  color: var(--status-success);
+}
+
+.updateCurrent div p {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.updateCurrent div small {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.checkUpdateBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-left: auto;
+}
+
+.checkUpdateBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.checkUpdateBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 STORAGE
+   ============================================================ */
+
+.storageInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.storageDetail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xs) 0;
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.storageDetail span:first-child {
+  color: var(--text-secondary);
+}
+
+.storageDetail span:last-child {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.storageBar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.storageBarFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
+}
+
+.clearCacheBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-danger);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  align-self: flex-start;
+  margin-top: var(--space-sm);
+}
+
+.clearCacheBtn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.clearCacheBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 NETWORK
+   ============================================================ */
+
+.networkInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.networkDetail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xs) 0;
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.networkDetail span:first-child {
+  color: var(--text-secondary);
+}
+
+.networkDetail span:last-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.checkNetworkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  align-self: flex-start;
+}
+
+.checkNetworkBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.checkNetworkBtn i {
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 DEVICE INFO GRID
+   ============================================================ */
+
+.deviceInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-sm);
+}
+
+.deviceInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.deviceInfoItem:hover {
+  border-color: var(--accent-primary);
+}
+
+.deviceInfoItem .label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.deviceInfoItem .value {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.deviceInfoItem .value i {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 ACTIONS GRID
+   ============================================================ */
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-sm);
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.actionBtn i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.appDeviceFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.buildInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.appLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.appLink {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-fast);
+}
+
+.appLink:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .appDeviceTab {
+    gap: var(--space-md);
+  }
+
+  .appDeviceCard {
+    padding: var(--space-md);
+  }
+
+  .deviceInfoGrid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .actionsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .appDeviceTab {
+    gap: var(--space-sm);
+  }
+
+  .appDeviceHeader h2 {
+    font-size: var(--text-lg);
+  }
+
+  .headerSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .appDeviceCard {
+    padding: var(--space-sm);
+  }
+
+  .cardHeader {
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .cardIcon {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .cardTitle h3 {
+    font-size: var(--text-sm);
+  }
+
+  .statusBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .deviceInfoGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+  }
+
+  .deviceInfoItem {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .deviceInfoItem .value {
+    font-size: var(--text-xs);
+  }
+
+  .actionsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+  }
+
+  .actionBtn {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-xs);
+  }
+
+  .installBtn,
+  .updateBtn,
+  .updateLaterBtn,
+  .clearCacheBtn,
+  .checkNetworkBtn,
+  .checkUpdateBtn {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--text-xs);
+  }
+
+  .updateCurrent {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .updateCurrent i {
+    font-size: var(--text-lg);
+  }
+
+  .checkUpdateBtn {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .updateActions {
+    width: 100%;
+  }
+
+  .updateActions button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .storageDetail {
+    font-size: var(--text-xs);
+  }
+
+  .networkDetail {
+    font-size: var(--text-xs);
+  }
+
+  .appDeviceFooter {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-xs);
+  }
+
+  .buildInfo {
+    font-size: 9px;
+  }
+
+  .appLink {
+    font-size: 10px;
+  }
+
+  .installSuccess i {
+    font-size: 28px;
+  }
+
+  .installSuccess p {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .appDeviceTab {
+    gap: var(--space-xs);
+  }
+
+  .appDeviceHeader h2 {
+    font-size: var(--text-base);
+  }
+
+  .appDeviceCard {
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+  }
+
+  .cardIcon {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+  }
+
+  .cardTitle h3 {
+    font-size: var(--text-xs);
+  }
+
+  .statusBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .deviceInfoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .installBtn,
+  .updateBtn,
+  .updateLaterBtn,
+  .clearCacheBtn,
+  .checkNetworkBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .updateActions {
+    flex-direction: column;
+  }
+
+  .updateActions button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .storageBar {
+    height: 6px;
+  }
+
+  .deviceInfoItem .label {
+    font-size: 9px;
+  }
+
+  .deviceInfoItem .value {
+    font-size: 10px;
+  }
+
+  .installDescription {
+    font-size: var(--text-xs);
+  }
+
+  .installSuccess {
+    padding: var(--space-sm);
+  }
+
+  .installSuccess i {
+    font-size: 24px;
+  }
+
+  .updateInfo {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .updateInfo i {
+    font-size: var(--text-base);
+  }
+
+  .updateInfo div p {
+    font-size: var(--text-xs);
+  }
+
+  .updateInfo div small {
+    font-size: 9px;
+  }
+
+  .appDeviceFooter {
+    gap: 2px;
+  }
+
+  .buildInfo {
+    font-size: 8px;
+  }
+
+  .appLink {
+    font-size: 9px;
+  }
+
+  .loadingState {
+    padding: var(--space-xl) var(--space-sm);
+  }
+
+  .loadingSpinner {
+    width: 30px;
+    height: 30px;
+    border-width: 3px;
+  }
+
+  .loadingState p {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loadingSpinner {
+    animation: none;
+  }
+
+  .appDeviceCard:hover {
+    transform: none !important;
+  }
+
+  .installBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .updateBtn:hover {
+    transform: none !important;
+  }
+
+  .updateLaterBtn:hover {
+    transform: none !important;
+  }
+
+  .clearCacheBtn:hover {
+    transform: none !important;
+  }
+
+  .checkNetworkBtn:hover {
+    transform: none !important;
+  }
+
+  .actionBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .storageBarFill {
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .appDeviceTab {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .appDeviceCard {
+    border-width: 2px;
+  }
+
+  .statusBadge {
+    border-width: 2px;
+  }
+
+  .installBtn,
+  .updateBtn,
+  .clearCacheBtn {
+    border: 2px solid currentColor;
+  }
+
+  .updateLaterBtn,
+  .checkUpdateBtn,
+  .checkNetworkBtn,
+  .actionBtn {
+    border-width: 2px;
+  }
+
+  .deviceInfoItem {
+    border-width: 2px;
+  }
+
+  .installSuccess {
+    border-width: 2px;
+  }
+
+  .updateInfo {
+    border-width: 2px;
+  }
+
+  .storageBar {
+    border-width: 2px;
+  }
+
+  .appLink:hover {
+    color: var(--accent-primary);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.installBtn:focus-visible,
+.updateBtn:focus-visible,
+.updateLaterBtn:focus-visible,
+.checkUpdateBtn:focus-visible,
+.clearCacheBtn:focus-visible,
+.checkNetworkBtn:focus-visible,
+.actionBtn:focus-visible,
+.appLink:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.appDeviceTab ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .appDeviceTab {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .appDeviceCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .statusBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .installBtn,
+  .updateBtn,
+  .clearCacheBtn,
+  .updateLaterBtn,
+  .checkUpdateBtn,
+  .checkNetworkBtn,
+  .actionBtn {
+    border: 1px solid #000000 !important;
+  }
+
+  .deviceInfoItem {
+    border: 1px solid #000000 !important;
+  }
+
+  .storageBar {
+    border: 1px solid #000000 !important;
+  }
+
+  .storageBarFill {
+    background: #000000 !important;
+  }
+
+  .appDeviceFooter {
+    border-top: 1px solid #000000 !important;
+  }
+}

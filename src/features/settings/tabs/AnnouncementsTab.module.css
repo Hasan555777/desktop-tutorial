@@ -1,0 +1,908 @@
+/* ============================================================
+   📢 ANNOUNCEMENTS TAB - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.announcementsTab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.announcementsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.headerLeft h2 {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.headerLeft h2 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.announcementCount {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.filterButtons {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.filterBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.filterBtn.active {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 ANNOUNCEMENTS LIST
+   ============================================================ */
+
+.announcementsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+/* ── Scrollbar ── */
+.announcementsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.announcementsList::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.announcementsList::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.announcementsList::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
+/* ============================================================
+   📌 ANNOUNCEMENT CARD
+   ============================================================ */
+
+.announcementCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.announcementCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  transform: translateY(-2px);
+}
+
+.announcementCard.expanded {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 25px var(--shadow-color);
+}
+
+/* ── Active Status Indicator ── */
+.announcementCard.active {
+  border-left: 4px solid var(--status-success);
+}
+
+.announcementCard.archived {
+  border-left: 4px solid var(--text-muted);
+  opacity: 0.8;
+}
+
+.announcementCard.archived:hover {
+  opacity: 1;
+}
+
+/* ============================================================
+   📌 CARD HEADER
+   ============================================================ */
+
+.announcementHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.announcementIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  flex-shrink: 0;
+  transition: all var(--transition-normal);
+}
+
+.announcementCard:hover .announcementIcon {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.announcementInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.announcementTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xs);
+}
+
+.announcementTitle {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.announcementStatus {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.statusBadge {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusBadge.active {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.statusBadge.archived {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.statusBadge.history {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+}
+
+.statusBadge.duplicate {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.announcementMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.metaItem i {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.metaItem.historyTag {
+  color: var(--status-info);
+  font-weight: 500;
+}
+
+.metaItem.historyTag i {
+  color: var(--status-info);
+}
+
+.expandBtn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.expandBtn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 CARD BODY
+   ============================================================ */
+
+.announcementBody {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-normal), opacity var(--transition-normal), margin var(--transition-normal);
+  opacity: 0;
+  margin-top: 0;
+}
+
+.announcementBody.show {
+  max-height: 600px;
+  opacity: 1;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.announcementMessage {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.announcementFooter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-light);
+}
+
+.createdBy {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.createdBy i {
+  font-size: 10px;
+}
+
+.updatedAt {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.updatedAt i {
+  font-size: 10px;
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.announcementsFooter {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.announcementsFooter p {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.announcementsFooter p i {
+  margin-right: var(--space-xs);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.announcementsLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.announcementsLoading i {
+  font-size: 40px;
+  color: var(--accent-primary);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.announcementsLoading span {
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 ERROR STATE
+   ============================================================ */
+
+.announcementsError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.announcementsError i {
+  font-size: 48px;
+  color: var(--status-danger);
+}
+
+.announcementsError h3 {
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.announcementsError p {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.retryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-top: var(--space-sm);
+}
+
+.retryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 EMPTY STATE
+   ============================================================ */
+
+.announcementsEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.announcementsEmpty i {
+  font-size: 56px;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.announcementsEmpty h3 {
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.announcementsEmpty p {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 NO RESULTS (Filter)
+   ============================================================ */
+
+.noResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.noResults i {
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+.noResults p {
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .announcementsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .headerRight {
+    width: 100%;
+  }
+
+  .filterButtons {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .filterBtn {
+    flex: 1;
+    text-align: center;
+    min-width: 80px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .announcementsTab {
+    gap: var(--space-md);
+  }
+
+  .headerLeft h2 {
+    font-size: var(--text-lg);
+  }
+
+  .announcementCount {
+    font-size: var(--text-xs);
+  }
+
+  .filterBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+    min-width: 60px;
+  }
+
+  .announcementCard {
+    padding: var(--space-sm);
+  }
+
+  .announcementHeader {
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .announcementIcon {
+    width: 36px;
+    height: 36px;
+    font-size: var(--text-base);
+  }
+
+  .announcementTitle {
+    font-size: var(--text-sm);
+  }
+
+  .announcementTitleRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .announcementStatus {
+    width: 100%;
+  }
+
+  .statusBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .announcementMeta {
+    font-size: 10px;
+    gap: var(--space-xs);
+  }
+
+  .metaItem i {
+    font-size: 9px;
+  }
+
+  .expandBtn {
+    width: 26px;
+    height: 26px;
+    font-size: var(--text-xs);
+  }
+
+  .announcementMessage {
+    font-size: var(--text-xs);
+  }
+
+  .announcementFooter {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .announcementsList {
+    max-height: 450px;
+  }
+
+  .announcementsFooter p {
+    font-size: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .announcementsTab {
+    gap: var(--space-sm);
+  }
+
+  .headerLeft {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .headerLeft h2 {
+    font-size: var(--text-base);
+  }
+
+  .announcementCount {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .filterButtons {
+    gap: 4px;
+  }
+
+  .filterBtn {
+    font-size: 9px;
+    padding: 2px 8px;
+    min-width: 50px;
+  }
+
+  .announcementCard {
+    padding: var(--space-xs);
+  }
+
+  .announcementIcon {
+    width: 30px;
+    height: 30px;
+    font-size: var(--text-sm);
+  }
+
+  .announcementTitle {
+    font-size: var(--text-xs);
+  }
+
+  .announcementMeta {
+    font-size: 9px;
+    gap: 4px;
+  }
+
+  .statusBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .expandBtn {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+
+  .announcementMessage {
+    font-size: 10px;
+  }
+
+  .announcementsList {
+    max-height: 350px;
+  }
+
+  .announcementsLoading i {
+    font-size: 32px;
+  }
+
+  .announcementsLoading span {
+    font-size: var(--text-sm);
+  }
+
+  .announcementsError i {
+    font-size: 36px;
+  }
+
+  .announcementsError h3 {
+    font-size: var(--text-base);
+  }
+
+  .announcementsEmpty i {
+    font-size: 40px;
+  }
+
+  .announcementsEmpty h3 {
+    font-size: var(--text-base);
+  }
+
+  .announcementsFooter p {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .announcementsLoading i {
+    animation: none;
+  }
+
+  .announcementCard:hover {
+    transform: none !important;
+  }
+
+  .announcementCard:hover .announcementIcon {
+    transform: none !important;
+  }
+
+  .retryBtn:hover {
+    transform: none !important;
+  }
+
+  .announcementBody {
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .announcementsTab {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .announcementCard {
+    border-width: 2px;
+  }
+
+  .announcementCard.active {
+    border-left-width: 6px;
+  }
+
+  .announcementCard.archived {
+    border-left-width: 6px;
+  }
+
+  .filterBtn.active {
+    border-width: 2px;
+  }
+
+  .statusBadge {
+    border-width: 2px;
+  }
+
+  .expandBtn {
+    border-width: 2px;
+  }
+
+  .retryBtn {
+    border: 2px solid currentColor;
+  }
+
+  .announcementBody.show {
+    border-top-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.filterBtn:focus-visible,
+.expandBtn:focus-visible,
+.retryBtn:focus-visible,
+.announcementCard:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.announcementsTab ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .announcementsTab {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .announcementCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .announcementCard.active {
+    border-left: 4px solid #000000 !important;
+  }
+
+  .filterButtons {
+    display: none !important;
+  }
+
+  .expandBtn {
+    display: none !important;
+  }
+
+  .announcementBody {
+    max-height: none !important;
+    opacity: 1 !important;
+    margin-top: var(--space-md) !important;
+    padding-top: var(--space-md) !important;
+    border-top: 1px solid #000000 !important;
+  }
+
+  .announcementsList {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .retryBtn {
+    display: none !important;
+  }
+
+  .announcementsFooter {
+    border-top: 1px solid #000000 !important;
+  }
+}

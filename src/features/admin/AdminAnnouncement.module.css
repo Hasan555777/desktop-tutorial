@@ -1,0 +1,927 @@
+/* ============================================================
+   📢 ADMIN ANNOUNCEMENT - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.adminAnnouncementContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingContainer {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.loadingIcon {
+  font-size: 48px;
+  color: var(--accent-primary);
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingContent h2 {
+  margin-top: var(--space-md);
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent p {
+  margin-top: var(--space-sm);
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingDots {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  margin-top: var(--space-md);
+}
+
+.loadingDots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  animation: dotBounce 1.4s ease-in-out infinite both;
+}
+
+.loadingDots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.loadingDots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+.loadingDots span:nth-child(3) {
+  animation-delay: 0s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.adminAnnouncementHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.adminAnnouncementHeader h2 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.adminAnnouncementHeader h2 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.headerStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.statusBadge {
+  display: inline-flex;
+  padding: 2px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusBadge.active {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.statusBadge.inactive {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.versionBadge {
+  display: inline-flex;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 SETTINGS FORM
+   ============================================================ */
+
+.announcementSettings {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  transition: all var(--transition-normal);
+}
+
+.announcementSettings:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.formGroup label {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.formGroup select {
+  cursor: pointer;
+}
+
+.formGroup select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.charCount {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: right;
+}
+
+/* ============================================================
+   📌 FORM ACTIONS
+   ============================================================ */
+
+.formActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.btnToggleStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border: none;
+}
+
+.btnToggleStatus.active {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.btnToggleStatus.active:hover {
+  background: var(--status-warning);
+  color: #ffffff;
+}
+
+.btnToggleStatus.inactive {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.btnToggleStatus.inactive:hover {
+  background: var(--status-success);
+  color: #ffffff;
+}
+
+.btnHistory {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.btnHistory:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.btnSave {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  margin-left: auto;
+}
+
+.btnSave:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnSave:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 ANNOUNCEMENT STATUS
+   ============================================================ */
+
+.announcementStatus {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--border-color);
+}
+
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-md);
+}
+
+.statusItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statusItem .label {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusItem .value {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusItem .value.active {
+  color: var(--status-success);
+}
+
+.statusItem .value.inactive {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 HISTORY
+   ============================================================ */
+
+.announcementHistory {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  transition: all var(--transition-normal);
+}
+
+.announcementHistory:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+}
+
+.announcementHistory h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-md) 0;
+}
+
+.announcementHistory h3 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.noHistory {
+  text-align: center;
+  padding: var(--space-xl);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+.historyList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.historyList::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.historyList::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.historyItem {
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.historyItem:hover {
+  border-color: var(--accent-primary);
+}
+
+.historyHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-xs);
+}
+
+.historyVersion {
+  display: inline-flex;
+  padding: 1px 10px;
+  border-radius: var(--radius-full);
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.historyAction {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.historyDate {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-left: auto;
+}
+
+.historyContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.historyContent p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.historyContent p strong {
+  font-weight: 100;
+  color: var(--text-primary);
+}
+
+.historyMessage {
+  color: var(--text-secondary) !important;
+}
+
+.historyType,
+.historyCategory {
+  display: inline-flex;
+  padding: 1px 10px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border: 1px solid var(--border-color);
+  width: fit-content;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .adminAnnouncementContainer {
+    gap: var(--space-lg);
+  }
+
+  .adminAnnouncementHeader h2 {
+    font-size: var(--text-lg);
+  }
+
+  .announcementSettings {
+    padding: var(--space-lg);
+  }
+
+  .announcementHistory {
+    padding: var(--space-lg);
+  }
+
+  .statusGrid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .adminAnnouncementContainer {
+    gap: var(--space-md);
+  }
+
+  .adminAnnouncementHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .adminAnnouncementHeader h2 {
+    font-size: var(--text-base);
+  }
+
+  .headerStatus {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .announcementSettings {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .formGroup label {
+    font-size: var(--text-xs);
+  }
+
+  .formGroup input,
+  .formGroup textarea,
+  .formGroup select {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .btnToggleStatus,
+  .btnHistory,
+  .btnSave {
+    width: 100%;
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .btnSave {
+    margin-left: 0;
+  }
+
+  .statusGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .statusItem .value {
+    font-size: var(--text-xs);
+  }
+
+  .announcementHistory {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .announcementHistory h3 {
+    font-size: var(--text-base);
+  }
+
+  .historyItem {
+    padding: var(--space-sm);
+  }
+
+  .historyHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .historyDate {
+    margin-left: 0;
+  }
+
+  .historyContent p {
+    font-size: var(--text-xs);
+  }
+
+  .historyType,
+  .historyCategory {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .charCount {
+    font-size: 10px;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-lg);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-sm);
+  }
+
+  .loadingIcon {
+    font-size: 36px;
+  }
+
+  .loadingDots span {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .adminAnnouncementContainer {
+    gap: var(--space-sm);
+  }
+
+  .adminAnnouncementHeader h2 {
+    font-size: var(--text-sm);
+  }
+
+  .announcementSettings {
+    padding: var(--space-sm);
+  }
+
+  .formGroup {
+    margin-bottom: var(--space-sm);
+  }
+
+  .statusGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .announcementHistory {
+    padding: var(--space-sm);
+  }
+
+  .announcementHistory h3 {
+    font-size: var(--text-sm);
+  }
+
+  .historyItem {
+    padding: var(--space-xs);
+  }
+
+  .historyVersion {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .historyAction {
+    font-size: 9px;
+  }
+
+  .historyDate {
+    font-size: 9px;
+  }
+
+  .historyContent p {
+    font-size: 10px;
+  }
+
+  .statusBadge {
+    font-size: 9px;
+    padding: 1px 10px;
+  }
+
+  .versionBadge {
+    font-size: 9px;
+    padding: 1px 10px;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-base);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-xs);
+  }
+
+  .loadingIcon {
+    font-size: 28px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loadingIcon {
+    animation: none;
+  }
+
+  .loadingDots span {
+    animation: none;
+  }
+
+  .btnSave:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .btnHistory:hover {
+    transform: none !important;
+  }
+
+  .btnToggleStatus.active:hover,
+  .btnToggleStatus.inactive:hover {
+    transform: none !important;
+  }
+
+  .historyItem:hover {
+    transform: none !important;
+  }
+
+  .announcementSettings:hover,
+  .announcementHistory:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .adminAnnouncementContainer {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .announcementSettings {
+    border-width: 2px;
+  }
+
+  .announcementHistory {
+    border-width: 2px;
+  }
+
+  .formGroup input,
+  .formGroup textarea,
+  .formGroup select {
+    border-width: 2px;
+  }
+
+  .formGroup input:focus,
+  .formGroup textarea:focus,
+  .formGroup select:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .btnSave {
+    border: 2px solid currentColor;
+  }
+
+  .btnToggleStatus.active,
+  .btnToggleStatus.inactive {
+    border-width: 2px;
+  }
+
+  .btnHistory {
+    border-width: 2px;
+  }
+
+  .statusBadge {
+    border-width: 2px;
+  }
+
+  .versionBadge {
+    border-width: 2px;
+  }
+
+  .historyItem {
+    border-width: 2px;
+  }
+
+  .historyVersion {
+    border: 2px solid currentColor;
+  }
+
+  .historyType,
+  .historyCategory {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.formGroup input:focus-visible,
+.formGroup textarea:focus-visible,
+.formGroup select:focus-visible,
+.btnToggleStatus:focus-visible,
+.btnHistory:focus-visible,
+.btnSave:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.adminAnnouncementContainer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .adminAnnouncementContainer {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .announcementSettings {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .announcementHistory {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .btnToggleStatus,
+  .btnHistory,
+  .btnSave {
+    display: none !important;
+  }
+
+  .historyItem {
+    border: 1px solid #000000 !important;
+  }
+
+  .formGroup input,
+  .formGroup textarea,
+  .formGroup select {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .loadingContainer {
+    display: none !important;
+  }
+}

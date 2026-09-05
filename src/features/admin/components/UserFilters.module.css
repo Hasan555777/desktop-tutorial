@@ -1,0 +1,362 @@
+/* ============================================================
+   🔍 USER FILTERS - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.usersHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  flex-wrap: wrap;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.usersHeader:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 SEARCH SECTION
+   ============================================================ */
+
+.usersSearch {
+  display: flex;
+  gap: var(--space-sm);
+  flex: 2;
+  min-width: 240px;
+  flex-wrap: wrap;
+}
+
+.usersSearch input {
+  flex: 2;
+  min-width: 160px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+}
+
+.usersSearch input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.usersSearch input::placeholder {
+  color: var(--text-muted);
+}
+
+.usersSearch select {
+  flex: 1;
+  min-width: 140px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+
+.usersSearch select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.usersSearch select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 ACTIONS SECTION
+   ============================================================ */
+
+.usersActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btnPrimary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.btnPrimary:hover {
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnSecondary {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btnSecondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .usersHeader {
+    padding: var(--space-sm) var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .usersSearch {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .usersSearch input {
+    min-width: 120px;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .usersSearch select {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+    min-width: 120px;
+  }
+
+  .btn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .usersHeader {
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .usersSearch {
+    flex-direction: column;
+    min-width: unset;
+  }
+
+  .usersSearch input {
+    min-width: unset;
+    width: 100%;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .usersSearch select {
+    min-width: unset;
+    width: 100%;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .usersActions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .usersHeader {
+    padding: var(--space-xs);
+    border-radius: var(--radius-sm);
+  }
+
+  .usersSearch input {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .usersSearch select {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .btn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .btn:hover {
+    transform: none !important;
+  }
+
+  .btn:active {
+    transform: none !important;
+  }
+
+  .usersHeader:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .usersHeader {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .usersHeader {
+    border-width: 2px;
+  }
+
+  .usersSearch input {
+    border-width: 2px;
+  }
+
+  .usersSearch input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .usersSearch select {
+    border-width: 2px;
+  }
+
+  .usersSearch select:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .btnPrimary {
+    border: 2px solid currentColor;
+  }
+
+  .btnSecondary {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.usersSearch input:focus-visible,
+.usersSearch select:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.usersHeader ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .usersHeader {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+  }
+
+  .usersSearch input {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .usersSearch select {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .btn {
+    display: none !important;
+  }
+}

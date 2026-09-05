@@ -1,0 +1,799 @@
+/* ============================================================
+   💬 ADMIN CHAT MONITOR - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+  min-height: 500px;
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header h2 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.header h2 i {
+  color: var(--accent-primary);
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.subtitle strong {
+  font-weight: 100;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 LAYOUT
+   ============================================================ */
+
+.layout {
+  display: flex;
+  gap: var(--space-md);
+  flex: 1;
+  min-height: 400px;
+}
+
+/* ============================================================
+   📌 LIST PANEL
+   ============================================================ */
+
+.listPanel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  max-height: 600px;
+  overflow: hidden;
+}
+
+.searchInput {
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+}
+
+.chatList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: var(--space-xs);
+}
+
+.chatList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chatList::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.chatList::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 CHAT LIST ITEM
+   ============================================================ */
+
+.chatListItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: left;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+}
+
+.chatListItem:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.chatListItemActive {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+}
+
+.chatListNames {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.chatListCode {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: monospace;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.chatListPreview {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatListMeta {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 THREAD PANEL
+   ============================================================ */
+
+.threadPanel {
+  flex: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  max-height: 600px;
+  overflow: hidden;
+}
+
+/* ============================================================
+   📌 THREAD HEADER
+   ============================================================ */
+
+.threadHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.backBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.threadTitle {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.threadSubtitle {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.threadCode {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: monospace;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   📌 THREAD BODY
+   ============================================================ */
+
+.threadBody {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-right: var(--space-xs);
+}
+
+.threadBody::-webkit-scrollbar {
+  width: 4px;
+}
+
+.threadBody::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.threadBody::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 MESSAGE ROW
+   ============================================================ */
+
+.messageRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.messageMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex-wrap: wrap;
+}
+
+.messageMeta strong {
+  font-weight: 100;
+  color: var(--text-primary);
+}
+
+.messageTime {
+  color: var(--text-muted);
+}
+
+.editedTag {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--status-info);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.messageText {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.messageImage {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  object-fit: cover;
+}
+
+.docLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+}
+
+.docLink:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.audioPlayer {
+  width: 100%;
+  max-width: 300px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   📌 DELETED MESSAGES
+   ============================================================ */
+
+.deletedRecovered {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--status-warning-bg);
+  border-left: 3px solid var(--status-warning);
+  border-radius: var(--radius-sm);
+}
+
+.deletedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--status-warning);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.deletedBadge i {
+  font-size: var(--text-xs);
+}
+
+.deletedFootnote {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.deletedUnrecoverable {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.deletedUnrecoverable i {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 EMPTY STATE
+   ============================================================ */
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: center;
+  flex: 1;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .wrapper {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .layout {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .listPanel,
+  .threadPanel {
+    max-height: 400px;
+  }
+
+  .listPanelHiddenOnMobile,
+  .threadPanelHiddenOnMobile {
+    display: none !important;
+  }
+
+  .header h2 {
+    font-size: var(--text-lg);
+  }
+
+  .subtitle {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .header h2 {
+    font-size: var(--text-base);
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  .listPanel,
+  .threadPanel {
+    max-height: 350px;
+    padding: var(--space-xs);
+  }
+
+  .chatListItem {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .chatListNames {
+    font-size: var(--text-xs);
+  }
+
+  .chatListCode {
+    font-size: 9px;
+  }
+
+  .chatListPreview {
+    font-size: 9px;
+  }
+
+  .threadTitle {
+    font-size: var(--text-sm);
+  }
+
+  .messageText {
+    font-size: var(--text-xs);
+  }
+
+  .messageImage {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .searchInput {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .backBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .emptyState {
+    font-size: var(--text-xs);
+    padding: var(--space-lg);
+  }
+
+  .docLink {
+    font-size: var(--text-xs);
+  }
+
+  .audioPlayer {
+    max-width: 100%;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .wrapper {
+    padding: var(--space-xs);
+  }
+
+  .listPanel,
+  .threadPanel {
+    max-height: 300px;
+  }
+
+  .chatListNames {
+    font-size: 10px;
+  }
+
+  .chatListCode {
+    font-size: 8px;
+  }
+
+  .chatListPreview {
+    font-size: 8px;
+  }
+
+  .chatListMeta {
+    font-size: 8px;
+  }
+
+  .threadTitle {
+    font-size: var(--text-xs);
+  }
+
+  .threadSubtitle {
+    font-size: 8px;
+  }
+
+  .threadCode {
+    font-size: 8px;
+  }
+
+  .messageMeta {
+    font-size: 8px;
+  }
+
+  .messageText {
+    font-size: 10px;
+  }
+
+  .messageImage {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .deletedBadge {
+    font-size: 8px;
+  }
+
+  .deletedFootnote {
+    font-size: 8px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .chatListItem:hover {
+    transform: none !important;
+  }
+
+  .backBtn:hover {
+    transform: none !important;
+  }
+
+  .docLink:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .wrapper {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .wrapper {
+    border-width: 2px;
+  }
+
+  .listPanel,
+  .threadPanel {
+    border-width: 2px;
+  }
+
+  .chatListItem {
+    border-width: 2px;
+  }
+
+  .chatListItemActive {
+    border-width: 2px;
+  }
+
+  .searchInput {
+    border-width: 2px;
+  }
+
+  .searchInput:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .backBtn {
+    border-width: 2px;
+  }
+
+  .messageRow {
+    border-width: 2px;
+  }
+
+  .docLink {
+    border-width: 2px;
+  }
+
+  .deletedRecovered {
+    border-left-width: 6px;
+  }
+
+  .deletedUnrecoverable {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.chatListItem:focus-visible,
+.searchInput:focus-visible,
+.backBtn:focus-visible,
+.docLink:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.wrapper ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .wrapper {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .layout {
+    display: block !important;
+  }
+
+  .listPanel {
+    display: none !important;
+  }
+
+  .threadPanel {
+    max-height: none !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .backBtn {
+    display: none !important;
+  }
+
+  .searchInput {
+    display: none !important;
+  }
+
+  .chatList {
+    display: none !important;
+  }
+
+  .messageRow {
+    border: 1px solid #000000 !important;
+  }
+
+  .deletedRecovered {
+    border-left: 3px solid #000000 !important;
+  }
+
+  .deletedUnrecoverable {
+    border: 1px solid #000000 !important;
+  }
+
+  .docLink {
+    border: 1px solid #000000 !important;
+  }
+
+  .emptyState {
+    display: none !important;
+  }
+}

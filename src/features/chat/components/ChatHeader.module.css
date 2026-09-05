@@ -1,0 +1,607 @@
+/* ============================================================
+   📱 CHAT HEADER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.chatHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  min-height: 64px;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 BACK BUTTON
+   ============================================================ */
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex-shrink: 0;
+}
+
+.backBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   📌 USER INFO
+   ============================================================ */
+
+.chatUserInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Avatar ── */
+.userAvatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+  transition: border-color var(--transition-normal);
+}
+
+.userAvatar:hover {
+  border-color: var(--accent-primary);
+}
+
+.userAvatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border: 2px solid var(--border-color);
+}
+
+/* ── Online Status Dot ── */
+.onlineStatusDot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-secondary);
+}
+
+.onlineStatusDot.online {
+  background: var(--status-success);
+}
+
+.onlineStatusDot.offline {
+  background: var(--text-muted);
+}
+
+/* ── User Details ── */
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.userDetails h3 {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userStatusText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.statusText {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statusText i {
+  font-size: 8px;
+}
+
+.statusText.online {
+  color: var(--status-success);
+}
+
+.statusText.offline {
+  color: var(--text-muted);
+}
+
+.dealStatusBadge {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  padding: 1px 10px;
+  border-radius: var(--radius-full);
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 CHAT CODE BADGE
+   ============================================================ */
+
+.chatCodeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 1px 10px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatCodeBadge:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.chatCodeBadge i {
+  font-size: var(--text-xs);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📌 MENU
+   ============================================================ */
+
+.chatHeaderMenuWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.headerMenuBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.headerMenuBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  transform: scale(1.05);
+}
+
+.headerMenuDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  padding: var(--space-xs) 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: dropdownSlide 0.15s ease;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.headerMenuDropdown button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: left;
+}
+
+.headerMenuDropdown button:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.headerMenuDropdown button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.headerMenuDropdown button i {
+  width: 18px;
+  text-align: center;
+  font-size: var(--text-base);
+}
+
+.headerMenuDropdown .deletesBtn {
+  color: var(--status-danger);
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+}
+
+.headerMenuDropdown .deletesBtn:hover:not(:disabled) {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.headerMenuNote {
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--status-warning);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--space-xs);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Mobile */
+@media (max-width: 768px) {
+  .chatHeader {
+    padding: var(--space-xs) var(--space-sm);
+    min-height: 56px;
+  }
+
+  .backBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+
+  .userAvatar,
+  .userAvatarPlaceholder {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+
+  .onlineStatusDot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .userDetails h3 {
+    font-size: var(--text-sm);
+  }
+
+  .statusText {
+    font-size: 10px;
+  }
+
+  .dealStatusBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .chatCodeBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+    max-width: 120px;
+  }
+
+  .headerMenuBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .headerMenuDropdown {
+    min-width: 150px;
+    right: -8px;
+  }
+
+  .headerMenuDropdown button {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .headerMenuDropdown button i {
+    font-size: var(--text-sm);
+    width: 16px;
+  }
+
+  .headerMenuNote {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .chatHeader {
+    padding: 4px var(--space-xs);
+    min-height: 48px;
+  }
+
+  .backBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .userAvatar,
+  .userAvatarPlaceholder {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .onlineStatusDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .userDetails h3 {
+    font-size: var(--text-xs);
+  }
+
+  .statusText {
+    font-size: 9px;
+  }
+
+  .dealStatusBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .chatCodeBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+    max-width: 80px;
+  }
+
+  .headerMenuBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+  }
+
+  .headerMenuDropdown {
+    min-width: 130px;
+    right: -4px;
+  }
+
+  .headerMenuDropdown button {
+    font-size: 10px;
+    padding: 3px var(--space-xs);
+  }
+
+  .headerMenuDropdown button i {
+    font-size: var(--text-xs);
+    width: 14px;
+  }
+
+  .headerMenuNote {
+    font-size: 9px;
+    padding: 3px var(--space-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .headerMenuDropdown {
+    animation: none !important;
+  }
+
+  .backBtn:hover {
+    transform: none !important;
+  }
+
+  .headerMenuBtn:hover {
+    transform: none !important;
+  }
+
+  .chatCodeBadge:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .chatHeader {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .chatHeader {
+    border-bottom-width: 2px;
+  }
+
+  .backBtn {
+    border: 1px solid transparent;
+  }
+
+  .backBtn:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .userAvatar {
+    border-width: 2px;
+  }
+
+  .userAvatarPlaceholder {
+    border-width: 2px;
+  }
+
+  .onlineStatusDot {
+    border-width: 2px;
+  }
+
+  .dealStatusBadge {
+    border-width: 2px;
+  }
+
+  .chatCodeBadge {
+    border-width: 2px;
+  }
+
+  .headerMenuBtn {
+    border: 1px solid transparent;
+  }
+
+  .headerMenuBtn:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .headerMenuDropdown {
+    border-width: 2px;
+  }
+
+  .headerMenuDropdown .deletesBtn {
+    border-top-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.backBtn:focus-visible,
+.headerMenuBtn:focus-visible,
+.chatCodeBadge:focus-visible,
+.headerMenuDropdown button:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.chatHeader ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .chatHeader {
+    background: #ffffff !important;
+    border-bottom: 1px solid #000000 !important;
+  }
+
+  .backBtn {
+    display: none !important;
+  }
+
+  .headerMenuBtn {
+    display: none !important;
+  }
+
+  .headerMenuDropdown {
+    display: none !important;
+  }
+
+  .chatCodeBadge {
+    border: 1px solid #000000 !important;
+  }
+}

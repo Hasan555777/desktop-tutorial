@@ -1,0 +1,299 @@
+/* ============================================================
+   📊 STATS GRID - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-md);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 STAT CARD
+   ============================================================ */
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.statCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.statCard.clickable:hover {
+  transform: translateY(-4px);
+  cursor: pointer;
+}
+
+/* ============================================================
+   📌 STAT ICON
+   ============================================================ */
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  flex-shrink: 0;
+}
+
+.statIcon.blue {
+  background: var(--status-info-bg);
+}
+
+.statIcon.green {
+  background: var(--status-success-bg);
+}
+
+.statIcon.yellow {
+  background: var(--status-warning-bg);
+}
+
+.statIcon.red {
+  background: var(--status-danger-bg);
+}
+
+.statIcon.purple {
+  background: rgba(139, 92, 246, 0.15);
+}
+
+.statIcon.orange {
+  background: rgba(251, 146, 60, 0.15);
+}
+
+.statIcon.teal {
+  background: rgba(20, 184, 166, 0.15);
+}
+
+.statIcon.pink {
+  background: rgba(236, 72, 153, 0.15);
+}
+
+/* ============================================================
+   📌 STAT INFO
+   ============================================================ */
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statInfo h3 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.statInfo p {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .statCard {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .statIcon {
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-base);
+  }
+
+  .statInfo h3 {
+    font-size: var(--text-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
+  }
+
+  .statCard {
+    padding: var(--space-xs) var(--space-sm);
+    gap: var(--space-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .statIcon {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+
+  .statInfo h3 {
+    font-size: var(--text-base);
+  }
+
+  .statInfo p {
+    font-size: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .statCard {
+    padding: var(--space-xs);
+    gap: var(--space-xs);
+  }
+
+  .statIcon {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .statInfo h3 {
+    font-size: var(--text-sm);
+  }
+
+  .statInfo p {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .statCard:hover {
+    transform: none !important;
+  }
+
+  .statCard.clickable:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .statCard {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .statCard {
+    border-width: 2px;
+  }
+
+  .statIcon {
+    border: 2px solid currentColor;
+  }
+
+  .statIcon.blue {
+    border-color: var(--status-info);
+  }
+
+  .statIcon.green {
+    border-color: var(--status-success);
+  }
+
+  .statIcon.yellow {
+    border-color: var(--status-warning);
+  }
+
+  .statIcon.red {
+    border-color: var(--status-danger);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.statCard.clickable:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.statsGrid ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .statCard {
+    border: 1px solid #000000 !important;
+    background: #ffffff !important;
+  }
+
+  .statInfo h3 {
+    color: #000000 !important;
+  }
+
+  .statInfo p {
+    color: #333333 !important;
+  }
+
+  .statIcon {
+    border: 1px solid #000000 !important;
+  }
+}

@@ -1,0 +1,626 @@
+/* ============================================================
+   👑 ADMIN MANAGEMENT - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.adminManagement {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 NO ACCESS MESSAGE
+   ============================================================ */
+
+.noAccessMessage {
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 CREATE SECTION
+   ============================================================ */
+
+.createSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.createSection h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.createSubtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.emailInput {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+  max-width: 400px;
+}
+
+.emailInput:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.emailInput::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 PERMISSIONS GRID
+   ============================================================ */
+
+.permissionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-sm);
+}
+
+.permissionCheckbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+}
+
+.permissionCheckbox:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.permissionCheckbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📌 CREATE BUTTON
+   ============================================================ */
+
+.createBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  max-width: 200px;
+}
+
+.createBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.createBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 SECTION TITLE
+   ============================================================ */
+
+.sectionTitle {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 LOADING TEXT
+   ============================================================ */
+
+.loadingText {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: center;
+  padding: var(--space-md);
+}
+
+/* ============================================================
+   📌 ADMINS LIST
+   ============================================================ */
+
+.adminsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ============================================================
+   📌 ADMIN CARD
+   ============================================================ */
+
+.adminCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.adminCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.adminCard.disabled {
+  opacity: 0.6;
+  border-color: var(--status-danger);
+}
+
+.adminCard.disabled:hover {
+  border-color: var(--status-danger);
+}
+
+.adminHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.adminHeader strong {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.adminActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ============================================================
+   📌 BADGES
+   ============================================================ */
+
+.mainBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 14px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.disabledBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 BUTTONS
+   ============================================================ */
+
+.toggleDisabledBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.toggleDisabledBtn:hover {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+  transform: translateY(-2px);
+}
+
+.removeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.removeBtn:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .adminManagement {
+    padding: var(--space-md);
+    gap: var(--space-lg);
+  }
+
+  .createSection {
+    padding: var(--space-md);
+  }
+
+  .permissionsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .adminManagement {
+    padding: var(--space-sm);
+    gap: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+
+  .createSection {
+    padding: var(--space-sm);
+  }
+
+  .createSection h3 {
+    font-size: var(--text-base);
+  }
+
+  .createSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .emailInput {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+    max-width: 100%;
+  }
+
+  .permissionsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+
+  .permissionCheckbox {
+    font-size: var(--text-xs);
+    padding: var(--space-xs);
+  }
+
+  .createBtn {
+    max-width: 100%;
+    width: 100%;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .sectionTitle {
+    font-size: var(--text-base);
+  }
+
+  .adminCard {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .adminHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .adminHeader strong {
+    font-size: var(--text-sm);
+  }
+
+  .adminActions {
+    width: 100%;
+  }
+
+  .toggleDisabledBtn,
+  .removeBtn {
+    flex: 1;
+    justify-content: center;
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .mainBadge,
+  .disabledBadge {
+    font-size: 10px;
+    padding: 1px 10px;
+  }
+
+  .noAccessMessage {
+    font-size: var(--text-sm);
+    padding: var(--space-xl) var(--space-sm);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .adminManagement {
+    padding: var(--space-xs);
+  }
+
+  .createSection {
+    padding: var(--space-xs);
+  }
+
+  .createSection h3 {
+    font-size: var(--text-sm);
+  }
+
+  .adminCard {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .adminHeader strong {
+    font-size: var(--text-xs);
+  }
+
+  .toggleDisabledBtn,
+  .removeBtn {
+    font-size: 9px;
+    padding: 2px var(--space-xs);
+  }
+
+  .mainBadge,
+  .disabledBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .createBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .toggleDisabledBtn:hover {
+    transform: none !important;
+  }
+
+  .removeBtn:hover {
+    transform: none !important;
+  }
+
+  .adminCard:hover {
+    transform: none !important;
+  }
+
+  .permissionCheckbox:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .adminManagement {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .adminManagement {
+    border-width: 2px;
+  }
+
+  .createSection {
+    border-width: 2px;
+  }
+
+  .adminCard {
+    border-width: 2px;
+  }
+
+  .adminCard.disabled {
+    border-width: 2px;
+  }
+
+  .emailInput {
+    border-width: 2px;
+  }
+
+  .emailInput:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .createBtn {
+    border: 2px solid currentColor;
+  }
+
+  .permissionCheckbox {
+    border-width: 2px;
+  }
+
+  .toggleDisabledBtn,
+  .removeBtn {
+    border-width: 2px;
+  }
+
+  .mainBadge {
+    border: 2px solid currentColor;
+  }
+
+  .disabledBadge {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.emailInput:focus-visible,
+.createBtn:focus-visible,
+.permissionCheckbox input:focus-visible,
+.toggleDisabledBtn:focus-visible,
+.removeBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.adminManagement ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .adminManagement {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  .createSection {
+    border: 1px solid #000000 !important;
+  }
+
+  .adminCard {
+    border: 1px solid #000000 !important;
+  }
+
+  .createBtn,
+  .toggleDisabledBtn,
+  .removeBtn {
+    display: none !important;
+  }
+
+  .permissionCheckbox input {
+    accent-color: #000000;
+  }
+
+  .mainBadge,
+  .disabledBadge {
+    border: 1px solid #000000 !important;
+  }
+
+  .noAccessMessage {
+    border: 1px solid #000000 !important;
+  }
+}

@@ -1,0 +1,96 @@
+/* ============================================================
+   ⏳ ADMIN CONTENT SKELETON - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* No separate CSS module needed — all styles are inline in the component.
+   This file is kept for consistency and to allow future overrides if needed. */
+
+/* ============================================================
+   📌 SKELETON ANIMATION
+   ============================================================ */
+
+/* The shimmer animation is defined as a style tag inside the component.
+   Here's the CSS equivalent for reference: */
+
+@keyframes admin-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* If you want to convert to CSS Module later, use: */
+
+.skeletonRow {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary, #1a1f2e) 25%,
+    var(--bg-tertiary, #232937) 50%,
+    var(--bg-secondary, #1a1f2e) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+  height: 52px;
+  width: 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .skeletonRow {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .skeletonRow {
+    height: 38px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonRow {
+    animation: none !important;
+  }
+
+  @keyframes shimmer {
+    0%, 100% {
+      background-position: 0 0;
+    }
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .skeletonRow {
+    background: var(--bg-tertiary) !important;
+    border: 1px solid var(--border-color);
+  }
+}

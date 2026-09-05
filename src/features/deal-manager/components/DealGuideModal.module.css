@@ -1,0 +1,528 @@
+/* ============================================================
+   📖 DEAL GUIDE MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.dealGuideOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.dealGuideModal {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.dealGuideTitle {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: var(--space-lg) var(--space-xl) var(--space-sm);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.dealGuideTitle i {
+  color: var(--accent-primary);
+  font-size: var(--text-2xl);
+}
+
+.dealGuideSubtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: 0 var(--space-xl) var(--space-md);
+  margin: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 STEPS LIST
+   ============================================================ */
+
+.dealGuideSteps {
+  padding: var(--space-md) var(--space-xl);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dealGuideSteps::-webkit-scrollbar {
+  width: 4px;
+}
+
+.dealGuideSteps::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.dealGuideSteps::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.dealGuideList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.dealGuideStepItem {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  line-height: 1.6;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-primary);
+  transition: all var(--transition-normal);
+}
+
+.dealGuideStepItem:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-secondary);
+}
+
+.dealGuideStepItem strong {
+  color: var(--text-primary);
+  font-weight: 100;
+}
+
+/* ============================================================
+   📌 CHECKBOX
+   ============================================================ */
+
+.dealGuideCheckbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+}
+
+.dealGuideCheckbox:hover {
+  background: var(--bg-hover);
+}
+
+.dealGuideCheckboxInput {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.dealGuideCheckbox span {
+  line-height: 1.5;
+}
+
+/* ============================================================
+   📌 ACTIONS
+   ============================================================ */
+
+.dealGuideActions {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.dealGuideCancel {
+  flex: 1;
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.dealGuideCancel:hover {
+  background: var(--bg-hover);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: translateY(-2px);
+}
+
+.dealGuideConfirm {
+  flex: 2;
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.dealGuideConfirm:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.dealGuideConfirm.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .dealGuideModal {
+    max-width: 560px;
+  }
+
+  .dealGuideTitle {
+    font-size: var(--text-lg);
+    padding: var(--space-md) var(--space-lg) var(--space-xs);
+  }
+
+  .dealGuideSubtitle {
+    padding: 0 var(--space-lg) var(--space-sm);
+  }
+
+  .dealGuideSteps {
+    padding: var(--space-sm) var(--space-lg);
+  }
+
+  .dealGuideCheckbox {
+    padding: var(--space-sm) var(--space-lg);
+  }
+
+  .dealGuideActions {
+    padding: var(--space-sm) var(--space-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dealGuideOverlay {
+    padding: var(--space-md);
+  }
+
+  .dealGuideModal {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: var(--radius-md);
+  }
+
+  .dealGuideTitle {
+    font-size: var(--text-base);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .dealGuideTitle i {
+    font-size: var(--text-xl);
+  }
+
+  .dealGuideSubtitle {
+    font-size: var(--text-xs);
+    padding: 0 var(--space-md) var(--space-sm);
+  }
+
+  .dealGuideSteps {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .dealGuideList {
+    gap: var(--space-sm);
+  }
+
+  .dealGuideStepItem {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+    border-left-width: 2px;
+  }
+
+  .dealGuideCheckbox {
+    font-size: var(--text-xs);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .dealGuideCheckboxInput {
+    width: 16px;
+    height: 16px;
+  }
+
+  .dealGuideActions {
+    flex-direction: column;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .dealGuideCancel,
+  .dealGuideConfirm {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .dealGuideOverlay {
+    padding: var(--space-sm);
+  }
+
+  .dealGuideModal {
+    max-height: 98vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .dealGuideTitle {
+    font-size: var(--text-sm);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .dealGuideTitle i {
+    font-size: var(--text-base);
+  }
+
+  .dealGuideSubtitle {
+    font-size: 10px;
+    padding: 0 var(--space-sm) var(--space-xs);
+  }
+
+  .dealGuideSteps {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .dealGuideStepItem {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .dealGuideCheckbox {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .dealGuideCheckboxInput {
+    width: 14px;
+    height: 14px;
+  }
+
+  .dealGuideActions {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .dealGuideCancel,
+  .dealGuideConfirm {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .dealGuideConfirm i {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .dealGuideOverlay {
+    animation: none !important;
+  }
+
+  .dealGuideModal {
+    animation: none !important;
+  }
+
+  .dealGuideCancel:hover {
+    transform: none !important;
+  }
+
+  .dealGuideConfirm:hover:not(.disabled) {
+    transform: none !important;
+  }
+
+  .dealGuideStepItem:hover {
+    transform: none !important;
+  }
+
+  .dealGuideCheckbox:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .dealGuideModal {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .dealGuideModal {
+    border-width: 2px;
+  }
+
+  .dealGuideStepItem {
+    border-left-width: 4px;
+  }
+
+  .dealGuideCheckboxInput {
+    accent-color: var(--accent-primary);
+  }
+
+  .dealGuideCancel {
+    border-width: 2px;
+  }
+
+  .dealGuideConfirm {
+    border: 2px solid currentColor;
+  }
+
+  .dealGuideConfirm.disabled {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.dealGuideCancel:focus-visible,
+.dealGuideConfirm:focus-visible,
+.dealGuideCheckboxInput:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.dealGuideModal ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .dealGuideOverlay {
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 20px !important;
+  }
+
+  .dealGuideModal {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    max-height: none !important;
+  }
+
+  .dealGuideActions {
+    display: none !important;
+  }
+
+  .dealGuideCheckbox {
+    display: none !important;
+  }
+}

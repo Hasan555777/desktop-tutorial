@@ -1,0 +1,529 @@
+rules_version = '2';
+
+// ============================================================
+// FIRESTORE SECURITY RULES
+// ============================================================
+// Built from the actual collections, fields, and ownership patterns
+// found in the codebase (src/**), not a generic template. See the
+// accompanying RULES_REPORT.md for what's enforced, what genuinely
+// can't be fully enforced by rules alone, and why.
+//
+// IMPORTANT: no rules file existed anywhere in this project before
+// this. Whatever was protecting this data until now lived only in
+// the Firebase Console and isn't visible in this codebase — so
+// treat this as a first version to review carefully, not a drop-in
+// replacement for something known-working.
+// ============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------
+    // Helpers
+    // ------------------------------------------------------------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function uid() {
+      return request.auth.uid;
+    }
+
+    function isOwner(ownerId) {
+      return isSignedIn() && uid() == ownerId;
+    }
+
+    // Mirrors constants/admin.js's isAdminUser() exactly: role field
+    // OR the email whitelist. Keep this list in sync with
+    // src/constants/admin.js and VITE_ADMIN_EMAILS by hand — rules
+    // can't import that file. If you add/remove an admin, update
+    // BOTH places or the app and the rules will disagree about who
+    // is an admin (this is exactly the bug that broke emergency
+    // unlock earlier in this audit — don't recreate it here).
+    function isAdminEmail() {
+      return isSignedIn() && request.auth.token.email in [
+        'hammanmusa362@gmail.com',
+        'hasanmahmudmd362@gmail.com'
+      ];
+    }
+
+    // Mirrors constants/admin.js's isMainAdminUser() — only the
+    // hardcoded ADMIN_EMAILS accounts can create/manage other admins
+    // (#30/#31: "a sub-admin must NOT be able to grant themselves
+    // higher permissions... must not be able to create another admin
+    // with higher privileges... must not be able to modify the Main
+    // Admin"). Keep this list in sync with constants/admin.js by hand,
+    // same caveat as isAdminEmail() above.
+    function isMainAdmin() {
+      return isSignedIn() && request.auth.token.email in [
+        'hammanmusa362@gmail.com',
+        'hasanmahmudmd362@gmail.com'
+      ];
+    }
+
+    function userDoc(id) {
+      return get(/databases/$(database)/documents/users/$(id)).data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        isAdminEmail() ||
+        (exists(/databases/$(database)/documents/users/$(uid())) &&
+         userDoc(uid()).role == 'admin')
+      );
+    }
+
+    // 🔧 ADD (RBAC gap closure): mirrors constants/admin.js's
+    // hasAdminPermission() — main admins bypass this entirely, a
+    // sub-admin needs the specific permission flag set on their own
+    // user doc. This is the SERVER-SIDE half of the permission
+    // system — the client-side requirePermission() wrapping in
+    // AdminDashboard.jsx alone isn't sufficient on its own, matching
+    // the requirements doc's explicit warning about hiding buttons
+    // not being real enforcement.
+    function hasPermission(permission) {
+      return isMainAdmin() || (
+        isAdmin() &&
+        userDoc(uid()).adminPermissions[permission] == true
+      );
+    }
+
+    // ------------------------------------------------------------
+    // users/{userId}
+    // ------------------------------------------------------------
+    // Confirmed from the app: other users CAN view a user's profile
+    // (UserProfilePage.jsx, ProfileDetail.jsx) — profiles are not
+    // owner-only. Firestore rules can't restrict individual FIELDS
+    // within a document (no column-level security), only whole-doc
+    // read/write. That means anything in this doc — including
+    // appLock.pinHash/pinSalt, email, phone — is readable by any
+    // signed-in user under this rule, matching the app's current
+    // "other profiles are visible" behavior but going further than
+    // is probably intended for the sensitive fields.
+    //
+    // The real fix is moving PIN hash/salt and any other non-public
+    // fields into a separate users_private/{userId} document that
+    // only the owner (and admin) can read — a data-model change, not
+    // just a rules change, so it's out of scope for this pass. Until
+    // then this is the honest tightest rule that doesn't break the
+    // existing "view other profiles" feature.
+    match /users/{userId} {
+      allow read: if isSignedIn();
+
+      // Create: only the account owner, at signup. role must default
+      // to a non-admin value — nobody should be able to self-register
+      // as admin.
+      allow create: if isOwner(userId) &&
+        (!('role' in request.resource.data) || request.resource.data.role != 'admin');
+
+      // Update: owner can update their own doc EXCEPT role and
+      // adminPermissions — those can only ever be changed by a MAIN
+      // admin (#30/#31). This is the single most important line in
+      // this whole file: without it, a user (or a sub-admin trying to
+      // escalate) could set their own role to 'admin' or grant
+      // themselves adminPermissions via a direct Firestore write,
+      // bypassing every isAdmin()/hasAdminPermission() check in the
+      // entire app.
+      //
+      // 🔧 UPDATED (RBAC gap closure, field-level version): a sub-admin
+      // editing SOMEONE ELSE's doc now needs the RIGHT permission for
+      // the SPECIFIC fields they're changing, not just "users OR
+      // verification" for anything. Built from the actual field names
+      // used in pages/Admin/hooks/useAdminData.js's block/unblock and
+      // verification-review functions:
+      //   - ban/block fields -> needs 'users' permission
+      //   - verification fields -> needs 'verification' permission
+      // A sub-admin with only 'verification' can no longer block a
+      // user, and vice versa. Touching fields from both groups in one
+      // write needs both permissions (main admin bypasses this
+      // entirely, same as everywhere else). Written as explicit
+      // boolean logic rather than nested ternaries — easier to verify
+      // is correct by reading it, which matters more than usual here
+      // since this can't be run/tested from this environment.
+      function changedFields() {
+        return request.resource.data.diff(resource.data).affectedKeys();
+      }
+      // Full field lists compiled by reading every updateDoc() call in
+      // pages/Admin/hooks/useAdminData.js that touches another user's
+      // document (toggleBlockUser, verifyUser, saveVerificationReview)
+      // — not guessed. updatedAt is common bookkeeping shared by both
+      // groups, included in each so it never blocks a legitimate write.
+      function onlyChangedUserManagementFields() {
+        return changedFields().hasOnly([
+          'isBanned', 'isBlocked', 'bannedAt', 'bannedBy', 'banReason',
+          'blockExpiry', 'blockCountdown', 'blockReviewNotifiedAt', 'updatedAt'
+        ]);
+      }
+      function onlyChangedVerificationFields() {
+        return changedFields().hasOnly([
+          'isVerified', 'isComplete', 'verifiedAt', 'verifiedBy',
+          'verificationStatus', 'documentsUploaded', 'documentVerified',
+          'faceVerified', 'faceStatus', 'faceRejectReason', 'documents',
+          'needsReview', 'reviewedBy', 'reviewedByEmail', 'reviewedAt',
+          'rejectionReason', 'updatedAt'
+        ]);
+      }
+      function otherAdminEditAllowed() {
+        return (onlyChangedUserManagementFields() && hasPermission('users')) ||
+               (onlyChangedVerificationFields() && hasPermission('verification')) ||
+               (!onlyChangedUserManagementFields() && !onlyChangedVerificationFields() &&
+                hasPermission('users') && hasPermission('verification'));
+      }
+
+      allow update: if isMainAdmin() ||
+        (isOwner(userId) &&
+         request.resource.data.role == resource.data.role &&
+         request.resource.data.get('adminPermissions', null) == resource.data.get('adminPermissions', null)) ||
+        (isAdmin() && isOwner(userId) == false &&
+         request.resource.data.role == resource.data.role &&
+         request.resource.data.get('adminPermissions', null) == resource.data.get('adminPermissions', null) &&
+         otherAdminEditAllowed());
+
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // wallets/{userId} — balance, lockedBalance
+    // ------------------------------------------------------------
+    // See RULES_REPORT.md "Wallet architecture" section before
+    // changing this. Short version: deposits are request+admin-
+    // approval (safe). Withdraw-lock and escrow-lock/release are
+    // client-executed Firestore transactions (utils/dealManager.utils.js,
+    // pages/Withdraw.jsx) — meaning the CLIENT directly decides its
+    // own balance changes for those flows, which rules can only
+    // partially constrain.
+    //
+    // This rule allows a non-admin write ONLY if the combined total
+    // (balance + lockedBalance) does not increase and neither value
+    // goes negative — i.e. a user can lock/unlock their OWN funds
+    // between the two buckets, or reduce them (withdrawal, escrow
+    // sent to someone else), but can never manufacture new balance
+    // for themselves.
+    //
+    // KNOWN GAP: this also blocks the legitimate case where a
+    // SELLER's balance should increase because a buyer released
+    // escrow to them on deal completion (hooks/dealManager.hooks.js).
+    // That specific operation needs to move to a Cloud Function
+    // (buyer confirms completion -> server verifies the deal ->
+    // server moves buyer.lockedBalance to seller.balance atomically)
+    // rather than a client-side transaction, because "is this
+    // balance increase legitimate" depends on cross-document state
+    // (the deal) that isn't safely verifiable this way. Until that
+    // Cloud Function exists, sellers will need an admin to manually
+    // release escrow, OR you accept the current client-trust model
+    // for that one operation and relax this rule — that's a decision
+    // only you can make, not something to silently choose either way.
+    match /wallets/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+
+      allow create: if isOwner(userId) &&
+        request.resource.data.balance == 0 &&
+        request.resource.data.lockedBalance == 0;
+
+      // 🔧 UPDATED (RBAC gap closure): admin-path was isAdmin() alone -
+      // crediting/debiting a wallet (deposit approval, admin
+      // adjustment) now requires the finance permission specifically.
+      allow update: if hasPermission('finance') || (
+        isOwner(userId) &&
+        request.resource.data.balance >= 0 &&
+        request.resource.data.lockedBalance >= 0 &&
+        (request.resource.data.balance + request.resource.data.lockedBalance) <=
+          (resource.data.balance + resource.data.lockedBalance)
+      );
+
+      allow delete: if false;
+    }
+
+    // ------------------------------------------------------------
+    // identityRecords/{recordId} — NID/birth-cert hashes, admin review
+    // ------------------------------------------------------------
+    // utils/identityUtils.js's duplicate-check (detectDuplicateIdentity)
+    // runs CLIENT-SIDE and queries this collection by identityHash —
+    // so it needs at least partial read access to do its job. This
+    // rule allows a signed-in user to read only enough to run that
+    // query (a query does not require broad read of full documents
+    // in the same way, but Firestore rules apply to the documents
+    // actually returned) — meaning any signed-in user could in
+    // principle see other users' identityHash/fullName/identityType
+    // if they queried directly. That is a genuine privacy trade-off
+    // inherited from doing the duplicate check client-side rather
+    // than through a Cloud Function; flagged in RULES_REPORT.md.
+    match /identityRecords/{recordId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() &&
+        request.resource.data.userId == uid();
+      allow update, delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // posts/{postId}
+    // ------------------------------------------------------------
+    match /posts/{postId} {
+      allow read: if true; // posts are the public listings — browsable when logged out too
+      allow create: if isSignedIn() && request.resource.data.userId == uid();
+      allow update, delete: if isAdmin() ||
+        (isSignedIn() && resource.data.userId == uid());
+    }
+
+    // ------------------------------------------------------------
+    // deals/{dealId}
+    // ------------------------------------------------------------
+    match /deals/{dealId} {
+      allow read: if isAdmin() || (isSignedIn() &&
+        (resource.data.buyerId == uid() || resource.data.sellerId == uid()));
+
+      allow create: if isSignedIn() &&
+        (request.resource.data.buyerId == uid() || request.resource.data.sellerId == uid());
+
+      // Both parties can update deal state (accept/decline/mark
+      // complete/etc are all legitimate two-sided actions per
+      // chatHelpers.js). buyerId/sellerId themselves can never change.
+      allow update: if isAdmin() || (isSignedIn() &&
+        (resource.data.buyerId == uid() || resource.data.sellerId == uid()) &&
+        request.resource.data.buyerId == resource.data.buyerId &&
+        request.resource.data.sellerId == resource.data.sellerId);
+
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // chats/{chatId} and chats/{chatId}/messages/{messageId}
+    // ------------------------------------------------------------
+    // hooks/useChatActions.js confirms participants is the reliable
+    // field (falls back through otherPartyId/buyerId/sellerId for
+    // legacy documents) — rules use participants plus the buyer/
+    // seller fields together since both forms exist in the data.
+    function isChatParticipant(chatData) {
+      return isSignedIn() && (
+        (chatData.buyerId != null && chatData.buyerId == uid()) ||
+        (chatData.sellerId != null && chatData.sellerId == uid()) ||
+        (chatData.participants != null && uid() in chatData.participants)
+      );
+    }
+
+    match /chats/{chatId} {
+      allow read: if isAdmin() || isChatParticipant(resource.data);
+      allow create: if isSignedIn() && isChatParticipant(request.resource.data);
+      allow update: if isAdmin() || isChatParticipant(resource.data);
+      allow delete: if isAdmin();
+
+      match /messages/{messageId} {
+        // A message's authorization is really about the PARENT chat's
+        // participants, not the message itself — read the parent.
+        function parentChat() {
+          return get(/databases/$(database)/documents/chats/$(chatId)).data;
+        }
+
+        allow read: if isAdmin() || isChatParticipant(parentChat());
+
+        allow create: if isSignedIn() && isChatParticipant(parentChat()) &&
+          request.resource.data.senderId == uid();
+
+        // 🔧 UPDATED to match the #14 soft-delete architecture and
+        // #11 15-minute edit window implemented in
+        // hooks/useChatMessages.js. Regular users can never hard-
+        // delete a message (delete: false below) — only soft-delete
+        // via update, which this rule allows in exactly two shapes:
+        // (a) a soft-delete: sets deleted/deletedAt/deletedBy and
+        //     touches no other fields, or
+        // (b) an edit: changes text/edited/editedAt, sender/createdAt
+        //     unchanged, and only within 15 minutes of the message's
+        //     original createdAt.
+        // Admins can do either without these constraints (moderation,
+        // and cleaning up abuse reports).
+        // 🔧 UPDATED: soft-delete now also redacts content
+        // (text/imageUrl/documentUrl/documentName/audioUrl/
+        // audioDuration set to null) so deleted content stops
+        // syncing to participants' clients entirely, not just
+        // getting hidden by the UI. See messageAudit below for
+        // where the original content is preserved for moderators.
+        function isSoftDelete() {
+          return request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly([
+              'deleted', 'deletedAt', 'deletedBy',
+              'text', 'imageUrl', 'documentUrl', 'documentName',
+              'audioUrl', 'audioDuration'
+            ]) &&
+            request.resource.data.deleted == true;
+        }
+
+        function isWithinEditWindow() {
+          return request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['text', 'edited', 'editedAt']) &&
+            resource.data.createdAt != null &&
+            request.time < resource.data.createdAt + duration.value(15, 'm');
+        }
+
+        allow update: if isAdmin() ||
+          (isSignedIn() && resource.data.senderId == uid() &&
+           (isSoftDelete() || isWithinEditWindow()));
+
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ------------------------------------------------------------
+    // messageAudit/{id} — preserved content of deleted chat messages
+    // ------------------------------------------------------------
+    // Written by deleteMessage() BEFORE it redacts the real message
+    // doc — see hooks/useChatMessages.js. Regular users can create an
+    // entry (that's how the redaction flow itself works) but can
+    // never read, update, or delete afterward — only admins can read
+    // this, for dispute/moderation review.
+    match /messageAudit/{id} {
+      allow create: if isSignedIn() && request.resource.data.deletedBy == uid();
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // ------------------------------------------------------------
+    // settings/{id} — app-wide config (e.g. withdrawalConfig.feePercent)
+    // ------------------------------------------------------------
+    // Publicly readable since the client needs feePercent before
+    // submitting a withdrawal; only admins can change it.
+    match /settings/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // transactions/{id}, temp_transactions/{id}, withdrawals/{id}
+    // ------------------------------------------------------------
+    // All three are financial records with a userId field. Users can
+    // create their own (submitting a deposit/withdrawal request) and
+    // read their own; only admin can approve/update status. Users
+    // must NEVER be able to change status themselves — that's the
+    // approval step, and Deposit.jsx/Withdraw.jsx never do this
+    // client-side today (confirmed: status changes only appear in
+    // Admin/hooks/useAdminData.js), so this rule matches existing
+    // behavior rather than restricting something currently working.
+    match /transactions/{id} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == uid());
+      allow create: if isSignedIn() && request.resource.data.userId == uid() &&
+        (!('status' in request.resource.data) || request.resource.data.status == 'pending');
+      // 🔧 UPDATED (RBAC gap closure): was isAdmin() alone - approving/
+      // rejecting a deposit now requires the finance permission
+      // specifically, not just "is any admin".
+      allow update: if hasPermission('finance');
+      allow delete: if false;
+    }
+
+    match /temp_transactions/{id} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == uid());
+      allow create: if isSignedIn() && request.resource.data.userId == uid();
+      allow update: if isAdmin();
+      allow delete: if isAdmin() || (isSignedIn() && resource.data.userId == uid());
+    }
+
+    match /withdrawals/{id} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == uid());
+      allow create: if isSignedIn() && request.resource.data.userId == uid() &&
+        (!('status' in request.resource.data) || request.resource.data.status == 'pending');
+      // 🔧 UPDATED (RBAC gap closure): was isAdmin() alone.
+      allow update: if hasPermission('finance');
+      allow delete: if false;
+    }
+
+    // ------------------------------------------------------------
+    // reviews/{id} — reviewerId field
+    // ------------------------------------------------------------
+    match /reviews/{id} {
+      allow read: if true; // reviews are shown on public profiles
+      allow create: if isSignedIn() && request.resource.data.reviewerId == uid();
+      allow update, delete: if isAdmin() ||
+        (isSignedIn() && resource.data.reviewerId == uid());
+    }
+
+    // ------------------------------------------------------------
+    // reports/{id} — userId field (the reporter)
+    // ------------------------------------------------------------
+    match /reports/{id} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == uid());
+      allow create: if isSignedIn() && request.resource.data.userId == uid();
+      allow update, delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // disputes/{id} — buyerId, sellerId, raisedBy
+    // ------------------------------------------------------------
+    match /disputes/{id} {
+      allow read: if isAdmin() || (isSignedIn() &&
+        (resource.data.buyerId == uid() || resource.data.sellerId == uid()));
+      allow create: if isSignedIn() &&
+        (request.resource.data.buyerId == uid() || request.resource.data.sellerId == uid()) &&
+        request.resource.data.raisedBy == uid();
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // ------------------------------------------------------------
+    // notifications/{id} — userId field (recipient)
+    // ------------------------------------------------------------
+    match /notifications/{id} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == uid());
+      // Notifications are created BY THE APP on behalf of other users
+      // (e.g. you send a message, the recipient gets a notification) —
+      // so create can't be locked to "userId == the creator". Any
+      // signed-in user can create a notification FOR another user;
+      // this mirrors how the app already works (chatHelpers.js,
+      // NotificationTemplates.js) but is worth knowing: it means
+      // notification content itself isn't strongly authenticated.
+      allow create: if isSignedIn();
+      // Recipient can only toggle their own read state, never other
+      // fields (prevents rewriting a notification's content/type).
+      allow update: if isAdmin() || (isSignedIn() && resource.data.userId == uid() &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['read', 'readAt']));
+      allow delete: if isAdmin() || (isSignedIn() && resource.data.userId == uid());
+    }
+
+    // ------------------------------------------------------------
+    // admin_notifications/{id}, adminLogs/{id} — admin-only
+    // ------------------------------------------------------------
+    match /admin_notifications/{id} {
+      allow read, write: if isAdmin();
+    }
+
+    match /adminLogs/{id} {
+      // Audit log: admins can read, but nobody updates/deletes a log
+      // entry after the fact — that defeats the point of an audit
+      // log. Writes happen via addDoc (create) only.
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // ------------------------------------------------------------
+    // announcements/{id}, announcementHistory/{id}
+    // ------------------------------------------------------------
+    match /announcements/{id} {
+      allow read: if true; // announcements are meant to be seen app-wide
+      allow write: if isAdmin();
+    }
+
+    match /announcementHistory/{id} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ------------------------------------------------------------
+    // login_history/{id}
+    // ------------------------------------------------------------
+    // Security-relevant record of a user's own login activity.
+    // Written by the app on login (context/AuthContext.jsx territory) —
+    // allow the owner to create their own entries and read them, but
+    // never edit/delete (it's a history log).
+    match /login_history/{id} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == uid());
+      allow create: if isSignedIn() && request.resource.data.userId == uid();
+      allow update, delete: if false;
+    }
+
+    // ------------------------------------------------------------
+    // Default deny — anything not explicitly matched above.
+    // ------------------------------------------------------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

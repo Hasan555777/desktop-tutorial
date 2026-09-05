@@ -1,0 +1,299 @@
+/* ============================================================
+   🖱️ CONTEXT MENU - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.contextMenu {
+  position: fixed;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  padding: var(--space-xs) 0;
+  min-width: 180px;
+  z-index: 100000;
+  animation: contextMenuSlide 0.15s ease;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@keyframes contextMenuSlide {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================================
+   📌 CLOSE BUTTON
+   ============================================================ */
+
+.closeBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.closeBtn:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 MENU ITEMS
+   ============================================================ */
+
+.contextMenuItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  padding-right: var(--space-xl);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.contextMenuItem:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.contextMenuItem i {
+  width: 18px;
+  text-align: center;
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.contextMenuItem:hover i {
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 DELETE ITEM
+   ============================================================ */
+
+.contextMenuItem.delete {
+  color: var(--status-danger);
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+}
+
+.contextMenuItem.delete:hover {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.contextMenuItem.delete:hover i {
+  color: var(--status-danger);
+}
+
+.contextMenuItem.delete i {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .contextMenu {
+    min-width: 160px;
+  }
+
+  .contextMenuItem {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+    padding-right: var(--space-lg);
+  }
+
+  .contextMenuItem i {
+    font-size: var(--text-sm);
+    width: 16px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .contextMenu {
+    min-width: 150px;
+    border-radius: var(--radius-sm);
+  }
+
+  .closeBtn {
+    width: 24px;
+    height: 24px;
+    font-size: var(--text-sm);
+    top: 3px;
+    right: 3px;
+  }
+
+  .contextMenuItem {
+    padding: var(--space-xs) var(--space-sm);
+    padding-right: var(--space-md);
+    font-size: 10px;
+  }
+
+  .contextMenuItem i {
+    font-size: var(--text-xs);
+    width: 14px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .contextMenu {
+    min-width: 130px;
+  }
+
+  .closeBtn {
+    width: 22px;
+    height: 22px;
+    font-size: var(--text-xs);
+    top: 2px;
+    right: 2px;
+  }
+
+  .contextMenuItem {
+    font-size: 9px;
+    padding: 4px var(--space-xs);
+    padding-right: var(--space-sm);
+  }
+
+  .contextMenuItem i {
+    font-size: 10px;
+    width: 12px;
+  }
+
+  .contextMenuItem.delete {
+    margin-top: 2px;
+    padding-top: 2px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .contextMenu {
+    animation: none !important;
+  }
+
+  .closeBtn:hover {
+    transform: none !important;
+  }
+
+  .contextMenuItem:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .contextMenu {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .contextMenu {
+    border-width: 2px;
+  }
+
+  .closeBtn {
+    border: 1px solid currentColor;
+  }
+
+  .closeBtn:hover {
+    border-color: var(--status-danger);
+  }
+
+  .contextMenuItem:hover {
+    border: 1px solid var(--accent-primary);
+  }
+
+  .contextMenuItem.delete {
+    border-top-width: 2px;
+  }
+
+  .contextMenuItem.delete:hover {
+    border: 1px solid var(--status-danger);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.contextMenuItem:focus-visible,
+.closeBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: -3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.contextMenu ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .contextMenu {
+    display: none !important;
+  }
+}

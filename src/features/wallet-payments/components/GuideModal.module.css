@@ -1,0 +1,499 @@
+/* ============================================================
+   📖 GUIDE MODAL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MODAL OVERLAY
+   ============================================================ */
+
+.guideModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📌 MODAL CONTENT
+   ============================================================ */
+
+.guideModalContent {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 CLOSE BUTTON
+   ============================================================ */
+
+.guideModalCloseBtn {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-lg);
+  z-index: 10;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.guideModalCloseBtn:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.guideModalHeader {
+  padding: var(--space-xl) var(--space-xl) var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.guideModalHeader h2 {
+  font-size: var(--text-2xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  padding-right: 40px;
+}
+
+.guideModalSubtitle {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: var(--space-xs) 0 0 0;
+}
+
+/* ============================================================
+   📌 STEPS
+   ============================================================ */
+
+.guideModalSteps {
+  padding: var(--space-md) var(--space-xl) var(--space-xl);
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.guideModalSteps::-webkit-scrollbar {
+  width: 4px;
+}
+
+.guideModalSteps::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.guideModalSteps::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.guideModalStep {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+}
+
+.guideModalStep:hover {
+  border-color: var(--accent-primary);
+}
+
+.guideModalStepIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.guideModalStepBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.guideModalStepBody h4 {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 2px 0;
+}
+
+.guideModalStepBody p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   📌 PRIMARY BUTTON
+   ============================================================ */
+
+.guideModalPrimaryBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  margin: 0 var(--space-xl) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-base);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.guideModalPrimaryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .guideModalContent {
+    max-width: 480px;
+  }
+
+  .guideModalHeader {
+    padding: var(--space-lg) var(--space-lg) var(--space-md);
+  }
+
+  .guideModalHeader h2 {
+    font-size: var(--text-xl);
+  }
+
+  .guideModalSteps {
+    padding: var(--space-sm) var(--space-lg) var(--space-lg);
+  }
+
+  .guideModalPrimaryBtn {
+    margin: 0 var(--space-lg) var(--space-lg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .guideModalOverlay {
+    padding: var(--space-md);
+  }
+
+  .guideModalContent {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: var(--radius-md);
+  }
+
+  .guideModalHeader {
+    padding: var(--space-md) var(--space-md) var(--space-sm);
+  }
+
+  .guideModalHeader h2 {
+    font-size: var(--text-lg);
+    padding-right: 32px;
+  }
+
+  .guideModalSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .guideModalSteps {
+    padding: var(--space-sm) var(--space-md) var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .guideModalStep {
+    padding: var(--space-xs) var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .guideModalStepIcon {
+    width: 30px;
+    height: 30px;
+    font-size: var(--text-sm);
+  }
+
+  .guideModalStepBody h4 {
+    font-size: var(--text-xs);
+  }
+
+  .guideModalStepBody p {
+    font-size: var(--text-xs);
+  }
+
+  .guideModalPrimaryBtn {
+    margin: 0 var(--space-md) var(--space-md);
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-xl);
+  }
+
+  .guideModalCloseBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+    top: var(--space-sm);
+    right: var(--space-sm);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .guideModalOverlay {
+    padding: var(--space-sm);
+  }
+
+  .guideModalContent {
+    max-height: 98vh;
+    border-radius: var(--radius-sm);
+  }
+
+  .guideModalHeader {
+    padding: var(--space-sm) var(--space-sm) var(--space-xs);
+  }
+
+  .guideModalHeader h2 {
+    font-size: var(--text-base);
+    padding-right: 28px;
+  }
+
+  .guideModalSubtitle {
+    font-size: 10px;
+  }
+
+  .guideModalSteps {
+    padding: var(--space-xs) var(--space-sm) var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .guideModalStep {
+    padding: var(--space-xs);
+  }
+
+  .guideModalStepIcon {
+    width: 26px;
+    height: 26px;
+    font-size: var(--text-xs);
+  }
+
+  .guideModalStepBody h4 {
+    font-size: 10px;
+  }
+
+  .guideModalStepBody p {
+    font-size: 10px;
+  }
+
+  .guideModalPrimaryBtn {
+    margin: 0 var(--space-sm) var(--space-sm);
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .guideModalCloseBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-sm);
+    top: var(--space-xs);
+    right: var(--space-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .guideModalOverlay {
+    animation: none !important;
+  }
+
+  .guideModalContent {
+    animation: none !important;
+  }
+
+  .guideModalCloseBtn:hover {
+    transform: none !important;
+  }
+
+  .guideModalPrimaryBtn:hover {
+    transform: none !important;
+  }
+
+  .guideModalStep:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .guideModalContent {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .guideModalContent {
+    border-width: 2px;
+  }
+
+  .guideModalCloseBtn {
+    border-width: 2px;
+  }
+
+  .guideModalStep {
+    border-width: 2px;
+  }
+
+  .guideModalStepIcon {
+    border: 2px solid currentColor;
+  }
+
+  .guideModalPrimaryBtn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.guideModalCloseBtn:focus-visible,
+.guideModalPrimaryBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.guideModalContent ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .guideModalOverlay {
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 20px !important;
+  }
+
+  .guideModalContent {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    max-height: none !important;
+  }
+
+  .guideModalCloseBtn {
+    display: none !important;
+  }
+
+  .guideModalPrimaryBtn {
+    display: none !important;
+  }
+
+  .guideModalStep {
+    border: 1px solid #000000 !important;
+  }
+}

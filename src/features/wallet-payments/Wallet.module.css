@@ -1,0 +1,1581 @@
+/* ============================================================
+   💰 WALLET PAGE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.walletContainerModern {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  margin-bottom: 70px;
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.loadingIcon {
+  font-size: 48px;
+  color: var(--accent-primary);
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingContent h2 {
+  margin-top: var(--space-md);
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent p {
+  margin-top: var(--space-sm);
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingDots {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: center;
+  margin-top: var(--space-md);
+}
+
+.loadingDots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  animation: dotBounce 1.4s ease-in-out infinite both;
+}
+
+.loadingDots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.loadingDots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+.loadingDots span:nth-child(3) {
+  animation-delay: 0s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   📌 BANNERS
+   ============================================================ */
+
+.pendingBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+  color: var(--status-warning);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.pendingBanner i {
+  font-size: var(--text-base);
+}
+
+.pendingBanner strong {
+  font-weight: 100;
+}
+
+.lockedBanner {
+  background: var(--status-info-bg);
+  border-color: var(--status-info);
+  color: var(--status-info);
+}
+
+/* ============================================================
+   📌 WALLET ID DISPLAY
+   ============================================================ */
+
+.walletIdDisplay {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  flex-wrap: wrap;
+}
+
+.walletIdLabel {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.walletIdValue {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.copyWalletIdBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.copyWalletIdBtn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 STATS BAR
+   ============================================================ */
+
+.statsBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-lg);
+  padding: var(--space-md);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statValue {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statValue.positive {
+  color: var(--status-success);
+}
+
+.statValue.negative {
+  color: var(--status-danger);
+}
+
+.statValue.locked {
+  color: var(--status-info);
+}
+
+.statValue.pendingCount {
+  color: var(--status-warning);
+}
+
+.statDivider {
+  width: 1px;
+  height: 32px;
+  background: var(--border-color);
+}
+
+/* ============================================================
+   📌 SECTION HEADER
+   ============================================================ */
+
+.walletSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.walletSectionHeader h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.walletSectionHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.pendingBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--status-warning);
+  color: #ffffff;
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.viewAllBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.viewAllBtn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 SEARCH BAR
+   ============================================================ */
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.searchBar:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.searchBar i {
+  color: var(--text-muted);
+  font-size: var(--text-base);
+}
+
+.searchBar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  outline: none;
+}
+
+.searchBar input::placeholder {
+  color: var(--text-muted);
+}
+
+.clearSearch {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: 2px 4px;
+}
+
+.clearSearch:hover {
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 FILTER SECTION
+   ============================================================ */
+
+.filterSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.filterBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.filterBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.filterBtn.active {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.filterBtn.active .filterCount {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+.clearFiltersBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.clearFiltersBtn:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+/* ============================================================
+   📌 RESULT COUNT
+   ============================================================ */
+
+.resultCount {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.resultCount strong {
+  font-weight: 100;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   📌 TRANSACTIONS LIST
+   ============================================================ */
+
+.transactionsListModern {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+.transactionsListModern::-webkit-scrollbar {
+  width: 4px;
+}
+
+.transactionsListModern::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.transactionsListModern::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================================
+   📌 TRANSACTION ITEM
+   ============================================================ */
+
+.transactionItemModern {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.transactionItemModern:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  transform: translateY(-2px);
+}
+
+.transactionItemModern.pending {
+  border-left: 3px solid var(--status-warning);
+}
+
+.transactionItemModern.completed {
+  border-left: 3px solid var(--status-success);
+}
+
+.transactionItemModern.rejected {
+  border-left: 3px solid var(--status-danger);
+}
+
+.transactionItemModern.processing {
+  border-left: 3px solid var(--status-info);
+}
+
+.txIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--text-base);
+}
+
+.txDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.txDetails h4 {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.escrowBadge {
+  font-size: 9px;
+  font-weight: 100;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  border: 1px solid var(--status-info);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.txDate {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 2px 0;
+}
+
+.txReference {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: block;
+}
+
+.txDescription {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: block;
+}
+
+.txBankDetails {
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--accent-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  display: block;
+}
+
+.txRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.txAmount {
+  font-size: var(--text-base);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.txAmount.credit {
+  color: var(--status-success);
+}
+
+.txAmount.debit {
+  color: var(--status-danger);
+}
+
+.txStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border: 1px solid transparent;
+}
+
+.txStatus.pending {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+}
+
+.txStatus.completed {
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+}
+
+.txStatus.rejected {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+}
+
+.txStatus.processing {
+  color: var(--status-info);
+  background: var(--status-info-bg);
+  border-color: var(--status-info);
+}
+
+/* ============================================================
+   📌 EMPTY STATE
+   ============================================================ */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.emptyState i {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.emptyState h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  max-width: 400px;
+}
+
+.emptyActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--space-sm);
+}
+
+.browseBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.browseBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.browseBtn.secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.browseBtn.secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.walletFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 TRANSACTION DETAILS MODAL
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.detailsModal {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 520px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.modalHeader h3 {
+  font-size: var(--text-lg);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.modalHeader h3 i {
+  color: var(--accent-primary);
+}
+
+.closeBtn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.closeBtn:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.modalBody {
+  padding: var(--space-xl);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modalBody::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modalBody::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.modalBody::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+.detailRow span:first-child {
+  color: var(--text-secondary);
+}
+
+.detailRow span:last-child {
+  color: var(--text-primary);
+}
+
+.detailRow strong {
+  font-weight: 100;
+}
+
+.creditText {
+  color: var(--status-success);
+}
+
+.debitText {
+  color: var(--status-danger);
+}
+
+.typeBadge {
+  display: inline-flex;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border: 1px solid var(--border-color);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  border: 1px solid transparent;
+}
+
+.statusBadge i {
+  font-size: var(--text-xs);
+}
+
+.statusBadge.pending {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+}
+
+.statusBadge.completed {
+  color: var(--status-success);
+  background: var(--status-success-bg);
+  border-color: var(--status-success);
+}
+
+.statusBadge.rejected {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+}
+
+.statusBadge.processing {
+  color: var(--status-info);
+  background: var(--status-info-bg);
+  border-color: var(--status-info);
+}
+
+.escrowNote {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--status-info) !important;
+  font-size: var(--text-xs);
+}
+
+.escrowNote i {
+  color: var(--status-info);
+}
+
+.detailDivider {
+  height: 1px;
+  background: var(--border-color);
+  margin: var(--space-sm) 0;
+}
+
+.bankDetailsModal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.bankDetailsModal h4 {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.receiptRow {
+  padding: var(--space-xs) 0;
+}
+
+.receiptLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.receiptLink:hover {
+  text-decoration: underline;
+}
+
+.adminRemark {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-md);
+  margin-top: var(--space-xs);
+}
+
+.adminRemarkText {
+  color: var(--status-warning) !important;
+}
+
+.txId {
+  font-family: monospace;
+  font-size: var(--text-xs);
+  color: var(--text-muted) !important;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .walletContainerModern {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .statsBar {
+    gap: var(--space-sm) var(--space-md);
+    padding: var(--space-sm);
+  }
+
+  .statValue {
+    font-size: var(--text-sm);
+  }
+
+  .statDivider {
+    height: 28px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .walletContainerModern {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .pendingBanner {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .walletIdDisplay {
+    padding: var(--space-xs) var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .walletIdValue {
+    font-size: var(--text-xs);
+  }
+
+  .copyWalletIdBtn {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+
+  .statsBar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+  }
+
+  .statItem {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2px 0;
+  }
+
+  .statDivider {
+    display: none;
+  }
+
+  .statValue {
+    font-size: var(--text-sm);
+  }
+
+  .walletSectionHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .walletSectionHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .viewAllBtn {
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  .filterSection {
+    gap: 4px;
+  }
+
+  .filterBtn {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+
+  .clearFiltersBtn {
+    font-size: 10px;
+    padding: 2px 10px;
+  }
+
+  .transactionItemModern {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .txIcon {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+
+  .txDetails h4 {
+    font-size: var(--text-xs);
+  }
+
+  .txDate {
+    font-size: 10px;
+  }
+
+  .txReference,
+  .txDescription,
+  .txBankDetails {
+    font-size: 9px;
+  }
+
+  .txAmount {
+    font-size: var(--text-sm);
+  }
+
+  .txStatus {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .txRight {
+    align-items: flex-start;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: var(--space-xs);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .escrowBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .emptyState i {
+    font-size: 36px;
+  }
+
+  .emptyState h3 {
+    font-size: var(--text-base);
+  }
+
+  .emptyState p {
+    font-size: var(--text-xs);
+  }
+
+  .browseBtn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-lg);
+  }
+
+  .detailsModal {
+    max-width: 100%;
+    margin: var(--space-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .modalHeader {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-md);
+  }
+
+  .detailRow {
+    font-size: var(--text-xs);
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .closeBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .walletFooter {
+    flex-direction: column;
+    gap: var(--space-xs);
+    text-align: center;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .walletContainerModern {
+    padding: var(--space-xs);
+  }
+
+  .filterBtn {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
+  .filterCount {
+    font-size: 7px;
+    min-width: 14px;
+    height: 14px;
+  }
+
+  .txIcon {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .txDetails h4 {
+    font-size: 10px;
+  }
+
+  .txAmount {
+    font-size: var(--text-xs);
+  }
+
+  .emptyState i {
+    font-size: 28px;
+  }
+
+  .emptyState h3 {
+    font-size: var(--text-sm);
+  }
+
+  .loadingIcon {
+    font-size: 36px;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-lg);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-sm);
+  }
+
+  .loadingDots span {
+    width: 8px;
+    height: 8px;
+  }
+
+  .pendingBanner {
+    font-size: 10px;
+  }
+
+  .walletIdLabel {
+    font-size: 10px;
+  }
+
+  .walletIdValue {
+    font-size: 10px;
+  }
+
+  .copyWalletIdBtn {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .resultCount {
+    font-size: 9px;
+  }
+
+  .transactionItemModern.pending,
+  .transactionItemModern.completed,
+  .transactionItemModern.rejected,
+  .transactionItemModern.processing {
+    border-left-width: 2px;
+  }
+
+  .statusBadge {
+    font-size: 8px;
+    padding: 1px 6px;
+  }
+
+  .typeBadge {
+    font-size: 9px;
+    padding: 1px 8px;
+  }
+
+  .bankDetailsModal h4 {
+    font-size: var(--text-xs);
+  }
+
+  .receiptLink {
+    font-size: var(--text-xs);
+  }
+
+  .adminRemark {
+    padding: var(--space-xs);
+  }
+
+  .adminRemarkText {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loadingIcon {
+    animation: none;
+  }
+
+  .loadingDots span {
+    animation: none;
+  }
+
+  .modalOverlay {
+    animation: none !important;
+  }
+
+  .detailsModal {
+    animation: none !important;
+  }
+
+  .transactionItemModern:hover {
+    transform: none !important;
+  }
+
+  .browseBtn:hover {
+    transform: none !important;
+  }
+
+  .viewAllBtn:hover {
+    transform: none !important;
+  }
+
+  .copyWalletIdBtn:hover {
+    transform: none !important;
+  }
+
+  .filterBtn:hover {
+    transform: none !important;
+  }
+
+  .clearFiltersBtn:hover {
+    transform: none !important;
+  }
+
+  .closeBtn:hover {
+    transform: none !important;
+  }
+
+  .clearSearch:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .walletContainerModern {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .pendingBanner {
+    border-width: 2px;
+  }
+
+  .lockedBanner {
+    border-width: 2px;
+  }
+
+  .walletIdDisplay {
+    border-width: 2px;
+  }
+
+  .copyWalletIdBtn {
+    border-width: 2px;
+  }
+
+  .statsBar {
+    border-width: 2px;
+  }
+
+  .searchBar {
+    border-width: 2px;
+  }
+
+  .searchBar:focus-within {
+    border-color: var(--accent-primary);
+  }
+
+  .filterBtn {
+    border-width: 2px;
+  }
+
+  .filterBtn.active {
+    border-width: 2px;
+  }
+
+  .clearFiltersBtn {
+    border-width: 2px;
+  }
+
+  .transactionItemModern {
+    border-width: 2px;
+  }
+
+  .transactionItemModern.pending,
+  .transactionItemModern.completed,
+  .transactionItemModern.rejected,
+  .transactionItemModern.processing {
+    border-left-width: 4px;
+  }
+
+  .txStatus {
+    border-width: 2px;
+  }
+
+  .statusBadge {
+    border-width: 2px;
+  }
+
+  .typeBadge {
+    border-width: 2px;
+  }
+
+  .browseBtn {
+    border: 2px solid currentColor;
+  }
+
+  .browseBtn.secondary {
+    border-width: 2px;
+  }
+
+  .viewAllBtn {
+    border-width: 2px;
+  }
+
+  .detailsModal {
+    border-width: 2px;
+  }
+
+  .closeBtn {
+    border-width: 2px;
+  }
+
+  .escrowBadge {
+    border-width: 2px;
+  }
+
+  .escrowNote {
+    border: 1px solid currentColor;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .receiptLink {
+    text-decoration: underline;
+  }
+
+  .adminRemark {
+    border: 2px solid var(--status-warning);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.copyWalletIdBtn:focus-visible,
+.viewAllBtn:focus-visible,
+.filterBtn:focus-visible,
+.clearFiltersBtn:focus-visible,
+.browseBtn:focus-visible,
+.closeBtn:focus-visible,
+.clearSearch:focus-visible,
+.searchBar input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.walletContainerModern ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .walletContainerModern {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 20px !important;
+  }
+
+  .statsBar {
+    border: 1px solid #000000 !important;
+  }
+
+  .transactionItemModern {
+    border: 1px solid #000000 !important;
+  }
+
+  .txStatus {
+    border: 1px solid #000000 !important;
+  }
+
+  .pendingBanner {
+    border: 1px solid #000000 !important;
+  }
+
+  .walletIdDisplay {
+    border: 1px solid #000000 !important;
+  }
+
+  .modalOverlay {
+    display: none !important;
+  }
+
+  .viewAllBtn,
+  .copyWalletIdBtn,
+  .filterBtn,
+  .clearFiltersBtn,
+  .browseBtn {
+    display: none !important;
+  }
+
+  .loadingContainer {
+    display: none !important;
+  }
+}

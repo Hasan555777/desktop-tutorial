@@ -1,0 +1,1224 @@
+/* ============================================================
+   🔒 SECURITY TAB - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.securityTab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.securityHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.securityHeader h2 {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.securityHeader h2 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.headerSubtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 SECURITY SCORE
+   ============================================================ */
+
+.securityScore {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+}
+
+.securityScore:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.scoreCircle {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.scoreCircle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.scoreText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--text-2xl);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.scoreInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scoreInfo h4 {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.scoreInfo p {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--accent-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.scoreInfo small {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 SECURITY SECTION
+   ============================================================ */
+
+.securitySection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+}
+
+.securitySection:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.sectionHeader i {
+  font-size: var(--text-xl);
+  color: var(--accent-primary);
+}
+
+.sectionHeader h3 {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 FORM ELEMENTS
+   ============================================================ */
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.formGroup label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Buttons ── */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.btnSecondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.changePinBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  align-self: flex-start;
+}
+
+.changePinBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+/* ── Security Note ── */
+.securityNote {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.securityNote.success {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.securityNote.warning {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.securityNote i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 PIN MODAL
+   ============================================================ */
+
+.pinModal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--radius-md);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.pinModalContent {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.pinModalContent h4 {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.pinModalContent h4 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.pinModalContent p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.pinActions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.pinActions .btnPrimary,
+.pinActions .btnSecondary {
+  flex: 1;
+}
+
+/* ============================================================
+   📌 RECOVERY CODES
+   ============================================================ */
+
+.recoveryInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.recoveryInfo p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.recoveryStats {
+  display: flex;
+  gap: var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.recoveryStats span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.recoveryStats span::before {
+  content: '•';
+  color: var(--accent-primary);
+}
+
+.recoveryActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   📌 MODAL (Recovery Codes)
+   ============================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  animation: fadeIn 0.3s ease;
+}
+
+.modalContent {
+  background: var(--modal-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modalHeader h3 {
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.modalHeader h3 i {
+  margin-right: var(--space-sm);
+}
+
+.modalCloseBtn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: var(--text-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.modalCloseBtn:hover {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+  transform: rotate(90deg);
+}
+
+.modalBody {
+  padding: var(--space-lg);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.warningText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--status-warning-bg);
+  border: 1px solid var(--status-warning);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--status-warning);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-md) 0;
+}
+
+.codesContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.codeItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.codeItem:hover {
+  border-color: var(--accent-primary);
+}
+
+.codeNumber {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.codeValue {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  flex: 1;
+  letter-spacing: 1px;
+}
+
+.copyBtn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-xs);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.copyBtn:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.downloadAllBtn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ============================================================
+   📌 LOGIN HISTORY
+   ============================================================ */
+
+.lastLogin {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.lastLogin i {
+  color: var(--accent-primary);
+}
+
+.historyLoading,
+.historyEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.historyLoading i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loginHistory {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+
+.loginHistory::-webkit-scrollbar {
+  width: 4px;
+}
+
+.loginHistory::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.loginHistory::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.historyItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.historyItem:hover {
+  border-color: var(--accent-primary);
+}
+
+.historyItem.failed {
+  border-color: var(--status-danger);
+  opacity: 0.7;
+}
+
+.historyDevice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.historyDevice i {
+  font-size: var(--text-base);
+}
+
+.historyDetails {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.historyIp {
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.historyTime {
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.historyStatus {
+  font-weight: 500;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 SECURITY TIPS
+   ============================================================ */
+
+.securityTips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.tipsToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.tipsToggle:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.tipsToggle i {
+  color: var(--accent-primary);
+}
+
+.tipsContent {
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  animation: fadeIn 0.3s ease;
+}
+
+.tipsContent ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.tipsContent ul li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.tipsContent ul li i {
+  color: var(--status-success);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .securityTab {
+    gap: var(--space-lg);
+  }
+
+  .securitySection {
+    padding: var(--space-md);
+  }
+
+  .securityScore {
+    padding: var(--space-md);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .securityTab {
+    gap: var(--space-md);
+  }
+
+  .securityHeader h2 {
+    font-size: var(--text-lg);
+  }
+
+  .headerSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .securitySection {
+    padding: var(--space-sm);
+  }
+
+  .sectionHeader h3 {
+    font-size: var(--text-sm);
+  }
+
+  .sectionHeader i {
+    font-size: var(--text-base);
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .securityScore {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-md);
+  }
+
+  .scoreCircle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .scoreText {
+    font-size: var(--text-xl);
+  }
+
+  .recoveryStats {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .recoveryActions {
+    flex-direction: column;
+  }
+
+  .recoveryActions .btnPrimary,
+  .recoveryActions .btnSecondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pinModalContent {
+    max-width: 100%;
+  }
+
+  .pinActions {
+    flex-direction: column;
+  }
+
+  .pinActions .btnPrimary,
+  .pinActions .btnSecondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modalContent {
+    max-width: 95%;
+    margin: var(--space-md);
+  }
+
+  .modalHeader {
+    padding: var(--space-md);
+  }
+
+  .modalHeader h3 {
+    font-size: var(--text-base);
+  }
+
+  .modalBody {
+    padding: var(--space-md);
+  }
+
+  .codesContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .historyItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .historyDetails {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    padding: var(--space-xs) var(--space-lg);
+    font-size: var(--text-xs);
+  }
+
+  .changePinBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .input {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .securityNote {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .pinModalContent h4 {
+    font-size: var(--text-sm);
+  }
+
+  .pinModalContent p {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .securityTab {
+    gap: var(--space-sm);
+  }
+
+  .securityHeader h2 {
+    font-size: var(--text-base);
+  }
+
+  .securitySection {
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+  }
+
+  .scoreCircle {
+    width: 48px;
+    height: 48px;
+  }
+
+  .scoreText {
+    font-size: var(--text-base);
+  }
+
+  .scoreInfo h4 {
+    font-size: var(--text-sm);
+  }
+
+  .scoreInfo p {
+    font-size: var(--text-xs);
+  }
+
+  .historyDevice {
+    font-size: var(--text-xs);
+  }
+
+  .historyDetails {
+    font-size: 9px;
+    gap: var(--space-xs);
+  }
+
+  .codeValue {
+    font-size: var(--text-xs);
+  }
+
+  .modalCloseBtn {
+    width: 30px;
+    height: 30px;
+    font-size: var(--text-base);
+  }
+
+  .warningText {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .tipsContent ul li {
+    font-size: var(--text-xs);
+  }
+
+  .recoveryStats {
+    font-size: var(--text-xs);
+  }
+
+  .recoveryInfo p {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .pinModal {
+    animation: none !important;
+  }
+
+  .modalOverlay {
+    animation: none !important;
+  }
+
+  .modalContent {
+    animation: none !important;
+  }
+
+  .tipsContent {
+    animation: none !important;
+  }
+
+  .historyLoading i {
+    animation: none;
+  }
+
+  .btnPrimary:hover:not(:disabled),
+  .btnSecondary:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .changePinBtn:hover {
+    transform: none !important;
+  }
+
+  .modalCloseBtn:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .securityTab {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .securitySection {
+    border-width: 2px;
+  }
+
+  .securityScore {
+    border-width: 2px;
+  }
+
+  .btnPrimary {
+    border: 2px solid currentColor;
+  }
+
+  .btnSecondary {
+    border-width: 2px;
+  }
+
+  .changePinBtn {
+    border-width: 2px;
+  }
+
+  .input {
+    border-width: 2px;
+  }
+
+  .input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .pinModal {
+    border-width: 2px;
+  }
+
+  .modalContent {
+    border-width: 2px;
+  }
+
+  .securityNote {
+    border-width: 2px;
+  }
+
+  .historyItem {
+    border-width: 2px;
+  }
+
+  .historyItem.failed {
+    border-width: 2px;
+  }
+
+  .codeItem {
+    border-width: 2px;
+  }
+
+  .copyBtn {
+    border-width: 2px;
+  }
+
+  .modalCloseBtn {
+    border-width: 2px;
+  }
+
+  .tipsToggle {
+    border-width: 2px;
+  }
+
+  .tipsContent {
+    border-width: 2px;
+  }
+
+  .recoveryStats {
+    border-width: 2px;
+  }
+
+  .lastLogin {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btnPrimary:focus-visible,
+.btnSecondary:focus-visible,
+.changePinBtn:focus-visible,
+.modalCloseBtn:focus-visible,
+.copyBtn:focus-visible,
+.tipsToggle:focus-visible,
+.input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.securityTab ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .securityTab {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .securitySection {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .securityScore {
+    border: 1px solid #000000 !important;
+  }
+
+  .modalOverlay {
+    display: none !important;
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .changePinBtn,
+  .tipsToggle {
+    border: 1px solid #000000 !important;
+  }
+
+  .input {
+    border: 1px solid #000000 !important;
+  }
+
+  .historyItem {
+    border: 1px solid #000000 !important;
+  }
+
+  .recoveryStats {
+    border: 1px solid #000000 !important;
+  }
+
+  .lastLogin {
+    border: 1px solid #000000 !important;
+  }
+
+  .pinModal {
+    display: none !important;
+  }
+}

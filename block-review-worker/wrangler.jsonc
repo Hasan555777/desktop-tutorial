@@ -1,0 +1,34 @@
+{
+  "name": "worktrust-block-review",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-13",
+
+  "observability": {
+    "enabled": true
+  },
+
+  "upload_source_maps": true,
+
+  // Runs every hour — frequent enough that a block expiring at any
+  // time of day gets an admin notification within an hour, without
+  // running so often it's wasteful. Change the cron expression if
+  // you want a different cadence (this is standard cron syntax).
+  "triggers": {
+    "crons": ["0 * * * *"]
+  },
+
+  "vars": {
+    "ENVIRONMENT": "development"
+  },
+
+  "env": {
+    "production": {
+      "vars": {
+        "ENVIRONMENT": "production"
+      },
+      "triggers": {
+        "crons": ["0 * * * *"]
+      }
+    }
+  }
+}

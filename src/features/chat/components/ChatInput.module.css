@@ -1,0 +1,316 @@
+/* ============================================================
+   ⌨️ CHAT INPUT - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.chatInputArea {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  position: sticky;
+  bottom: 0;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 ATTACH BUTTONS
+   ============================================================ */
+
+.attachBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.attachBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--accent-primary);
+  transform: scale(1.05);
+}
+
+.attachBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.attachBtn i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📌 CHAT INPUT FIELD
+   ============================================================ */
+
+.chatInput {
+  flex: 1;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+  min-height: 40px;
+  outline: none;
+}
+
+.chatInput:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.chatInput::placeholder {
+  color: var(--text-muted);
+}
+
+.chatInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 SEND BUTTON
+   ============================================================ */
+
+.sendBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--gradient-primary);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+  font-size: var(--text-base);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.sendBtn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+.sendBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sendBtn i {
+  font-size: var(--text-base);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .chatInputArea {
+    padding: var(--space-xs) var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .attachBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+
+  .chatInput {
+    font-size: var(--text-xs);
+    min-height: 36px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .sendBtn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .chatInputArea {
+    padding: var(--space-xs);
+    gap: 4px;
+  }
+
+  .attachBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .attachBtn i {
+    font-size: var(--text-sm);
+  }
+
+  .chatInput {
+    font-size: 10px;
+    min-height: 32px;
+    padding: var(--space-xs);
+    border-radius: var(--radius-sm);
+  }
+
+  .sendBtn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--text-xs);
+  }
+
+  .sendBtn i {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .chatInputArea {
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .attachBtn {
+    width: 24px;
+    height: 24px;
+    font-size: 9px;
+  }
+
+  .attachBtn i {
+    font-size: var(--text-xs);
+  }
+
+  .chatInput {
+    font-size: 9px;
+    min-height: 28px;
+    padding: 2px var(--space-xs);
+  }
+
+  .sendBtn {
+    width: 24px;
+    height: 24px;
+    font-size: 9px;
+  }
+
+  .sendBtn i {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .attachBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .sendBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .chatInputArea {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .chatInputArea {
+    border-top-width: 2px;
+  }
+
+  .attachBtn {
+    border: 1px solid transparent;
+  }
+
+  .attachBtn:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+  }
+
+  .chatInput {
+    border-width: 2px;
+  }
+
+  .chatInput:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .sendBtn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.attachBtn:focus-visible,
+.sendBtn:focus-visible,
+.chatInput:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.chatInputArea ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .chatInputArea {
+    display: none !important;
+  }
+}

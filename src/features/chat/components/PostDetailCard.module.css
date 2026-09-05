@@ -1,0 +1,686 @@
+/* ============================================================
+   📄 POST DETAIL CARD - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CARD
+   ============================================================ */
+
+.card {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  font-family: var(--font-primary);
+  transition: transform var(--transition-normal),
+              border-color var(--transition-normal),
+              box-shadow var(--transition-normal);
+}
+
+.card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   📌 INNER LAYOUT
+   ============================================================ */
+
+.inner {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+}
+
+/* ============================================================
+   📌 IMAGE
+   ============================================================ */
+
+.image {
+  flex: 0 0 220px;
+  width: 220px;
+  height: 180px;
+  margin: var(--space-md);
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px var(--shadow-color);
+  display: block;
+  cursor: pointer;
+  transition: transform var(--transition-slow),
+              box-shadow var(--transition-slow),
+              filter var(--transition-slow);
+}
+
+.image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 35px var(--shadow-color);
+  filter: brightness(1.04);
+}
+
+/* ============================================================
+   📌 INFORMATION
+   ============================================================ */
+
+.info {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+/* ============================================================
+   📌 TITLE
+   ============================================================ */
+
+.title {
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: var(--text-lg);
+  font-weight: 100;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-word;
+  cursor: default;
+}
+
+/* ============================================================
+   📌 DESCRIPTION
+   ============================================================ */
+
+.description {
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  word-break: break-word;
+  cursor: default;
+}
+
+/* ============================================================
+   📌 META
+   ============================================================ */
+
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-xs);
+  padding: var(--space-xs) 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  white-space: nowrap;
+}
+
+.metaIcon {
+  color: var(--accent-primary);
+  font-size: var(--text-sm);
+}
+
+/* ============================================================
+   📌 ACTIONS
+   ============================================================ */
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+/* ============================================================
+   📌 BUTTON BASE
+   ============================================================ */
+
+.button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 38px;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  line-height: 1;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: transform var(--transition-normal),
+              background var(--transition-normal),
+              border-color var(--transition-normal),
+              box-shadow var(--transition-normal),
+              opacity var(--transition-normal);
+}
+
+.button i {
+  font-size: 0.9em;
+}
+
+.button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   📌 VIEW POST
+   ============================================================ */
+
+.buttonView {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.buttonView:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 SEND OFFER
+   ============================================================ */
+
+.buttonOffer {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.buttonOffer:hover:not(:disabled) {
+  box-shadow: 0 5px 22px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+/* ============================================================
+   📌 APPROVE / CONFIRM DEAL
+   ============================================================ */
+
+.buttonApprove {
+  background: var(--gradient-success);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.buttonApprove:hover:not(:disabled) {
+  opacity: 0.92;
+  box-shadow: 0 5px 18px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 REJECT OFFER
+   ============================================================ */
+
+.buttonReject {
+  background: var(--gradient-danger);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.buttonReject:hover:not(:disabled) {
+  opacity: 0.92;
+  box-shadow: 0 5px 18px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 REOPEN DEAL
+   ============================================================ */
+
+.buttonReopen {
+  background: var(--gradient-warning);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.buttonReopen:hover:not(:disabled) {
+  opacity: 0.92;
+  box-shadow: 0 5px 18px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 STATUS BADGES
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.badge i {
+  font-size: 0.9em;
+}
+
+/* Active */
+.badgeActive {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+/* Pending */
+.badgePending {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+/* Rejected */
+.badgeRejected {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+}
+
+/* Cancelled */
+.badgeCancelled {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 FOCUS ACCESSIBILITY
+   ============================================================ */
+
+.button:focus-visible,
+.image:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   📌 TEXT SELECTION
+   ============================================================ */
+
+.card ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   📌 TABLET
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .image {
+    flex-basis: 190px;
+    width: 190px;
+    height: 155px;
+    margin: var(--space-sm);
+  }
+
+  .info {
+    padding: var(--space-md);
+  }
+
+  .title {
+    font-size: var(--text-base);
+  }
+
+  .description {
+    font-size: var(--text-sm);
+    -webkit-line-clamp: 2;
+  }
+
+  .metaItem {
+    font-size: var(--text-xs);
+  }
+
+  .button {
+    min-height: 36px;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .badge {
+    min-height: 34px;
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   📌 MOBILE - IMAGE LEFT + CONTENT RIGHT (হরাইজন্টাল লেআউট)
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .card {
+    border-radius: var(--radius-md);
+  }
+
+  .inner {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
+  }
+
+  .image {
+    flex: 0 0 82px;
+    width: 82px;
+    height: 62px;
+    margin: var(--space-sm);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 10px var(--shadow-color);
+  }
+
+  .image:hover {
+    transform: none;
+    filter: none;
+  }
+
+  .info {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    padding: var(--space-sm) var(--space-sm) var(--space-sm) 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5px;
+  }
+
+  .title {
+    font-size: var(--text-sm);
+    line-height: 1.35;
+    -webkit-line-clamp: 2;
+  }
+
+  .description {
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    -webkit-line-clamp: 2;
+  }
+
+  .meta {
+    gap: 8px;
+    padding: 4px 0;
+    margin-top: 2px;
+  }
+
+  .metaItem {
+    font-size: 11px;
+  }
+
+  .metaIcon {
+    font-size: 10px;
+  }
+
+  .actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 3px;
+  }
+
+  .button {
+    width: auto;
+    min-height: 32px;
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .badge {
+    width: auto;
+    min-height: 30px;
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   📌 VERY SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .inner {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .image {
+    flex: 0 0 68px;
+    width: 68px;
+    height: 52px;
+    margin: 8px;
+    border-radius: 6px;
+  }
+
+  .info {
+    padding: 8px 8px 8px 0;
+    gap: 4px;
+  }
+
+  .title {
+    font-size: var(--text-sm);
+    line-height: 1.3;
+    -webkit-line-clamp: 2;
+  }
+
+  .description {
+    font-size: 11px;
+    line-height: 1.35;
+    -webkit-line-clamp: 2;
+  }
+
+  .meta {
+    gap: 7px;
+    padding: 3px 0;
+  }
+
+  .metaItem {
+    font-size: 10px;
+  }
+
+  .metaIcon {
+    font-size: 9px;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .button {
+    width: auto;
+    min-height: 30px;
+    padding: 4px 7px;
+    font-size: 9px;
+  }
+
+  .badge {
+    width: auto;
+    min-height: 28px;
+    padding: 4px 7px;
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   📌 EXTRA SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 360px) {
+  .image {
+    flex: 0 0 58px;
+    width: 58px;
+    height: 46px;
+    margin: 7px;
+  }
+
+  .info {
+    padding-right: 7px;
+  }
+
+  .title {
+    font-size: 12px;
+  }
+
+  .description {
+    font-size: 10px;
+  }
+
+  .metaItem {
+    font-size: 9px;
+  }
+
+  .button {
+    min-height: 28px;
+    padding: 4px 6px;
+    font-size: 8px;
+  }
+
+  .badge {
+    min-height: 26px;
+    padding: 4px 6px;
+    font-size: 8px;
+  }
+}
+
+/* ============================================================
+   📌 REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .image,
+  .button {
+    transition: none !important;
+  }
+
+  .card:hover,
+  .image:hover,
+  .button:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   📌 HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+  }
+
+  .image {
+    border: 2px solid var(--border-color);
+  }
+
+  .button {
+    border-width: 2px;
+  }
+
+  .buttonOffer,
+  .buttonApprove,
+  .buttonReject,
+  .buttonReopen {
+    border: 2px solid currentColor;
+  }
+
+  .badge {
+    border-width: 2px;
+  }
+
+  .meta {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+  }
+}
+
+/* ============================================================
+   📌 PRINT
+   ============================================================ */
+
+@media print {
+  .card {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  .card:hover {
+    transform: none !important;
+  }
+
+  .image {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .image:hover {
+    transform: none !important;
+  }
+
+  .button {
+    display: none !important;
+  }
+
+  .badge {
+    border: 1px solid #000000 !important;
+  }
+
+  .meta {
+    border-top: 1px solid #000000 !important;
+    border-bottom: 1px solid #000000 !important;
+  }
+}

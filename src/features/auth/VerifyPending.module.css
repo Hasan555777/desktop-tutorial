@@ -1,0 +1,433 @@
+/* ============================================================
+   ⏳ VERIFY PENDING - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.verifyPendingContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  padding: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 CARD
+   ============================================================ */
+
+.verifyCard {
+  max-width: 460px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  transition: all var(--transition-normal);
+  text-align: center;
+}
+
+.verifyCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 40px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 ICON
+   ============================================================ */
+
+.verifyIcon {
+  font-size: 56px;
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verifyIcon.pending {
+  color: var(--status-warning);
+}
+
+.verifyIcon.success {
+  color: var(--status-success);
+}
+
+.verifyIcon.error {
+  color: var(--status-danger);
+}
+
+.verifyIcon.incomplete {
+  color: var(--status-info);
+}
+
+.verifyIcon.info {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 TITLE & MESSAGE
+   ============================================================ */
+
+.verifyCard h2 {
+  font-size: var(--text-2xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.verifyMessage {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  line-height: 1.8;
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.verifySubText {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-md) 0;
+}
+
+/* ============================================================
+   📌 ACTIONS
+   ============================================================ */
+
+.verifyActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.btnSupport,
+.btnRetry,
+.btnContinue,
+.btnDashboard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+}
+
+.btnSupport:hover,
+.btnRetry:hover,
+.btnContinue:hover,
+.btnDashboard:hover {
+  transform: translateY(-2px);
+}
+
+.btnSupport {
+  background: var(--gradient-warning);
+  color: #ffffff;
+}
+
+.btnSupport:hover {
+  opacity: 0.9;
+}
+
+.btnRetry {
+  background: var(--gradient-danger);
+  color: #ffffff;
+}
+
+.btnRetry:hover {
+  opacity: 0.9;
+}
+
+.btnContinue {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.btnContinue:hover {
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnDashboard {
+  background: var(--gradient-success);
+  color: #ffffff;
+}
+
+.btnDashboard:hover {
+  opacity: 0.9;
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.verifyFooter {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.btnLogout {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: var(--space-xs) var(--space-md);
+}
+
+.btnLogout:hover {
+  color: var(--status-danger);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .verifyCard {
+    padding: var(--space-xl);
+    max-width: 400px;
+  }
+
+  .verifyCard h2 {
+    font-size: var(--text-xl);
+  }
+
+  .verifyIcon {
+    font-size: 48px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .verifyPendingContainer {
+    padding: var(--space-md);
+  }
+
+  .verifyCard {
+    padding: var(--space-lg);
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .verifyCard h2 {
+    font-size: var(--text-lg);
+  }
+
+  .verifyMessage {
+    font-size: var(--text-sm);
+  }
+
+  .verifySubText {
+    font-size: var(--text-xs);
+  }
+
+  .verifyIcon {
+    font-size: 40px;
+  }
+
+  .btnSupport,
+  .btnRetry,
+  .btnContinue,
+  .btnDashboard {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .btnLogout {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .verifyPendingContainer {
+    padding: var(--space-sm);
+  }
+
+  .verifyCard {
+    padding: var(--space-md);
+    border-radius: var(--radius-sm);
+  }
+
+  .verifyCard h2 {
+    font-size: var(--text-base);
+  }
+
+  .verifyMessage {
+    font-size: var(--text-xs);
+  }
+
+  .verifySubText {
+    font-size: 10px;
+  }
+
+  .verifyIcon {
+    font-size: 32px;
+  }
+
+  .btnSupport,
+  .btnRetry,
+  .btnContinue,
+  .btnDashboard {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .btnLogout {
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .btnSupport:hover,
+  .btnRetry:hover,
+  .btnContinue:hover,
+  .btnDashboard:hover {
+    transform: none !important;
+  }
+
+  .btnLogout:hover {
+    transform: none !important;
+  }
+
+  .verifyCard:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .verifyCard {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .verifyCard {
+    border-width: 2px;
+  }
+
+  .btnSupport,
+  .btnRetry,
+  .btnContinue,
+  .btnDashboard {
+    border: 2px solid currentColor;
+  }
+
+  .btnLogout {
+    border: 1px solid transparent;
+  }
+
+  .btnLogout:hover {
+    border-color: var(--status-danger);
+  }
+
+  .verifyIcon.pending {
+    color: #ffaa00;
+  }
+
+  .verifyIcon.success {
+    color: #00ff00;
+  }
+
+  .verifyIcon.error {
+    color: #ff0000;
+  }
+
+  .verifyIcon.incomplete {
+    color: #00ccff;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btnSupport:focus-visible,
+.btnRetry:focus-visible,
+.btnContinue:focus-visible,
+.btnDashboard:focus-visible,
+.btnLogout:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.verifyCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .verifyPendingContainer {
+    background: #ffffff !important;
+    padding: 20px !important;
+  }
+
+  .verifyCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .btnSupport,
+  .btnRetry,
+  .btnContinue,
+  .btnDashboard,
+  .btnLogout {
+    display: none !important;
+  }
+
+  .verifyIcon {
+    color: #000000 !important;
+  }
+}

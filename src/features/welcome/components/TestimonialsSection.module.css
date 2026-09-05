@@ -1,0 +1,563 @@
+/* ============================================================
+   💬 TESTIMONIALS SECTION - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.testimonialsSection {
+  padding: 80px var(--space-lg);
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ── Background Decorations ── */
+.testimonialsSection::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: var(--status-success-bg);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.testimonialsSection::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: var(--accent-glow);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+/* ============================================================
+   📌 SECTION HEADER
+   ============================================================ */
+
+.sectionHeader {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.sectionHeader h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  position: relative;
+  display: inline-block;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.sectionHeader h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  margin: var(--space-sm) auto 0;
+}
+
+.sectionHeader p {
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  margin-top: var(--space-sm);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ============================================================
+   📌 TESTIMONIALS GRID
+   ============================================================ */
+
+.testimonialsGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-xl);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   📌 TESTIMONIAL CARD
+   ============================================================ */
+
+.testimonialCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ── Gradient Border on Hover ── */
+.testimonialCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 2px;
+  background: var(--gradient-primary);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: all var(--transition-normal);
+}
+
+.testimonialCard:hover::before {
+  opacity: 1;
+}
+
+.testimonialCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px var(--shadow-color);
+}
+
+/* ── Inner Glow on Hover ── */
+.testimonialCard::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    var(--accent-glow),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: all var(--transition-normal);
+  pointer-events: none;
+}
+
+.testimonialCard:hover::after {
+  opacity: 0.08;
+}
+
+/* ============================================================
+   📌 TESTIMONIAL TEXT
+   ============================================================ */
+
+.testimonialText {
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: 1.8;
+  margin: 0 0 var(--space-lg);
+  flex: 1;
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+  padding-top: var(--space-md);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ── Quote Marks ── */
+.testimonialText::before {
+  content: '"';
+  color: var(--accent-primary);
+  opacity: 0.25;
+  font-size: 48px;
+  line-height: 1;
+  position: absolute;
+  top: -8px;
+  left: -4px;
+  font-family: Georgia, serif;
+}
+
+.testimonialText::after {
+  content: '"';
+  color: var(--accent-primary);
+  opacity: 0.25;
+  font-size: 48px;
+  line-height: 0;
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-family: Georgia, serif;
+}
+
+/* ============================================================
+   👤 TESTIMONIAL AUTHOR
+   ============================================================ */
+
+.testimonialAuthor {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  position: relative;
+  z-index: 1;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+/* ── Avatar ── */
+.testimonialAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px var(--shadow-glow);
+  transition: all var(--transition-normal);
+  position: relative;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.testimonialCard:hover .testimonialAvatar {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 8px 25px var(--shadow-glow);
+}
+
+/* ── Avatar Ring Animation ── */
+.testimonialAvatar::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-primary);
+  opacity: 0;
+  transition: all var(--transition-normal);
+  animation: avatarPulse 2s ease-in-out infinite;
+}
+
+.testimonialCard:hover .testimonialAvatar::after {
+  opacity: 1;
+}
+
+@keyframes avatarPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* ── Author Info ── */
+.testimonialName {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  transition: color var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+.testimonialCard:hover .testimonialName {
+  color: var(--accent-primary);
+}
+
+.testimonialRole {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  font-family: 'Bensen Handwriting', var(--font-primary), sans-serif;
+}
+
+/* ============================================================
+   📌 STAR RATING (Optional)
+   ============================================================ */
+
+.testimonialRating {
+  display: flex;
+  gap: 2px;
+  margin-bottom: var(--space-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.testimonialRating i {
+  color: var(--status-warning);
+  font-size: 14px;
+}
+
+.testimonialRating i.empty {
+  color: var(--border-color);
+}
+
+/* ============================================================
+   📌 CARD VARIANTS
+   ============================================================ */
+
+/* ── Glass Variant ── */
+.testimonialCard.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* ── Featured Card (Larger) ── */
+.testimonialCard.featured {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .testimonialCard.featured {
+    grid-column: span 1;
+  }
+}
+
+/* ── Gradient Background Variant ── */
+.testimonialCard.gradientBg {
+  background: var(--gradient-primary);
+  border-color: transparent;
+}
+
+.testimonialCard.gradientBg .testimonialText {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.testimonialCard.gradientBg .testimonialName {
+  color: #ffffff;
+}
+
+.testimonialCard.gradientBg .testimonialRole {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.testimonialCard.gradientBg .testimonialAuthor {
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+.testimonialCard.gradientBg .testimonialAvatar {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.testimonialCard.gradientBg .testimonialText::before,
+.testimonialCard.gradientBg .testimonialText::after {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================================
+   🎬 ANIMATIONS
+   ============================================================ */
+
+.testimonialCard {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.testimonialCard:nth-child(1) { animation-delay: 0.05s; }
+.testimonialCard:nth-child(2) { animation-delay: 0.10s; }
+.testimonialCard:nth-child(3) { animation-delay: 0.15s; }
+.testimonialCard:nth-child(4) { animation-delay: 0.20s; }
+.testimonialCard:nth-child(5) { animation-delay: 0.25s; }
+.testimonialCard:nth-child(6) { animation-delay: 0.30s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .testimonialsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .testimonialsSection {
+    padding: 60px var(--space-md);
+  }
+
+  .testimonialsGrid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+    gap: var(--space-md);
+  }
+
+  .testimonialCard {
+    padding: var(--space-lg);
+  }
+
+  .testimonialText {
+    font-size: var(--text-sm);
+  }
+
+  .testimonialText::before,
+  .testimonialText::after {
+    font-size: 32px;
+  }
+
+  .testimonialAvatar {
+    width: 44px;
+    height: 44px;
+    font-size: var(--text-base);
+  }
+
+  .sectionHeader p {
+    font-size: var(--text-base);
+  }
+
+  .testimonialsSection::before,
+  .testimonialsSection::after {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonialsSection {
+    padding: 40px var(--space-sm);
+  }
+
+  .testimonialCard {
+    padding: var(--space-md);
+  }
+
+  .testimonialText {
+    font-size: var(--text-xs);
+    line-height: 1.7;
+  }
+
+  .testimonialText::before,
+  .testimonialText::after {
+    font-size: 24px;
+  }
+
+  .testimonialAvatar {
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-sm);
+  }
+
+  .testimonialName {
+    font-size: var(--text-xs);
+  }
+
+  .testimonialRole {
+    font-size: 10px;
+  }
+
+  .sectionHeader h2 {
+    font-size: clamp(1.6rem, 5vw, 2rem);
+  }
+
+  .sectionHeader p {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonialCard {
+    opacity: 1;
+    animation: none;
+  }
+
+  .testimonialCard:hover {
+    transform: none;
+  }
+
+  .testimonialAvatar::after {
+    animation: none;
+    display: none;
+  }
+
+  .testimonialCard::before,
+  .testimonialCard::after {
+    display: none;
+  }
+
+  .testimonialCard:hover .testimonialAvatar {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .testimonialCard {
+    border-width: 2px;
+  }
+
+  .testimonialCard:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .testimonialCard::before {
+    display: none;
+  }
+
+  .testimonialAvatar {
+    background: var(--accent-primary);
+    border: 2px solid currentColor;
+  }
+
+  .testimonialAvatar::after {
+    display: none;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.testimonialCard:focus-within {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.testimonialCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

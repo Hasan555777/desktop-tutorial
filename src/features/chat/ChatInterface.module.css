@@ -1,0 +1,232 @@
+/* ============================================================
+   💬 CHAT INTERFACE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  
+}
+
+/* ============================================================
+   📌 EMPTY STATE
+   ============================================================ */
+
+.emptyChatState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--space-2xl);
+  gap: var(--space-sm);
+}
+
+.emptyChatState i {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.emptyChatState p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   📌 TYPING INDICATOR
+   ============================================================ */
+
+.typingIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-light);
+  animation: typingFadeIn 0.3s ease;
+}
+
+@keyframes typingFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.typingIndicatorDots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.typingIndicatorDots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: typingDotBounce 1.4s ease-in-out infinite;
+}
+
+.typingIndicatorDots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typingIndicatorDots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingDotBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📌 UPLOADING INDICATOR
+   ============================================================ */
+
+.uploadingIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-light);
+}
+
+.uploadingIndicator i {
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .chatContainer {
+    border-radius: 0;
+    border: none;
+    height: calc(110vh - var(--navbar-height));
+    
+  }
+
+  .emptyChatState i {
+    font-size: 36px;
+  }
+
+  .emptyChatState p {
+    font-size: var(--text-sm);
+  }
+
+  .typingIndicator {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .typingIndicatorDots span {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chatContainer {
+    height: calc(110vh - var(--navbar-height));
+    
+  }
+
+  .emptyChatState {
+    padding: var(--space-xl);
+  }
+
+  .emptyChatState i {
+    font-size: 28px;
+  }
+
+  .emptyChatState p {
+    font-size: var(--text-xs);
+  }
+
+  .typingIndicator {
+    font-size: 9px;
+    padding: var(--space-xs);
+  }
+
+  .typingIndicatorDots span {
+    width: 4px;
+    height: 4px;
+  }
+
+  .uploadingIndicator {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .typingIndicator {
+    animation: none;
+  }
+
+  .typingIndicatorDots span {
+    animation: none;
+  }
+
+  .uploadingIndicator i {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .chatContainer {
+    border-width: 2px;
+  }
+
+  .typingIndicatorDots span {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.chatContainer ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

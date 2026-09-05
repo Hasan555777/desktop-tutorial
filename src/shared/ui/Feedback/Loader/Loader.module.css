@@ -1,0 +1,503 @@
+/* ============================================================
+   ⏳ LOADER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 OVERLAY / PAGE
+   ============================================================ */
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.3s ease;
+}
+
+.loader-overlay.loader-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-overlay.loader-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Fullscreen ── */
+.loader-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+}
+
+/* ── Inline ── */
+.loader-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+  background: transparent;
+  position: relative;
+}
+
+/* ── Button ── */
+.loader-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background: transparent;
+  position: relative;
+}
+
+/* ── Container ── */
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: var(--space-xl);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   📌 LOADER CONTENT
+   ============================================================ */
+
+.loaderContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  padding: var(--space-xl);
+}
+
+/* ============================================================
+   📌 ICON
+   ============================================================ */
+
+.loaderIcon {
+  font-size: 48px;
+  color: var(--accent-primary);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loaderIcon i {
+  animation: loaderSpin 1.2s linear infinite;
+}
+
+/* ── Cube Variant ── */
+.loaderIcon .loaderCubeAnimated i {
+  animation: loaderCubeFloat 2s ease-in-out infinite;
+}
+
+@keyframes loaderCubeFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-8px) rotate(5deg) scale(1.02);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  75% {
+    transform: translateY(8px) rotate(-5deg) scale(0.98);
+  }
+}
+
+/* ── Dots Variant ── */
+.loaderDots {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.loaderDots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  animation: loaderDotBounce 1.4s ease-in-out infinite;
+}
+
+.loaderDots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loaderDots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes loaderDotBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.3;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Spinner ── */
+@keyframes loaderSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Pulse ── */
+@keyframes loaderPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+.loaderIcon .fa-circle-pulse {
+  animation: loaderPulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   📌 TITLE & SUB MESSAGE
+   ============================================================ */
+
+.loaderTitle {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.loaderSubMessage {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   📌 PROGRESS BAR
+   ============================================================ */
+
+.loaderProgressWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.loaderProgressBar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.loaderProgressFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+.loaderProgressText {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 ACTIONS (Children)
+   ============================================================ */
+
+.loaderActions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ============================================================
+   📌 SIZE VARIANTS
+   ============================================================ */
+
+/* ── Extra Small ── */
+.loader-xs .loaderIcon {
+  font-size: 20px;
+}
+
+.loader-xs .loaderTitle {
+  font-size: var(--text-sm);
+}
+
+.loader-xs .loaderSubMessage {
+  font-size: var(--text-xs);
+}
+
+.loader-xs .loaderDots span {
+  width: 6px;
+  height: 6px;
+}
+
+/* ── Small ── */
+.loader-sm .loaderIcon {
+  font-size: 32px;
+}
+
+.loader-sm .loaderTitle {
+  font-size: var(--text-base);
+}
+
+.loader-sm .loaderSubMessage {
+  font-size: var(--text-xs);
+}
+
+.loader-sm .loaderDots span {
+  width: 8px;
+  height: 8px;
+}
+
+/* ── Medium (Default) ── */
+.loader-md .loaderIcon {
+  font-size: 48px;
+}
+
+.loader-md .loaderTitle {
+  font-size: var(--text-xl);
+}
+
+.loader-md .loaderSubMessage {
+  font-size: var(--text-sm);
+}
+
+.loader-md .loaderDots span {
+  width: 10px;
+  height: 10px;
+}
+
+/* ── Large ── */
+.loader-lg .loaderIcon {
+  font-size: 64px;
+}
+
+.loader-lg .loaderTitle {
+  font-size: var(--text-2xl);
+}
+
+.loader-lg .loaderSubMessage {
+  font-size: var(--text-base);
+}
+
+.loader-lg .loaderDots span {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Extra Large ── */
+.loader-xl .loaderIcon {
+  font-size: 80px;
+}
+
+.loader-xl .loaderTitle {
+  font-size: var(--text-3xl);
+}
+
+.loader-xl .loaderSubMessage {
+  font-size: var(--text-lg);
+}
+
+.loader-xl .loaderDots span {
+  width: 14px;
+  height: 14px;
+}
+
+/* ============================================================
+   📌 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .loaderContent {
+    padding: var(--space-lg);
+  }
+
+  .loaderIcon {
+    font-size: 40px;
+  }
+
+  .loaderTitle {
+    font-size: var(--text-lg);
+  }
+
+  .loaderSubMessage {
+    font-size: var(--text-xs);
+  }
+
+  .loader-lg .loaderIcon {
+    font-size: 48px;
+  }
+
+  .loader-lg .loaderTitle {
+    font-size: var(--text-xl);
+  }
+
+  .loader-xl .loaderIcon {
+    font-size: 56px;
+  }
+
+  .loader-xl .loaderTitle {
+    font-size: var(--text-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .loaderContent {
+    padding: var(--space-md);
+  }
+
+  .loaderIcon {
+    font-size: 32px;
+  }
+
+  .loaderTitle {
+    font-size: var(--text-base);
+  }
+
+  .loaderSubMessage {
+    font-size: 10px;
+  }
+
+  .loaderProgressBar {
+    height: 4px;
+  }
+
+  .loaderProgressText {
+    font-size: var(--text-xs);
+  }
+
+  .loader-lg .loaderIcon {
+    font-size: 40px;
+  }
+
+  .loader-lg .loaderTitle {
+    font-size: var(--text-lg);
+  }
+
+  .loader-xl .loaderIcon {
+    font-size: 48px;
+  }
+
+  .loader-xl .loaderTitle {
+    font-size: var(--text-xl);
+  }
+
+  .loaderDots span {
+    width: 8px;
+    height: 8px;
+  }
+
+  .loader-xs .loaderDots span {
+    width: 4px;
+    height: 4px;
+  }
+
+  .loader-sm .loaderDots span {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .loaderIcon i {
+    animation: none;
+  }
+
+  .loaderIcon .loaderCubeAnimated i {
+    animation: none;
+  }
+
+  .loaderDots span {
+    animation: none;
+  }
+
+  .loaderIcon .fa-circle-pulse {
+    animation: none;
+  }
+
+  .loaderProgressFill {
+    transition: none;
+  }
+
+  .loader-overlay {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .loader-overlay {
+    background: var(--overlay-bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .loaderIcon {
+    color: var(--accent-primary);
+  }
+
+  .loaderProgressBar {
+    border: 1px solid var(--border-color);
+  }
+
+  .loaderProgressFill {
+    background: var(--accent-primary);
+  }
+
+  .loaderDots span {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.loader-overlay ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

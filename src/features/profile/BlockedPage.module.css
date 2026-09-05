@@ -1,0 +1,394 @@
+/* ============================================================
+   🚫 BLOCKED PAGE - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.verifyPendingContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  padding: var(--space-md);
+  font-family: var(--font-primary);
+}
+
+/* ============================================================
+   📌 VERIFY CARD
+   ============================================================ */
+
+.verifyCard {
+  max-width: 460px;
+  width: 100%;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 80px var(--shadow-color);
+  padding: var(--space-2xl) var(--space-xl) var(--space-xl);
+  text-align: center;
+  animation: cardSlideUp 0.4s ease;
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   📌 ICON
+   ============================================================ */
+
+.verifyIcon {
+  font-size: 64px;
+  margin-bottom: var(--space-md);
+  display: inline-block;
+}
+
+.verifyIcon.error {
+  animation: shake 0.6s ease;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  40% {
+    transform: rotate(15deg);
+  }
+  60% {
+    transform: rotate(-10deg);
+  }
+  80% {
+    transform: rotate(10deg);
+  }
+}
+
+/* ============================================================
+   📌 TITLE & MESSAGE
+   ============================================================ */
+
+.verifyCard h2 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.verifyCard p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-sm);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   📌 BLOCK TIMER
+   ============================================================ */
+
+.blockTimer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-md);
+  margin: var(--space-md) 0;
+  text-align: left;
+}
+
+.timerIcon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.timerText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timerLabel {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.timerValue {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 BLOCK INFO
+   ============================================================ */
+
+.blockInfo {
+  padding: var(--space-md);
+  background: var(--status-info-bg);
+  border: 1px solid var(--status-info);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+  text-align: left;
+}
+
+.blockInfo p {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.blockInfo i {
+  color: var(--status-info);
+  font-size: var(--text-base);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   📌 ACTIONS
+   ============================================================ */
+
+.verifyActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.btnSupport {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--status-info-bg);
+  color: var(--status-info);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-primary);
+  border: 1px solid var(--status-info);
+  width: 100%;
+}
+
+.btnSupport:hover {
+  background: var(--status-info);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--shadow-glow);
+}
+
+/* ============================================================
+   📌 FOOTER
+   ============================================================ */
+
+.verifyFooter {
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-md);
+  margin-top: var(--space-xs);
+}
+
+.btnLogout {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-primary);
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.btnLogout:hover {
+  color: var(--status-danger);
+  text-decoration: underline;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .verifyCard {
+    max-width: 100%;
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+  }
+
+  .verifyIcon {
+    font-size: 56px;
+  }
+
+  .verifyCard h2 {
+    font-size: var(--text-lg);
+  }
+
+  .verifyCard p {
+    font-size: var(--text-sm);
+  }
+
+  .blockTimer {
+    padding: var(--space-sm) var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .timerIcon {
+    font-size: 28px;
+  }
+
+  .timerValue {
+    font-size: var(--text-sm);
+  }
+
+  .blockInfo p {
+    font-size: var(--text-xs);
+  }
+
+  .btnSupport {
+    padding: 12px 20px;
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .verifyPendingContainer {
+    padding: var(--space-sm);
+  }
+
+  .verifyCard {
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+  }
+
+  .verifyIcon {
+    font-size: 48px;
+    margin-bottom: var(--space-sm);
+  }
+
+  .verifyCard h2 {
+    font-size: var(--text-base);
+  }
+
+  .verifyCard p {
+    font-size: var(--text-xs);
+  }
+
+  .blockTimer {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-sm);
+  }
+
+  .timerIcon {
+    font-size: 24px;
+  }
+
+  .timerLabel {
+    font-size: 10px;
+  }
+
+  .timerValue {
+    font-size: var(--text-xs);
+  }
+
+  .blockInfo p {
+    font-size: 10px;
+  }
+
+  .btnSupport {
+    font-size: var(--text-xs);
+    padding: 10px 16px;
+  }
+
+  .btnLogout {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .verifyCard {
+    animation: none;
+  }
+
+  .verifyIcon.error {
+    animation: none;
+  }
+
+  .btnSupport:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .verifyCard {
+    border-width: 2px;
+  }
+
+  .blockTimer {
+    border-width: 2px;
+  }
+
+  .blockInfo {
+    border-width: 2px;
+  }
+
+  .btnSupport {
+    border: 2px solid currentColor;
+  }
+
+  .btnLogout {
+    border: 1px solid transparent;
+  }
+
+  .btnLogout:hover {
+    border-color: var(--status-danger);
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btnSupport:focus-visible,
+.btnLogout:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.verifyCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}

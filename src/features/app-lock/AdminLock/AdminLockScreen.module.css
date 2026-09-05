@@ -1,0 +1,383 @@
+/* ============================================================
+   🔒 ADMIN LOCK SCREEN - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 OVERLAY
+   ============================================================ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 CARD
+   ============================================================ */
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 20px 60px var(--shadow-color);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card i {
+  color: var(--accent-primary);
+  margin-bottom: var(--space-md);
+}
+
+.card h2 {
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.hint {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-md) 0;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   📌 FORM
+   ============================================================ */
+
+.card form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.card input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  transition: all var(--transition-normal);
+}
+
+.card input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--focus-ring);
+}
+
+.card input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   📌 BUTTONS
+   ============================================================ */
+
+.card button[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  box-shadow: 0 2px 12px var(--shadow-glow);
+  width: 100%;
+  margin-top: var(--space-xs);
+}
+
+.card button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.card button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card button[type="submit"] i {
+  margin-right: var(--space-xs);
+}
+
+/* ============================================================
+   📌 LINK BUTTON
+   ============================================================ */
+
+.linkBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  padding: var(--space-xs) 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--border-color);
+}
+
+.linkBtn:hover {
+  color: var(--accent-primary);
+  text-decoration-color: var(--accent-primary);
+}
+
+/* ============================================================
+   📌 ERROR
+   ============================================================ */
+
+.error {
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+  border: 1px solid var(--status-danger);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  text-align: center;
+  margin-top: var(--space-xs);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .card {
+    padding: var(--space-xl);
+    max-width: 380px;
+  }
+
+  .card h2 {
+    font-size: var(--text-lg);
+  }
+
+  .hint {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .overlay {
+    padding: var(--space-md);
+  }
+
+  .card {
+    padding: var(--space-lg);
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .card h2 {
+    font-size: var(--text-base);
+  }
+
+  .card input {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .card button[type="submit"] {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .linkBtn {
+    font-size: var(--text-xs);
+  }
+
+  .error {
+    font-size: var(--text-xs);
+    padding: var(--space-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .overlay {
+    padding: var(--space-sm);
+  }
+
+  .card {
+    padding: var(--space-md);
+    border-radius: var(--radius-sm);
+  }
+
+  .card h2 {
+    font-size: var(--text-sm);
+  }
+
+  .hint {
+    font-size: 10px;
+  }
+
+  .card input {
+    font-size: 10px;
+    padding: var(--space-xs);
+  }
+
+  .card button[type="submit"] {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .linkBtn {
+    font-size: 10px;
+  }
+
+  .error {
+    font-size: 10px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .card {
+    animation: none !important;
+  }
+
+  .card button[type="submit"]:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .linkBtn:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .card {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .card {
+    border-width: 2px;
+  }
+
+  .card input {
+    border-width: 2px;
+  }
+
+  .card input:focus {
+    border-color: var(--accent-primary);
+  }
+
+  .card button[type="submit"] {
+    border: 2px solid currentColor;
+  }
+
+  .linkBtn {
+    text-decoration-color: var(--border-color);
+  }
+
+  .linkBtn:hover {
+    text-decoration-color: var(--accent-primary);
+  }
+
+  .error {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.card input:focus-visible,
+.card button[type="submit"]:focus-visible,
+.linkBtn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.card ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .overlay {
+    display: none !important;
+  }
+}

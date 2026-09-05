@@ -1,0 +1,35 @@
+// src/pages/Welcome/components/HeroSection.jsx
+
+import React from 'react';
+import styles from './HeroSection.module.css';
+
+const HeroSection = ({ navigate }) => {
+  return (
+    <section className={styles.heroSection}>
+      <div className={styles.heroBadge}>বাংলাদেশের বিশ্বস্ত ফ্রিল্যান্স মার্কেটপ্লেস</div>
+      <h1 className={styles.heroTitle}>
+        সংযোগ করুন, কাজ করুন, <br />
+        <span style={{ color: '#09d61a', WebkitTextFillColor: '#14b8a6' }}>
+          একসাথে বেড়ে উঠুন
+        </span> 
+      </h1>
+      <p className={styles.heroSubtitle}>
+        WorkTrustbd একটি বিশ্বস্ত ফ্রিল্যান্স ও সার্ভিস মার্কেটপ্লেস। 
+        এখানে ক্লায়েন্ট ও প্রফেশনালরা নিরাপদে সংযোগ স্থাপন করতে পারেন 
+        ভেরিফাইড প্রোফাইল, এসক্রো পেমেন্ট এবং অ্যাডমিন-অ্যাপ্রুভড পোস্টের মাধ্যমে। 
+        আমাদের লক্ষ্য বাংলাদেশের ফ্রিল্যান্সারদের জন্য একটি নিরাপদ ও স্বচ্ছ প্ল্যাটফর্ম তৈরি করা 
+        যেখানে তারা আত্মবিশ্বাসের সাথে কাজ করতে পারে এবং তাদের দক্ষতা দিয়ে আয় করতে পারে।
+      </p>
+      <div className={styles.heroActions}>
+        <button className={styles.heroBtnPrimary} onClick={() => navigate('/register')}>
+           ফ্রিতে শুরু করুন
+        </button>
+        <button className={styles.heroBtnSecondary} onClick={() => navigate('/login')}>
+          <i className="fa-solid fa-sign-in"></i> লগ ইন
+        </button>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;

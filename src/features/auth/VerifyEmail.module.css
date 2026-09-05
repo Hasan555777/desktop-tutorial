@@ -1,0 +1,518 @@
+/* ============================================================
+   📧 VERIFY EMAIL - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.verifyEmailContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  padding: var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 CARD
+   ============================================================ */
+
+.verifyEmailCard {
+  max-width: 460px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  box-shadow: 0 8px 30px var(--shadow-color);
+  transition: all var(--transition-normal);
+  text-align: center;
+}
+
+.verifyEmailCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 40px var(--shadow-color);
+}
+
+/* ============================================================
+   📌 ICON
+   ============================================================ */
+
+.verifyIcon {
+  font-size: 56px;
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   📌 TITLE & TEXT
+   ============================================================ */
+
+.verifyEmailCard h2 {
+  font-size: var(--text-2xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.verifyEmailCard p {
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  line-height: 1.8;
+  margin: 0 0 var(--space-md) 0;
+}
+
+.emailHighlight {
+  color: var(--accent-primary);
+  font-weight: 100;
+}
+
+/* ============================================================
+   📌 STATUS
+   ============================================================ */
+
+.verifyStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin-bottom: var(--space-md);
+}
+
+.verifyStatus[role="alert"] {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+}
+
+.statusDot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--status-warning);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+
+/* ============================================================
+   📌 BUTTONS
+   ============================================================ */
+
+.verifyActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 100;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  width: 100%;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.loading {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.btnPrimary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.btnSuccess {
+  background: var(--gradient-success);
+  color: #ffffff;
+}
+
+.btnSuccess:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btnOutline {
+  background: transparent;
+  color: var(--accent-primary);
+  border: 2px solid var(--accent-primary);
+}
+
+.btnOutline:hover:not(:disabled) {
+  background: var(--accent-glow);
+}
+
+.btnGhost {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btnGhost:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.verifyFooterActions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.verifyFooterActions .btnGhost {
+  flex: 1;
+}
+
+/* ============================================================
+   📌 SPINNER
+   ============================================================ */
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color);
+  border-top: 2px solid var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   📌 HELP TEXT
+   ============================================================ */
+
+.verifyHelp {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.verifyHelp p {
+  font-size: var(--text-sm);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+  line-height: 1.8;
+}
+
+.helpNote {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 DEBUG
+   ============================================================ */
+
+.debugInfo {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: monospace;
+  text-align: left;
+  line-height: 1.8;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .verifyEmailCard {
+    padding: var(--space-xl);
+    max-width: 400px;
+  }
+
+  .verifyEmailCard h2 {
+    font-size: var(--text-xl);
+  }
+
+  .verifyIcon {
+    font-size: 48px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .verifyEmailContainer {
+    padding: var(--space-md);
+  }
+
+  .verifyEmailCard {
+    padding: var(--space-lg);
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .verifyEmailCard h2 {
+    font-size: var(--text-lg);
+  }
+
+  .verifyEmailCard p {
+    font-size: var(--text-sm);
+  }
+
+  .verifyIcon {
+    font-size: 40px;
+  }
+
+  .btn {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .verifyStatus {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .verifyFooterActions {
+    flex-direction: column;
+  }
+
+  .verifyHelp p {
+    font-size: var(--text-xs);
+  }
+
+  .helpNote {
+    font-size: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .verifyEmailContainer {
+    padding: var(--space-sm);
+  }
+
+  .verifyEmailCard {
+    padding: var(--space-md);
+    border-radius: var(--radius-sm);
+  }
+
+  .verifyEmailCard h2 {
+    font-size: var(--text-base);
+  }
+
+  .verifyEmailCard p {
+    font-size: var(--text-xs);
+  }
+
+  .verifyIcon {
+    font-size: 32px;
+  }
+
+  .btn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .verifyStatus {
+    font-size: 10px;
+  }
+
+  .statusDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+  }
+
+  .debugInfo {
+    font-size: 9px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .statusDot {
+    animation: none !important;
+  }
+
+  .spinner {
+    animation: none !important;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .verifyEmailCard {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .verifyEmailCard {
+    border-width: 2px;
+  }
+
+  .btnPrimary {
+    border: 2px solid currentColor;
+  }
+
+  .btnSuccess {
+    border: 2px solid currentColor;
+  }
+
+  .btnOutline {
+    border-width: 2px;
+  }
+
+  .btnGhost {
+    border-width: 2px;
+  }
+
+  .verifyStatus {
+    border-width: 2px;
+  }
+
+  .verifyStatus[role="alert"] {
+    border-width: 2px;
+  }
+
+  .statusDot {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btn:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.verifyEmailCard ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .verifyEmailContainer {
+    background: #ffffff !important;
+    padding: 20px !important;
+  }
+
+  .verifyEmailCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .btn {
+    display: none !important;
+  }
+
+  .verifyStatus {
+    border: 1px solid #000000 !important;
+  }
+
+  .debugInfo {
+    display: none !important;
+  }
+
+  .verifyHelp {
+    border-top: 1px solid #000000 !important;
+  }
+}

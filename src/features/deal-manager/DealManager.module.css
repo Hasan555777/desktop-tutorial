@@ -1,0 +1,294 @@
+/* ============================================================
+   🤝 DEAL MANAGER - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.dashboardContainerWrapper {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+  padding: var(--space-lg);
+  margin-left: 120px;
+}
+
+.dashboardWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.loadingContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.loadingIcon {
+  font-size: 48px;
+  color: var(--accent-primary);
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingContent h2 {
+  margin-top: var(--space-md);
+  font-size: var(--text-xl);
+  font-weight: 100;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingContent p {
+  margin-top: var(--space-sm);
+  font-size: var(--text-base);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 CANCEL DEAL SECTION
+   ============================================================ */
+
+.cancelDealSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  align-items: center;
+}
+
+.btnCancelDeal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--gradient-danger);
+  color: #ffffff;
+  border: none;
+  font-size: var(--text-sm);
+  font-weight: 100;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.btnCancelDeal:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.cancelWarning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  font-weight: 100;
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.cancelWarning i {
+  color: var(--status-warning);
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .dashboardContainerWrapper {
+    padding: var(--space-md);
+  }
+
+  .dashboardWrapper {
+    gap: var(--space-md);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dashboardContainerWrapper {
+    padding: var(--space-sm);
+    margin-left: 0;
+  }
+
+  .dashboardWrapper {
+    gap: var(--space-sm);
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-lg);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-sm);
+  }
+
+  .loadingIcon {
+    font-size: 36px;
+  }
+
+  .cancelDealSection {
+    padding: var(--space-sm);
+  }
+
+  .btnCancelDeal {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--text-xs);
+  }
+
+  .cancelWarning {
+    font-size: 10px;
+    text-align: center;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .dashboardContainerWrapper {
+    padding: var(--space-xs);
+    margin-left: 0;
+  }
+
+  .loadingContent h2 {
+    font-size: var(--text-base);
+  }
+
+  .loadingContent p {
+    font-size: var(--text-xs);
+  }
+
+  .loadingIcon {
+    font-size: 28px;
+  }
+
+  .btnCancelDeal {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .cancelWarning {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loadingIcon {
+    animation: none;
+  }
+
+  .btnCancelDeal:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .dashboardContainerWrapper {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .cancelDealSection {
+    border-width: 2px;
+  }
+
+  .btnCancelDeal {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.btnCancelDeal:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.dashboardContainerWrapper ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .dashboardContainerWrapper {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 20px !important;
+  }
+
+  .cancelDealSection {
+    border: 1px solid #000000 !important;
+  }
+
+  .btnCancelDeal {
+    border: 1px solid #000000 !important;
+  }
+
+  .loadingContainer {
+    display: none !important;
+  }
+}

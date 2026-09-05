@@ -1,0 +1,1098 @@
+/* ============================================================
+   🔔 NOTIFICATIONS TAB - সম্পূর্ণ গ্লোবাল কালার ভেরিয়েবল ব্যবহার করে
+   ============================================================ */
+
+/* ============================================================
+   📌 MAIN CONTAINER
+   ============================================================ */
+
+.notiTab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   📌 HEADER
+   ============================================================ */
+
+.notiTabHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.notiTabHeader h2 {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.notiTabHeader h2 i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.headerSubtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 LOADING STATE
+   ============================================================ */
+
+.notiTabLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.notiTabLoading p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 PUSH SECTION
+   ============================================================ */
+
+.notiPushSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.pushCard {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: all var(--transition-normal);
+}
+
+.pushCard:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.pushCardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.pushIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.pushInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.pushInfo h4 {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.pushInfo p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.pushActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.pushBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.pushBtn.primary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 12px var(--shadow-glow);
+}
+
+.pushBtn.primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--shadow-glow);
+  opacity: 0.95;
+}
+
+.pushBtn.danger {
+  background: var(--gradient-danger);
+  color: #ffffff;
+}
+
+.pushBtn.danger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.pushBtn.warning {
+  background: var(--gradient-warning);
+  color: #ffffff;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pushBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pushStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-light);
+  flex-wrap: wrap;
+}
+
+.statusLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusBadge {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: 2px 14px;
+  border-radius: var(--radius-full);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.statusBadge.success {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border: 1px solid var(--status-success);
+}
+
+.statusBadge.warning {
+  background: var(--status-warning-bg);
+  color: var(--status-warning);
+  border: 1px solid var(--status-warning);
+}
+
+.subscriptionDetail {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  word-break: break-all;
+}
+
+/* ============================================================
+   📌 MASTER CONTROLS
+   ============================================================ */
+
+.notiMasterControls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.notiMasterToggle,
+.masterToggle,
+.masterMute {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.notiMasterToggle:hover,
+.masterToggle:hover,
+.masterMute:hover {
+  border-color: var(--accent-primary);
+}
+
+.notiMasterInfo,
+.masterInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.notiMasterIcon,
+.masterIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.notiMasterText,
+.masterText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notiMasterText h4,
+.masterText h4 {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.notiMasterText p,
+.masterText p {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📌 CATEGORIES
+   ============================================================ */
+
+.notiCategories {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.categoriesTitle {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.categoriesTitle i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.categoriesSubtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.notiCategoriesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+/* ============================================================
+   📌 CATEGORY ITEM
+   ============================================================ */
+
+.notiCategory {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.notiCategory:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.notiCategoryIcon {
+  font-size: var(--text-xl);
+  flex-shrink: 0;
+}
+
+.notiCategoryInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notiCategoryName {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.notiCategoryDesc {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 TOGGLE SWITCH
+   ============================================================ */
+
+.notiToggleSwitch {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  padding: 0;
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.notiToggleSwitch.active {
+  background: var(--gradient-primary);
+  border-color: var(--accent-primary);
+}
+
+.notiToggleSwitch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notiToggleSlider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: all var(--transition-normal);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.notiToggleSwitch.active .notiToggleSlider {
+  transform: translateX(20px);
+}
+
+.notiToggleStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ============================================================
+   📌 TOGGLE ITEM (for email section)
+   ============================================================ */
+
+.notiToggleItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.notiToggleItem:hover {
+  border-color: var(--accent-primary);
+}
+
+.notiToggleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notiToggleLabel {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.notiToggleDescription {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ============================================================
+   📌 EMAIL SECTION
+   ============================================================ */
+
+.notiEmailSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.sectionTitle {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+.sectionTitle i {
+  color: var(--accent-primary);
+  margin-right: var(--space-sm);
+}
+
+.notiEmailSettings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ============================================================
+   📌 SOUND SECTION
+   ============================================================ */
+
+.soundSection {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.soundMasterControls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.volumeControl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.volumeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.volumeLabel {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.volumeLabel i {
+  margin-right: var(--space-xs);
+  color: var(--accent-primary);
+}
+
+.volumeValue {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.volumeSliderMain {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  outline: none;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+
+.volumeSliderMain::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: all var(--transition-normal);
+}
+
+.volumeSliderMain::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.volumeSliderMain::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.volumeSliderMain:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.volumeMarks {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+/* ── Sound Categories ── */
+.soundCategories {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-light);
+}
+
+.soundTestButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.soundTestButtons .pushBtn {
+  flex: 1;
+  min-width: 120px;
+  justify-content: center;
+}
+
+/* ============================================================
+   📌 RESET
+   ============================================================ */
+
+.notiReset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.resetBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+}
+
+.resetBtn:hover {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning);
+  color: var(--status-warning);
+  transform: translateY(-2px);
+}
+
+.resetNote {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: 'Bensen Handwriting', var(--font-primary);
+  margin: 0;
+}
+
+/* ============================================================
+   📱 RESPONSIVE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .notiTab {
+    gap: var(--space-lg);
+  }
+
+  .notiCategoriesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pushCard {
+    padding: var(--space-md);
+  }
+
+  .pushCardHeader {
+    flex-wrap: wrap;
+  }
+
+  .pushActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .soundTestButtons .pushBtn {
+    min-width: 100px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .notiTab {
+    gap: var(--space-md);
+  }
+
+  .notiTabHeader h2 {
+    font-size: var(--text-lg);
+  }
+
+  .headerSubtitle {
+    font-size: var(--text-xs);
+  }
+
+  .notiCategoriesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .notiCategory {
+    padding: var(--space-sm);
+  }
+
+  .pushCard {
+    padding: var(--space-sm);
+  }
+
+  .pushCardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pushIcon {
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-lg);
+  }
+
+  .pushInfo h4 {
+    font-size: var(--text-sm);
+  }
+
+  .pushInfo p {
+    font-size: var(--text-xs);
+  }
+
+  .pushActions {
+    width: 100%;
+  }
+
+  .pushBtn {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+  }
+
+  .pushStatus {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .notiMasterToggle,
+  .masterToggle,
+  .masterMute {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+  }
+
+  .notiMasterInfo,
+  .masterInfo {
+    width: 100%;
+  }
+
+  .notiMasterIcon,
+  .masterIcon {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-base);
+  }
+
+  .notiMasterText h4,
+  .masterText h4 {
+    font-size: var(--text-xs);
+  }
+
+  .notiMasterText p,
+  .masterText p {
+    font-size: 10px;
+  }
+
+  .notiToggleSwitch {
+    width: 40px;
+    height: 24px;
+  }
+
+  .notiToggleSlider {
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .notiToggleSwitch.active .notiToggleSlider {
+    transform: translateX(16px);
+  }
+
+  .notiToggleItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+  }
+
+  .volumeControl {
+    padding: var(--space-sm);
+  }
+
+  .soundTestButtons {
+    flex-direction: column;
+  }
+
+  .soundTestButtons .pushBtn {
+    width: 100%;
+  }
+
+  .resetBtn {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .notiTab {
+    gap: var(--space-sm);
+  }
+
+  .notiTabHeader h2 {
+    font-size: var(--text-base);
+  }
+
+  .notiCategory {
+    padding: var(--space-xs);
+    gap: var(--space-sm);
+  }
+
+  .notiCategoryIcon {
+    font-size: var(--text-base);
+  }
+
+  .notiCategoryName {
+    font-size: var(--text-xs);
+  }
+
+  .notiCategoryDesc {
+    font-size: 9px;
+  }
+
+  .pushBtn {
+    font-size: 10px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .notiToggleSwitch {
+    width: 36px;
+    height: 20px;
+  }
+
+  .notiToggleSlider {
+    width: 14px;
+    height: 14px;
+    top: 1px;
+    left: 1px;
+  }
+
+  .notiToggleSwitch.active .notiToggleSlider {
+    transform: translateX(16px);
+  }
+
+  .statusBadge {
+    font-size: var(--text-xs);
+    padding: 1px 10px;
+  }
+
+  .subscriptionDetail {
+    font-size: 9px;
+  }
+
+  .volumeLabel {
+    font-size: var(--text-xs);
+  }
+
+  .volumeValue {
+    font-size: var(--text-xs);
+  }
+
+  .volumeMarks {
+    font-size: 9px;
+  }
+
+  .resetNote {
+    font-size: 9px;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loadingSpinner {
+    animation: none;
+  }
+
+  .pushBtn:hover:not(:disabled) {
+    transform: none !important;
+  }
+
+  .resetBtn:hover {
+    transform: none !important;
+  }
+
+  .notiToggleSlider {
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   ♿ ACCESSIBILITY - HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: high) {
+  .notiTab {
+    --bg-primary: #000000;
+    --bg-secondary: #000000;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #cccccc;
+    --border-color: #ffffff;
+    --accent-primary: #00ffcc;
+    --accent-secondary: #00ffcc;
+  }
+
+  .pushCard {
+    border-width: 2px;
+  }
+
+  .notiCategory {
+    border-width: 2px;
+  }
+
+  .notiMasterToggle,
+  .masterToggle,
+  .masterMute {
+    border-width: 2px;
+  }
+
+  .notiToggleItem {
+    border-width: 2px;
+  }
+
+  .volumeControl {
+    border-width: 2px;
+  }
+
+  .resetBtn {
+    border-width: 2px;
+  }
+
+  .pushBtn.primary,
+  .pushBtn.danger,
+  .pushBtn.warning {
+    border: 2px solid currentColor;
+  }
+
+  .statusBadge {
+    border-width: 2px;
+  }
+
+  .notiToggleSwitch {
+    border-width: 2px;
+  }
+
+  .notiToggleSwitch.active {
+    border-color: var(--accent-primary);
+  }
+
+  .volumeSliderMain::-webkit-slider-thumb {
+    border: 2px solid currentColor;
+  }
+
+  .volumeSliderMain::-moz-range-thumb {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================
+   🎯 FOCUS VISIBLE
+   ============================================================ */
+
+.pushBtn:focus-visible,
+.resetBtn:focus-visible,
+.notiToggleSwitch:focus-visible,
+.volumeSliderMain:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   🎨 SELECTION STYLING
+   ============================================================ */
+
+.notiTab ::selection {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+/* ============================================================
+   🖨️ PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .notiTab {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .pushCard {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+  }
+
+  .notiCategory {
+    border: 1px solid #000000 !important;
+  }
+
+  .notiMasterToggle,
+  .masterToggle,
+  .masterMute {
+    border: 1px solid #000000 !important;
+  }
+
+  .notiToggleItem {
+    border: 1px solid #000000 !important;
+  }
+
+  .volumeControl {
+    border: 1px solid #000000 !important;
+  }
+
+  .pushBtn,
+  .resetBtn {
+    border: 1px solid #000000 !important;
+  }
+
+  .notiToggleSwitch {
+    border: 1px solid #000000 !important;
+  }
+
+  .soundTestButtons {
+    display: none !important;
+  }
+
+  .pushActions {
+    display: none !important;
+  }
+}
