@@ -1,5 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "worktrust",
-  "pages_build_output_dir": "./dist"
+  "pages_build_output_dir": "./dist",
+  "build": {
+    "command": "npm run build"
+  }
 }
